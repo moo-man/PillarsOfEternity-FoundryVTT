@@ -1,0 +1,175 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{log this}}
+    <section class="general">
+        <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
+        <section class="defenses">
+            <div class="property-group">
+                <label>Def</label>
+                <div class="property-value">
+                    <input name="data.defenses.deflection.value" value="{{data.defenses.deflection.value}}" />
+                </div>
+                <div class="property-modifier">
+                    {{data.defenses.deflection.modifier}}
+                </div>
+            </div>
+
+            <div class="property-group">
+                <label>Fort</label>
+                <div class="property-value">
+                    <input name="data.defenses.fortitude.value" value="{{data.defenses.fortitude.value}}" />
+                </div>
+                <div class="property-modifier">
+                    {{data.defenses.fortitude.modifier}}
+                </div>
+            </div>
+
+            <div class="property-group">
+                <label>Ref</label>
+                <div class="property-value">
+                    <input name="data.defenses.reflexes.value" value="{{data.defenses.reflexes.value}}" />
+                </div>
+                <div class="property-modifier">
+                    {{data.defenses.reflexes.modifier}}
+                </div>
+            </div>
+
+            <div class="property-group">
+                <label>Will</label>
+                <div class="property-value">
+                    <input name="data.defenses.will.value" value="{{data.defenses.will.value}}" />
+                </div>
+                <div class="property-modifier">
+                    {{data.defenses.will.modifier}}
+                </div>
+            </div>
+
+        </section>
+        <hr>
+        <section class="status">
+            <div class="property-group">
+                <label>Health</label>
+                <div class="property-group stacked">
+                    <input name="data.health.current" value="{{data.health.current}}" />
+                    <hr>
+                    <input name="data.health.max" value="{{data.health.max}}" />
+                </div>
+            </div>
+            <div class="property-group">
+                <label>Endurance</label>
+                <div class="property-group stacked">
+                    <input name="data.endurance.current" value="{{data.endurance.current}}" />
+                    <hr>
+                    <input name="data.endurance.max" value="{{data.endurance.max}}" />
+                </div>
+            </div>
+            <div class="property-stack">
+                <div class="property-group small">
+                    <label>Stride</label>
+                    <div class="property-value">
+                        <input name="data.stride.value" value="{{data.stride.value}}" />
+                    </div>
+                </div>
+                <div class="property-group small">
+                    <label>Initiative</label>
+                    <div class="property-value">
+                        <input name="data.initiative.value" value="{{data.initiative.value}}" />
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr>
+        <section class="wounds">
+            <h4>Wounds</h4>
+            <div class="wound-group">
+                <label>Light:</label>
+                <input name="" value="{{a}}" />
+                <div class="wound-squares">
+                    <a class="wound-square"><i class="far fa-square"></i></a>
+                    <a class="wound-square"><i class="far fa-square"></i></a>
+                    <a class="wound-square"><i class="far fa-square"></i></a>
+                    <a class="wound-square"><i class="far fa-square"></i></a>
+                </div>
+            </div>
+            <div class="wound-group">
+                <label>Heavy:</label>
+                <input name="" value="{{a}}" />
+                <div class="wound-squares">
+                    <a class="wound-square"><i class="far fa-square"></i></a>
+                    <a class="wound-square"><i class="far fa-square"></i></a>
+                </div>
+            </div>
+            <div class="wound-group">
+                <label>Severe:</label>
+                <input name="" value="{{a}}" />
+                <div class="wound-squares">
+                    <a class="wound-square"><i class="far fa-square"></i></a>
+                </div>
+            </div>
+            <div class="wound-group">
+                <label>Injury:</label>
+                <input class="injury-input" name="" value="{{a}}" />
+            </div>
+        </section>
+    </section>
+
+    </section>
+    <section class="sheet-content">
+        <div class="name-header">
+            <h1 class="charname">
+                <input name="name" type="text" value="{{actor.name}}" placeholder="Name" />
+            </h1>
+        </div>
+        <div class="details">
+            <div class="detail-group">
+                <label>Culture</label>
+                <input type="text" name="" value="{{a}}">
+            </div>
+            <div class="detail-group">
+                <label>Species</label>
+                <input type="text" name="" value="{{a}}">
+            </div>
+            <div class="detail-group">
+                <label>Stock</label>
+                <input type="text" name="" value="{{a}}">
+            </div>
+            <div class="detail-group">
+                <label>Age</label>
+                <input type="text" name="" value="{{a}}">
+            </div>
+            <div class="detail-group">
+                <label>Size</label>
+                <input type="text" name="" value="{{a}}">
+            </div>
+        </div>
+        <section class="tab-section">
+            <nav class="sheet-tabs tabs">
+                <a class="item active" data-tab="main">Main</a>
+                <a class="item" data-tab="combat">Combat</a>
+                <a class="item" data-tab="effects">Effects</a>
+                <a class="item" data-tab="powers">Powers</a>
+                <a class="item" data-tab="inventory">Inventory</a>
+                <a class="item" data-tab="details">Details</a>
+            </nav>
+            <div class="tab-content">
+                <div class="tab main save-scroll" data-tab="main">
+                    {{> systems/pillars-of-eternity/templates/actor/actor-main.html}}
+                </div>
+                <div class="tab combat save-scroll" data-tab="combat">
+                    {{> systems/pillars-of-eternity/templates/actor/actor-combat.html}}
+                </div>
+                <div class="tab effects save-scroll" data-tab="effects">
+                    {{> systems/pillars-of-eternity/templates/actor/actor-effects.html}}
+                </div>
+                <div class="tab powers save-scroll" data-tab="powers">
+                    {{> systems/pillars-of-eternity/templates/actor/actor-powers.html}}
+                </div>
+                <div class="tab inventory save-scroll" data-tab="inventory">
+                    {{> systems/pillars-of-eternity/templates/actor/actor-inventory.html}}
+                </div>
+                <div class="tab details save-scroll" data-tab="details">
+                    {{> systems/pillars-of-eternity/templates/actor/actor-details.html}}
+                </div>
+            </div>
+        </section>
+    </section>
+</form>
