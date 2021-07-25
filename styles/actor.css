@@ -192,7 +192,8 @@
 
   .pillars-of-eternity.actor.sheet .items-list .item{
       line-height: 10px;
-      border-bottom: 1px solid #CCC
+      border-bottom: 1px solid #CCC;
+      justify-content: space-between
 }
 
 .pillars-of-eternity.actor.sheet .items-list .item:last-of-type {
@@ -203,7 +204,18 @@
 .pillars-of-eternity.actor.sheet .items-list .item-name{
     flex: 1;
     margin: 3px;
+    overflow: hidden; 
+  }
+
+.pillars-of-eternity.actor.sheet .items-list.weapons .item-name,
+  .pillars-of-eternity.actor.sheet .items-list.powers .item-name{
+  max-width: 50%;
 }
+
+.pillars-of-eternity.actor.sheet .items-list.power-sources .item-name{
+  max-width: 80%;
+}
+
 
 .pillars-of-eternity.actor.sheet .items-list .item .item-name .item-image {
   flex: 0 0 30px;
@@ -215,12 +227,25 @@
 .pillars-of-eternity.actor.sheet .items-list .item-property-column{
   flex: 0 0 60px;
   text-align: center;
-  padding: 5px
+  padding: 0px;
+  line-height: 25px;
+}
+
+
+.pillars-of-eternity.actor.sheet .items-list .item-property-column.flex{
+  flex: 1
 }
 
 
 .pillars-of-eternity.actor.sheet .items-list .items .item-property-column{
-  line-height: 25px;
+}
+
+.pillars-of-eternity.actor.sheet .items-list .items .item-property-column.small{
+  font-size: 11px
+}
+
+.pillars-of-eternity.actor.sheet .items-list .items .item-property-column.large{
+  flex: 0 0 100px;
 }
 
 .pillars-of-eternity.actor.sheet .items-list .items .item-property-column input{
@@ -228,9 +253,19 @@
   background: none;
   border: none;
   border-bottom: 1px solid black;
-  text-align: center
+  text-align: center;
+  border-radius: 0px
 }
 
+.pillars-of-eternity.actor.sheet .items-list.power-sources .items .item-property-column.pool-inputs {
+  display: flex;
+  justify-content: center;
+}
+
+.pillars-of-eternity.actor.sheet .items-list.power-sources .items .item-property-column.pool-inputs input{
+  width: 40px;
+  font-size: 16px
+}
 
 .pillars-of-eternity.actor.sheet .items-list  .item-used {
   flex: 0 0 10px;
@@ -256,6 +291,7 @@
   /* border-radius: 3px; */
   border-left: none;
   border-right: none;
+  justify-content: space-between;
 }
 
 .pillars-of-eternity.actor.sheet .items-list .items-header .item-controls{
@@ -290,6 +326,11 @@
   text-align: center;
   width: 30px;
   margin: 0px 0px 8px 5px;
+}
+
+.pillars-of-eternity.actor.sheet .combat-items input.value {
+  background: rgba(0, 0, 0, 0.05);
+  font-size: 20px
 }
 
 /* .pillars-of-eternity.actor.sheet .items-list {

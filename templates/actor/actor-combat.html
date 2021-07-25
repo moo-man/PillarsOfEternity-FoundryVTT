@@ -6,7 +6,7 @@
         </div>
         <div class="exert">
             <h3>Exert: </h3>
-            <div class="value">5</div>
+            <input class="value" value="5">
         </div>
     </div>
     <ol class="items-list armor">
@@ -99,7 +99,7 @@
             <div class="item-controls"></div>
         </li>
 
-        <ol class="items">
+        <ol class="items weapons">
             {{#each items.equipped.weapons as |item i|}}
             <li class="item flexrow" data-item-id="{{item.id}}">
                 <div class="item-name flexrow">

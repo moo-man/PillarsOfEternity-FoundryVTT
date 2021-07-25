@@ -49,13 +49,6 @@
           "windedThreshold": 0
         }
       },
-      "power": {
-        "power": {
-          "pool": 0,
-          "bonus": 0,
-          "penalty": 0
-        }
-      },
       "size": {
         "size": {
           "value": 0
@@ -88,7 +81,6 @@
         "defenses",
         "health",
         "endurance",
-        "power",
         "species",
         "size",
         "initiative",
@@ -121,6 +113,7 @@
       "skill",
       "trait",
       "power",
+      "powerSource",
       "weapon",
       "armor",
       "shield",
@@ -222,6 +215,23 @@
       },
       "limitations": {
         "value": ""
+      }
+    },
+    "powerSource": {
+      "templates": [
+        "description",
+        "category"
+      ],
+      "category" : {
+        "value" : "personal"
+      },
+      "level" : {
+        "value" : 0,
+        "XP" : 0
+      },
+      "pool" : {
+        "max" : 0,
+        "current" : 0
       }
     },
     "weapon": {
