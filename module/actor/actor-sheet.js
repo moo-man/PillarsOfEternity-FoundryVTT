@@ -26,7 +26,7 @@ export class PillarsActorSheet extends ActorSheet {
 
     prepareSheetData(sheetData) {
         sheetData.items = this.constructItemLists(sheetData)
-    }
+    }   
 
 
     constructItemLists(sheetData) {
@@ -38,6 +38,11 @@ export class PillarsActorSheet extends ActorSheet {
 
         items.skills = sheetData.actor.getItemTypes("skill")
         items.traits = sheetData.actor.getItemTypes("trait")
+
+        items.backgrounds = sheetData.actor.getItemTypes("background")  
+        items.settings = sheetData.actor.getItemTypes("setting")  
+        items.connections = sheetData.actor.getItemTypes("connection")  
+        items.reputations = sheetData.actor.getItemTypes("reputation")  
 
         items.inventory = this.constructInventory(sheetData)
         return items
