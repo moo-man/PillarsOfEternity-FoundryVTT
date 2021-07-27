@@ -38,11 +38,40 @@ export class PillarsActorSheet extends ActorSheet {
 
         items.skills = sheetData.actor.getItemTypes("skill")
         items.traits = sheetData.actor.getItemTypes("trait")
+
+        items.inventory = this.constructInventory(sheetData)
         return items
     }
 
-    constructInventory() {
-       
+    constructInventory(sheetData) {
+        let inventory = {
+            gear : {
+                label: "Gear",
+                type : "equipment",
+                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "gear")
+            },
+            tools : {
+                label: "Tools",
+                type : "equipment",
+                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "tool")
+            },
+            weapon : {
+                label: "Weapons",
+                type : "weapon",
+                items : sheetData.actor.getItemTypes("weapon")
+            },
+            armor : {
+                label: "Armor",
+                type : "armor",
+                items : sheetData.actor.getItemTypes("armor")
+            },
+            shields : {
+                label: "Shields",
+                type : "shield",
+                items : sheetData.actor.getItemTypes("shield")
+            },
+        }
+        return inventory
     }
 
      _dropdown(event, dropdownData) {

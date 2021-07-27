@@ -237,15 +237,16 @@
 }
 
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column{
+.pillars-of-eternity.actor.sheet .items-list .items .item-property-column .item-toggle{  
+  line-height: 30px;
 }
 
 .pillars-of-eternity.actor.sheet .items-list .items .item-property-column.small{
   font-size: 11px
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column.large{
-  flex: 0 0 100px;
+.pillars-of-eternity.actor.sheet .items-list .item-property-column.large{
+  flex: 0 0 200px;
 }
 
 .pillars-of-eternity.actor.sheet .items-list .items .item-property-column input{
@@ -332,6 +333,36 @@
   background: rgba(0, 0, 0, 0.05);
   font-size: 20px
 }
+
+.pillars-of-eternity.actor.sheet .inventory {
+  height: 100%
+}
+
+.pillars-of-eternity.actor.sheet .inventory .items-list {
+  height: unset
+}
+
+  .pillars-of-eternity.actor.sheet .inventory .wealth {
+  display: flex;
+  margin: 10px 0px -15px 10px;
+}
+
+.pillars-of-eternity.actor.sheet .inventory .wealth input {
+  width: 55px;
+  margin: 0px 5px 20px 5px;
+  text-align: right;
+  height: 20px;
+}
+
+.pillars-of-eternity.actor.sheet .inventory .inventory-lists {
+  overflow-y: auto;
+  height: 95%
+}
+
+.pillars-of-eternity.actor.sheet .items-list .items button.item-property-column {
+  height: 30px;
+}
+
 
 /* .pillars-of-eternity.actor.sheet .items-list {
     list-style: none;

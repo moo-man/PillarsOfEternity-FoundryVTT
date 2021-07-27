@@ -1,0 +1,53 @@
+<div class="wealth">
+    <h3>Wealth:</h3>
+    <input type="text">
+    <h3>cp</h3>
+</div>
+<div class="inventory-lists">
+    {{#each items.inventory as |section s|}}
+    <ol class="items-list">
+        <li class="items-header flexrow">
+            <h3 class="item-name flexrow">{{section.label}}</h3>
+            <span class="item-property-column large">Skill</span>
+            <span class="item-property-column">Equip</span>
+            <span class="item-property-column">Qty.</span>
+            <span class="item-property-column">Wt.</span>
+            <div class="item-controls">
+                <a class="item-control item-create" title="Create" data-type="{{section.type}}"><i class="fas fa-plus"></i></a>
+            </div>
+        </li>
+    
+        <ol class="items">
+            {{#each section.items as |item i|}}
+            <li class="item flexrow" data-item-id="{{item.id}}">
+                <div class="item-name flexrow">
+                    <div class="item-image" style="background-image: url('{{item.img}}')"></div>
+                    <a>
+                        <h4>{{item.name}}</h4>
+                    </a>
+                </div>
+    
+                <button class="item-property-column large">Advanced Animancy Tools</button>
+                <span class="item-property-column">
+                    {{#if item.equipped.value}}
+                    <a class="item-toggle" data-target="data.equipped.value"><i class="far fa-check-circle"></i></a>
+                    {{else}}
+                    <a class="item-toggle" data-target="data.equipped.value"><i class="far fa-circle"></i></a>
+                    {{/if}}</span>
+                <span class="item-property-column">Qty.</span>
+                <span class="item-property-column">Wt.</span>
+    
+                <div class="item-controls flexrow">
+                    {{#if ../../owner}}
+                    <a class="item-control item-post" title="Post Item"><i class="fas fa-comment"></i></a>
+                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    <a class="item-control item-dropdown" title="Dropdown"><i class="fas fa-chevron-down"></i></a>
+                    <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    {{/if}}
+                </div>
+            </li>
+            {{/each}}
+        </ol>
+    </ol>
+    {{/each}}
+</div>
