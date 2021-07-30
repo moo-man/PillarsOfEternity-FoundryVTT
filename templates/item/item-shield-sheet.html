@@ -1,0 +1,44 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.type physical=true}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "Description"}}</a>
+        <a class="item" data-tab="details">{{localize "Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "Effects"}}</a>
+    </nav>
+
+    <section class="content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.html}}
+
+
+        <div class="tab details active" data-tab="details"> 
+
+            <div class="form-group">
+                <label>Deflection</label>
+                <div class="form-fields small">
+                    <input type="number" name="data.deflection.value" value="{{data.deflection.value}}" data-dtype="Number">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Winded Threshold</label>
+                <div class="form-fields small">
+                    <input type="number" name="data.winded.value" value="{{data.winded.value}}" data-dtype="Number">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Health</label>
+                <div class="form-fields small">
+                    <input type="number" name="data.health.value" value="{{data.health.value}}" data-dtype="Number">
+                </div>
+            </div>
+            
+        
+        </div>
+
+        {{> systems/pillars-of-eternity/templates/item/item-effects.html}}
+
+    </section>
+
+</form>

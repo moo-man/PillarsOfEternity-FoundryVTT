@@ -138,12 +138,19 @@
       },
       "description": {
         "description": {
-          "value": ""
+          "value": "",
+          "gm" : ""
         }
       },
       "rank": {
         "rank": {
           "value": 0
+        }
+      },
+      "xp": {
+        "xp": {
+          "value": 0,
+          "rank" : 0
         }
       },
       "physical": {
@@ -154,19 +161,20 @@
           "value": 0
         },
         "quantity": {
-          "value": 0
+          "value": 1
         },
         "used": {
           "used": {
             "value": false
           }
         }
-      },
+      }
+    },
       "skill": {
         "templates": [
           "description",
           "category",
-          "rank",
+          "xp",
           "used"
         ],
         "specialization": {
@@ -175,10 +183,6 @@
         },
         "requires": {
           "value": []
-        },
-        "rank": {
-          "value": 0,
-          "XP": 0
         },
         "modifier": {
           "value": 0
@@ -202,29 +206,36 @@
         "level": {
           "value": 0
         },
+        "cost": {
+          "value": 0
+        },
+        "source": {
+          "value": ""
+        },
         "base": {
           "value": "",
           "ritual": false
         },
         "range": {
-          "value": "",
+          "value": "none",
           "ritual": false
         },
         "target": {
-          "value": "",
-          "subtype": "",
+          "value": "target",
+          "subtype": "self",
+          "targeted" : false,
           "ritual": false
         },
         "duration": {
-          "value": "",
+          "value": "momentary",
           "ritual": false
         },
         "speed": {
-          "value": "",
+          "value": "slow",
           "ritual": false
         },
         "exclusion": {
-          "value": ""
+          "value": "none"
         },
         "limitations": {
           "value": ""
@@ -238,9 +249,9 @@
         "category": {
           "value": "personal"
         },
-        "level": {
+        "xp": {
           "value": 0,
-          "XP": 0
+          "level": 0
         },
         "pool": {
           "max": 0,
@@ -315,8 +326,15 @@
         },
         "skill": {
           "value": "",
-          "suitability": ""
+          "suitability": "none"
+        },
+        "worn" : {
+          "value" : false
+        },
+        "wearable" : {
+          "value" : false
         }
+
       },
       "connection": {
         "templates": [
@@ -365,6 +383,15 @@
         "templates": [
           "description"
         ],
+        "size" : {
+          "value" : 0
+        },
+        "stride" : {
+          "value" : 6
+        },
+        "species": {
+          "value": ""
+        },
         "stock": {
           "value": ""
         },
@@ -382,4 +409,3 @@
       }
     }
   }
-}

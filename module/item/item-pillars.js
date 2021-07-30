@@ -51,13 +51,25 @@ export class PillarsItem extends Item {
 
     //#region Getters
     // @@@@@@@@ CALCULATION GETTERS @@@@@@@
-    
+    get isMelee() {
+        return this.category.value == "smallMelee" 
+            || this.category.value == "mediumMelee" 
+            || this.category.value == "largeMelee"
+    }
+
+    get isRanged() {
+        return this.category.value == "mediumRanged" 
+            || this.category.value == "largeRanged" 
+            || this.category.value == "grenade"
+    }
+
     // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
 
   
 
     // @@@@@@@@ DATA GETTERS @@@@@@@@@@
     get category() {return this.data.data.category}
+    get target() {return this.data.data.target}
     //      Processed data getters
 
     //#endregion

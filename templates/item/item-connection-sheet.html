@@ -1,0 +1,22 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.type physical=true}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "Description"}}</a>
+        <!-- <a class="item" data-tab="details">{{localize "Details"}}</a> -->
+        <a class="item" data-tab="effects">{{localize "Effects"}}</a>
+    </nav>
+
+    <section class="content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.html}}
+
+<!-- 
+        <div class="tab details active" data-tab="details"> 
+          
+        </div> -->
+
+        {{> systems/pillars-of-eternity/templates/item/item-effects.html}}
+
+    </section>
+
+</form>

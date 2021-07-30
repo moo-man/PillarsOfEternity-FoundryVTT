@@ -1,0 +1,57 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.type physical=false}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "Description"}}</a>
+        <a class="item" data-tab="details">{{localize "Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "Effects"}}</a>
+    </nav>
+
+    <section class="content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.html}}
+
+
+        <div class="tab details active" data-tab="details"> 
+
+            <div class="form-group">
+                <label>Species</label>
+                <div class="form-fields">
+                    <input type="number" name="data.species.value" value="{{data.species.value}}" data-dtype="String">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Stock</label>
+                <div class="form-fields">
+                    <input type="number" name="data.stock.value" value="{{data.stock.value}}" data-dtype="String">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Size</label>
+                <div class="form-fields">
+                    <select name="data.size.value">
+                        {{#select data.size.value}}
+                        <option value=""></option>
+                        {{#each (config "actorSizes") as |value k|}}
+                        <option value="{{k}}">{{value}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Stride</label>
+                <div class="form-fields small">
+                    <input type="number" name="data.stride.value" value="{{data.stride.value}}" data-dtype="Number">
+                </div>
+            </div>
+        
+        </div>
+
+        {{> systems/pillars-of-eternity/templates/item/item-effects.html}}
+
+    </section>
+
+</form>

@@ -1,7 +1,6 @@
 /**
  * A Foundry implementation of the Pillars of Eternity TTRPG
  * Author: Moo Man
- * Software License: GNU GPLv3
  */
 
 // Import Modules
@@ -26,11 +25,6 @@ Hooks.on("init", () => {
   Actors.registerSheet("pillars-of-eternity", PillarsActorSheet, { makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("pillars-of-eternity", PillarsItemSheet, { makeDefault: true });
-
-  // Pre-load templates
-  loadTemplates([
-
-  ]);
 
   // Assign the actor class to the CONFIG
   CONFIG.Actor.documentClass = PillarsActor;
@@ -60,5 +54,3 @@ Hooks.on("init", () => {
 
   // Register all other hooks
   hooks();
-
-

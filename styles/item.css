@@ -1,0 +1,102 @@
+.pillars-of-eternity.item.sheet form{
+  height: 100%
+}
+  .pillars-of-eternity.item.sheet .window-content{
+  overflow: hidden
+}
+  .pillars-of-eternity.item.sheet .content{
+  height: 70%
+}
+
+.pillars-of-eternity.item.sheet .item-header {
+  display: flex;
+  width: 100%
+}
+.pillars-of-eternity.item.sheet .item-header .detail-row .form-group label,
+.pillars-of-eternity.item.sheet .item-header > *{
+  margin: 5px
+}
+
+
+.pillars-of-eternity.item.sheet .item-header .item-type {
+  opacity: 0.5
+}
+
+
+
+.pillars-of-eternity.item.sheet .item-header .header-details{
+  flex: 1
+  }
+
+
+  .pillars-of-eternity.item.sheet .item-header .detail-row input {
+  min-width: 80px;
+  max-width: 80px;
+  text-align: center;
+}
+
+.pillars-of-eternity.item.sheet .item-header .detail-row .unit {
+  opacity: 0.5;
+  margin-left: 3px;
+}
+
+.pillars-of-eternity.item.sheet .item-header .detail-row{
+  display:flex;
+}
+
+.pillars-of-eternity.item.sheet .item-header .detail-row .form-group{
+  margin-left: 10px;
+}
+.pillars-of-eternity.item.sheet .item-header .detail-row .form-group:first-of-type{
+  margin-left: 0px
+}
+
+
+.pillars-of-eternity.item.sheet .item-header img{
+  width: 60px;
+  height: 60px
+}
+
+
+.pillars-of-eternity.item.sheet .description.active {
+  display: flex;
+  flex-direction: column;
+  height: 100%
+}
+
+.pillars-of-eternity.item.sheet .details.active {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.pillars-of-eternity.item.sheet .editor{
+  flex: 1
+}
+
+
+.pillars-of-eternity.item.sheet .details .xp-rank input{
+  flex: 0 0 100px;
+  text-align: center;
+}
+
+.pillars-of-eternity.item.sheet .details .xp-rank .form-fields{
+  justify-content: flex-start;
+}
+
+  .pillars-of-eternity.item.sheet .details input.rank {
+  background: none;
+  flex: 0 0 50px;
+}
+
+.pillars-of-eternity.item.sheet .details .form-group .small {
+  justify-content: flex-start;
+}
+  .pillars-of-eternity.item.sheet .details .form-group .small input {
+  flex: 0.3;
+  text-align: center
+}
+
+
+

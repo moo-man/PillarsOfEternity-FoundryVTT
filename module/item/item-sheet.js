@@ -11,9 +11,8 @@ export class PillarsItemSheet extends ItemSheet {
 			classes: ["pillars-of-eternity", "sheet", "item"],
 			width: 550,
 			height: 534,
-      tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "details"}],
-      dragDrop: [{dragSelector: ".item-list .item", dropSelector: null}],
-      scrollY: [".sheet-body"]
+      tabs: [{navSelector: ".sheet-tabs", contentSelector: ".content", initial: "details"}],
+      scrollY: [".content"]
 		});
   }
 
@@ -27,7 +26,7 @@ export class PillarsItemSheet extends ItemSheet {
     if (this.item.isOwner) {
         buttons.unshift(
             {
-                label: "DGNS.Post",
+                label: "Post",
                 class: "post",
                 icon: "fas fa-comment",
                 onclick: ev => this.item.postToChat()
@@ -41,6 +40,12 @@ export class PillarsItemSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.data = data.item.data._source.data
+
+    if (this.item.type == "power" && this.item.target.value)
+    {
+      data.targetSubTypes = `power${this.item.target.value[0].toUpperCase() + this.item.target.value.slice(1)}s`
+    }
+
     return data;
   }
   /** @override */

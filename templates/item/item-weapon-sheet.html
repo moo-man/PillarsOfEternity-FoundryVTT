@@ -1,0 +1,59 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.type physical=true}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "Description"}}</a>
+        <a class="item" data-tab="details">{{localize "Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "Effects"}}</a>
+    </nav>
+
+    <section class="content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.html}}
+
+
+        <div class="tab details active" data-tab="details"> 
+
+            <div class="form-group">
+                <label>Type</label>
+                <div class="form-fields">
+                    <select name="data.category.value">
+                        {{#select data.category.value}}
+                        <option value=""></option>
+                        {{#each (config "weaponTypes") as |value k|}}
+                        <option value="{{k}}">{{value}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Damage</label>
+                <div class="form-fields">
+                    <input type="text" name="data.damage.value" value="{{data.damage.value}}" data-dtype="String">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Crit Die</label>
+                <div class="form-fields">
+                    <input type="text" name="data.crit.value" value="{{data.crit.value}}" data-dtype="String">
+                </div>
+            </div>
+
+            {{#if item.isRanged}}
+            <div class="form-group">
+                <label>Range</label>
+                <div class="form-fields small">
+                    <input type="text" name="data.range.value" value="{{data.range.value}}" data-dtype="String">
+                    <label>Hexes</label>
+                </div>
+            </div>
+            {{/if}}
+        
+        </div>
+
+        {{> systems/pillars-of-eternity/templates/item/item-effects.html}}
+
+    </section>
+
+</form>
