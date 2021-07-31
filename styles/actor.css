@@ -191,9 +191,19 @@
   } */
 
   .pillars-of-eternity.actor.sheet .items-list .item{
-      line-height: 10px;
-      border-bottom: 1px solid #CCC;
-      justify-content: space-between
+      overflow: hidden
+}
+
+.pillars-of-eternity.actor.sheet .items-list .item .item-summary{
+  margin: 5px;
+}
+
+.pillars-of-eternity.actor.sheet .items-list .item .row-content{
+  display: flex;
+  line-height: 10px;
+  border-bottom: 1px solid #CCC;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 .pillars-of-eternity.actor.sheet .items-list .item:last-of-type {
@@ -214,6 +224,10 @@
 
 .pillars-of-eternity.actor.sheet .items-list.power-sources .item-name{
   max-width: 80%;
+}
+
+.pillars-of-eternity.actor.sheet .items-list .item.used {
+  opacity: 0.5
 }
 
 
@@ -242,7 +256,11 @@
 }
 
 .pillars-of-eternity.actor.sheet .items-list .items .item-property-column.small{
-  font-size: 11px
+  font-size: 11px;
+  line-height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pillars-of-eternity.actor.sheet .items-list .item-property-column.large{
@@ -255,7 +273,13 @@
   border: none;
   border-bottom: 1px solid black;
   text-align: center;
-  border-radius: 0px
+  border-radius: 0px;
+  font-size: 16px;
+  line-height: 25px;
+}
+
+.pillars-of-eternity.actor.sheet .items-list .items .item-property-column input:focus{
+  box-shadow: none;
 }
 
 
@@ -282,6 +306,24 @@
 .pillars-of-eternity.actor.sheet .items-list.power-sources .items .item-property-column.pool-inputs input{
   width: 40px;
   font-size: 16px
+}
+
+.pillars-of-eternity.actor.sheet .items-list .items .item-property-column .progress-bar{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.pillars-of-eternity.actor.sheet .items-list .items .item-property-column .progress-bar-container{
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+  height: 10px;
+}
+
+.pillars-of-eternity.actor.sheet .items-list .items .item-property-column .progress-bar-container .progress{
+  background: black;
+  height: 100%
 }
 
 .pillars-of-eternity.actor.sheet .items-list  .item-used {

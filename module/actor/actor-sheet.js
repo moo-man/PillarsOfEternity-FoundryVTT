@@ -26,6 +26,7 @@ export class PillarsActorSheet extends ActorSheet {
 
     prepareSheetData(sheetData) {
         sheetData.items = this.constructItemLists(sheetData)
+        this._setPowerSourcePercentage(sheetData)
     }   
 
 
@@ -38,6 +39,8 @@ export class PillarsActorSheet extends ActorSheet {
 
         items.skills = sheetData.actor.getItemTypes("skill")
         items.traits = sheetData.actor.getItemTypes("trait")
+        items.powers = sheetData.actor.getItemTypes("power")
+        items.powerSources = sheetData.actor.getItemTypes("powerSource")
 
         items.backgrounds = sheetData.actor.getItemTypes("background")  
         items.settings = sheetData.actor.getItemTypes("setting")  
@@ -45,6 +48,11 @@ export class PillarsActorSheet extends ActorSheet {
         items.reputations = sheetData.actor.getItemTypes("reputation")  
 
         items.inventory = this.constructInventory(sheetData)
+
+        items.equipped = {}
+        items.equipped.weapons = items.inventory.weapons.items.filter(i => i.equipped.value)
+        items.equipped.armor = items.inventory.armor.items.filter(i => i.equipped.value)
+        items.equipped.shields = items.inventory.shields.items.filter(i => i.equipped.value)
         return items
     }
 
@@ -60,7 +68,7 @@ export class PillarsActorSheet extends ActorSheet {
                 type : "equipment",
                 items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "tool")
             },
-            weapon : {
+            weapons : {
                 label: "Weapons",
                 type : "weapon",
                 items : sheetData.actor.getItemTypes("weapon")
@@ -77,6 +85,14 @@ export class PillarsActorSheet extends ActorSheet {
             },
         }
         return inventory
+    }
+
+    _setPowerSourcePercentage(sheetData)
+    {
+        let sources = sheetData.items.powerSources
+        sources.forEach(s => {
+            s.pool.pct = (s.pool.current / s.pool.max) * 100
+        })
     }
 
      _dropdown(event, dropdownData) {
@@ -122,6 +138,21 @@ export class PillarsActorSheet extends ActorSheet {
         $("input[type=text]").focusin(function () {
             $(this).select();
         });
+
+        $("input[type=number]").focusin(function () {
+            $(this).select()
+        });
+
+        html.find(".item-edit").click(this._onItemEdit.bind(this))
+        html.find(".item-delete").click(this._onItemDelete.bind(this))
+        html.find(".item-create").click(this._onItemCreate.bind(this))
+        html.find(".item-post").click(this._onPostItem.bind(this))
+        html.find(".sheet-checkbox").click(this._onCheckboxClick.bind(this))
+        html.find(".item-dropdown").mousedown(this._onDropdown.bind(this))
+        html.find(".item-dropdown-alt").mousedown(this._onDropdownAlt.bind(this))
+
+
+        html.find(".item-property").change(this._onEditItemProperty.bind(this))
     }
 
     // Handle custom drop events (currently just putting items into containers)
@@ -131,20 +162,24 @@ export class PillarsActorSheet extends ActorSheet {
 
     _onItemEdit(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        this.actor.items.get(itemId).sheet.render(true)
+        return this.actor.items.get(itemId).sheet.render(true)
     }
     _onItemDelete(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        this.actor.deleteEmbeddedDocuments("Item", [itemId])
+        return this.actor.deleteEmbeddedDocuments("Item", [itemId])
     }
     _onItemCreate(event) {
-        let type = $(event.currentTarget).attr("data-item");
-        this.actor.createEmbeddedDocuments("Item", [{ name: `New ${type.capitalize()}`, type: type }])
+        let type = $(event.currentTarget).attr("data-type");
+        let category = $(event.currentTarget).attr("data-category");
+        let createData = { name: `New ${game.i18n.localize(CONFIG.Item.typeLabels[type])}`, type}
+        if (category)
+            createData["data.category.value"] = category
+        return this.actor.createEmbeddedDocuments("Item", [createData])
     }
 
     _onPostItem(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        this.actor.items.get(itemId).postToChat()
+        return this.actor.items.get(itemId).postToChat()
     }
     
     _onCheckboxClick(event) {
@@ -152,30 +187,36 @@ export class PillarsActorSheet extends ActorSheet {
         if (target == "item") {
             target = $(event.currentTarget).attr("data-item-target")
             let item = this.actor.items.get($(event.currentTarget).parents(".item").attr("data-item-id"))
-            item.update({ [`${target}`]: !getProperty(item.data, target) })
-            return;
+            return item.update({ [`${target}`]: !getProperty(item.data, target) })
         }
         if (target)
-            this.actor.update({[`${target}`] : !getProperty(this.actor.data, target)});
+            return this.actor.update({[`${target}`] : !getProperty(this.actor.data, target)});
     }
+
+    _onEditItemProperty(event) {
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let target = $(event.currentTarget).attr("data-target")
+        let value = event.target.value
+        let item = this.actor.items.get(itemId)
+
+        if (Number.isNumeric(value))
+            value = parseInt(value)
+
+        return item.update({[target] : value})
+    }
+
     _onDropdown(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
         let item = this.actor.items.get(itemId)
         this._dropdown(event, item.dropdownData())
     }
-    async _onSkillClick(event) {
-        let skill = $(event.currentTarget).parents(".skill").attr("data-target")
-        let skipDialog = event.ctrlKey
-        let { rollResults, cardData } = await this.actor.rollSkill(skill, {skipDialog})
-        PillarsChat.renderRollCard(rollResults, cardData)
-    }
-    async _onWeaponClick(event) {
-        let weaponId = $(event.currentTarget).parents(".weapon").attr("data-item-id")
-        let skipDialog = event.ctrlKey
-        let use = $(event.currentTarget).attr("data-use");
-        let weapon = this.actor.items.get(weaponId)
-        let { rollResults, cardData } = await this.actor.rollWeapon(weapon, { use, skipDialog })
-        PillarsChat.renderRollCard(rollResults, cardData)
+    _onDropdownAlt(event) {
+        if (event.button == 2)
+        {
+            let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+            let item = this.actor.items.get(itemId)
+            this._dropdown(event, item.dropdownData())
+        }
     }
 
     /* -------------------------------------------- */

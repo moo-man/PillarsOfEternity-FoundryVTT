@@ -162,11 +162,16 @@
         },
         "quantity": {
           "value": 1
-        },
+        }
+      },
         "used": {
           "used": {
             "value": false
           }
+      },
+      "equipped" : {
+        "equipped" : {
+          "value" : false
         }
       }
     },
@@ -262,7 +267,8 @@
         "templates": [
           "description",
           "category",
-          "physical"
+          "physical",
+          "equipped"
         ],
         "size": {
           "value": ""
@@ -284,7 +290,8 @@
         "templates": [
           "description",
           "category",
-          "physical"
+          "physical",
+          "equipped"
         ],
         "soak": {
           "value": 0
@@ -300,7 +307,8 @@
         "templates": [
           "description",
           "physical",
-          "used"
+          "used",
+          "equipped"
         ],
         "soak": {
           "value": 0
@@ -319,7 +327,8 @@
         "templates": [
           "description",
           "category",
-          "physical"
+          "physical",
+          "equipped"
         ],
         "category": {
           "value": "gear"
@@ -327,9 +336,6 @@
         "skill": {
           "value": "",
           "suitability": "none"
-        },
-        "worn" : {
-          "value" : false
         },
         "wearable" : {
           "value" : false

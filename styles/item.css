@@ -12,6 +12,7 @@
   display: flex;
   width: 100%
 }
+
 .pillars-of-eternity.item.sheet .item-header .detail-row .form-group label,
 .pillars-of-eternity.item.sheet .item-header > *{
   margin: 5px
@@ -27,6 +28,17 @@
 .pillars-of-eternity.item.sheet .item-header .header-details{
   flex: 1
   }
+
+  .pillars-of-eternity.item.sheet .item-header .header-details h1{
+    height: 50px;
+    }
+
+    
+  .pillars-of-eternity.item.sheet .item-header .header-details h1 input{
+    height: 40px;
+    }
+
+  
 
 
   .pillars-of-eternity.item.sheet .item-header .detail-row input {

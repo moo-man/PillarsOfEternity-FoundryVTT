@@ -1,3 +1,23 @@
 {
-    "Pillars.Title" : "Pillars of Eternity"
+    "Pillars.Title" : "Pillars of Eternity",
+
+    "ACTOR.TypeCharacter" : "Character",
+    "ACTOR.TypeCreature" : "Creature",
+    "ACTOR.TypeFollower" : "Follower",
+    "ACTOR.TypeHeadquarters" : "Headquarters",
+
+    "ITEM.TypeArmor" : "Armor",
+    "ITEM.TypeAttribute" : "Attribute",
+    "ITEM.TypeBackground" : "Background",
+    "ITEM.TypeConnection" : "Connection",
+    "ITEM.TypeCulture" : "Culture",
+    "ITEM.TypeEquipment" : "Equipment",
+    "ITEM.TypePower" : "Power",
+    "ITEM.TypePowersource" : "Power Source",
+    "ITEM.TypeSetting" : "Setting",
+    "ITEM.TypeShield" : "Shield",
+    "ITEM.TypeSkill" : "Skill",
+    "ITEM.TypeSpecies" : "Species",
+    "ITEM.TypeTrait" : "Trait",
+    "ITEM.TypeWeapon" : "Weapon"
 }

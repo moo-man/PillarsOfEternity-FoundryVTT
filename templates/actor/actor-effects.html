@@ -8,7 +8,7 @@
     </li>
 
     <ol class="items">
-        <li class="item flexrow" data-item-id="{{effect.id}}">
+        <li class="item" data-item-id="{{effect.id}}">
 
         {{#each effects.temporary as |effect e|}}
             <div class="item-name flexrow">
@@ -42,7 +42,7 @@
 
     <ol class="items">
         {{#each effects.passive as |effect e|}}
-        <li class="item flexrow" data-item-id="{{effect.id}}">
+        <li class="item" data-item-id="{{effect.id}}">
 
             <div class="item-name flexrow">
                 <div class="item-image" style="background-image: url('{{effect.icon}}')"></div>
@@ -76,7 +76,7 @@
 
     <ol class="items" style="opacity: 0.5">
         {{#each effects.disabled as |effect e|}}
-        <li class="item flexrow" data-item-id="{{effect.id}}">
+        <li class="item" data-item-id="{{effect.id}}">
 
             <div class="item-name flexrow">
                 <div class="item-image" style="background-image: url('{{effect.icon}}')"></div>

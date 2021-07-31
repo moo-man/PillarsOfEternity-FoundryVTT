@@ -11,7 +11,7 @@ import { PillarsActor } from "./module/actor/actor-pillars.js";
 import { PillarsCombat } from "./module/system/combat.js";
 import { POE } from "./module/system/config.js";
 import { PillarsDice } from "./module/system/dice.js";
-import { POE_UTILITY } from "./module/system/utility.js";
+import PILLARS_UTILITY from "./module/system/utility.js";
 import { PillarsChat } from "./module/system/chat.js";
 import hooks from "./module/hooks/hooks.js"
 
@@ -37,7 +37,7 @@ Hooks.on("init", () => {
       PillarsActorSheet,
       PillarsItemSheet
     },
-    utility: POE_UTILITY,
+    utility: PILLARS_UTILITY,
     config : POE,
     dice : PillarsDice,
     chat : PillarsChat
