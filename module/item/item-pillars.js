@@ -119,6 +119,17 @@ export class PillarsItem extends Item {
     get exclusion() {return this.data.data.exclusion}
     get pool() {return this.data.data.pool}
     get description() {return this.data.data.description}
+    get soak() {return this.data.data.soak}
+    get winded() {return this.data.data.winded}
+    get initiative() {return this.data.data.initiative}
+    get health() {return this.data.data.health}
+    get deflection() {return this.data.data.deflection}
+    get skill() {return this.data.data.skill}
+    get misc() {return this.data.data.misc}
+    get accuracy() {return this.data.data.accuracy}
+    get damage() {return this.data.data.damage}
+    get crit() {return this.data.data.crit}
+    get special() {return this.data.data.special}
 
     //      Processed data getters
 

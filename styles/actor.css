@@ -195,7 +195,10 @@
 }
 
 .pillars-of-eternity.actor.sheet .items-list .item .item-summary{
+  padding: 5px;
   margin: 5px;
+  border-left: 1px dotted black;
+  border-right: 1px dotted black;
 }
 
 .pillars-of-eternity.actor.sheet .items-list .item .row-content{
@@ -215,6 +218,7 @@
     flex: 1;
     margin: 3px;
     overflow: hidden; 
+    flex-wrap:nowrap
   }
 
 .pillars-of-eternity.actor.sheet .items-list.weapons .item-name,
@@ -380,17 +384,22 @@
 
 
 .pillars-of-eternity.actor.sheet .combat-items .value {
-  border: 1px solid black;
-  border-radius: 3px;
   text-align: center;
   width: 30px;
   margin: 0px 0px 8px 5px;
-}
-
-.pillars-of-eternity.actor.sheet .combat-items input.value {
-  background: rgba(0, 0, 0, 0.05);
   font-size: 20px
 }
+
+.pillars-of-eternity.actor.sheet .defence-items{
+  width: 100%;
+  display:flex;
+}
+
+
+.pillars-of-eternity.actor.sheet .defence-items > *{
+  flex: 1
+}
+
 
 .pillars-of-eternity.actor.sheet .inventory {
   height: 100%
@@ -440,6 +449,10 @@
   display: flex;
   justify-content: space-between;
   margin: 5px 5px 5px 10px;
+}
+
+.pillars-of-eternity.actor.sheet .details .detail-group label{
+  line-height: 26px;
 }
 
 .pillars-of-eternity.actor.sheet .details .detail-group input{

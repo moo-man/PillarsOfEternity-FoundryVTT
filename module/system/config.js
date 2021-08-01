@@ -154,3 +154,14 @@ POE.suitabilities = {
 }
 
 POE.actorSizes = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
+
+
+
+POE.itemSpecials = {
+    "halfSword" : "Half-Sword"
+}
+
+POE.itemSpecialDescriptions = {
+    "Half-Sword" : `(Skilled) Ignore 6 points of a target’s Soak from armor (only).  The weapon is considered one Size category smaller for purposes of Grapple Attacks.  Reduce Deflection by 2 until next Action.  This action can only be performed with a free hand (i.e., no weapon or shield in the other hand).`
+
+}

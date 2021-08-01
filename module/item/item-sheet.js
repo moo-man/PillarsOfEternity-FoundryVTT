@@ -59,5 +59,15 @@ export class PillarsItemSheet extends ItemSheet {
       new ItemQualities(this.item).render(true)
     })
 
+
+    html.find(".csv-input").change(ev => {
+      let target = $(ev.currentTarget).attr("data-target")
+      let text = ev.target.value;
+      let array = text.split(",").map(i => i.trim())
+
+      return this.item.update({[target] : array})
+
+    })
+
   }
 }

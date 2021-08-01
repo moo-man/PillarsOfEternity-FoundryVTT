@@ -50,7 +50,8 @@ export class PillarsActorSheet extends ActorSheet {
         items.inventory = this.constructInventory(sheetData)
 
         items.equipped = {}
-        items.equipped.weapons = items.inventory.weapons.items.filter(i => i.equipped.value)
+        items.equipped.meleeWeapons = items.inventory.weapons.items.filter(i => i.equipped.value && i.isMelee)
+        items.equipped.rangedWeapons = items.inventory.weapons.items.filter(i => i.equipped.value && i.isRanged)
         items.equipped.armor = items.inventory.armor.items.filter(i => i.equipped.value)
         items.equipped.shields = items.inventory.shields.items.filter(i => i.equipped.value)
         return items
@@ -150,6 +151,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".sheet-checkbox").click(this._onCheckboxClick.bind(this))
         html.find(".item-dropdown").mousedown(this._onDropdown.bind(this))
         html.find(".item-dropdown-alt").mousedown(this._onDropdownAlt.bind(this))
+        html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
 
 
         html.find(".item-property").change(this._onEditItemProperty.bind(this))
@@ -217,6 +219,10 @@ export class PillarsActorSheet extends ActorSheet {
             let item = this.actor.items.get(itemId)
             this._dropdown(event, item.dropdownData())
         }
+    }
+
+    _onSpecialClicked(event) {
+        this._dropdown(event, {text : game.pillars.config.itemSpecialDescriptions[event.target.text]})
     }
 
     /* -------------------------------------------- */
