@@ -65,7 +65,7 @@ export class PillarsActor extends Actor {
 
     prepareDerivedData() {
 
-        this.health.bloodied = (this.health.max / 2) <= this.health.current
+        this.health.bloodied = (this.health.max / 2) >= this.health.current
     }
 
     //#region Data Preparation
@@ -73,6 +73,8 @@ export class PillarsActor extends Actor {
         try {
             super.prepareData();
             this.itemCategories = this.itemTypes
+            this.prepareItems()
+            this.prepareCombat()
 
         }
         catch (e) {
@@ -81,11 +83,25 @@ export class PillarsActor extends Actor {
     }
 
     prepareItems() {
-
-
         for (let i of this.items)
             i.prepareOwnedData()
 
+    }
+
+
+    prepareCombat()
+    {
+        this.data.data.combat = {
+            soak : 0
+        }
+
+        let equippedArmor = this.getItemTypes("armor")[0]
+        let equippedShield = this.getItemTypes("shield")[0]
+
+        if (equippedArmor)
+            this.combat.soak += equippedArmor.soak.value || 0
+        if (equippedShield)
+            this.combat.soak += equippedShield.soak.value || 0        
     }
 
     //#endregion
@@ -115,6 +131,10 @@ export class PillarsActor extends Actor {
     get endurance() { return this.data.data.endurance }
     get health() { return this.data.data.health }
     get size() { return this.data.data.size }
+    get details() { return this.data.data.details}
+    get knownConnections() { return this.data.data.knownConnections}
 
+
+    get combat() {return this.data.data.combat}
     //#endregion
 }

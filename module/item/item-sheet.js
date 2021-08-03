@@ -46,6 +46,11 @@ export class PillarsItemSheet extends ItemSheet {
       data.targetSubTypes = `power${this.item.target.value[0].toUpperCase() + this.item.target.value.slice(1)}s`
     }
 
+    if (this.item.type == "weapon" && this.item.isOwned)
+    {
+      data.ownerMartialSkills = this.item.actor.getItemTypes("skill").filter(i => i.category.value == "martial")
+    }
+
     return data;
   }
   /** @override */

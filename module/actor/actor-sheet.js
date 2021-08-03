@@ -11,9 +11,65 @@ export class PillarsActorSheet extends ActorSheet {
             width: 1200,
             height: 700,
             tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".tab-content", initial: "main" }],
-            scrollY: []
+            scrollY: [".details", ".inventory-lists", ".items", ".powers" ]
         });
     }
+
+
+      /**
+   * Overrides the default ActorSheet.render to add lity.
+   * 
+   * This adds scroll position saving support, as well as tooltips for the
+   * custom buttons.
+   * 
+   * @param {bool} force      used upstream.
+   * @param {Object} options  used upstream.
+   */
+  async _render(force = false, options = {}) {
+    this._saveScrollPos(); // Save scroll positions
+    await super._render(force, options);
+    this._setScrollPos();  // Set scroll positions
+
+    //this._refocus(this._element)
+
+  }
+    
+  /**
+   * Saves all the scroll positions in the sheet for setScrollPos() to use
+   * 
+   * All elements in the sheet that use ".save-scroll" class has their position saved to
+   * this.scrollPos array, which is used when rendering (rendering a sheet resets all 
+   * scroll positions by default).
+   */
+  _saveScrollPos() {
+    if (this.form === null)
+      return;
+
+    const html = $(this.form).parent();
+    this.scrollPos = [];
+    let lists = $(html.find(".items"));
+    for (let list of lists) {
+      this.scrollPos.push($(list).scrollTop());
+    }
+  }
+
+  /**
+   * Sets all scroll positions to what was saved by saveScrollPos()
+   * 
+   * All elements in the sheet that use ".save-scroll" class has their position set to what was
+   * saved by saveScrollPos before rendering. 
+   */
+  _setScrollPos() {
+    if (this.scrollPos) {
+      const html = $(this.form).parent();
+      let lists = $(html.find(".items"));
+      for (let i = 0; i < lists.length; i++) {
+        $(lists[i]).scrollTop(this.scrollPos[i]);
+      }
+    }
+  }
+
+
 
     /** @override */
     getData() {
@@ -92,7 +148,7 @@ export class PillarsActorSheet extends ActorSheet {
     {
         let sources = sheetData.items.powerSources
         sources.forEach(s => {
-            s.pool.pct = (s.pool.current / s.pool.max) * 100
+            s.pool.pct = Math.clamped((s.pool.current / s.pool.max) * 100, 0, 100)
         })
     }
 
@@ -152,9 +208,9 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".item-dropdown").mousedown(this._onDropdown.bind(this))
         html.find(".item-dropdown-alt").mousedown(this._onDropdownAlt.bind(this))
         html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
-
-
         html.find(".item-property").change(this._onEditItemProperty.bind(this))
+        html.find(".property-counter").mousedown(this._onCounterClick.bind(this))
+        html.find(".create-connection").click(this._onCreateConnection.bind(this))
     }
 
     // Handle custom drop events (currently just putting items into containers)
@@ -221,8 +277,36 @@ export class PillarsActorSheet extends ActorSheet {
         }
     }
 
+    _onCounterClick(event) {
+        let multiplier = event.button == 0 ? 1 : -1;
+        multiplier = event.ctrlKey ? multiplier * 10 : multiplier
+
+
+        let target = $(event.currentTarget).attr("data-target")
+        if (target == "item") {
+            target = $(event.currentTarget).attr("data-item-target")
+            let item = this.actor.items.get($(event.currentTarget).parents(".item").attr("data-item-id"))
+            return item.update({ [`${target}`]: getProperty(item.data, target) + multiplier })
+        }
+        if (target)
+            return this.actor.update({[`${target}`] : getProperty(this.actor.data, target) + multiplier});
+    }
+
     _onSpecialClicked(event) {
         this._dropdown(event, {text : game.pillars.config.itemSpecialDescriptions[event.target.text]})
+    }
+
+    _onCreateConnection(event) {
+        let connections = duplicate(this.actor.knownConnections.value);
+        connections.push({name : "New Connection"})
+        this.actor.update({"data.knownConnections.value" : connections})
+    }
+
+    _onEditConnection(event) {
+        $()
+        let connections = duplicate(this.actor.knownConnections.value);
+        connections.push("")
+        this.actor.update({"data.knownConnections" : connections})
     }
 
     /* -------------------------------------------- */

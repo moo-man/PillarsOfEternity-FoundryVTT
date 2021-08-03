@@ -8,9 +8,8 @@
     </li>
 
     <ol class="items">
-        <li class="item" data-item-id="{{effect.id}}">
-
         {{#each effects.temporary as |effect e|}}
+        <li class="item" data-item-id="{{effect.id}}">
             <div class="item-name flexrow">
                 <div class="item-image" style="background-image: url('{{effect.icon}}')"></div>
                 <a>
@@ -21,7 +20,7 @@
             <span class="item-property-column flex"></span>
 
             <div class="item-controls flexrow">
-                {{#if owner}}
+                {{#if ../document.isOwner}}
                 <a class="item-control effect-disable" title="Disable Effect"><i class="far fa-check-circle"></i></a>
                 <a class="item-control effect-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
                 {{/if}}

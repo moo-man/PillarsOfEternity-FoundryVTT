@@ -21,7 +21,7 @@
             <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-circle"></i></a>
             {{/if}}
 
-            <div class="item-name flexrow">
+            <div class="item-name flexrow item-dropdown">
                 <a>
                     <h4>{{item.name}}</h4>
                 </a>
@@ -52,7 +52,7 @@
     </ol>
 </ol>
 
-<ol class="items-list powers">
+<ol class="items-list powers-list">
     <li class="items-header flexrow">
         <h3 class="item-name flexrow">Powers</h3>
             <!--<span class="item-property-column flex">Base Effects</span>-->
@@ -71,7 +71,7 @@
         {{#each items.powers as |item i|}}
         <li class="item" data-item-id="{{item.id}}">
             <div class="row-content">
-            <div class="item-name flexrow">
+            <div class="item-name flexrow item-dropdown-alt">
                 <a>
                     <h4>{{item.name}}</h4>
                 </a>

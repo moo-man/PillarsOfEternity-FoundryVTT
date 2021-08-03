@@ -5,6 +5,17 @@ POE.attributeTypes = {
     "hindrance" : "Hindrance"
 }
 
+
+POE.skillTypes = {
+    "academic" : "Academic",
+    "artistic" : "Artistic",
+    "language" : "Language",
+    "martial" : "Martial",
+    "physical" : "Physical",
+    "social" : "Social",
+    "worldly" : "Worldly"
+}
+
 POE.traitTypes = {
     "adventure" : "Adventure",
     "experience" : "Experience"

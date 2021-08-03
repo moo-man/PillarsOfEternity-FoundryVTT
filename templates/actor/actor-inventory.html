@@ -25,7 +25,7 @@
             {{#each section.items as |item i|}}
             <li class="item" data-item-id="{{item.id}}">
                 <div class="row-content">
-                <div class="item-name flexrow">
+                <div class="item-name flexrow item-dropdown">
                     <div class="item-image" style="background-image: url('{{item.img}}')"></div>
                     <a>
                         <h4>{{item.name}}</h4>
@@ -33,9 +33,11 @@
                 </div>
                 {{log ../section}}
     
+                {{#unless (eq item.type "weapon") }}
                 {{#if item.skill.value}}
                 <button class="item-property-column large">{{item.skill.value}}</button>
                 {{/if}}
+                {{/unless}}
 
                 <span class="item-property-column">
                 {{#if item.canEquip}}

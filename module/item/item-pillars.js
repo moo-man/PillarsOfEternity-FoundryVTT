@@ -6,12 +6,18 @@ import PILLARS_UTILITY  from "../system/utility.js"
 export class PillarsItem extends Item {
 
 
+    _preUpdate(updateData, options, user)
+    {
+        if (this.type == "shield" && hasProperty(updateData, "data.health.current"))
+            updateData.data.health.current = Math.clamped(updateData.data.health.current, 0, this.health.max)
+
+        if (this.type=="powerSource" && hasProperty(updateData, "data.source.value"))
+            updateData.name = game.pillars.config.powerSources[updateData.data.source.value]
+    }
+
     //#region Data Preparation 
     prepareData() {
         super.prepareData();
-
-        if (this.isOwned)
-            this.prepareOwnedData()
     }
 
     prepareOwnedData() 
@@ -29,7 +35,7 @@ export class PillarsItem extends Item {
     }
 
     prepareOwnedSkill() {
-        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value)
+        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier.value
     }
 
     prepareOwnedPowerSource() {
@@ -99,6 +105,7 @@ export class PillarsItem extends Item {
     get Duration() {return game.pillars.config.powerDurations[this.data.data.duration.value]}
     get Speed() {return game.pillars.config.powerSpeeds[this.data.data.speed.value]}
     get Exclusion() {return game.pillars.config.powerExclusions[this.data.data.exclusion.value]}
+    get Skill() {return this.actor.items.get(this.skill.value)}
 
     // @@@@@@@@ DATA GETTERS @@@@@@@@@@
     get category() {return this.data.data.category}
@@ -130,8 +137,10 @@ export class PillarsItem extends Item {
     get damage() {return this.data.data.damage}
     get crit() {return this.data.data.crit}
     get special() {return this.data.data.special}
+    get modifier() {return this.data.data.modifier}
+    get setting() {return this.data.data.setting}
 
-    //      Processed data getters
+    // Processed data getters
 
     //#endregion
 

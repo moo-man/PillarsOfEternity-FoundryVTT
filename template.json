@@ -46,7 +46,8 @@
         "endurance": {
           "max": 0,
           "current": 0,
-          "windedThreshold": 0
+          "windedThreshold": 0,
+          "exert" : 0
         }
       },
       "size": {
@@ -99,8 +100,11 @@
         "bonus": 0,
         "penalty": 0
       },
-      "cause": {
-        "value": ""
+      "details": {
+        "cause": "",
+        "call" : "",
+        "goal" : "",
+        "relationships" : ""
       },
       "knownConnections": {
         "value": []
@@ -270,6 +274,9 @@
           "physical",
           "equipped"
         ],
+        "skill" : {
+          "value" : ""
+        },
         "size": {
           "value": ""
         },
@@ -314,7 +321,8 @@
           "value": 0
         },
         "health": {
-          "value": 0
+          "max": 0,
+          "current": 0
         },
         "winded": {
           "value": 0
@@ -364,10 +372,14 @@
           "description"
         ],
         "setting": {
-          "value": ""
+          "value": "",
+          "id" : ""
         },
         "skills": {
           "value": []
+        },
+        "years" : {
+          "value" : 0
         }
       },
       "setting": {

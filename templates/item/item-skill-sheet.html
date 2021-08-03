@@ -11,6 +11,20 @@
 
         <div class="tab details active" data-tab="details"> 
             <div class="form-group">
+                <label>Type</label>
+                <div class="form-fields">
+                    <select name="data.category.value">
+                        {{#select data.category.value}}
+                        <option value=""></option>
+                        {{#each (config "skillTypes") as |value k|}}
+                        <option value="{{k}}">{{value}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>Specialization</label>
                 <div class="form-fields">
                     <input type="checkbox" name="data.specialization.has" data-dtype="Number" {{checked data.specialization.has}}>
@@ -21,8 +35,8 @@
             <div class="form-group xp-rank">
                 <label>XP and Rank</label>
                 <div class="form-fields">
-                    <input type="number" name="data.XP.value" value="{{data.XP.value}}" data-dtype="Number">
-                    <input class="rank" type="number" disabled value="{{data.XP.rank}}" data-dtype="Number">
+                    <input type="number" name="data.xp.value" value="{{data.xp.value}}" data-dtype="Number">
+                    <input type="number" disabled value="{{item.xp.rank}}" data-dtype="Number">
                 </div>
             </div>
 

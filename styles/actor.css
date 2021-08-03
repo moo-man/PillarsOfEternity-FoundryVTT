@@ -101,6 +101,15 @@
 }
 
 
+.pillars-of-eternity.actor.sheet .general .property-group.bloodied label{
+  color: darkred
+}
+
+.pillars-of-eternity.actor.sheet .general .property-group.bloodied input{
+  color: darkred;
+  border: 1px solid darkred
+}
+
 .pillars-of-eternity.actor.sheet .general .wounds h4 {
   width: 100%;
   font-size: 18px
@@ -221,10 +230,13 @@
     flex-wrap:nowrap
   }
 
+
 .pillars-of-eternity.actor.sheet .items-list.weapons .item-name,
-  .pillars-of-eternity.actor.sheet .items-list.powers .item-name{
+  .pillars-of-eternity.actor.sheet .items-list.powers-list .item-name{
   max-width: 50%;
 }
+
+
 
 .pillars-of-eternity.actor.sheet .items-list.power-sources .item-name{
   max-width: 80%;
@@ -244,9 +256,10 @@
 
 .pillars-of-eternity.actor.sheet .items-list .item-property-column{
   flex: 0 0 60px;
-  text-align: center;
-  padding: 0px;
-  line-height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center
 }
 
 
@@ -405,7 +418,8 @@
   height: 100%
 }
 
-.pillars-of-eternity.actor.sheet .inventory .items-list {
+.pillars-of-eternity.actor.sheet .powers .items-list,
+  .pillars-of-eternity.actor.sheet .inventory .items-list {
   height: unset
 }
 
@@ -431,7 +445,8 @@
 }
 
 
-.pillars-of-eternity.actor.sheet .details {
+.pillars-of-eternity.actor.sheet .powers,
+  .pillars-of-eternity.actor.sheet .details {
   overflow-y: auto;
   height: 100%
 }
@@ -449,10 +464,11 @@
   display: flex;
   justify-content: space-between;
   margin: 5px 5px 5px 10px;
+  align-items: center;
 }
 
-.pillars-of-eternity.actor.sheet .details .detail-group label{
-  line-height: 26px;
+.pillars-of-eternity.actor.sheet .details .detail-group.textbox {
+  align-items: start;
 }
 
 .pillars-of-eternity.actor.sheet .details .detail-group input{

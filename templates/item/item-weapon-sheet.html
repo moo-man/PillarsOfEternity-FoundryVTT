@@ -27,6 +27,22 @@
                 </div>
             </div>
 
+            {{#if item.isOwned}}
+            <div class="form-group">
+                <label>Skill</label>
+                <div class="form-fields">
+                    <select name="data.skill.value">
+                        {{#select data.skill.value}}
+                        <option value=""></option>
+                        {{#each ownerMartialSkills as |value k|}}
+                        <option value="{{value.id}}">{{value.name}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+            {{/if}}
+
             <div class="form-group">
                 <label>Damage</label>
                 <div class="form-fields">
