@@ -19,5 +19,6 @@
     "ITEM.TypeSkill" : "Skill",
     "ITEM.TypeSpecies" : "Species",
     "ITEM.TypeTrait" : "Trait",
-    "ITEM.TypeWeapon" : "Weapon"
+    "ITEM.TypeWeapon" : "Weapon",
+    "ITEM.TypeReputation" : "Reputation"
 }

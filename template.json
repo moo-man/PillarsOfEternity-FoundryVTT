@@ -95,6 +95,7 @@
       ],
       "life": {
         "age": 0,
+        "apparentAge" : 0,
         "phase": "",
         "march": 0,
         "bonus": 0,
@@ -104,7 +105,10 @@
         "cause": "",
         "call" : "",
         "goal" : "",
-        "relationships" : ""
+        "relationships" : "",
+        "culture" : "",
+        "species" : "",
+        "stock" : ""
       },
       "knownConnections": {
         "value": []
@@ -277,9 +281,6 @@
         ],
         "skill" : {
           "value" : ""
-        },
-        "size": {
-          "value": ""
         },
         "damage": {
           "value": ""

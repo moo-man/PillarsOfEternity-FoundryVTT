@@ -42,8 +42,8 @@
 
 
   .pillars-of-eternity.item.sheet .item-header .detail-row input {
-  min-width: 80px;
-  max-width: 80px;
+  min-width: 75px;
+  max-width: 75px;
   text-align: center;
 }
 

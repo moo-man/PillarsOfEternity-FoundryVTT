@@ -72,6 +72,7 @@
         <li class="item" data-item-id="{{item.id}}">
             <div class="row-content">
             <div class="item-name flexrow item-dropdown-alt">
+                <div class="item-image" style="background-image: url('{{item.img}}')"></div>
                 <a>
                     <h4>{{item.name}}</h4>
                 </a>
@@ -80,7 +81,7 @@
             <!--<span class="item-property-column flex">Base Effects</span>-->
             <span class="item-property-column small">{{item.cost.value}}</span>
             <span class="item-property-column small">{{item.Range}}</span>
-            <span class="item-property-column small">{{item.Target}}</span>
+            <a class="item-property-column small power-target">{{item.Target}}</a>
             <span class="item-property-column small">{{item.Duration}}</span>
             <span class="item-property-column small">{{item.Speed}}</span>
             <span class="item-property-column small">{{item.Exclusion}}</span>

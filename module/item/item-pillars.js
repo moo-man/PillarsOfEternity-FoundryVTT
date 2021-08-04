@@ -8,8 +8,8 @@ export class PillarsItem extends Item {
 
     _preUpdate(updateData, options, user)
     {
-        if (this.type == "shield" && hasProperty(updateData, "data.health.value"))
-            updateData.data.health.value = Math.clamped(updateData.data.health.value, 0, this.health.max)
+        if (this.type == "shield" && hasProperty(updateData, "data.health.current"))
+            updateData.data.health.current = Math.clamped(updateData.data.health.current, 0, this.health.max)
 
         if (this.type=="powerSource" && hasProperty(updateData, "data.source.value"))
             updateData.name = game.pillars.config.powerSources[updateData.data.source.value]
@@ -91,6 +91,8 @@ export class PillarsItem extends Item {
 
     // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
 
+    get Type() {return game.i18n.localize(CONFIG.Item.typeLabels[this.type])}
+
     get Range() {return game.pillars.config.powerRanges[this.data.data.range.value]}
 
     get Target() {
@@ -166,6 +168,10 @@ export class PillarsItem extends Item {
     get setting() {return this.data.data.setting}
     get years() {return this.data.data.years}
     get group() {return this.data.data.group}
+    get stride() {return this.data.data.stride}
+    get size() {return this.data.data.size}
+    get species() {return this.data.data.species}
+    get stock() {return this.data.data.stock}
 
     // Processed data getters
     get rank() {return this.xp.rank}

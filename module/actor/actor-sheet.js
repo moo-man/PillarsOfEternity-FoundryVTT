@@ -1,3 +1,5 @@
+import PowerTemplate from "../system/power-template.js";
+
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -116,11 +118,6 @@ export class PillarsActorSheet extends ActorSheet {
 
     constructInventory(sheetData) {
         let inventory = {
-            gear : {
-                label: "Gear",
-                type : "equipment",
-                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "gear")
-            },
             tools : {
                 label: "Tools",
                 type : "equipment",
@@ -141,6 +138,11 @@ export class PillarsActorSheet extends ActorSheet {
                 type : "shield",
                 items : sheetData.actor.getItemTypes("shield")
             },
+            gear : {
+                label: "Gear",
+                type : "equipment",
+                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "gear")
+            }
         }
         return inventory
     }
@@ -181,7 +183,7 @@ export class PillarsActorSheet extends ActorSheet {
             if (!dropdownData) {
                 return
             } else {
-                dropdownHTML = `<div class="item-summary">${dropdownData.text}`;
+                dropdownHTML = `<div class="item-summary">${TextEditor.enrichHTML(dropdownData.text)}`;
             }
             if (dropdownData.tags) {
                 let tags = `<div class='tags'>`
@@ -228,6 +230,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".edit-connection").click(this._onEditConnection.bind(this))
         html.find(".delete-connection").click(this._onDeleteConnection.bind(this))
         html.find(".connection-name").click(this._onConnectionClick.bind(this))
+        html.find(".power-target").click(this._onPowerTargetClick.bind(this))
     }
 
     // Handle custom drop events (currently just putting items into containers)
@@ -241,7 +244,21 @@ export class PillarsActorSheet extends ActorSheet {
     }
     _onItemDelete(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        return this.actor.deleteEmbeddedDocuments("Item", [itemId])
+        new Dialog({
+            title : "Delete Item",
+            content : `<p>Are you sure you want to delete this item?`,
+            buttons : {
+                yes : {
+                    label : "Yes",
+                    callback : () => {this.actor.deleteEmbeddedDocuments("Item", [itemId]) }
+                },
+                no : {
+                    label : "No",
+                    callback : () => {}
+                }
+            },
+            default: "yes"
+        }).render(true)
     }
     _onItemCreate(event) {
         let type = $(event.currentTarget).attr("data-type");
@@ -362,6 +379,12 @@ export class PillarsActorSheet extends ActorSheet {
         let id = $(event.currentTarget).parents(".item").attr("data-actor-id")
         if (id)
             game.actors.get(id).sheet.render(true)
+    }
+
+    _onPowerTargetClick(event) {
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId)
+        PowerTemplate.fromItem(item).drawPreview()
     }
 
 

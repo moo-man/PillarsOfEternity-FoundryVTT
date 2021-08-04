@@ -77,6 +77,7 @@ export class PillarsActor extends Actor {
         try {
             super.prepareData();
             this.itemCategories = this.itemTypes
+            this.prepareSpecies();
             this.prepareItems()
             this.prepareCombat()
 
@@ -84,6 +85,20 @@ export class PillarsActor extends Actor {
         catch (e) {
             console.error(e);
         }
+    }
+
+    prepareSpecies(){
+        let species = this.getItemTypes("species")[0]
+        let culture = this.getItemTypes("culture")[0]
+        if (species)
+        {
+            this.size.value = species.size.value
+            this.stride.value = species.stride.value
+            this.details.species  = species.species.value;
+            this.details.stock = species.stock.value
+        }
+        if (culture)
+            this.details.culture = culture.name
     }
 
     prepareItems() {
@@ -99,11 +114,14 @@ export class PillarsActor extends Actor {
             soak : 0
         }
 
-        let equippedArmor = this.getItemTypes("armor")[0]
-        let equippedShield = this.getItemTypes("shield")[0]
+        let equippedArmor = this.getItemTypes("armor").filter(i => i.equipped.value)[0]
+        let equippedShield = this.getItemTypes("shield").filter(i => i.equipped.value)[0]
 
         if (equippedArmor)
+        {
             this.combat.soak += equippedArmor.soak.value || 0
+            this.initiative.value += equippedArmor.initiative.value
+        }
         if (equippedShield)
             this.combat.soak += equippedShield.soak.value || 0        
     }
@@ -137,6 +155,8 @@ export class PillarsActor extends Actor {
     get size() { return this.data.data.size }
     get details() { return this.data.data.details}
     get knownConnections() { return this.data.data.knownConnections}
+    get stride() { return this.data.data.stride}
+    get initiative() { return this.data.data.initiative}
 
 
     get combat() {return this.data.data.combat}
