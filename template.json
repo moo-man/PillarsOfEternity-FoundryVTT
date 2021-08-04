@@ -34,7 +34,7 @@
       "health": {
         "health": {
           "max": 0,
-          "current": 0,
+          "value": 0,
           "wounds": {
             "light": [],
             "heavy": [],
@@ -45,7 +45,7 @@
       "endurance": {
         "endurance": {
           "max": 0,
-          "current": 0,
+          "value": 0,
           "windedThreshold": 0,
           "exert" : 0
         }
@@ -132,7 +132,8 @@
       "culture",
       "background",
       "setting",
-      "species"
+      "species",
+      "reputation"
     ],
     "templates": {
       "category": {
@@ -423,6 +424,15 @@
         ],
         "category": {
           "value": "benefit"
+        }
+      },
+      "reputation" : {
+        "templates" : [
+          "descirption",
+          "xp"
+        ],
+        "group" : {
+          "value" : ""
         }
       }
     }

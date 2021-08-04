@@ -1,0 +1,41 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.type physical=false}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "Description"}}</a>
+        <a class="item" data-tab="details">{{localize "Details"}}</a>
+    </nav>
+
+    <section class="content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.html}}
+
+        <div class="tab details active" data-tab="details"> 
+
+            <div class="form-group">
+                <label>Group</label>
+                <div class="form-fields">
+                    <input type="text" name="data.group.value" value="{{data.group.value}}" data-dtype="String">
+                </div>
+            </div>
+
+            {{#if item.isOwned}}
+            <div class="form-group xp-rank">
+                <label>XP</label>
+                <div class="form-fields">
+                    <input type="number" name="data.xp.value" value="{{data.xp.value}}" data-dtype="Number">
+                </div>
+            </div>
+
+            <div class="form-group xp-rank">
+                <label>Rank</label>
+                <div class="form-fields">
+                    <input type="number" name="data.xp.rank" value="{{item.xp.rank}}" data-dtype="Number">
+                </div>
+            </div>
+            {{/if}}
+        </div>
+
+
+    </section>
+
+</form>

@@ -43,8 +43,10 @@
 }
 
 .pillars-of-eternity.actor.sheet .general img.profile {
-    /*height:50%*/
-    width:100%
+  height: 300px;
+  width: 300px;
+  object-fit: contain;
+  BORDER: none
 }
 
 
@@ -267,6 +269,15 @@
   flex: 1
 }
 
+.pillars-of-eternity.actor.sheet .items-list .item-property-column.item-specials{
+  flex-wrap: wrap;;
+}
+
+.pillars-of-eternity.actor.sheet .items-list .item-property-column.item-specials > *{
+  white-space: nowrap;
+}
+
+
 
 .pillars-of-eternity.actor.sheet .items-list .items .item-property-column .item-toggle{  
   line-height: 30px;
@@ -314,6 +325,9 @@
 }
 
 
+.pillars-of-eternity .array-comma {
+  margin-right: 3px;
+}
 
 .pillars-of-eternity.actor.sheet .items-list.power-sources .items .item-property-column.pool-inputs {
   display: flex;
@@ -525,7 +539,6 @@
 .pillars-of-eternity.actor.sheet .details .connection > *{
   flex: 1
 }
-
 
 .pillars-of-eternity.actor.sheet .details .aging {
   display: flex;

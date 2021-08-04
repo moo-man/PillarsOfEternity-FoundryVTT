@@ -19,7 +19,7 @@
 </div>
 <hr>
 <div class="notes">
-    {{editor content=data.notes.value target=data.notes.value button=true owner=owner editable=editable}}
+    {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
 </div>
 <hr>
 <!-- childhood/background -->
@@ -80,7 +80,7 @@
                         {{/select}}
                     </select>
                 </span>
-                <span class="item-property-column"><input type="number" class="item-property" data-target="data.years.value" value="{{data.years.value}}"></span>
+                <span class="item-property-column"><input type="number" class="item-property" data-target="data.years.value" value="{{item.years.value}}"></span>
 
 
                 <div class="item-controls flexrow">
@@ -149,12 +149,12 @@
         </li>
 
         <ol class="items">
-            {{#each actor.knownConnections.value as |item i|}}
-            <li class="item" data-index="{{i}}">
+            {{#each KnownConnections as |item i|}}
+            <li class="item" data-index="{{i}}" data-actor-id="{{item.id}}">
                 <div class="row-content">
 
-                <div class="item-name flexrow">
-                    <div class="item-image" style="background-image: url('{{item.img}}')"></div>
+                <div class="item-name connection-name flexrow">
+                    <div class="item-image"  style="background-image: url('{{item.img}}')"></div>
                     <a>
                         <h4>{{item.name}}</h4>
                     </a>
@@ -162,8 +162,8 @@
 
                 <div class="item-controls flexrow">
                     {{#if ../owner}}
-                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-                    <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    <a class="item-control edit-connection" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    <a class="item-control delete-connection" title="Delete Item"><i class="fas fa-trash"></i></a>
                     {{/if}}
                 </div>
                 </div>
@@ -180,7 +180,7 @@
             <span class="item-property-column">XP</span>
             <span class="item-property-column">Rank</span>
             <div class="item-controls">
-                <a class="item-control item-create" title="Create" data-type="background"><i class="fas fa-plus"></i></a>
+                <a class="item-control item-create" title="Create" data-type="reputation"><i class="fas fa-plus"></i></a>
             </div>
         </li>
 
@@ -196,9 +196,9 @@
                 </div>
 
 
-                <span class="item-property-column flex"><input class="item-property" data-target="" value="{{a}}"></input></span>
-                <span class="item-property-column"><input class="item-property" data-target="" value="{{a}}"></span>
-                <span class="item-property-column"><input class="item-property" data-target="" value="{{a}}"></span>
+                <span class="item-property-column flex">{{item.group.value}}</span>
+                <span class="item-property-column"><input type="number" class="item-property" data-target="data.xp.value" value="{{item.xp.value}}"></span>
+                <span class="item-property-column"><input type="number" class="item-property" data-target="data.xp.rank" value="{{item.xp.rank}}"></span>
 
 
                 <div class="item-controls flexrow">

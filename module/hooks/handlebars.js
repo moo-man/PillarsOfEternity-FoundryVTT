@@ -22,7 +22,7 @@ export default function () {
         
         Handlebars.registerHelper("array", function (array, cls) {
             if (typeof cls == "string")
-                return array.map(i => `<a class="${cls}">${i}</a>`).join(`, `)
+                return array.map(i => `<a class="${cls}">${i}</a>`).join(`<span class="array-comma">,</span>`)
             else
                 return array.join(", ")
         })

@@ -8,8 +8,8 @@ export class PillarsItem extends Item {
 
     _preUpdate(updateData, options, user)
     {
-        if (this.type == "shield" && hasProperty(updateData, "data.health.current"))
-            updateData.data.health.current = Math.clamped(updateData.data.health.current, 0, this.health.max)
+        if (this.type == "shield" && hasProperty(updateData, "data.health.value"))
+            updateData.data.health.value = Math.clamped(updateData.data.health.value, 0, this.health.max)
 
         if (this.type=="powerSource" && hasProperty(updateData, "data.source.value"))
             updateData.name = game.pillars.config.powerSources[updateData.data.source.value]
@@ -107,6 +107,31 @@ export class PillarsItem extends Item {
     get Exclusion() {return game.pillars.config.powerExclusions[this.data.data.exclusion.value]}
     get Skill() {return this.actor.items.get(this.skill.value)}
 
+
+    get Specials() {
+        let specials = game.pillars.config.itemSpecials
+        let notSkilledEnough = this.special.value.filter(i => this.isOwned && specials[i.name].skilled && this.Skill.rank < 5)
+
+        return this.special.value.map(i => {
+            let display = game.pillars.config.itemSpecials[i.name].label
+            if (i.value)
+                display += ` (${i.value})`
+            if (notSkilledEnough.find(sp => sp.name == i.name))
+                display = `<p style="text-decoration: line-through">${display}</p>`
+            return display
+        })
+    }
+    
+
+    get specials() {
+        let specials = {}
+        this.special.value.forEach(sp => {
+            specials[sp.name] = game.pillars.config.itemSpecials[sp.name]
+            specials[sp.name].value = sp.value
+        })
+        return specials
+    }
+
     // @@@@@@@@ DATA GETTERS @@@@@@@@@@
     get category() {return this.data.data.category}
     get target() {return this.data.data.target}
@@ -139,8 +164,11 @@ export class PillarsItem extends Item {
     get special() {return this.data.data.special}
     get modifier() {return this.data.data.modifier}
     get setting() {return this.data.data.setting}
+    get years() {return this.data.data.years}
+    get group() {return this.data.data.group}
 
     // Processed data getters
+    get rank() {return this.xp.rank}
 
     //#endregion
 

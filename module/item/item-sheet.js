@@ -1,3 +1,4 @@
+import ItemSpecials from "../apps/item-specials.js";
 
 /**
  * Extend the basic ItemSheet with for Pillars
@@ -60,8 +61,8 @@ export class PillarsItemSheet extends ItemSheet {
     if (!this.options.editable) return;
 
 
-    html.find(".item-quality-config").click(ev => {
-      new ItemQualities(this.item).render(true)
+    html.find(".item-specials").click(ev => {
+      new ItemSpecials(this.item).render(true)
     })
 
 

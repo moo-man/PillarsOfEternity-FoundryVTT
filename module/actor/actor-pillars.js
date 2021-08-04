@@ -12,7 +12,11 @@ export class PillarsActor extends Actor {
             this.data.update(
                 {
                     "token.disposition": CONST.TOKEN_DISPOSITIONS.NEUTRAL,         // Default disposition to neutral
-                    "token.name": data.name                                        // Set token name to actor name
+                    "token.name": data.name,                                      // Set token name to actor name
+                    "token.bar1": { "attribute": "health" },                 // Default Bar 1 to Wounds
+                    "token.bar2": { "attribute": "endurance" },               // Default Bar 2 to Advantage
+                    "token.displayName": CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,    // Default display name to be on owner hover
+                    "token.displayBars": CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,    // Default display bars to be on owner hover
                 })
 
         // Default characters to HasVision = true and Link Data = true
@@ -65,7 +69,7 @@ export class PillarsActor extends Actor {
 
     prepareDerivedData() {
 
-        this.health.bloodied = (this.health.max / 2) >= this.health.current
+        this.health.bloodied = (this.health.max / 2) >= this.health.value
     }
 
     //#region Data Preparation

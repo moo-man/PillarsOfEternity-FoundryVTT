@@ -83,6 +83,7 @@ export class PillarsActorSheet extends ActorSheet {
     prepareSheetData(sheetData) {
         sheetData.items = this.constructItemLists(sheetData)
         this._setPowerSourcePercentage(sheetData)
+        this._enrichKnownConnections(sheetData)
     }   
 
 
@@ -142,6 +143,19 @@ export class PillarsActorSheet extends ActorSheet {
             },
         }
         return inventory
+    }
+
+    _enrichKnownConnections(sheetData)
+    {
+        let connections = sheetData.actor.knownConnections.value
+        sheetData.KnownConnections = connections.map(i => {
+            let actor = game.actors.getName(i.name)
+            return {
+                name : i.name,
+                img : actor ? actor.data.token.img : "",
+                id : actor ? actor.id : ""
+            }
+        })
     }
 
     _setPowerSourcePercentage(sheetData)
@@ -211,6 +225,9 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".item-property").change(this._onEditItemProperty.bind(this))
         html.find(".property-counter").mousedown(this._onCounterClick.bind(this))
         html.find(".create-connection").click(this._onCreateConnection.bind(this))
+        html.find(".edit-connection").click(this._onEditConnection.bind(this))
+        html.find(".delete-connection").click(this._onDeleteConnection.bind(this))
+        html.find(".connection-name").click(this._onConnectionClick.bind(this))
     }
 
     // Handle custom drop events (currently just putting items into containers)
@@ -293,7 +310,13 @@ export class PillarsActorSheet extends ActorSheet {
     }
 
     _onSpecialClicked(event) {
-        this._dropdown(event, {text : game.pillars.config.itemSpecialDescriptions[event.target.text]})
+        let text = event.target.text
+        for (let special in game.pillars.config.itemSpecials)
+        {
+            if (game.pillars.config.itemSpecials[special].label == text)
+                return this._dropdown(event, {text : game.pillars.config.itemSpecials[special].description})
+        }
+        
     }
 
     _onCreateConnection(event) {
@@ -303,11 +326,44 @@ export class PillarsActorSheet extends ActorSheet {
     }
 
     _onEditConnection(event) {
-        $()
+        let index = $(event.currentTarget).parents(".item").attr("data-index")
         let connections = duplicate(this.actor.knownConnections.value);
-        connections.push("")
-        this.actor.update({"data.knownConnections" : connections})
+        new Dialog({
+            title : "Change Connection",
+            content : `
+            <p>Enter the name of the connection</p>
+            <div class="form-group">
+            <input type="text" name="connection" value=${connections[index].name}>
+            </div>
+            `,
+            buttons : {
+                submit : {
+                    label : "Submit",
+                    callback : (dlg) => {
+                        let newName = dlg.find("[name='connection']")[0].value
+                        connections[index].name = newName;
+                        this.actor.update({"data.knownConnections.value" : connections})
+                    }
+                },
+            },
+            default: "submit"
+        }).render(true)
+
     }
+
+    _onDeleteConnection(event) {
+        let index = parseInt($(event.currentTarget).parents(".item").attr("data-index"))
+        let connections = duplicate(this.actor.knownConnections.value);
+        connections.splice(index, 1);
+        this.actor.update({"data.knownConnections.value" : connections})
+    }
+    
+    _onConnectionClick(event) {
+        let id = $(event.currentTarget).parents(".item").attr("data-actor-id")
+        if (id)
+            game.actors.get(id).sheet.render(true)
+    }
+
 
     /* -------------------------------------------- */
 }
