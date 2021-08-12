@@ -157,6 +157,7 @@ export class PillarsActor extends Actor {
     get knownConnections() { return this.data.data.knownConnections}
     get stride() { return this.data.data.stride}
     get initiative() { return this.data.data.initiative}
+    get seasons() { return this.data.data.seasons}
 
 
     get combat() {return this.data.data.combat}

@@ -15,6 +15,7 @@ import PILLARS_UTILITY from "./module/system/utility.js";
 import { PillarsChat } from "./module/system/chat.js";
 import hooks from "./module/hooks/hooks.js"
 import PowerTemplate from "./module/system/power-template.js";
+import BookOfSeasons from "./module/apps/book-of-seasons.js"
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -36,7 +37,8 @@ Hooks.on("init", () => {
   game.pillars = {
     apps : {
       PillarsActorSheet,
-      PillarsItemSheet
+      PillarsItemSheet,
+      BookOfSeasons
     },
     utility: PILLARS_UTILITY,
     config : POE,

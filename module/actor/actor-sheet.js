@@ -33,7 +33,6 @@ export class PillarsActorSheet extends ActorSheet {
     this._setScrollPos();  // Set scroll positions
 
     //this._refocus(this._element)
-
   }
     
   /**
@@ -71,6 +70,24 @@ export class PillarsActorSheet extends ActorSheet {
     }
   }
 
+
+
+  /**
+   * Override header buttons to add custom ones.
+   */
+  _getHeaderButtons() {
+    let buttons = super._getHeaderButtons();
+    // Add "Post to chat" button
+    // We previously restricted this to GM and editable items only. If you ever find this comment because it broke something: eh, sorry!
+    buttons.unshift(
+      {
+        class: "seasons",
+        label : "Seasons",
+        icon: "fas fa-book",
+        onclick: ev => {new game.pillars.apps.BookOfSeasons(this.actor).render(true)}
+      })
+    return buttons
+  }
 
 
     /** @override */

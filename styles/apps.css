@@ -1,0 +1,58 @@
+#seasons .window-content {
+    overflow: hidden;
+}
+
+#seasons form {
+    height: 100%
+}
+
+#seasons h2 {
+    text-align: center;
+}
+
+#seasons .season-list {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
+    height: calc(100% - 90px)
+}
+
+#seasons .controls {
+    margin: 10px
+}
+
+#seasons input {
+    border: none;
+    border-bottom: 1px solid black;
+    border-radius: 0px;
+    background: none   
+}
+
+#seasons input:focus {
+    box-shadow: none;
+}
+
+#seasons .year-input h3
+{
+    display: flex;
+    align-items: center;
+    width: 100px;
+}
+
+#seasons .year-input input {
+    text-align: center;
+    height: 18px;
+    margin: 5px 5px;
+}
+
+#seasons .form-group label
+{
+    flex: none;
+    width: 100px;
+}
+
+#seasons .season-details {
+    padding-bottom: 25px;
+    border-bottom: 1px inset #CCC
+}

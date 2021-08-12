@@ -115,7 +115,15 @@
       },
       "childhood": {
         "value": ""
-      }
+      },
+      "seasons" : [{
+        "year" : 0,
+        "spring" : "",
+        "summer" : "",
+        "autumn" : "",
+        "winter" : "",
+        "aging" : ""
+      }]
     },
     "npc": {
       "templates": []
