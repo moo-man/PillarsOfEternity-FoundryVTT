@@ -2,39 +2,37 @@
 
 export default class RollDialog extends Dialog {
 
-    _onValueChange()
-    {
-        let modifiers = this._getSelectedModifiers()
-
-        this.diceModifierInput.val(this.userEntry.diceModifier + modifiers.diceModifier)
-        this.successModifierInput.val(this.userEntry.successModifier + modifiers.successModifier)
-        this.triggerModifierInput.val(this.userEntry.triggerModifier + modifiers.triggerModifier)
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            id : "roll-dialog"
+        })
     }
 
-    _getSelectedModifiers()
-    {
-        let totalMods = {
-            diceModifier : 0,
-            successModifier : 0,
-            triggerModifier   : 0
-        }
-        this.customModifiers.val().forEach(i => {
-            let index = Number(i)
-            let modifierSelected = this.data.dialogData.customModifiers[index]
-
-            switch (modifierSelected.modifyType) {
-                case "D":
-                    totalMods.diceModifier += modifierSelected.modifyNumber
-                    break;
-                case "S":
-                    totalMods.successModifier += modifierSelected.modifyNumber
-                    break;
-                case "T":
-                    totalMods.triggerModifier += modifierSelected.modifyNumber
-                    break;
-            }
+    static async create({title, assisters, state={normal : true}, modifier}) {
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/roll-dialog.html", {title, assisters, state, modifier})
+        return new Promise((resolve) => {
+            return new this({
+                title: title,
+                content: html,
+                buttons : {
+                    roll : {
+                        label : "Roll",
+                        callback : (html, test) => {
+                            console.log(html, test)
+                            let data = {}
+                            data.modifier = parseInt(html.find("input[name='modifier']").val())
+                            data.proxy = html.find("input[name='proxy']").is(":checked")
+                            data.assister = html.find("select[name='assistance']").val()
+                            data.state = html.find("input:radio[name='state']:checked").val()
+                            console.log(data)
+                            resolve(data)
+                        }
+                    }
+                },
+                default : "roll"
+            }).render(true)
         })
-        return totalMods
+
     }
 
     submit(button)
@@ -52,33 +50,5 @@ export default class RollDialog extends Dialog {
     {
         super.activateListeners(html)
 
-        $("input").focusin(function () {
-            $(this).select();
-        });
-        
-        this.userEntry = {
-            diceModifier : 0,
-            successModifier : 0,
-            triggerModifier : 0
-        }
-        this.diceModifierInput = html.find("input[name='diceModifier']").change(ev => {
-            this.userEntry.diceModifier = Number(ev.target.value)
-            this._onValueChange()
-
-        })
-        this.successModifierInput = html.find("input[name='successModifier']").change(ev => {
-            this.userEntry.successModifier = Number(ev.target.value)
-            this._onValueChange()
-
-        })
-        this.triggerModifierInput = html.find("input[name='triggerModifier']").change(ev => {
-            this.userEntry.triggerModifier = Number(ev.target.value)
-            this._onValueChange()
-
-        })
-
-        this.customModifiers = html.find(".custom-modifiers").change(ev => {
-            this._onValueChange()
-        })
     }
 }

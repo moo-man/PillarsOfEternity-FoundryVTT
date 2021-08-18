@@ -1,0 +1,40 @@
+<div>
+    <div class="form-group">
+        <label>Modifier</label>
+        <div class="form-fields">
+            <input type="number" name="modifier" value="{{modifier}}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Proxy</label>
+        <div class="form-fields">
+            <input type="checkbox" name="proxy">
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Assistance</label>
+        <div class="form-fields">
+            <select name="assistance">
+                <option value="">-</option>
+                {{#each assisters as |actor a|}}
+                <option value="{{actor.id}}">{{actor.name}} ({{actor.rank}})</option>
+                {{/each}}
+            </select>
+        </div>
+
+    </div>
+    <div class="form-group advantage-disadvantage">
+        <div>
+            <label>Advantaged</label>
+            <input type="radio" name="state" value="adv" {{checked state.adv}} />
+        </div>
+        <div>
+            <label>Normal</label>
+            <input type="radio" name="state" value="normal" {{checked state.normal}} />
+        </div>
+        <div>
+            <label>Disadvantaged</label>
+            <input type="radio" name="state" value="dis" {{checked state.dis}} />
+        </div>
+    </div>
+</div>

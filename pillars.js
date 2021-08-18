@@ -10,12 +10,14 @@ import { PillarsActorSheet } from "./module/actor/actor-sheet.js";
 import { PillarsActor } from "./module/actor/actor-pillars.js";
 import { PillarsCombat } from "./module/system/combat.js";
 import { POE } from "./module/system/config.js";
-import { PillarsDice } from "./module/system/dice.js";
 import PILLARS_UTILITY from "./module/system/utility.js";
 import { PillarsChat } from "./module/system/chat.js";
 import hooks from "./module/hooks/hooks.js"
 import PowerTemplate from "./module/system/power-template.js";
 import BookOfSeasons from "./module/apps/book-of-seasons.js"
+import RollDialog from "./module/apps/roll-dialog.js";
+import PillarsExplode from "./module/system/explode.js";
+import SkillTest from "./module/system/skill-test.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -32,19 +34,22 @@ Hooks.on("init", () => {
   CONFIG.Actor.documentClass = PillarsActor;
   CONFIG.Item.documentClass = PillarsItem;
   CONFIG.Combat.documentClass = PillarsCombat;
-
+  PillarsExplode()
 
   game.pillars = {
     apps : {
       PillarsActorSheet,
       PillarsItemSheet,
-      BookOfSeasons
+      BookOfSeasons,
+      RollDialog
+    },
+    rollClass : {
+      SkillTest
     },
     utility: PILLARS_UTILITY,
     config : POE,
-    dice : PillarsDice,
     chat : PillarsChat,
-    templates : PowerTemplate
+    templates : PowerTemplate,
   }
 })
 

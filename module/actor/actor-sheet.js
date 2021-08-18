@@ -1,4 +1,5 @@
 import PowerTemplate from "../system/power-template.js";
+import SkillTest from "../system/skill-test.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -242,6 +243,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".item-dropdown-alt").mousedown(this._onDropdownAlt.bind(this))
         html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
         html.find(".item-property").change(this._onEditItemProperty.bind(this))
+        html.find(".skill-roll").click(this._onSkillRoll.bind(this))
         html.find(".property-counter").mousedown(this._onCounterClick.bind(this))
         html.find(".create-connection").click(this._onCreateConnection.bind(this))
         html.find(".edit-connection").click(this._onEditConnection.bind(this))
@@ -406,4 +408,14 @@ export class PillarsActorSheet extends ActorSheet {
 
 
     /* -------------------------------------------- */
+
+
+    async _onSkillRoll(event) {
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let testData = await this.actor.setupSkillTest(itemId)
+        let test = new SkillTest(testData)
+        await test.rollTest();
+        test.sendToChat()
+    }
+
 }

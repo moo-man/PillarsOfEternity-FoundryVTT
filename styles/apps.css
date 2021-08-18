@@ -56,3 +56,36 @@
     padding-bottom: 25px;
     border-bottom: 1px inset #CCC
 }
+
+
+
+
+#roll-dialog .form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#roll-dialog .form-group > * {
+    flex: 1;
+    display: flex;
+}
+
+
+#roll-dialog .form-group .form-fields {
+    width: 100%
+}
+
+
+#roll-dialog .form-group .form-fields >* {
+    width: 100%
+}
+
+#roll-dialog .form-group.advantage-disadvantage {
+    margin: 10px 0px;
+}
+
+#roll-dialog .form-group.advantage-disadvantage > *{
+    flex-direction: column;
+    align-items: center;
+}

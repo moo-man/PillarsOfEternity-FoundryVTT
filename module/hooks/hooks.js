@@ -3,6 +3,7 @@ import chatHooks from "./chat.js"
 import itemHooks from "./item.js";
 import handlebars from "./handlebars.js"
 import diceSoNiceHooks from "./dsn.js"
+import readyHooks from "./ready.js"
 
 export default function () {
     actorHooks();

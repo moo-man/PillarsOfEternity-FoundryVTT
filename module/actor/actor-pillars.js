@@ -1,3 +1,5 @@
+import RollDialog from "../apps/roll-dialog.js";
+
 /**
  * Extend FVTT Actor class for Pillars functionality
  * @extends {Actor}
@@ -128,11 +130,71 @@ export class PillarsActor extends Actor {
 
     //#endregion
 
+    //#region Roll Setup
 
+    async setupSkillTest(skill)
+    {
+        if (typeof skill == "string")
+            skill = this.items.get(skill)
+
+        let data = this.getDialogData("skill", skill)
+        let testData =  await RollDialog.create(data)
+        testData.title = data.title
+        testData.skillId = skill.id
+        testData.speaker = this.speakerData();
+        return testData
+    }
+
+    //#endregion
+
+    //#Region Rolling 
+    async rollSkillTest(testData)
+    {
+
+    }
 
     //#region Convenience Helpers
     getItemTypes(type) {
         return (this.itemCategories || this.itemTypes)[type]
+    }
+
+    getDialogData(type, item)
+    {
+        let dialogData = {}
+        dialogData.title = `${item.name} Test`
+        dialogData.assisters = this.constructAssisterList(item)
+        dialogData.modifier = 0
+        return dialogData
+    }
+
+    constructAssisterList(item)
+    {
+        let assisters = game.users.filter(i => i.active && !i.isGM).map(i => i.character)
+        assisters = assisters.filter(a => a.items.getName(item.name))
+        assisters = assisters.map(a => {
+            return {
+                name : a.name,
+                id : a.id,
+                rank : a.items.getName(item.name).rank
+            }
+        })
+        return assisters.filter(a => a.rank > 5)
+    }
+
+    speakerData() {
+        if (this.isToken)
+        {
+            return {
+                token : this.token.id,
+                scene : this.token.parent.id
+            }
+        }
+        else
+        {
+            return {
+                actor : this.id
+            }
+        }
     }
 
     //#endregion
