@@ -1,4 +1,5 @@
 import RollDialog from "../apps/roll-dialog.js";
+import SkillTest from "../system/skill-test.js";
 
 /**
  * Extend FVTT Actor class for Pillars functionality
@@ -164,6 +165,7 @@ export class PillarsActor extends Actor {
         dialogData.title = `${item.name} Test`
         dialogData.assisters = this.constructAssisterList(item)
         dialogData.modifier = 0
+        dialogData.hasRank = item.xp.rank
         return dialogData
     }
 
@@ -175,7 +177,8 @@ export class PillarsActor extends Actor {
             return {
                 name : a.name,
                 id : a.id,
-                rank : a.items.getName(item.name).rank
+                rank : a.items.getName(item.name).rank,
+                die : `d${SkillTest.rankToDie(a.items.getName(item.name))}`
             }
         })
         return assisters.filter(a => a.rank > 5)

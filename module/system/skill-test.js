@@ -32,22 +32,50 @@ export default class SkillTest
     
         async rollTest() {
             let terms = []
+
+            if(this.testData.state == "normal")
+            {
+                terms.push(new Die({number : 2, faces : 10, modifiers : ["xp"]}))
+            }
+            else 
+            {
+                let modifier = ""
+                if (this.testData.state == "adv") modifier = "kh"
+                else if (this.testData.state == "dis") modifier = "kl"
+
+                terms.push(new PoolTerm({terms : ["2d10xp", "1d20"], modifiers : [modifier] }))
+            }
+
             let assisterDie = this.assisterDie()
-            terms.push(assisterDie)
-            terms.push(this.testData.modifier)
-            terms.push(this.skill.rank)
-            let mainDie = this.testData.proxy ? this.proxyDie() : "2d10xp"
-
-            if (this.testData.state == "adv")
-                mainDie = `{${mainDie},1d20}kh`
-            if (this.testData.state == "dis")
-                mainDie = `{${mainDie},1d20}kl`
-            terms.unshift(mainDie)
-
-            this.roll = new Roll(terms.filter(i=>!!i).join(" + "));  
-            await this.roll.evaluate({async:true})  
+            
             if (assisterDie)
-                this.setAssistDieAppearance()
+            {
+                terms.push(new OperatorTerm({operator : "+"}))
+                terms.push(new Die(assisterDie))
+            }
+
+            if (this.testData.modifier)
+            {
+                terms.push(new OperatorTerm({operator : "+"}))
+                terms.push(new NumericTerm({number : this.testData.modifier}))
+            }
+
+            if (!this.testData.proxy)
+            {
+                terms.push(new OperatorTerm({operator : "+"}))
+                terms.push(new NumericTerm({number : this.skill.rank}))
+            }
+            else 
+            {
+                terms.push(new OperatorTerm({operator : "+"}))
+                terms.push(new Die(this.proxyDie()))
+            }
+
+   
+                
+
+            this.roll = Roll.fromTerms(terms)
+            await this.roll.evaluate({async:true})  
             //this.data.result = this._computeResult()   
         }
     
@@ -84,32 +112,33 @@ export default class SkillTest
 
         static rankToDie(skill) {
             if (skill.rank >= 15)
-                return "d8"
+                return 8
             if (skill.rank >= 10)
-                return "d6"
+                return 6
             if (skill.rank >= 5)
-                return "d4"
+                return 4
             return ""
         }
 
         proxyDie() {
-            return SkillTest.rankToDie(this.skill)
+            return {number : 1, faces : SkillTest.rankToDie(this.skill)}
         }
 
         assisterDie() {
             if (this.testData.assister)
-                return SkillTest.rankToDie(this.assister.items.getName(this.skill.name))
+                return {number : 1, faces : SkillTest.rankToDie(this.assister.items.getName(this.skill.name)), options : {appearance : this.assistDieAppearance()}}
             else return ""
         }
 
-        setAssistDieAppearance()
-        {            
-            const appearanceSettings = Dice3D.APPEARANCE(this.assisterUser);
-            let appearance = appearanceSettings.global;
-            if(appearance.hasOwnProperty(this.assisterDie()))
-                appearance = apperanceSettings[this.assisterDie()];
+        assisterDieString() {
+            if (this.testData.assister)
+                return `d${SkillTest.rankToDie(this.assister.items.getName(this.skill.name))}`
+            else return ""
+        }
 
-            this.roll.dice[1].options.appearance = this.assisterUser.getFlag("dice-so-nice", "appearance")?.global;
+        assistDieAppearance()
+        {            
+            return game.dice3d.DiceFactory.getAppearanceForDice(game.dice3d.constructor.APPEARANCE(this.assisterUser), this.assisterDieString())
         }
         
     

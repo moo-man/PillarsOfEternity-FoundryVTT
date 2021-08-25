@@ -8,8 +8,8 @@ export default class RollDialog extends Dialog {
         })
     }
 
-    static async create({title, assisters, state={normal : true}, modifier}) {
-        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/roll-dialog.html", {title, assisters, state, modifier})
+    static async create({title, assisters, state={normal : true}, modifier, hasRank}) {
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/roll-dialog.html", {title, assisters, state, modifier, hasRank})
         return new Promise((resolve) => {
             return new this({
                 title: title,
@@ -50,5 +50,15 @@ export default class RollDialog extends Dialog {
     {
         super.activateListeners(html)
 
-    }
+        html.find("input[name='proxy']").change(ev => {
+            let select = html.find("select[name='assistance']")[0]
+            if(ev.target.checked)
+            {
+                select.value = ""
+                select.setAttribute("disabled", true)
+            }
+            else 
+                select.removeAttribute("disabled")
+        })
+    }   
 }
