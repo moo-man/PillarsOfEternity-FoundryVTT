@@ -112,7 +112,7 @@ export class PillarsItem extends Item {
 
     get Specials() {
         let specials = game.pillars.config.itemSpecials
-        let notSkilledEnough = this.special.value.filter(i => this.isOwned && specials[i.name].skilled && this.Skill.rank < 5)
+        let notSkilledEnough = this.special.value.filter(i => this.isOwned && specials[i.name].skilled && ( !this.Skill || this.Skill?.rank < 5))
 
         return this.special.value.map(i => {
             let display = game.pillars.config.itemSpecials[i.name].label
