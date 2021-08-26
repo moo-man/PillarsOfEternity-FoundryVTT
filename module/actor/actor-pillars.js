@@ -138,10 +138,27 @@ export class PillarsActor extends Actor {
         if (typeof skill == "string")
             skill = this.items.get(skill)
 
-        let data = this.getDialogData("skill", skill)
+        let data = this.getSkillDialogData("skill", skill)
         let testData =  await RollDialog.create(data)
         testData.title = data.title
         testData.skillId = skill.id
+        testData.speaker = this.speakerData();
+        return testData
+    }
+
+    async setupWeaponTest(weapon)
+    {
+        if (typeof weapon == "string")
+            weapon = this.items.get(weapon)
+
+        if (!weapon.Skill)
+            throw new Error("No skill assigned to the weapon")
+
+        let data = this.getWeaponDialogData("weapon", weapon)
+        let testData =  await RollDialog.create(data)
+        testData.title = data.title
+        testData.skillId = weapon.Skill.id
+        testData.itemId = weapon.id
         testData.speaker = this.speakerData();
         return testData
     }
@@ -159,7 +176,7 @@ export class PillarsActor extends Actor {
         return (this.itemCategories || this.itemTypes)[type]
     }
 
-    getDialogData(type, item)
+    getSkillDialogData(type, item)
     {
         let dialogData = {}
         dialogData.title = `${item.name} Test`
@@ -168,6 +185,17 @@ export class PillarsActor extends Actor {
         dialogData.hasRank = item.xp.rank
         return dialogData
     }
+
+    getWeaponDialogData(type, item)
+    {
+        let dialogData = {}
+        dialogData.title = `${item.name} Test`
+        //dialogData.assisters = this.constructAssisterList(weapon.Skill)
+        dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0)
+        dialogData.hasRank = item.Skill.rank
+        return dialogData
+    }
+
 
     constructAssisterList(item)
     {

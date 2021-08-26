@@ -116,18 +116,18 @@
             <li class="item" data-item-id="{{item.id}}">
                 <div class="row-content">
 
-                <div class="item-name flexrow item-dropdown-alt">
+                <div class="item-name flexrow weapon-roll item-dropdown-alt">
                     <div class="item-image" style="background-image: url('{{item.img}}')"></div>
                     <a>
                         <h4>{{item.name}}</h4>
                     </a>
                 </div>
 
-                <span class="item-property-column">{{item.Skill.xp.rank}}</span>
-                <span class="item-property-column">{{item.misc.value}}</span>
-                <span class="item-property-column">{{item.accuracy.value}}</span>
-                <span class="item-property-column">{{item.damage.value}}</span>
-                <span class="item-property-column">{{item.crit.value}}</span>
+                <span class="item-property-column">{{item.Skill.rank}}</span>
+                <span class="item-property-column"><input class="item-property" type="number" data-target="item.misc.value" value="{{item.misc.value}}"></span>
+                <span class="item-property-column"><input class="item-property" type="number" data-target="item.accuracy.value" value="{{item.accuracy.value}}"></span>
+                <a class="item-property-column sheet-roll">{{item.damage.value}}</a>
+                <a class="item-property-column sheet-roll">{{item.crit.value}}</a>
                 <span class="item-property-column flex item-specials">{{{array item.Specials "item-special"}}}</span>
 
                 <div class="item-controls flexrow">

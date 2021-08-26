@@ -290,6 +290,12 @@
         "skill" : {
           "value" : ""
         },
+        "accuracy" : {
+          "value" : null
+        },
+        "misc" : {
+          "value" : null
+        },
         "damage": {
           "value": ""
         },

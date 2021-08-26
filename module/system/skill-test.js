@@ -1,5 +1,3 @@
-import { Dice3D } from "/modules/dice-so-nice/Dice3D.js"
-
 export default class SkillTest
 {
         constructor(data) {
@@ -30,7 +28,8 @@ export default class SkillTest
             return data
         }
     
-        async rollTest() {
+        getTerms() 
+        {
             let terms = []
 
             if(this.testData.state == "normal")
@@ -71,13 +70,18 @@ export default class SkillTest
                 terms.push(new Die(this.proxyDie()))
             }
 
-   
-                
+            return terms
 
+        }
+    
+        async rollTest() {
+            
+            let terms = this.getTerms()
             this.roll = Roll.fromTerms(terms)
             await this.roll.evaluate({async:true})  
             //this.data.result = this._computeResult()   
         }
+    
     
     
         _computeResult()

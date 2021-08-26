@@ -1,5 +1,6 @@
 import PowerTemplate from "../system/power-template.js";
 import SkillTest from "../system/skill-test.js";
+import WeaponTest from "../system/weapon-test.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -244,12 +245,14 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
         html.find(".item-property").change(this._onEditItemProperty.bind(this))
         html.find(".skill-roll").click(this._onSkillRoll.bind(this))
+        html.find(".weapon-roll").click(this._onWeaponRoll.bind(this))
         html.find(".property-counter").mousedown(this._onCounterClick.bind(this))
         html.find(".create-connection").click(this._onCreateConnection.bind(this))
         html.find(".edit-connection").click(this._onEditConnection.bind(this))
         html.find(".delete-connection").click(this._onDeleteConnection.bind(this))
         html.find(".connection-name").click(this._onConnectionClick.bind(this))
         html.find(".power-target").click(this._onPowerTargetClick.bind(this))
+        html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
     }
 
     // Handle custom drop events (currently just putting items into containers)
@@ -410,10 +413,23 @@ export class PillarsActorSheet extends ActorSheet {
     /* -------------------------------------------- */
 
 
+    _onSheetRollClick(event) {
+        new Roll(event.target.text).roll().toMessage({speaker : this.actor.speakerData()})
+    }
+
+
     async _onSkillRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
         let testData = await this.actor.setupSkillTest(itemId)
         let test = new SkillTest(testData)
+        await test.rollTest();
+        test.sendToChat()
+    }
+
+    async _onWeaponRoll(event) {
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let testData = await this.actor.setupWeaponTest(itemId)
+        let test = new WeaponTest(testData)
         await test.rollTest();
         test.sendToChat()
     }
