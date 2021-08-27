@@ -18,6 +18,7 @@ import BookOfSeasons from "./module/apps/book-of-seasons.js"
 import RollDialog from "./module/apps/roll-dialog.js";
 import PillarsExplode from "./module/system/explode.js";
 import SkillTest from "./module/system/skill-test.js";
+import PillarsCombatTracker from "./module/apps/combat-tracker.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -52,6 +53,8 @@ Hooks.on("init", () => {
     templates : PowerTemplate,
   }
 })
+
+  CONFIG.ui.combat = PillarsCombatTracker
 
   Hooks.on("setup", () => {
     for (let group in POE) {

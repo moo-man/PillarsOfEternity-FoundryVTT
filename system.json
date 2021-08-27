@@ -20,6 +20,7 @@
   ],
   "gridDistance": 5,
   "gridUnits": "ft",
+  "initiative": "2d10 + (1d12 / 100)",
   "background" : "",
   "url": "",
   "manifest": "https://raw.githubusercontent.com/moo-man/PillarsOfEternity-FoundryVTT/master/system.json",
