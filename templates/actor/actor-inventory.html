@@ -1,7 +1,14 @@
-<div class="wealth">
-    <h3>Wealth:</h3>
-    <input type="text">
-    <h3>cp</h3>
+<div class="gear-header">
+    <div class="wealth">
+        <h3>Wealth:</h3>
+        <input type="text" name="data.wealth.cp" value={{data.wealth.cp}}>
+        <h3>cp</h3>
+    </div>
+    <div class="weight">
+        <h3>Weight:</h3>
+        <input disabled type="text" value={{data.weight}}>
+        <h3>ibs</h3>
+    </div>
 </div>
 <div class="inventory-lists">
     {{#each items.inventory as |section s|}}

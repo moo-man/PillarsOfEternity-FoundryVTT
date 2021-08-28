@@ -23,6 +23,11 @@ export class PillarsItem extends Item {
     {
         if (this[`prepareOwned${this.type[0].toUpperCase() + this.type.slice(1)}`])
             this[`prepareOwned${this.type[0].toUpperCase() + this.type.slice(1)}`]()
+
+        if (this.weight)
+        {
+            this.weight.value *= this.quantity.value
+        }
     }
 
     prepareWeapon() {

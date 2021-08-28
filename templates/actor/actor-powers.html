@@ -12,7 +12,7 @@
 
     <ol class="items">
         {{#each items.powerSources as |item i|}}
-        <li class="item {{#if item.used.value}}used{{/if}}" data-item-id="{{item.id}}">
+        <li class="item" data-item-id="{{item.id}}">
             <div class="row-content">
 
             {{#if item.used.value}}

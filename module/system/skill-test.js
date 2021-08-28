@@ -79,6 +79,7 @@ export default class SkillTest
             let terms = this.getTerms()
             this.roll = Roll.fromTerms(terms)
             await this.roll.evaluate({async:true})  
+            this.skill.update({"data.used.value" : true})
             //this.data.result = this._computeResult()   
         }
     

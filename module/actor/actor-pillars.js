@@ -118,9 +118,14 @@ export class PillarsActor extends Actor {
     }
 
     prepareItems() {
+        let weight = 0;
         for (let i of this.items)
+        {
             i.prepareOwnedData()
-
+            if (i.weight)
+                weight += i.weight.value
+        }
+        this.data.update({"data.weight" : weight})
     }
 
 
