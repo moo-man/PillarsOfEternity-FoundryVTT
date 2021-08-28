@@ -31,8 +31,6 @@
                         <h4>{{item.name}}</h4>
                     </a>
                 </div>
-                {{log ../section}}
-    
                 {{#unless (eq item.type "weapon") }}
                 {{#if item.skill.value}}
                 <button class="item-property-column large">{{item.skill.value}}</button>

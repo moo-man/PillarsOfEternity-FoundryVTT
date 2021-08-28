@@ -29,47 +29,66 @@ export class PillarsActor extends Actor {
         }
     }
 
-    prepareBaseData() {
-        this.defenses.deflection.value = 10 - (this.size.value * 2)
-        this.defenses.reflexes.value = 15 - (this.size.value * 2)
-        this.defenses.fortitude.value = 15 + (this.size.value * 2)
-        this.defenses.will.value = 15
+    setSpeciesData(speciesItem) 
+    {
+        let data = this.toObject().data
+        data.size.value = speciesItem.size.value
+        data.defenses.deflection.value = 10 - (data.size.value * 2)
+        data.defenses.reflexes.value = 15 - (data.size.value * 2)
+        data.defenses.fortitude.value = 15 + (data.size.value * 2)
+        data.defenses.will.value = 15
 
-        this.health.threshold = game.pillars.config.woundThresholds[this.size.value]
+        data.stride.value = speciesItem.stride.value
+        data.details.species  = speciesItem.species.value;
+        data.details.stock = speciesItem.stock.value
+
+        data.health.threshold = game.pillars.config.woundThresholds[data.size.value]
 
         switch (this.size.value) {
             case -4:
-                this.health.max = 4
+                data.health.max = 4
                 break;
             case -3:
-                this.health.max = 8
+                data.health.max = 8
                 break;
             case -2:
-                this.health.max = 16
+                data.health.max = 16
                 break;
             case -1:
-                this.health.max = 32
+                data.health.max = 32
                 break;
             case 0:
-                this.health.max = 36
+                data.health.max = 36
                 break;
             case 1:
-                this.health.max = 40
+                data.health.max = 40
                 break;
             case 2:
-                this.health.max = 75
+                data.health.max = 75
                 break;
             case 3:
-                this.health.max = 125
+                data.health.max = 125
                 break;
             case 4:
-                this.health.max = 250
+                data.health.max = 250
                 break;
             case 5:
-                this.health.max = 500
+                data.health.max = 500
                 break;
-
         }
+
+        return this.update({"data" : data})
+
+    }
+
+    setCultureData(cultureItem)
+    {
+        return this.update({"data.details.culture" : cultureItem.name})
+    }
+
+    prepareBaseData() {
+
+       
     };
 
     prepareDerivedData() {
@@ -93,15 +112,7 @@ export class PillarsActor extends Actor {
     }
 
     prepareSpecies(){
-        let species = this.getItemTypes("species")[0]
         let culture = this.getItemTypes("culture")[0]
-        if (species)
-        {
-            this.size.value = species.size.value
-            this.stride.value = species.stride.value
-            this.details.species  = species.species.value;
-            this.details.stock = species.stock.value
-        }
         if (culture)
             this.details.culture = culture.name
     }

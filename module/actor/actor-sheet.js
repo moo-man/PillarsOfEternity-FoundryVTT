@@ -238,6 +238,14 @@ export class PillarsActorSheet extends ActorSheet {
         li.toggleClass("expanded");
     }
 
+    
+    _getSubmitData(updateData = {}) {
+        this.actor.overrides = {}
+        let data = super._getSubmitData(updateData);
+        data = diffObject(flattenObject(this.actor.toObject(false)), data)
+        return data
+    }
+
     /* -------------------------------------------- */
     /** @override */
     activateListeners(html) {

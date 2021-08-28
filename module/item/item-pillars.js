@@ -5,7 +5,6 @@ import PILLARS_UTILITY  from "../system/utility.js"
  */
 export class PillarsItem extends Item {
 
-
     _preUpdate(updateData, options, user)
     {
         if (this.type == "shield" && hasProperty(updateData, "data.health.current"))

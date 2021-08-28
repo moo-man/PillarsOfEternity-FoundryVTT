@@ -1,5 +1,4 @@
 <form class="{{cssClass}}" autocomplete="off">
-    {{log this}}
     <section class="general">
         <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
         <section class="defenses">
@@ -84,7 +83,6 @@
                 <label>Light:</label>
                 <input name="" value="{{a}}" />
                 <div class="wound-squares">
-                    {{log this}}
                     {{#each data.health.wounds.light as |wound i|}}
                         <a data-index="{{i}}" data-wound="light" class="wound-square">{{{wound}}}</i></a>
                     {{/each}}
