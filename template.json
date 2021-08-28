@@ -36,9 +36,10 @@
           "max": 0,
           "value": 0,
           "wounds": {
-            "light": [],
-            "heavy": [],
-            "severe": []
+            "light": [0, 0, 0, 0],
+            "heavy": [0, 0],
+            "severe": [0],
+            "injury" : ""
           }
         }
       },

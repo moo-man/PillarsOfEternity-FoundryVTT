@@ -35,6 +35,8 @@ export class PillarsActor extends Actor {
         this.defenses.fortitude.value = 15 + (this.size.value * 2)
         this.defenses.will.value = 15
 
+        this.health.threshold = game.pillars.config.woundThresholds[this.size.value]
+
         switch (this.size.value) {
             case -4:
                 this.health.max = 4

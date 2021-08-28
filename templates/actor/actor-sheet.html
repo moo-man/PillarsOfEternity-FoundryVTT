@@ -79,35 +79,38 @@
         </section>
         <hr>
         <section class="wounds">
-            <h4>Wounds</h4>
+            <h4>Wounds ({{data.health.threshold.light}} / {{data.health.threshold.heavy}})</h4>
             <div class="wound-group">
                 <label>Light:</label>
                 <input name="" value="{{a}}" />
                 <div class="wound-squares">
-                    <a class="wound-square"><i class="far fa-square"></i></a>
-                    <a class="wound-square"><i class="far fa-square"></i></a>
-                    <a class="wound-square"><i class="far fa-square"></i></a>
-                    <a class="wound-square"><i class="far fa-square"></i></a>
+                    {{log this}}
+                    {{#each data.health.wounds.light as |wound i|}}
+                        <a data-index="{{i}}" data-wound="light" class="wound-square">{{{wound}}}</i></a>
+                    {{/each}}
                 </div>
             </div>
             <div class="wound-group">
                 <label>Heavy:</label>
                 <input name="" value="{{a}}" />
                 <div class="wound-squares">
-                    <a class="wound-square"><i class="far fa-square"></i></a>
-                    <a class="wound-square"><i class="far fa-square"></i></a>
+                    {{#each data.health.wounds.heavy as |wound i|}}
+                        <a data-index="{{i}}" data-wound="heavy" class="wound-square">{{{wound}}}</i></a>
+                    {{/each}}
                 </div>
             </div>
             <div class="wound-group">
                 <label>Severe:</label>
                 <input name="" value="{{a}}" />
                 <div class="wound-squares">
-                    <a class="wound-square"><i class="far fa-square"></i></a>
+                    {{#each data.health.wounds.severe as |wound i|}}
+                    <a data-index="{{i}}" data-wound="severe" class="wound-square">{{{wound}}}</i></a>
+                {{/each}}
                 </div>
             </div>
             <div class="wound-group">
                 <label>Injury:</label>
-                <input class="injury-input" name="" value="{{a}}" />
+                <input class="injury-input" name="data.health.wounds.injury" value="{{data.health.wounds.injury}}" />
             </div>
         </section>
     </section>

@@ -104,6 +104,7 @@ export class PillarsActorSheet extends ActorSheet {
     prepareSheetData(sheetData) {
         sheetData.items = this.constructItemLists(sheetData)
         this._setPowerSourcePercentage(sheetData)
+        this._createWoundsArrays(sheetData)
         this._enrichKnownConnections(sheetData)
     }   
 
@@ -179,6 +180,24 @@ export class PillarsActorSheet extends ActorSheet {
         })
     }
 
+    _createWoundsArrays(sheetData)
+    {
+        for (let woundType in sheetData.data.health.wounds)
+        {
+            if (woundType != "injury")
+            {
+                sheetData.data.health.wounds[woundType] = sheetData.data.health.wounds[woundType].map(i => {
+                    switch(i)
+                    {
+                        case 0: return `<i class="far fa-square"></i>`
+                        case 1: return `<i class="fas fa-skull"></i>`
+                        case 2: return `<i class="fas fa-band-aid"></i>`
+                    }
+                })
+            }
+        }
+    }
+
     _setPowerSourcePercentage(sheetData)
     {
         let sources = sheetData.items.powerSources
@@ -240,6 +259,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".item-create").click(this._onItemCreate.bind(this))
         html.find(".item-post").click(this._onPostItem.bind(this))
         html.find(".sheet-checkbox").click(this._onCheckboxClick.bind(this))
+        html.find(".wound-square").click(this._onWoundClick.bind(this))
         html.find(".item-dropdown").mousedown(this._onDropdown.bind(this))
         html.find(".item-dropdown-alt").mousedown(this._onDropdownAlt.bind(this))
         html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
@@ -409,6 +429,17 @@ export class PillarsActorSheet extends ActorSheet {
         PowerTemplate.fromItem(item).drawPreview()
     }
 
+
+    _onWoundClick(event) {
+        let index = Number(event.currentTarget.dataset["index"])
+        let type = event.currentTarget.dataset["wound"];
+
+        let wounds = duplicate(this.actor.health.wounds[type])
+        wounds[index]++
+        if (wounds[index] > 2)
+            wounds[index] = 0
+        this.actor.update({[`data.health.wounds.${type}`] : wounds})
+    }
 
     /* -------------------------------------------- */
 

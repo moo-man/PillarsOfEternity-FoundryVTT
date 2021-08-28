@@ -203,6 +203,18 @@ POE.suitabilities = {
 
 POE.actorSizes = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
 
+POE.woundThresholds = {
+    "-4" : { light : 1, heavy: 2},
+    "-3" : { light : 2, heavy: 3},
+    "-2" : { light : 6, heavy: 12},
+    "-1" : { light : 10, heavy: 20},
+    "0" : { light : 12, heavy: 24},
+    "1" : { light : 14, heavy: 28},
+    "2" : { light : 24, heavy: 48},
+    "3" : { light : 40, heavy: 80},
+    "4" : { light : 80, heavy: 160},
+    "5" : { light : 166, heavy: 332}
+}
 
 
 POE.itemSpecials = {

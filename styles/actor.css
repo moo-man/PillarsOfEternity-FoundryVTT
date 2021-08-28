@@ -148,6 +148,7 @@
 .pillars-of-eternity.actor.sheet .general .wounds .wound-squares > *{
   cursor: pointer;
   margin-right: 5px;
+  width: 15px;
 }
 
 
