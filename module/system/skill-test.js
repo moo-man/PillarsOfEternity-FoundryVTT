@@ -56,7 +56,7 @@ export default class SkillTest
             if (this.testData.modifier)
             {
                 terms.push(new OperatorTerm({operator : "+"}))
-                terms.push(new NumericTerm({number : this.testData.modifier}))
+                terms = terms.concat(Roll.parse(this.testData.modifier))
             }
 
             if (!this.testData.proxy)

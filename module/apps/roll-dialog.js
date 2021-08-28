@@ -20,7 +20,7 @@ export default class RollDialog extends Dialog {
                         callback : (html, test) => {
                             console.log(html, test)
                             let data = {}
-                            data.modifier = parseInt(html.find("input[name='modifier']").val())
+                            data.modifier = html.find("input[name='modifier']").val()
                             data.proxy = html.find("input[name='proxy']").is(":checked")
                             data.assister = html.find("select[name='assistance']").val()
                             data.state = html.find("input:radio[name='state']:checked").val()

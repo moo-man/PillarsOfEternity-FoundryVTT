@@ -14,7 +14,10 @@ export default class PillarsCombatTracker extends CombatTracker {
         super.activateListeners(html)
 
         html.find(".switch-phase").click(ev => {
-            game.combat.setFlag("pillars-of-eternity", "phase", game.combat.phase == 0 ? 1 : 0)
+            if (game.user.isGM)
+            {
+                game.combat.setFlag("pillars-of-eternity", "phase", game.combat.phase == 0 ? 1 : 0)
+            }
         })
     }
 }
