@@ -1,8 +1,15 @@
-<div>
+<div class="dialog-fields">
     <div class="form-group">
         <label>Modifier</label>
         <div class="form-fields">
             <input type="text" name="modifier" value="{{modifier}}">
+        </div>
+    </div>
+    <div class="form-group steps">
+        <label>Steps</label>
+        <div class="form-fields">
+            <input type="number" name="steps" value="{{steps}}">
+            <input type="text" name="step-dice" disabled value="">
         </div>
     </div>
     <div class="form-group">
@@ -26,15 +33,22 @@
     <div class="form-group advantage-disadvantage">
         <div>
             <label>Advantaged</label>
-            <input type="radio" name="state" value="adv" {{checked state.adv}} />
+            <input type="radio" id="state-adv" name="state" value="adv" {{checked state.adv}} />
         </div>
         <div>
             <label>Normal</label>
-            <input type="radio" name="state" value="normal" {{checked state.normal}} />
+            <input type="radio" id="state-normal" name="state" value="normal" {{checked state.normal}} />
         </div>
         <div>
             <label>Disadvantaged</label>
-            <input type="radio" name="state" value="dis" {{checked state.dis}} />
+            <input type="radio" id="state-dis" name="state" value="dis" {{checked state.dis}} />
         </div>
     </div>
+</div>
+<div class="effects">
+    <select multiple class="effect-select">
+        {{#each effects as |effect e|}}
+        <option title="{{effect.tooltip}}" value="{{e}}">{{effect.label}}</option>
+        {{/each}}
+    </select>
 </div>

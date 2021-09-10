@@ -25,4 +25,18 @@ export default class PILLARS_UTILITY {
 
     }
 
+    static stepsToDice(steps)
+    {
+        steps = Math.abs(steps)
+        if (steps >= 5)
+            return {number : 1, faces : 12}
+        else if (steps >= 3)
+            return {number : 1, faces : 8}
+        else if (steps >= 2)
+            return {number : 1, faces : 6}
+        else if (steps >= 1)
+            return {number : 1, faces : 4}
+        else return ""
+    }
+
 }

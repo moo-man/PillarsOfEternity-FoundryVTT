@@ -7,6 +7,7 @@ export default class SkillTest
                 testData : {
                     title : data.title,
                     modifier : data.modifier,
+                    steps : data.steps,
                     proxy : data.proxy,
                     assister : data.assister,
                     state : data.state || "normal",
@@ -57,6 +58,16 @@ export default class SkillTest
             {
                 terms.push(new OperatorTerm({operator : "+"}))
                 terms = terms.concat(Roll.parse(this.testData.modifier))
+            }
+
+            if (this.testData.steps)
+            {
+                if (this.testData.steps > 0)
+                    terms.push(new OperatorTerm({operator : "+"}))
+                else if (this.testData.steps < 0)
+                    terms.push(new OperatorTerm({operator : "-"}))
+
+                terms.push(new Die(game.pillars.utility.stepsToDice(this.testData.steps)))
             }
 
             if (!this.testData.proxy)

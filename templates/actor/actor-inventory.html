@@ -6,7 +6,7 @@
     </div>
     <div class="weight">
         <h3>Weight:</h3>
-        <input disabled type="text" value={{data.weight}}>
+        <input disabled type="text" value={{actor.data.weight}}>
         <h3>ibs</h3>
     </div>
 </div>
@@ -40,7 +40,7 @@
                 </div>
                 {{#unless (eq item.type "weapon") }}
                 {{#if item.skill.value}}
-                <button class="item-property-column large">{{item.skill.value}}</button>
+                <button type="button" class="item-property-column large">{{item.skill.value}}</button>
                 {{/if}}
                 {{/unless}}
 

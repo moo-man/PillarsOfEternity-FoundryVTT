@@ -103,6 +103,7 @@ export class PillarsActorSheet extends ActorSheet {
 
     prepareSheetData(sheetData) {
         sheetData.items = this.constructItemLists(sheetData)
+        sheetData.effects = this.constructEffectLists(sheetData) 
         this._setPowerSourcePercentage(sheetData)
         this._createWoundsArrays(sheetData)
         this._enrichKnownConnections(sheetData)
@@ -165,6 +166,17 @@ export class PillarsActorSheet extends ActorSheet {
             }
         }
         return inventory
+    }
+
+    constructEffectLists(sheetData) 
+    {
+        let effects = {}
+
+        effects.temporary = sheetData.actor.effects.filter(i => i.isTemporary && !i.data.disabled)
+        effects.disabled = sheetData.actor.effects.filter(i => i.data.disabled)
+        effects.passive = sheetData.actor.effects.filter(i => !i.isTemporary && !i.data.disabled)
+
+        return effects;
     }
 
     _enrichKnownConnections(sheetData)
@@ -266,6 +278,10 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".item-delete").click(this._onItemDelete.bind(this))
         html.find(".item-create").click(this._onItemCreate.bind(this))
         html.find(".item-post").click(this._onPostItem.bind(this))
+        html.find(".effect-create").click(this._onEffectCreate.bind(this));  
+        html.find(".effect-edit").click(this._onEffectEdit.bind(this));  
+        html.find(".effect-delete").click(this._onEffectDelete.bind(this));  
+        html.find(".effect-toggle").click(this._onEffectToggle.bind(this));  
         html.find(".sheet-checkbox").click(this._onCheckboxClick.bind(this))
         html.find(".wound-square").click(this._onWoundClick.bind(this))
         html.find(".item-dropdown").mousedown(this._onDropdown.bind(this))
@@ -283,7 +299,6 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
     }
 
-    // Handle custom drop events (currently just putting items into containers)
     _onDrop(event) {
             super._onDrop(event);
     }
@@ -324,6 +339,35 @@ export class PillarsActorSheet extends ActorSheet {
         return this.actor.items.get(itemId).postToChat()
     }
     
+    _onEffectCreate(ev) {
+        let type = ev.currentTarget.attributes["data-type"].value
+        let effectData = { label: "New Effect" , icon: "icons/svg/aura.svg"}
+        if (type == "temporary") {
+          effectData["duration.rounds"] = 1;
+        }
+        this.actor.createEmbeddedDocuments("ActiveEffect", [effectData])
+      }
+
+    _onEffectEdit(ev)
+    {
+        let id = $(ev.currentTarget).parents(".item").attr("data-item-id")
+        this.object.effects.get(id).sheet.render(true)
+    }
+
+    _onEffectDelete(ev)
+    {
+        let id = $(ev.currentTarget).parents(".item").attr("data-item-id")
+        this.object.deleteEmbeddedDocuments("ActiveEffect", [id])
+    }
+
+    _onEffectToggle(ev)
+    {
+        let id = $(ev.currentTarget).parents(".item").attr("data-item-id")
+        let effect = this.object.effects.get(id)
+
+        effect.update({"disabled" : !effect.data.disabled})
+    }
+
     _onCheckboxClick(event) {
         let target = $(event.currentTarget).attr("data-target")
         if (target == "item") {

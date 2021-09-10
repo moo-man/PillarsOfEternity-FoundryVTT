@@ -112,6 +112,15 @@
   border: 1px solid darkred
 }
 
+.pillars-of-eternity.actor.sheet .general .property-group.winded label{
+  color: darkblue
+}
+
+.pillars-of-eternity.actor.sheet .general .property-group.winded input{
+  color: darkblue;
+  border: 1px solid darkblue
+}
+
 .pillars-of-eternity.actor.sheet .general .wounds h4 {
   width: 100%;
   font-size: 18px
@@ -367,6 +376,7 @@
     flex: 0 0 40px;
     text-align: center;
     margin: 2px;
+    align-items: center;
 }
 .pillars-of-eternity.actor.sheet .items-list .item-controls > *{
     font-size: 12px;

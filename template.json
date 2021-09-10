@@ -35,6 +35,7 @@
         "health": {
           "max": 0,
           "value": 0,
+          "bloodiedThreshold" : 0,
           "wounds": {
             "light": [0, 0, 0, 0],
             "heavy": [0, 0],

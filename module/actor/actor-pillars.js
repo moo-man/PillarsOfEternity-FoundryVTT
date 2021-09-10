@@ -33,6 +33,10 @@ export class PillarsActor extends Actor {
     {
         let data = this.toObject().data
         data.size.value = speciesItem.size.value
+
+        let attributes = game.pillars.config.sizeAttributes[data.size.value]
+
+
         data.defenses.deflection.value = 10 - (data.size.value * 2)
         data.defenses.reflexes.value = 15 - (data.size.value * 2)
         data.defenses.fortitude.value = 15 + (data.size.value * 2)
@@ -42,40 +46,14 @@ export class PillarsActor extends Actor {
         data.details.species  = speciesItem.species.value;
         data.details.stock = speciesItem.stock.value
 
-        data.health.threshold = game.pillars.config.woundThresholds[data.size.value]
+        data.health.threshold = {light : attributes.light, heavy : attributes.heavy}
+        data.health.max = attributes.maxHealthEndurance
+        data.endurance.max = attributes.maxHealthEndurance
+        data.health.bloodiedThreshold = data.health.max / 2
 
-        switch (this.size.value) {
-            case -4:
-                data.health.max = 4
-                break;
-            case -3:
-                data.health.max = 8
-                break;
-            case -2:
-                data.health.max = 16
-                break;
-            case -1:
-                data.health.max = 32
-                break;
-            case 0:
-                data.health.max = 36
-                break;
-            case 1:
-                data.health.max = 40
-                break;
-            case 2:
-                data.health.max = 75
-                break;
-            case 3:
-                data.health.max = 125
-                break;
-            case 4:
-                data.health.max = 250
-                break;
-            case 5:
-                data.health.max = 500
-                break;
-        }
+        data.endurance.windedThreshold = attributes.windedExert
+        data.endurance.exert = attributes.windedExert
+
 
         return this.update({"data" : data})
 
@@ -93,13 +71,15 @@ export class PillarsActor extends Actor {
 
     prepareDerivedData() {
 
-        this.health.bloodied = (this.health.max / 2) >= this.health.value
+        this.data.update({"data.health.bloodied" :  this.health.bloodiedThreshold >= this.health.value})
+        this.data.update({"data.endurance.winded" :  this.endurance.windedThreshold >= this.endurance.value})
     }
 
     //#region Data Preparation
     prepareData() {
         try {
             super.prepareData();
+            super.prepareEmbeddedEntities();
             this.itemCategories = this.itemTypes
             this.prepareSpecies();
             this.prepareItems()
@@ -125,7 +105,7 @@ export class PillarsActor extends Actor {
             if (i.weight)
                 weight += i.weight.value
         }
-        this.data.update({"data.weight" : weight})
+        this.data.weight = weight
     }
 
 
@@ -199,8 +179,10 @@ export class PillarsActor extends Actor {
         let dialogData = {}
         dialogData.title = `${item.name} Test`
         dialogData.assisters = this.constructAssisterList(item)
-        dialogData.modifier = 0
+        dialogData.modifier = ""
+        dialogData.steps = 0
         dialogData.hasRank = item.xp.rank
+        dialogData.effects = this.effects.filter(i => i.hasRollEffect)
         return dialogData
     }
 
@@ -210,7 +192,9 @@ export class PillarsActor extends Actor {
         dialogData.title = `${item.name} Test`
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0)
+        dialogData.steps = 0
         dialogData.hasRank = item.Skill.rank
+        dialogData.effects = this.effects.filter(i => i.hasRollEffect)
         return dialogData
     }
 
