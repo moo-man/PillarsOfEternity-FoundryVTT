@@ -73,6 +73,40 @@ export class PillarsActor extends Actor {
 
         this.data.update({"data.health.bloodied" :  this.health.bloodiedThreshold >= this.health.value})
         this.data.update({"data.endurance.winded" :  this.endurance.windedThreshold >= this.endurance.value})
+
+        if (this.health.bloodied)
+        {
+            let existing = this.effects.find(e => e.getFlag("core", "statusId") == "bloodied")
+            if (!existing)
+            {
+                let effect = foundry.utils.deepClone(CONFIG.statusEffects.find(e => e.id == "bloodied"))
+                effect.flags["core.statusId"] = effect.id
+                delete effect.id
+                this.createEmbeddedDocuments("ActiveEffect", [effect])
+            }
+        }
+        else {
+            let existing = this.effects.find(e => e.getFlag("core", "statusId") == "bloodied")
+            if (existing)
+                this.deleteEmbeddedDocuments("ActiveEffect", [existing.id])
+        }
+
+        if (this.endurance.winded)
+        {
+            let existing = this.effects.find(e => e.getFlag("core", "statusId") == "winded")
+            if (!existing)
+            {
+                let effect = foundry.utils.deepClone(CONFIG.statusEffects.find(e => e.id == "winded"))
+                effect.flags["core.statusId"] = effect.id
+                delete effect.id
+                this.createEmbeddedDocuments("ActiveEffect", [effect])
+            }
+        }
+        else {
+            let existing = this.effects.find(e => e.getFlag("core", "statusId") == "winded")
+            if (existing)
+                this.deleteEmbeddedDocuments("ActiveEffect", [existing.id])
+        }
     }
 
     //#region Data Preparation

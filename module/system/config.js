@@ -173,6 +173,28 @@ POE.powerSourceTypes = {
     "trained": "Trained"
 }
 
+POE.powerEffectType  = {
+    "damage" : "Damage",
+    "condition" : "Condition",
+    "other" : "Other"
+}
+
+POE.powerEffectResistTypes = {
+    "always" : "Always",
+    "reflex" : "Reflex",
+    "fortitude": "Fortitude",
+    "will" : "Will"
+}
+
+
+POE.damageTypes = {
+    "burn" : "Burn",
+    "freeze" : "Freeze",
+    "raw" : "Raw",
+    "corrode" : "Corrode",
+    "shock" : "Shock"
+}
+
 POE.weaponTypes = {
     "smallMelee": "Small Melee",
     "mediumMelee": "Medium Melee",
@@ -183,6 +205,7 @@ POE.weaponTypes = {
 }
 
 POE.armorTypes = {
+    "physical" : "Physical",
     "light": "Light Armor",
     "medium": "Medium Armor",
     "heavy": "Heavy Armor"
@@ -358,3 +381,215 @@ POE.itemSpecials = {
         skilled: true
     }
 }
+
+CONFIG.statusEffects = [
+    {
+        id : "bloodied",
+        label : "Bloodied",
+        icon : "icons/svg/blood.svg",
+        changes : [
+            {key: "steps", mode : 0, value : -2}, 
+            {key: "data.defenses.deflection.value", mode : 2, value : -3},
+            {key: "data.defenses.fortitude.value", mode : 2, value : -3},
+            {key: "data.defenses.reflexes.value", mode : 2, value : -3},
+            {key: "data.defenses.will.value", mode : 2, value : -3}],
+        flags : { "pillars-of-eternity.description" : "All Rolls"}
+    },
+    {
+        id : "winded",
+        label : "Winded",
+        icon : "icons/svg/unconscious.svg",
+        changes : [
+            {key: "steps", mode : 0, value : -1}, 
+            {key: "data.defenses.deflection.value", mode : 2, value : -2},
+            {key: "data.defenses.fortitude.value", mode : 2, value : -2},
+            {key: "data.defenses.reflexes.value", mode : 2, value : -2},
+            {key: "data.defenses.will.value", mode : 2, value : -2}],
+        flags : { "pillars-of-eternity.description" : "All Rolls"}
+    },
+    {
+        id : "weakened",
+        label : "Weakened",
+        icon : "icons/svg/degen.svg",
+        changes : [{key: "state", mode : 0, value : "dis"}],
+        flags : { "pillars-of-eternity.description" : "Involves Physical Activity"}
+    },
+    {
+        id : "sickened",
+        label : "Sickened",
+        icon : "icons/svg/degen.svg",
+        changes : [{key: "state", mode : 0, value : "dis"}],
+        flags : { "pillars-of-eternity.description" : "Involves Physical Activity"}
+    },
+    {
+        id : "enfeebled",
+        label : "Enfeebled",
+        icon : "icons/svg/degen.svg",
+        changes : [{key: "state", mode : 0, value : "dis"}],
+        flags : { "pillars-of-eternity.description" : "Involves Physical Activity"}
+    },
+    {
+        id : "fit",
+        label : "Fit",
+        icon : "icons/svg/regen.svg",
+        changes : [{key: "state", mode : 0, value : "adv"}],
+        flags : { "pillars-of-eternity.description" : "Involves Physical Activity"}
+    },
+    {
+        id : "hardy",
+        label : "Hardy",
+        icon : "icons/svg/regen.svg",
+        changes : [{key: "state", mode : 0, value : "adv"}],
+        flags : { "pillars-of-eternity.description" : "Involves Physical Activity"}
+    },
+    {
+        id : "robust",
+        label : "Robust",
+        icon : "icons/svg/regen.svg",
+        changes : [{key: "state", mode : 0, value : "adv"}],
+        flags : { "pillars-of-eternity.description" : "Involves Physical Activity"}
+    },
+    {
+        id : "prone",
+        label : "Prone",
+        icon : "icons/svg/falling.svg",
+        changes : [{key: "state", mode : 0, value : "dis"}],
+        flags : { "pillars-of-eternity.description" : "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)"}
+    },
+    {
+        id : "knocked-down",
+        label : "Knocked Down",
+        icon : "icons/svg/falling.svg",
+        changes : [{key: "state", mode : 0, value : "dis"}],
+        flags : { "pillars-of-eternity.description" : "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)"}
+    },
+    {
+        id : "down-n-out",
+        label : "Down and Out",
+        icon : "icons/svg/falling.svg",
+        changes : [{key: "state", mode : 0, value : "dis"}],
+        flags : { "pillars-of-eternity.description" : "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)"}
+    },
+    {
+        id : "hampered",
+        label : "Hampered",
+        icon : "icons/svg/paralysis.svg"
+    },
+    {
+        id : "immobilized",
+        label : "Immobilized",
+        icon : "icons/svg/paralysis.svg"
+    },
+    {
+        id : "paralyzed",
+        label : "Paralyzed",
+        icon : "icons/svg/paralysis.svg"
+    },
+    {
+        id : "nimble",
+        label : "Nimble",
+        icon : "icons/svg/ice-aura.svg"
+    },
+    {
+        id : "quickened",
+        label : "Quickened",
+        icon : "icons/svg/ice-aura.svg"
+    },
+    {
+        id : "swift",
+        label : "Swift",
+        icon : "icons/svg/ice-aura.svg"
+    },
+    {
+        id : "ditracted",
+        label : "Distracted",
+        icon : "icons/svg/sun.svg"
+    },
+    {
+        id : "deafened",
+        label : "Deafened",
+        icon : "icons/svg/deaf.svg"
+    },
+    {
+        id : "dazzled",
+        label : "Dazzled",
+        icon : "icons/svg/blind.svg",
+        changes : [{key: "state", mode : 0, value : "dis"}],
+        flags : { "pillars-of-eternity.description" : "Disadvantage on Weapon Attacks or Skill checks that require sight"}
+    },
+    {
+        id : "blinded",
+        label : "Blinded",
+        icon : "icons/svg/blind.svg",
+        changes : [{key: "steps", mode : 0, value : -3}],
+        flags : { "pillars-of-eternity.description" : "Skill checks requiring sight"}
+    },
+    {
+        id : "aware",
+        label : "Aware",
+        icon : "icons/svg/eye.svg",
+        changes : [{key: "state", mode : 0, value : "adv"}],
+        flags : { "pillars-of-eternity.description" : "Disengagement Attacks"}
+    },
+    {
+        id : "insightful",
+        label : "Insightful",
+        icon : "icons/svg/eye.svg",
+        changes : [{key: "state", mode : 0, value : "adv"}],
+        flags : { "pillars-of-eternity.description" : "Attack rolls and skill checks that require sight"}
+    },
+    {
+        id : "all-seeing",
+        label : "All-Seeing",
+        icon : "icons/svg/eye.svg",
+        changes : [{key: "state", mode : 0, value : "adv"}],
+        flags : { "pillars-of-eternity.description" : "Attack rolls and skill checks that require sight"}
+    },
+    {
+        id : "demoralized",
+        label : "Demoralized",
+        icon : "icons/svg/unconscious.svg",
+        changes : [{key: "data.initiative.value", mode : 2, value : -5}]
+    },
+    {
+        id : "frightened",
+        label : "Frightened",
+        icon : "icons/svg/terror.svg",
+        changes : [{key: "data.initiative.value", mode : 2, value : -5}, {key: "state", mode : 0, value : "dis"}],
+        flags : { "pillars-of-eternity.description" : "Attack and skill rolls within line of sight of the source of fear"}
+    },
+    {
+        id : "terrified",
+        label : "Terrified",
+        icon : "icons/svg/terror.svg",
+        changes : [{key: "data.initiative.value", mode : 2, value : -5}, {key: "state", mode : 0, value : "dis"}],
+        flags : { "pillars-of-eternity.description" : "Attack and skill rolls within line of sight of the source of fear"}
+    },
+    {
+        id : "charmed",
+        label : "Charmed",
+        icon : "icons/svg/stoned.svg"
+    },
+    {
+        id : "dominated",
+        label : "Dominated",
+        icon : "icons/svg/stoned.svg"
+    },
+    {
+        id : "determined",
+        label : "Determined",
+        icon : "icons/svg/statue.svg",
+        changes : [{key: "steps", mode : 0, value : 1}],
+        flags : { "pillars-of-eternity.description" : "Bonus step to one roll per round"}
+    },
+    {
+        id : "resolute",
+        label : "Resolute",
+        icon : "icons/svg/statue.svg"
+    },
+    {
+        id : "inspiring",
+        label : "Inspiring",
+        icon : "icons/svg/statue.svg"
+    }
+]

@@ -4,6 +4,7 @@ import itemHooks from "./item.js";
 import handlebars from "./handlebars.js"
 import diceSoNiceHooks from "./dsn.js"
 import readyHooks from "./ready.js"
+import effects from "./effects.js";
 
 export default function () {
     actorHooks();
@@ -11,4 +12,6 @@ export default function () {
     chatHooks();
     handlebars();
     diceSoNiceHooks();
+    readyHooks();
+    effects()
 }

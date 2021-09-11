@@ -75,5 +75,19 @@ export class PillarsItemSheet extends ItemSheet {
 
     })
 
+    html.find(".effect-create").click(ev => {
+      return this.item.createEmbeddedDocuments("ActiveEffect", [{label : "New Effect", icon: "icons/svg/aura.svg"}])
+    })
+    
+    html.find(".effect-delete").click(ev => {
+      let id = $(ev.currentTarget).parents(".item").attr("data-effect-id")
+      return this.item.deleteEmbeddedDocuments("ActiveEffect", [id])
+    })
+
+    html.find(".effect-edit").click(ev => {
+      let id = $(ev.currentTarget).parents(".item").attr("data-effect-id")
+      this.item.effects.get(id).sheet.render(true)
+    })
+
   }
 }

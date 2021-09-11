@@ -145,7 +145,6 @@ export class PillarsItem extends Item {
     get used() {return this.data.data.used}
     get equipped() {return this.data.data.equipped}
     get wearable() {return this.data.data.wearable}
-    get skill() {return this.data.data.skill}
     get weight() {return this.data.data.weight}
     get cost() {return this.data.data.cost}
     get quantity() {return this.data.data.quantity}

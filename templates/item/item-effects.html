@@ -1,4 +1,32 @@
 <div class="tab effects active" data-tab="effects">
-    test
+  <ol class="items-list">
+  <li class="items-header flexrow">
+    <h3 class="item-name flexrow">Effects</h3>
+    <div class="item-controls">
+      <a class="item-control effect-create" title="Create"><i class="fas fa-plus"></i></a>
+    </div>
+  </li>
 
-  </div>
+  <ol class="items">
+    {{#each item.effects as |effect e|}}
+    {{log effect}}
+    <li class="item" data-effect-id="{{effect.id}}">
+      <div class="row-content">
+        <div class="item-name flexrow effect-edit">
+          <div class="item-image" style="background-image: url('{{effect.data.icon}}')"></div>
+          <a>
+            <h4>{{effect.label}}</h4>
+          </a>
+        </div>
+
+        <div class="item-controls flexrow">
+          {{#if ../document.isOwner}}
+          <a class="item-control effect-delete" title="Delete"><i class="fas fa-trash"></i></a>
+          {{/if}}
+        </div>
+      </div>
+    </li>
+    {{/each}}
+  </ol>
+  </ol>
+</div>

@@ -191,7 +191,7 @@
    text-align: center;
 } 
 
-.pillars-of-eternity.actor.sheet .items-list {
+.pillars-of-eternity .items-list {
     list-style: none;
     margin: 10px;
     padding: 0;
@@ -199,28 +199,28 @@
     height: 102%
   }
 
-  .pillars-of-eternity.actor.sheet .items {
+  .pillars-of-eternity.sheet .items {
     padding: 0px;
     height: 90%;
     overflow-y:auto;
   }
 
-  /* .pillars-of-eternity.actor.sheet .items-list .item:nth-child(even) {
+  /* .pillars-of-eternity .items-list .item:nth-child(even) {
       background-color: #DDD;
   } */
 
-  .pillars-of-eternity.actor.sheet .items-list .item{
+  .pillars-of-eternity .items-list .item{
       overflow: hidden
 }
 
-.pillars-of-eternity.actor.sheet .items-list .item .item-summary{
+.pillars-of-eternity .items-list .item .item-summary{
   padding: 5px;
   margin: 5px;
   border-left: 1px dotted black;
   border-right: 1px dotted black;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .item .row-content{
+.pillars-of-eternity .items-list .item .row-content{
   display: flex;
   line-height: 10px;
   border-bottom: 1px solid #CCC;
@@ -228,12 +228,12 @@
   overflow: hidden;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .item:last-of-type {
+.pillars-of-eternity .items-list .item:last-of-type {
     border: none
 }
 
 
-.pillars-of-eternity.actor.sheet .items-list .item-name{
+.pillars-of-eternity .items-list .item-name{
     flex: 1;
     margin: 3px;
     overflow: hidden; 
@@ -241,30 +241,30 @@
   }
 
 
-.pillars-of-eternity.actor.sheet .items-list.weapons .item-name,
-  .pillars-of-eternity.actor.sheet .items-list.powers-list .item-name{
+.pillars-of-eternity .items-list.weapons .item-name,
+  .pillars-of-eternity .items-list.powers-list .item-name{
   max-width: 50%;
 }
 
 
 
-.pillars-of-eternity.actor.sheet .items-list.power-sources .item-name{
+.pillars-of-eternity .items-list.power-sources .item-name{
   max-width: 80%;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .item.used {
+.pillars-of-eternity .items-list .item.used {
   opacity: 0.5
 }
 
 
-.pillars-of-eternity.actor.sheet .items-list .item .item-name .item-image {
+.pillars-of-eternity .items-list .item .item-name .item-image {
   flex: 0 0 30px;
   height: 30px;
   background-size: 30px;
   border: none;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .item-property-column{
+.pillars-of-eternity .items-list .item-property-column{
   flex: 0 0 60px;
   display: flex;
   align-items: center;
@@ -273,25 +273,25 @@
 }
 
 
-.pillars-of-eternity.actor.sheet .items-list .item-property-column.flex{
+.pillars-of-eternity .items-list .item-property-column.flex{
   flex: 1
 }
 
-.pillars-of-eternity.actor.sheet .items-list .item-property-column.item-specials{
+.pillars-of-eternity .items-list .item-property-column.item-specials{
   flex-wrap: wrap;;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .item-property-column.item-specials > *{
+.pillars-of-eternity .items-list .item-property-column.item-specials > *{
   white-space: nowrap;
 }
 
 
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column .item-toggle{  
+.pillars-of-eternity .items-list .items .item-property-column .item-toggle{  
   line-height: 30px;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column.small{
+.pillars-of-eternity .items-list .items .item-property-column.small{
   font-size: 11px;
   line-height: 15px;
   display: flex;
@@ -299,11 +299,11 @@
   justify-content: center;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .item-property-column.large{
+.pillars-of-eternity .items-list .item-property-column.large{
   flex: 0 0 200px;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column input{
+.pillars-of-eternity .items-list .items .item-property-column input{
   width: 50%;
   background: none;
   border: none;
@@ -314,12 +314,12 @@
   line-height: 25px;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column input:focus{
+.pillars-of-eternity .items-list .items .item-property-column input:focus{
   box-shadow: none;
 }
 
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column select{
+.pillars-of-eternity .items-list .items .item-property-column select{
   width: 50%;
   background: none;
   border: none;
@@ -328,7 +328,7 @@
   border-radius: 0px
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column select:focus{
+.pillars-of-eternity .items-list .items .item-property-column select:focus{
   box-shadow: none;
 }
 
@@ -337,54 +337,54 @@
   margin-right: 3px;
 }
 
-.pillars-of-eternity.actor.sheet .items-list.power-sources .items .item-property-column.pool-inputs {
+.pillars-of-eternity .items-list.power-sources .items .item-property-column.pool-inputs {
   display: flex;
   justify-content: center;
 }
 
-.pillars-of-eternity.actor.sheet .items-list.power-sources .items .item-property-column.pool-inputs input{
+.pillars-of-eternity .items-list.power-sources .items .item-property-column.pool-inputs input{
   width: 40px;
   font-size: 16px
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column .progress-bar{
+.pillars-of-eternity .items-list .items .item-property-column .progress-bar{
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
 }
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column .progress-bar-container{
+.pillars-of-eternity .items-list .items .item-property-column .progress-bar-container{
   width: 100%;
   border: 1px solid black;
   border-radius: 5px;
   height: 10px;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items .item-property-column .progress-bar-container .progress{
+.pillars-of-eternity .items-list .items .item-property-column .progress-bar-container .progress{
   background: black;
   height: 100%
 }
 
-.pillars-of-eternity.actor.sheet .items-list  .item-used {
+.pillars-of-eternity .items-list  .item-used {
   flex: 0 0 10px;
   font-size: 12px;
   line-height: 35px;
   padding-left : 1px;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .item-controls{
+.pillars-of-eternity .items-list .item-controls{
     flex: 0 0 40px;
     text-align: center;
     margin: 2px;
     align-items: center;
 }
-.pillars-of-eternity.actor.sheet .items-list .item-controls > *{
+.pillars-of-eternity .items-list .item-controls > *{
     font-size: 12px;
     margin: 2px;
     color: #444
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items-header {
+.pillars-of-eternity .items-list .items-header {
   border: 1px solid #7a7971;
   background: rgba(0, 0, 0, 0.05);
   /* border-radius: 3px; */
@@ -393,13 +393,13 @@
   justify-content: space-between;
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items-header .item-controls{
+.pillars-of-eternity .items-list .items-header .item-controls{
     padding-top: 2px
 }
 
 
-.pillars-of-eternity.actor.sheet .items-list .item-name h3,
-.pillars-of-eternity.actor.sheet .items-list .item-name h4 {
+.pillars-of-eternity .items-list .item-name h3,
+.pillars-of-eternity .items-list .item-name h4 {
   margin: 0;
   white-space: nowrap;
   overflow-x: hidden;
@@ -441,8 +441,9 @@
   height: 100%
 }
 
-.pillars-of-eternity.actor.sheet .powers .items-list,
-  .pillars-of-eternity.actor.sheet .inventory .items-list {
+.pillars-of-eternity .effects .items-list,
+.pillars-of-eternity .powers .items-list,
+  .pillars-of-eternity .inventory .items-list {
   height: unset
 }
 
@@ -469,11 +470,12 @@
   height: 95%
 }
 
-.pillars-of-eternity.actor.sheet .items-list .items button.item-property-column {
+.pillars-of-eternity .items-list .items button.item-property-column {
   height: 30px;
 }
 
 
+.pillars-of-eternity.actor.sheet .effects,
 .pillars-of-eternity.actor.sheet .powers,
   .pillars-of-eternity.actor.sheet .details {
   overflow-y: auto;
@@ -574,81 +576,3 @@ line-height: 25px;
   width: 50px;
   margin-left: 10px;
 }
-
-
-
-/* .pillars-of-eternity.actor.sheet .items-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    color: #7a7971;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .item-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .item-name {
-    flex: 2;
-    margin: 0;
-    overflow: hidden;
-    font-size: 13px;
-    text-align: left;
-    align-items: center;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .item-name h3,
-  .pillars-of-eternity.actor.sheet .items-list .item-name h4 {
-    margin: 0;
-    white-space: nowrap;
-    overflow-x: hidden;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .item-controls {
-    flex: 0 0 60px;
-    justify-content: space-between;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .item-controls a {
-    font-size: 12px;
-    text-align: center;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .item {
-    align-items: center;
-    padding: 0 2px;
-    border-bottom: 1px solid #c9c7b8;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .item:last-child {
-    border-bottom: none;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .item .item-name {
-    color: #191813;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .item .item-name .item-image {
-    flex: 0 0 30px;
-    height: 30px;
-    background-size: 30px;
-    border: none;
-    margin-right: 5px;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .items-header {
-    height: 28px;
-    margin: 2px 0;
-    padding: 0;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.05);
-    border: 2px groove #eeede0;
-    font-weight: bold;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .items-header > * {
-    font-size: 12px;
-    text-align: center;
-  }
-  .pillars-of-eternity.actor.sheet .items-list .items-header h3 {
-    padding-left: 5px;
-    font-family: "Modesto Condensed", "Palatino Linotype", serif;
-    font-size: 20px;
-    font-weight: 700;
-    text-align: left;
-    font-size: 16px;
-  } */
-  

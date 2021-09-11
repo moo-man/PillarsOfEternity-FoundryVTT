@@ -297,6 +297,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".connection-name").click(this._onConnectionClick.bind(this))
         html.find(".power-target").click(this._onPowerTargetClick.bind(this))
         html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
+        html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
     }
 
     _onDrop(event) {
@@ -514,6 +515,18 @@ export class PillarsActorSheet extends ActorSheet {
         let testData = await this.actor.setupWeaponTest(itemId)
         let test = new WeaponTest(testData)
         await test.rollTest();
+        test.sendToChat()
+    }
+
+    async _onItemSkillClick(event) {
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId);
+        let skill = this.actor.items.getName(item.skill.value)
+        if (!skill)
+            return ui.notifications.warn(`Could not find skill ${item.skill.value}`)
+        let testData = await this.actor.setupSkillTest(skill)
+        let test = new SkillTest(testData)
+        await test.rollTest()
         test.sendToChat()
     }
 
