@@ -17,6 +17,8 @@ export class PillarsItem extends Item {
     //#region Data Preparation 
     prepareData() {
         super.prepareData();
+        if (this[`prepare${this.type[0].toUpperCase() + this.type.slice(1)}`])
+            this[`prepare${this.type[0].toUpperCase() + this.type.slice(1)}`]()
     }
 
     prepareOwnedData() 
@@ -36,6 +38,26 @@ export class PillarsItem extends Item {
 
     prepareSkill() {
 
+    }
+
+    preparePower() {
+        try 
+        {
+            let pl = 0
+            let values = game.pillars.config.powerLevelValues
+            pl += values.powerRanges[this.range.value] || 0
+
+            let targetSubTypes = values[`power${this.target.value[0].toUpperCase() + this.target.value.slice(1)}s`]
+            pl += targetSubTypes[this.target.subtype] || 0
+            pl += values.powerDurations[this.duration.value]
+            pl += values.powerSpeeds[this.speed.value]
+            pl += values.powerExclusions[this.exclusion.value]
+            this.data.data.pl = pl
+        }
+        catch(e) 
+        {   
+            console.log(`Could not calculate PL for ${this.name}: ${e}`)
+        }
     }
 
     prepareOwnedSkill() {

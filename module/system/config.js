@@ -30,7 +30,7 @@ POE.powerRanges = {
     "equippedWeapon": "Equipped Weapon",
     "mid": "Mid",
     "far": "Far",
-    "extreme": "Extreme",
+    "extreme": "Extreme"
 }
 
 POE.powerTargetTypes = {
@@ -40,7 +40,7 @@ POE.powerTargetTypes = {
     "cone": "Cone",
     "ray": "Ray",
     "line": "Line",
-    "boundary": "Boundary",
+    "boundary": "Boundary"
 }
 
 POE.powerTargets = {
@@ -50,22 +50,26 @@ POE.powerTargets = {
     "space": "Space"
 }
 
+
 POE.powerCircles = {
     "small": "Small Circle",
     "medium": "Medium Circle",
     "large": "Large Circle"
 }
 
+
 POE.powerAuras = {
     "small": "Small Aura",
     "large": "Large Aura"
 }
+
 
 POE.powerCones = {
     "small": "Small Cone",
     "medium": "Medium Cone",
     "large": "Large Cone"
 }
+
 
 POE.powerRays = {
     "narrow": "Narrow Ray",
@@ -77,12 +81,14 @@ POE.powerLines = {
     "long": "Long Line"
 }
 
+
 POE.powerBoundarys = {
     "adjacent": "Adjacent Boundary",
     "small": "Small Boundary",
     "large": "Large Boundary",
     "huge": "Huge Boundary"
 }
+
 
 POE.powerDurations = {
     "momentary": "Momentary",
@@ -99,6 +105,7 @@ POE.powerDurations = {
     "year": "Year"
 }
 
+
 POE.powerSpeeds = {
     "slow": "Slow",
     "move": "Move",
@@ -106,14 +113,93 @@ POE.powerSpeeds = {
     "immediate": "Immediate",
     "reaction": "Reaction",
     "triggered1rest": "Triggered 1/Rest",
-    "triggered1encounter": "Triggered 1/Encounter",
+    "triggered1encounter": "Triggered 1/Encounter"
 }
+
 
 POE.powerExclusions = {
     "none": "None",
     "target": "Target",
     "single": "Single",
     "selective": "Selective"
+}
+
+
+POE.powerLevelValues = {
+    powerRanges :  {
+        "none": 0,
+        "adjacent": 1,
+        "meleeWeapon": 1.5,
+        "close": 2,
+        "equippedWeapon": 2.5,
+        "mid": 3,
+        "far": 4,
+        "extreme": 5
+    },
+    powerTargets :  {
+        "self": 0,
+        "individualEU": 0.5,
+        "individual": 1,
+        "space": 1.5
+    },
+    powerCircles :  {
+        "small": 2,
+        "medium": 3,
+        "large": 4
+    },
+    powerAuras :  {
+        "small": 1.5,
+        "large": 3.5
+    },
+    powerCones :  {
+        "small": 2,
+        "medium": 3,
+        "large": 4
+    },
+    powerRays :  {
+        "narrow": 1,
+        "wide": 3
+    },
+    
+    powerLines :  {
+        "short": 2,
+        "long": 4
+    },
+    powerBoundarys :  {
+        "adjacent": 2,
+        "small": 5,
+        "large": 10,
+        "huge": 15
+    },
+    powerDurations :  {
+        "momentary": 0,
+        "momentary2R": 3,
+        "round": 1,
+        "encounter": 2,
+        "encounterPerRound": 3,
+        "concentration": 1.5,
+        "boundary": 3,
+        "day": 5,
+        "week": 6,
+        "month": 7,
+        "season": 8,
+        "year": 9
+    },
+    powerSpeeds :  {
+        "slow": 0,
+        "move": 1,
+        "action": 1.5,
+        "immediate": 5,
+        "reaction": 5,
+        "triggered1rest": 7,
+        "triggered1encounter": 9
+    },
+    powerExclusions :  {
+        "none": 0,
+        "target": 0.5,
+        "single": 1,
+        "selective": 2
+    }
 }
 
 POE.powerSources = {
