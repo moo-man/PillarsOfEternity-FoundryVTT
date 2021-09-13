@@ -39,4 +39,8 @@ export default class PILLARS_UTILITY {
         else return ""
     }
 
+    static weaponSpecials() {
+        return mergeObject(foundry.utils.deepClone(game.pillars.config.meleeSpecials), game.pillars.config.rangedSpecials)
+    }
+
 }

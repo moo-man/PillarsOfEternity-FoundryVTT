@@ -1,5 +1,7 @@
 import RollDialog from "../apps/roll-dialog.js";
 import SkillTest from "../system/skill-test.js";
+import PillarsActiveEffect from "../system/pillars-effect.js"
+import effects from "../hooks/effects.js";
 
 /**
  * Extend FVTT Actor class for Pillars functionality
@@ -22,6 +24,15 @@ export class PillarsActor extends Actor {
                     "token.displayBars": CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,    // Default display bars to be on owner hover
                 })
 
+        let createData = foundry.utils.deepClone(this.data.data)
+
+        this.setSizeData(createData)
+
+        createData.health.value = createData.health.max
+        createData.endurance.value = createData.endurance.max
+
+        this.data.update({data : createData})
+
         // Default characters to HasVision = true and Link Data = true
         if (data.type == "character") {
             this.data.update({ "token.vision": true });
@@ -33,18 +44,27 @@ export class PillarsActor extends Actor {
     {
         let data = this.toObject().data
         data.size.value = speciesItem.size.value
-
-        let attributes = game.pillars.config.sizeAttributes[data.size.value]
-
-
-        data.defenses.deflection.value = 10 - (data.size.value * 2)
-        data.defenses.reflexes.value = 15 - (data.size.value * 2)
-        data.defenses.fortitude.value = 15 + (data.size.value * 2)
-        data.defenses.will.value = 15
+        this.setSizeData(data)
 
         data.stride.value = speciesItem.stride.value
         data.details.species  = speciesItem.species.value;
         data.details.stock = speciesItem.stock.value
+
+
+
+
+        return this.update({"data" : data})
+
+    }
+
+    setSizeData(data)
+    {
+        let attributes = game.pillars.config.sizeAttributes[data.size.value]
+        
+        data.defenses.deflection.value = 10 - (data.size.value * 2)
+        data.defenses.reflexes.value = 15 - (data.size.value * 2)
+        data.defenses.fortitude.value = 15 + (data.size.value * 2)
+        data.defenses.will.value = 15
 
         data.health.threshold = {light : attributes.light, heavy : attributes.heavy}
         data.health.max = attributes.maxHealthEndurance
@@ -53,10 +73,6 @@ export class PillarsActor extends Actor {
 
         data.endurance.windedThreshold = attributes.windedExert
         data.endurance.exert = attributes.windedExert
-
-
-        return this.update({"data" : data})
-
     }
 
     setCultureData(cultureItem)
@@ -71,41 +87,44 @@ export class PillarsActor extends Actor {
 
     prepareDerivedData() {
 
-        this.data.update({"data.health.bloodied" :  this.health.bloodiedThreshold >= this.health.value})
-        this.data.update({"data.endurance.winded" :  this.endurance.windedThreshold >= this.endurance.value})
-
-        if (this.health.bloodied)
+        if (game.actors && game.actors.get(this.id))
         {
-            let existing = this.effects.find(e => e.getFlag("core", "statusId") == "bloodied")
-            if (!existing)
-            {
-                let effect = foundry.utils.deepClone(CONFIG.statusEffects.find(e => e.id == "bloodied"))
-                effect.flags["core.statusId"] = effect.id
-                delete effect.id
-                this.createEmbeddedDocuments("ActiveEffect", [effect])
-            }
-        }
-        else {
-            let existing = this.effects.find(e => e.getFlag("core", "statusId") == "bloodied")
-            if (existing)
-                this.deleteEmbeddedDocuments("ActiveEffect", [existing.id])
-        }
+            this.data.update({"data.health.bloodied" :  this.health.bloodiedThreshold >= this.health.value})
+            this.data.update({"data.endurance.winded" :  this.endurance.windedThreshold >= this.endurance.value})
 
-        if (this.endurance.winded)
-        {
-            let existing = this.effects.find(e => e.getFlag("core", "statusId") == "winded")
-            if (!existing)
+            if (this.health.bloodied)
             {
-                let effect = foundry.utils.deepClone(CONFIG.statusEffects.find(e => e.id == "winded"))
-                effect.flags["core.statusId"] = effect.id
-                delete effect.id
-                this.createEmbeddedDocuments("ActiveEffect", [effect])
+                let existing = this.effects.find(e => e.getFlag("core", "statusId") == "bloodied")
+                if (!existing)
+                {
+                    let effect = duplicate(CONFIG.statusEffects.find(e => e.id == "bloodied"))
+                    effect.flags["core.statusId"] = effect.id
+                    delete effect.id
+                    this.createEmbeddedDocuments("ActiveEffect", [effect])
+                }
             }
-        }
-        else {
-            let existing = this.effects.find(e => e.getFlag("core", "statusId") == "winded")
-            if (existing)
-                this.deleteEmbeddedDocuments("ActiveEffect", [existing.id])
+            else {
+                let existing = this.effects.find(e => e.getFlag("core", "statusId") == "bloodied")
+                if (existing)
+                    this.deleteEmbeddedDocuments("ActiveEffect", [existing.id])
+            }
+
+            if (this.endurance.winded)
+            {
+                let existing = this.effects.find(e => e.getFlag("core", "statusId") == "winded")
+                if (!existing)
+                {
+                    let effect = duplicate(CONFIG.statusEffects.find(e => e.id == "winded"))
+                    effect.flags["core.statusId"] = effect.id
+                    delete effect.id
+                    this.createEmbeddedDocuments("ActiveEffect", [effect])
+                }
+            }
+            else {
+                let existing = this.effects.find(e => e.getFlag("core", "statusId") == "winded")
+                if (existing)
+                    this.deleteEmbeddedDocuments("ActiveEffect", [existing.id])
+            }
         }
     }
 
@@ -208,27 +227,31 @@ export class PillarsActor extends Actor {
         return (this.itemCategories || this.itemTypes)[type]
     }
 
-    getSkillDialogData(type, item)
+    getDialogData(type, item)
     {
         let dialogData = {}
         dialogData.title = `${item.name} Test`
-        dialogData.assisters = this.constructAssisterList(item)
         dialogData.modifier = ""
         dialogData.steps = 0
+        dialogData.effects = this.getDialogRollEffects()
+        return dialogData
+    }
+
+    getSkillDialogData(type, item)
+    {
+        let dialogData = this.getDialogData(type, item)
+        dialogData.assisters = this.constructAssisterList(item)
         dialogData.hasRank = item.xp.rank
-        dialogData.effects = this.effects.filter(i => i.hasRollEffect)
         return dialogData
     }
 
     getWeaponDialogData(type, item)
     {
-        let dialogData = {}
-        dialogData.title = `${item.name} Test`
+
+        let dialogData = this.getDialogData(type, item)
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0)
-        dialogData.steps = 0
         dialogData.hasRank = item.Skill.rank
-        dialogData.effects = this.effects.filter(i => i.hasRollEffect)
         return dialogData
     }
 
@@ -246,6 +269,52 @@ export class PillarsActor extends Actor {
             }
         })
         return assisters.filter(a => a.rank > 5)
+    }
+
+
+    /**
+     * Get effects listed in the dialog
+     * Effects are sourced from the rolling actor and targeted actor, if applicable
+     * Effects from the rolling actor are filtered to remove "targeter" effects
+     * Effects from the target are filtered to remove "self" effects
+     */
+    getDialogRollEffects() {
+        let effects = this.effects.filter(i => i.hasRollEffect).map(i => i.toObject())
+        let selfEffects = []
+        let targetEffects = []
+
+        // Remove "target" effects from self actor
+        effects.forEach(e => {
+            for(let i = 0; i < e.changes.length; i++)
+            {
+                if (e.changes[i].key.includes("targeter."))
+                    delete e.changes[i]
+            }
+            e.changes = e.changes.filter(i => i)
+        })
+
+        // If the effect only had target effects, remove the effect entirely
+        selfEffects = effects.filter(i => i.changes.length > 0)
+
+        // Get target effects, removing "target" from the keys to get the proper path, and delete effects that don't refer to the targeter
+        let target = Array.from(game.user.targets)[0]
+        if (target)
+        {
+            targetEffects = target.actor.effects.filter(i => i.hasRollEffect).filter(i => i.data.changes.find(i => i.key.includes("targeter."))).map(i => i.toObject())
+            targetEffects.forEach(e => {
+                for(let i = 0; i < e.changes.length; i++)
+                {
+                    if (!e.changes[i].key.includes("targeter."))
+                        delete e.changes[i]
+                    else
+                        e.changes[i].key = e.changes[i].key.replace("targeter.", "")
+                }
+                e.changes = e.changes.filter(i => i)
+                e.label = `Target: ${e.label}`
+            })
+        }
+
+        return targetEffects.concat(selfEffects).map(e => new PillarsActiveEffect(e))
     }
 
     speakerData() {

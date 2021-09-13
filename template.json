@@ -10,22 +10,22 @@
       "defenses": {
         "defenses": {
           "deflection": {
-            "value": 0,
+            "value": 10,
             "bonus": 0,
             "penalty": 0
           },
           "fortitude": {
-            "value": 0,
+            "value": 10,
             "bonus": 0,
             "penalty": 0
           },
           "reflexes": {
-            "value": 0,
+            "value": 10,
             "bonus": 0,
             "penalty": 0
           },
           "will": {
-            "value": 0,
+            "value": 10,
             "bonus": 0,
             "penalty": 0
           }
@@ -33,8 +33,8 @@
       },
       "health": {
         "health": {
-          "max": 0,
-          "value": 0,
+          "max": 36,
+          "value": 36,
           "bloodiedThreshold" : 0,
           "wounds": {
             "light": [0, 0, 0, 0],
@@ -46,8 +46,8 @@
       },
       "endurance": {
         "endurance": {
-          "max": 0,
-          "value": 0,
+          "max": 36,
+          "value": 36,
           "windedThreshold": 0,
           "exert" : 0
         }

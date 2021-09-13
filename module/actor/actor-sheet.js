@@ -422,11 +422,11 @@ export class PillarsActorSheet extends ActorSheet {
     }
 
     _onSpecialClicked(event) {
-        let text = event.target.text
-        for (let special in game.pillars.config.itemSpecials)
+        let text = event.target.text.split("(")[0].trim()
+        for (let special in game.pillars.utility.weaponSpecials())
         {
-            if (game.pillars.config.itemSpecials[special].label == text)
-                return this._dropdown(event, {text : game.pillars.config.itemSpecials[special].description})
+            if (game.pillars.utility.weaponSpecials()[special].label == text)
+                return this._dropdown(event, {text : game.pillars.utility.weaponSpecials()[special].description})
         }
         
     }

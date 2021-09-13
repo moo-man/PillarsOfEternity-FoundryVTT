@@ -89,6 +89,13 @@ export class PillarsItem extends Item {
             || this.category.value == "grenade"
     }
 
+    get specialList() {
+        if (this.isMelee)
+            return game.pillars.config.meleeSpecials
+        else if (this.isRanged)
+            return game.pillars.config.rangedSpecials
+    }
+
     get canEquip() {
         return (this.type == "equipment" && this.wearable.value) || this.type == "weapon" || this.type == "armor" || this.type == "shield"
     }
@@ -115,11 +122,11 @@ export class PillarsItem extends Item {
 
 
     get Specials() {
-        let specials = game.pillars.config.itemSpecials
+        let specials = this.specialList
         let notSkilledEnough = this.special.value.filter(i => this.isOwned && specials[i.name].skilled && ( !this.Skill || this.Skill?.rank < 5))
 
         return this.special.value.map(i => {
-            let display = game.pillars.config.itemSpecials[i.name].label
+            let display = this.specialList[i.name].label
             if (i.value)
                 display += ` (${i.value})`
             if (notSkilledEnough.find(sp => sp.name == i.name))
@@ -132,13 +139,13 @@ export class PillarsItem extends Item {
     get specials() {
         let specials = {}
         this.special.value.forEach(sp => {
-            specials[sp.name] = game.pillars.config.itemSpecials[sp.name]
+            specials[sp.name] = this.specialList[sp.name] || {}
             specials[sp.name].value = sp.value
         })
         return specials
     }
 
-    // @@@@@@@@ DATA GETTERS @@@@@@@@@@
+    // @@@@@@@@ DATA GETTERS @@@@@@@@@@;    
     get category() {return this.data.data.category}
     get target() {return this.data.data.target}
     get xp() {return this.data.data.xp}

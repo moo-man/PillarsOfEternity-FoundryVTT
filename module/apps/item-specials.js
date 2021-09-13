@@ -13,7 +13,7 @@ export default class ItemSpecials extends FormApplication
 
     getData() {
         let data = super.getData();
-        data.specials = duplicate(game.pillars.config.itemSpecials)
+        data.specials = duplicate(this.object.specialList)
         let itemSpecials = this.object.specials
         for (let special in data.specials)
         {

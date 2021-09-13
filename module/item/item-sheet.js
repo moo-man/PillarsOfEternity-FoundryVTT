@@ -75,6 +75,15 @@ export class PillarsItemSheet extends ItemSheet {
 
     })
 
+    html.find(".add-power-effect").change(ev => {
+      
+      let text = ev.target.value;
+      let array = text.split(",").map(i => i.trim())
+
+      return this.item.update({[target] : array})
+
+    })
+
     html.find(".effect-create").click(ev => {
       return this.item.createEmbeddedDocuments("ActiveEffect", [{label : "New Effect", icon: "icons/svg/aura.svg"}])
     })
