@@ -147,8 +147,8 @@ export default class RollDialog extends Dialog {
         })
 
         let stateChanges = changes.filter(change => change.key == "state")
-        let adv = stateChanges.some(change => change.value == "adv")
-        let dis = stateChanges.some(change => change.value == "dis")
+        let adv = stateChanges.some(change => change.value == "adv") || this.userEntry.state == "adv"
+        let dis = stateChanges.some(change => change.value == "dis") || this.userEntry.state == "dis"
         let finalState = ""
         if ((adv && dis) || (!adv && !dis))
             finalState = "normal"

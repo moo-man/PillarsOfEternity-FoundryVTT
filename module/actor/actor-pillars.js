@@ -202,7 +202,7 @@ export class PillarsActor extends Actor {
             weapon = this.items.get(weapon)
 
         if (!weapon.Skill)
-            throw new Error("No skill assigned to the weapon")
+            throw ui.notifications.error("No skill assigned to the weapon")
 
         let data = this.getWeaponDialogData("weapon", weapon)
         let testData =  await RollDialog.create(data)
@@ -219,10 +219,10 @@ export class PillarsActor extends Actor {
             power = this.items.get(power)
 
         if (!power.SourceItem)
-            throw new Error("Could not find Power Source")
+            throw ui.notifications.error("Could not find Power Source")
 
         if (power.SourceItem.pool.current < power.cost.value)
-            throw new Error("Not enough power!")
+            throw ui.notifications.error("Not enough power!")
 
         let data = this.getPowerDialogData("power", power)
         let testData =  await RollDialog.create(data)
@@ -363,6 +363,40 @@ export class PillarsActor extends Actor {
 
     //#endregion
 
+    async applyDamage(value, type, multiplier)
+    {
+        value *= multiplier
+        let current  = this[type].value
+
+        current += value
+
+        current = Math.clamped(current, 0, this[type].max)
+
+        if (type == "health", value < 0 && Math.abs(value) >= this.health.max)
+            await this.addWound("severe")
+        else if (type == "health", value < 0 && Math.abs(value) >= this.health.threshold.heavy)
+            await this.addWound("heavy")
+        else if (type == "health", value < 0 && Math.abs(value) >= this.health.threshold.light)
+            await this.addWound("light")
+
+        ui.notifications.notify(`${-value} Damage applied to ${this.name}'s ${type.slice(0, 1).toUpperCase() + type.slice(1)}`)
+        
+        return this.update({[`data.${type}.value`] : current})
+    }
+    
+    addWound(type)
+    {
+        let wounds = foundry.utils.deepClone(this.health.wounds[type])
+        for (let i = 0; i < wounds.length ; i++)
+        {
+            if (wounds[i] == 0 || wounds[i] == 2)
+            {
+                wounds[i] = 1
+                break;
+            }
+        }
+        return this.update({[`data.health.wounds.${type}`] : wounds})
+    }
     //#region Getters
     // @@@@@@@@ CALCULATION GETTERS @@@@@@
 

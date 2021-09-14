@@ -5,6 +5,7 @@ import handlebars from "./handlebars.js"
 import diceSoNiceHooks from "./dsn.js"
 import readyHooks from "./ready.js"
 import effects from "./effects.js";
+import entryContextHooks from "./entryContext.js";
 
 export default function () {
     actorHooks();
@@ -13,5 +14,6 @@ export default function () {
     handlebars();
     diceSoNiceHooks();
     readyHooks();
-    effects()
+    effects();
+    entryContextHooks();
 }
