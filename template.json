@@ -273,6 +273,9 @@
         "category": {
           "value": "personal"
         },
+        "source" : {
+          "value" : ""
+        },
         "xp": {
           "value": 0,
           "level": 0

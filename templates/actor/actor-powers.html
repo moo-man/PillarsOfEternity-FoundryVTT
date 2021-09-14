@@ -3,6 +3,7 @@
         <h3 class="item-name flexrow">Power Sources</h3>
         <span class="item-property-column flex"></span>
         <span class="item-property-column large">Pool</span>
+        <span class="item-property-column">Attack</span>
         <span class="item-property-column">XP</span>
         <span class="item-property-column">Level</span>
         <div class="item-controls">
@@ -34,7 +35,8 @@
                     </div>
                 </div>
             </span>
-            <span class="item-property-column large pool-inputs"><input class="item-property" data-target="data.pool.current" type="text" value="{{item.pool.current}}"  > / <input class="item-property" data-target="data.pool.max" type="text" value="{{item.pool.max}}" ></span>
+            <span class="item-property-column large pool-inputs"><input class="item-property" data-target="data.pool.current" type="number" value="{{item.pool.current}}"  > / <input class="item-property" data-target="data.pool.max" type="number" disabled value="{{item.pool.max}}" ></span>
+            <span class="item-property-column">+{{item.data.data.attack}}</span>
             <span class="item-property-column"><input type="number" class="item-property" data-target="data.xp.value" value="{{item.xp.value}}"></span>
             <span class="item-property-column"><input type="number" class="item-property" disabled value="{{item.xp.level}}"></span>
 
@@ -71,7 +73,7 @@
         {{#each items.powers as |item i|}}
         <li class="item" data-item-id="{{item.id}}">
             <div class="row-content">
-            <div class="item-name flexrow item-dropdown-alt">
+            <div class="item-name flexrow power-roll item-dropdown-alt">
                 <div class="item-image" style="background-image: url('{{item.img}}')"></div>
                 <a>
                     <h4>{{item.name}}</h4>

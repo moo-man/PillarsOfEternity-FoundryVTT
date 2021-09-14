@@ -66,6 +66,8 @@ export class PillarsItem extends Item {
 
     prepareOwnedPowerSource() {
         this.xp.level = PILLARS_UTILITY.getPowerSourceLevel(this.xp.value)
+        this.data.data.attack = PILLARS_UTILITY.getPowerSourceAttackBonus(this.xp.level)
+        this.pool.max = PILLARS_UTILITY.getPowerSourcePool(this.xp.level)
     }
 
 
@@ -142,6 +144,12 @@ export class PillarsItem extends Item {
     get Exclusion() {return game.pillars.config.powerExclusions[this.data.data.exclusion.value]}
     get Skill() {return this.actor.items.get(this.skill.value)}
 
+    get SourceItem() {
+        if (!this.isOwned)
+            return
+
+        return this.actor.items.find(i => i.type == "powerSource" && i.source.value == this.source.value)
+    }
 
     get Specials() {
         let specials = this.specialList
@@ -204,9 +212,11 @@ export class PillarsItem extends Item {
     get size() {return this.data.data.size}
     get species() {return this.data.data.species}
     get stock() {return this.data.data.stock}
+    get source() {return this.data.data.source}
 
     // Processed data getters
     get rank() {return this.xp.rank}
+    get attack() {return this.data.data.attack}
 
     //#endregion
 

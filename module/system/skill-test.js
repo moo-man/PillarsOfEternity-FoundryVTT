@@ -70,12 +70,12 @@ export default class SkillTest
                 terms.push(new Die(game.pillars.utility.stepsToDice(this.testData.steps)))
             }
 
-            if (!this.testData.proxy)
+            if (!this.testData.proxy && this.skill)
             {
                 terms.push(new OperatorTerm({operator : "+"}))
                 terms.push(new NumericTerm({number : this.skill.rank}))
             }
-            else 
+            else if (this.testData.proxy)
             {
                 terms.push(new OperatorTerm({operator : "+"}))
                 terms.push(new Die(this.proxyDie()))

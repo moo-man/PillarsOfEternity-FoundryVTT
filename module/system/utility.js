@@ -10,6 +10,23 @@ export default class PILLARS_UTILITY {
         return xp < 10 ? 0 : Math.floor(Math.sqrt(0.5 * xp + (1/16)) - (5/4))
     }
 
+    static getPowerSourceAttackBonus(level)
+    {
+        return level * 2 + 2
+    }
+
+    static getPowerSourcePool(level)
+    {
+        if (level < 3)
+        {
+            if (level == 2) return level * 2
+            else if (level == 1) return level * 2 + 1
+            else return 0
+        }
+        else
+            return level * 2 - 1
+    }
+
     static getSpeaker(speaker) {
         try {
             if (speaker.actor)

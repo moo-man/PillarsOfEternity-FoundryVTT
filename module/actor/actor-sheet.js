@@ -1,6 +1,7 @@
 import PowerTemplate from "../system/power-template.js";
 import SkillTest from "../system/skill-test.js";
 import WeaponTest from "../system/weapon-test.js";
+import PowerTest from "../system/power-test.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -290,6 +291,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".item-property").change(this._onEditItemProperty.bind(this))
         html.find(".skill-roll").click(this._onSkillRoll.bind(this))
         html.find(".weapon-roll").click(this._onWeaponRoll.bind(this))
+        html.find(".power-roll").click(this._onPowerRoll.bind(this))
         html.find(".property-counter").mousedown(this._onCounterClick.bind(this))
         html.find(".create-connection").click(this._onCreateConnection.bind(this))
         html.find(".edit-connection").click(this._onEditConnection.bind(this))
@@ -514,6 +516,14 @@ export class PillarsActorSheet extends ActorSheet {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
         let testData = await this.actor.setupWeaponTest(itemId)
         let test = new WeaponTest(testData)
+        await test.rollTest();
+        test.sendToChat()
+    }
+
+    async _onPowerRoll(event) {
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let testData = await this.actor.setupPowerTest(itemId)
+        let test = new PowerTest(testData)
         await test.rollTest();
         test.sendToChat()
     }

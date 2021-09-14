@@ -1,7 +1,6 @@
 import RollDialog from "../apps/roll-dialog.js";
 import SkillTest from "../system/skill-test.js";
 import PillarsActiveEffect from "../system/pillars-effect.js"
-import effects from "../hooks/effects.js";
 
 /**
  * Extend FVTT Actor class for Pillars functionality
@@ -214,6 +213,26 @@ export class PillarsActor extends Actor {
         return testData
     }
 
+    async setupPowerTest(power)
+    {
+        if (typeof power == "string")
+            power = this.items.get(power)
+
+        if (!power.SourceItem)
+            throw new Error("Could not find Power Source")
+
+        if (power.SourceItem.pool.current < power.cost.value)
+            throw new Error("Not enough power!")
+
+        let data = this.getPowerDialogData("power", power)
+        let testData =  await RollDialog.create(data)
+        testData.title = data.title
+        testData.sourceId = power.SourceItem.id
+        testData.itemId = power.id
+        testData.speaker = this.speakerData();
+        return testData
+    }
+
     //#endregion
 
     //#Region Rolling 
@@ -247,13 +266,22 @@ export class PillarsActor extends Actor {
 
     getWeaponDialogData(type, item)
     {
-
         let dialogData = this.getDialogData(type, item)
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0)
         dialogData.hasRank = item.Skill.rank
         return dialogData
     }
+
+    getPowerDialogData(type, item)
+    {
+        let dialogData = this.getDialogData(type, item)
+        //dialogData.assisters = this.constructAssisterList(weapon.Skill)
+        dialogData.modifier = (item.SourceItem.attack || 0)
+        dialogData.hasRank = false;
+        return dialogData
+    }
+
 
 
     constructAssisterList(item)
