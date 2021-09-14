@@ -2,7 +2,7 @@
   "name": "pillars-of-eternity",
   "title": "Pillars of Eternity",
   "description": "Pillars of Eternity TTRPG",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "minimumCoreVersion": "0.8.4",
   "compatibleCoreVersion": "0.8.9",
   "templateVersion": 2,
@@ -24,6 +24,6 @@
   "background" : "",
   "url": "",
   "manifest": "https://raw.githubusercontent.com/moo-man/PillarsOfEternity-FoundryVTT/master/system.json",
-  "download": "https://github.com/moo-man/PillarsOfEternity-FoundryVTT/releases/download/0.0.1/pillars-of-eternity.zip",
+  "download": "https://github.com/moo-man/PillarsOfEternity-FoundryVTT/archive/refs/heads/master.zip",
   "license": "LICENSE.txt"
 }
