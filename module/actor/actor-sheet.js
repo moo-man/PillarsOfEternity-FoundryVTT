@@ -325,7 +325,11 @@ export class PillarsActorSheet extends ActorSheet {
     }
 
     _onDrop(event) {
-            super._onDrop(event);
+            let dragData = JSON.parse(event.dataTransfer.getData("text/plain"))
+            if (dragData.type == "item")
+                this.actor.createEmbeddedDocuments("Item", [dragData.payload])
+            else 
+                super._onDrop(event);
     }
 
     _onItemEdit(event) {

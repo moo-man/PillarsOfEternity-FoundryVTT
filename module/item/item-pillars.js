@@ -84,7 +84,10 @@ export class PillarsItem extends Item {
         chatData.showGeneral = this.isWeapon
 
         let html = await renderTemplate("systems/pillars-of-eternity/templates/chat/post-item.html", chatData)
-        let cardData = PILLARS_UTILITY.chatDataSetup(html)
+        let cardData = {content : html}
+        if (this.actor)
+            cardData.speaker = this.actor.speakerData()
+            
         cardData.flags = {
             "pillars-of-eternity" : {
                 transfer : this.toObject()

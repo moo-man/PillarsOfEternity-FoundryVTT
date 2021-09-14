@@ -138,3 +138,29 @@
     width: 100%;
     height: 100%;
 }
+
+#chat-log .post-item{
+    padding: 5px;
+}
+
+#chat-log .post-item:hover {
+    outline: 1px dotted black;
+    cursor: pointer
+}
+
+
+#chat-log .post-item .post-img{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+#chat-log .post-item h2 {
+    text-align: center;
+}
+
+#chat-log .post-item img {
+    border: none;
+    height: 100px;
+    width: 100px;
+}
