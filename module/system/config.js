@@ -21,6 +21,53 @@ POE.traitTypes = {
     "experience": "Experience"
 }
 
+POE.lifePhases = {
+    childhood : "Childhood",
+    adolescence : "Adolescence",
+    youngAdult : "Young Adult",
+    adult : "Adult",
+    middleAge : "Middle Age",
+    old : "Old",
+    venerable : "Venerable" 
+}
+
+POE.lifePhaseModifier = {
+    childhood : 0,
+    adolescence : 0,
+    youngAdult : 0,
+    adult : 0,
+    middleAge : 2,
+    old : 5,
+    venerable : 8
+}
+
+POE.agePointsDeathRank = {
+    6  : 1,
+    10 : 2,
+    15 : 3,
+    21 : 4,
+    28 : 5,
+    36 : 6,
+    45 : 7
+}
+
+POE.lifeStyles = {
+    impoverished: "Impoverished" ,
+    poor: "Poor" ,
+    comfortable: "Comfortable",
+    prosperous: "Prosperous" ,
+    rich: "Rich" ,
+    extravagant: "Extravagant" ,
+}
+
+POE.lifestyleModifier = {
+    impoverished:  3,
+    poor:  1,
+    comfortable: 0,
+    prosperous:  -1,
+    rich:  -2,
+    extravagant:  -3,
+}
 
 POE.powerRanges = {
     "none": "None",

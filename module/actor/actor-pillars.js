@@ -1,6 +1,7 @@
 import RollDialog from "../apps/roll-dialog.js";
 import SkillTest from "../system/skill-test.js";
 import PillarsActiveEffect from "../system/pillars-effect.js"
+import AgingDialog from "../apps/aging-dialog.js";
 
 /**
  * Extend FVTT Actor class for Pillars functionality
@@ -125,6 +126,15 @@ export class PillarsActor extends Actor {
                     this.deleteEmbeddedDocuments("ActiveEffect", [existing.id])
             }
         }
+
+        for(let pointThreshold in game.pillars.config.agePointsDeathRank)
+        {
+            if (parseInt(this.life.agingPoints) <= parseInt(pointThreshold))
+            {
+                this.life.march = game.pillars.config.agePointsDeathRank[pointThreshold]
+                break;
+            }
+        }
     }
 
     //#region Data Preparation
@@ -229,6 +239,15 @@ export class PillarsActor extends Actor {
         testData.title = data.title
         testData.sourceId = power.SourceItem.id
         testData.itemId = power.id
+        testData.speaker = this.speakerData();
+        return testData
+    }
+
+    async setupAgingRoll()
+    {
+        let dialogData = {modifier : game.pillars.config.lifePhaseModifier[this.life.phase] || 0, effects : this.getDialogRollEffects()} 
+        let testData =  await AgingDialog.create(dialogData)
+        testData.title = "Aging Roll"
         testData.speaker = this.speakerData();
         return testData
     }
@@ -412,6 +431,7 @@ export class PillarsActor extends Actor {
     get defenses() { return this.data.data.defenses }
     get endurance() { return this.data.data.endurance }
     get health() { return this.data.data.health }
+    get life() { return this.data.data.life}
     get size() { return this.data.data.size }
     get details() { return this.data.data.details}
     get knownConnections() { return this.data.data.knownConnections}

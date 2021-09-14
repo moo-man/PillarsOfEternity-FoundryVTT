@@ -2,6 +2,7 @@ import PowerTemplate from "../system/power-template.js";
 import SkillTest from "../system/skill-test.js";
 import WeaponTest from "../system/weapon-test.js";
 import PowerTest from "../system/power-test.js";
+import AgingRoll from "../system/aging-roll.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -108,6 +109,7 @@ export class PillarsActorSheet extends ActorSheet {
         this._setPowerSourcePercentage(sheetData)
         this._createWoundsArrays(sheetData)
         this._enrichKnownConnections(sheetData)
+        this._createDeathMarchArray(sheetData)
     }   
 
 
@@ -210,6 +212,25 @@ export class PillarsActorSheet extends ActorSheet {
             }
         }
     }
+    _createDeathMarchArray(sheetData)
+    {
+        let marchVal = sheetData.data.life.march
+        sheetData.data.life.march = []
+
+        for(let i = 0; i < 7 ; i++)
+        {
+            if (i + 1 < marchVal)
+                sheetData.data.life.march.push(`<i class="far fa-check-square"></i>`)
+            else 
+                sheetData.data.life.march.push(`<i class="far fa-square"></i>`)
+        }
+
+        if (marchVal != 7)
+            sheetData.data.life.march[6] = `<i style="opacity:0.5" class="fas fa-skull"></i>`
+        else
+            sheetData.data.life.march[6] = `<i class="fas fa-skull"></i>`
+
+    }
 
     _setPowerSourcePercentage(sheetData)
     {
@@ -300,6 +321,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".power-target").click(this._onPowerTargetClick.bind(this))
         html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
         html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
+        html.find(".age-roll").click(this._onAgeRoll.bind(this))
     }
 
     _onDrop(event) {
@@ -540,4 +562,10 @@ export class PillarsActorSheet extends ActorSheet {
         test.sendToChat()
     }
 
+    async _onAgeRoll(event) {
+        let testData = await this.actor.setupAgingRoll()
+        let test = new AgingRoll(testData)
+        await test.rollTest();
+        test.sendToChat()
+    }
 }

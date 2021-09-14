@@ -100,9 +100,8 @@
         "age": 0,
         "apparentAge" : 0,
         "phase": "",
-        "march": 0,
-        "bonus": 0,
-        "penalty": 0
+        "agingPoints": 0,
+        "march": 0
       },
       "details": {
         "cause": "",
