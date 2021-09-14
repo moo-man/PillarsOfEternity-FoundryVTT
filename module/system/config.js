@@ -48,7 +48,8 @@ POE.agePointsDeathRank = {
     21 : 4,
     28 : 5,
     36 : 6,
-    45 : 7
+    45 : 7,
+    999 : 8
 }
 
 POE.lifeStyles = {

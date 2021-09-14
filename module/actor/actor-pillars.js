@@ -127,14 +127,16 @@ export class PillarsActor extends Actor {
             }
         }
 
+        let thresholds = game.pillars.config.agePointsDeathRank
         for(let pointThreshold in game.pillars.config.agePointsDeathRank)
         {
-            if (parseInt(this.life.agingPoints) <= parseInt(pointThreshold))
+            if (parseInt(this.life.agingPoints) < parseInt(pointThreshold))
             {
                 this.life.march = game.pillars.config.agePointsDeathRank[pointThreshold]
                 break;
             }
         }
+        this.life.march -= 1
     }
 
     //#region Data Preparation

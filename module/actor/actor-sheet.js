@@ -219,7 +219,7 @@ export class PillarsActorSheet extends ActorSheet {
 
         for(let i = 0; i < 7 ; i++)
         {
-            if (i + 1 < marchVal)
+            if (i + 1 <= marchVal)
                 sheetData.data.life.march.push(`<i class="far fa-check-square"></i>`)
             else 
                 sheetData.data.life.march.push(`<i class="far fa-square"></i>`)
