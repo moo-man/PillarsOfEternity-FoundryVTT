@@ -275,6 +275,7 @@
   height: 30px;
   background-size: 30px;
   border: none;
+  cursor: pointer;
 }
 
 .pillars-of-eternity .items-list .item-property-column{

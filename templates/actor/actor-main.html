@@ -9,7 +9,7 @@
 
         <ol class="items">
             {{#each items.attributes.benefits as |item i|}}
-            <li class="item" data-item-id="{{item.id}}">
+            <li class="item" draggable="true" data-item-id="{{item.id}}">
                 <div class="row-content">
                     {{#if item.used.value}}
                     <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-check-circle"></i></a>
@@ -48,7 +48,7 @@
 
         <ol class="items">
             {{#each items.attributes.hindrances as |item i|}}
-                <li class="item" data-item-id="{{item.id}}">
+                <li class="item" draggable="true" data-item-id="{{item.id}}">
                 <div class="row-content">
 
                 {{#if item.used.value}}
@@ -88,7 +88,7 @@
 
         <ol class="items">
             {{#each items.traits as |item i|}}
-            <li class="item" data-item-id="{{item.id}}">
+            <li class="item" draggable="true" data-item-id="{{item.id}}">
                 <div class="row-content">
 
                 {{#if item.used.value}}
@@ -133,7 +133,7 @@
 
         <ol class="items">
             {{#each items.skills as |item i|}}
-            <li class="item" data-item-id="{{item.id}}">
+            <li class="item" draggable="true" data-item-id="{{item.id}}">
                 <div class="row-content">
 
                 {{#if item.used.value}}

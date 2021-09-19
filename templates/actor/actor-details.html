@@ -117,7 +117,7 @@
 
         <ol class="items">
             {{#each items.connections as |item i|}}
-            <li class="item" data-item-id="{{item.id}}">
+            <li class="item" draggable="true" data-item-id="{{item.id}}">
                 <div class="row-content">
 
                     <div class="item-name flexrow item-dropdown">
@@ -155,7 +155,7 @@
 
         <ol class="items">
             {{#each KnownConnections as |item i|}}
-            <li class="item" data-index="{{i}}" data-actor-id="{{item.id}}">
+            <li class="item" draggable="true" data-index="{{i}}" data-actor-id="{{item.id}}">
                 <div class="row-content">
 
                     <div class="item-name connection-name flexrow">
@@ -192,7 +192,7 @@
 
         <ol class="items">
             {{#each items.reputations as |item i|}}
-            <li class="item" data-item-id="{{item.id}}">
+            <li class="item" draggable="true" data-item-id="{{item.id}}">
                 <div class="row-content">
                     <div class="item-name flexrow">
                         <div class="item-image" style="background-image: url('{{item.img}}')"></div>

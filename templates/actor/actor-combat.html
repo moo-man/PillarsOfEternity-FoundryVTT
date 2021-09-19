@@ -23,7 +23,7 @@
     
             <ol class="items">
                 {{#each items.equipped.armor as |item i|}}
-                <li class="item" data-item-id="{{item.id}}">
+                <li class="item" draggable="true" data-item-id="{{item.id}}">
                     <div class="row-content">
     
                     <div class="item-name flexrow item-dropdown">
@@ -62,7 +62,7 @@
     
             <ol class="items">
                 {{#each items.equipped.shields as |item i|}}
-                <li class="item" data-item-id="{{item.id}}">
+                <li class="item" draggable="true" data-item-id="{{item.id}}">
                     <div class="row-content">
     
                     {{#if item.used.value}}
@@ -113,7 +113,7 @@
 
         <ol class="items weapons">
             {{#each items.equipped.meleeWeapons as |item i|}}
-            <li class="item" data-item-id="{{item.id}}">
+            <li class="item" draggable="true" data-item-id="{{item.id}}">
                 <div class="row-content">
 
                 <div class="item-name flexrow weapon-roll item-dropdown-alt">
@@ -161,7 +161,7 @@
 
         <ol class="items weapons">
             {{#each items.equipped.rangedWeapons as |item i|}}
-            <li class="item" data-item-id="{{item.id}}">
+            <li class="item" draggable="true" data-item-id="{{item.id}}">
                 <div class="row-content">
 
                 <div class="item-name flexrow weapon-roll item-dropdown-alt">

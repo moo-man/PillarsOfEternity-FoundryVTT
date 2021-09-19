@@ -10,7 +10,7 @@
     <ol class="items">
         {{#each effects.temporary as |effect e|}}
         {{log effect}}
-        <li class="item" data-item-id="{{effect.id}}">
+        <li class="item" draggable="true" data-item-id="{{effect.id}}">
             <div class="row-content">
                 <div class="item-name flexrow effect-edit">
                     <div class="item-image" style="background-image: url('{{effect.data.icon}}')"></div>
@@ -44,7 +44,7 @@
 
     <ol class="items">
         {{#each effects.passive as |effect e|}}
-        <li class="item" data-item-id="{{effect.id}}">
+        <li class="item" draggable="true" data-item-id="{{effect.id}}">
             <div class="row-content">
                 <div class="item-name flexrow effect-edit">
                     <div class="item-image" style="background-image: url('{{effect.data.icon}}')"></div>
@@ -78,7 +78,7 @@
 
     <ol class="items" style="opacity: 0.5">
         {{#each effects.disabled as |effect e|}}
-        <li class="item" data-item-id="{{effect.id}}">
+        <li class="item" draggable="true" data-item-id="{{effect.id}}">
             <div class="row-content">
                 <div class="item-name flexrow effect-edit">
                     <div class="item-image" style="background-image: url('{{effect.data.icon}}')"></div>

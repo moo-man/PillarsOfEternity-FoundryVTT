@@ -30,7 +30,7 @@
 
         <ol class="items">
             {{#each section.items as |item i|}}
-            <li class="item" data-item-id="{{item.id}}">
+            <li class="item" draggable="true" data-item-id="{{item.id}}">
                 <div class="row-content">
                 <div class="item-name flexrow item-dropdown">
                     <div class="item-image" style="background-image: url('{{item.img}}')"></div>

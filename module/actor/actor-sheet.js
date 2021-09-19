@@ -306,8 +306,8 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".effect-toggle").click(this._onEffectToggle.bind(this));  
         html.find(".sheet-checkbox").click(this._onCheckboxClick.bind(this))
         html.find(".wound-square").click(this._onWoundClick.bind(this))
-        html.find(".item-dropdown").mousedown(this._onDropdown.bind(this))
-        html.find(".item-dropdown-alt").mousedown(this._onDropdownAlt.bind(this))
+        html.find(".item-dropdown h4").mousedown(this._onDropdown.bind(this))
+        html.find(".item-dropdown-alt h4").mousedown(this._onDropdownAlt.bind(this))
         html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
         html.find(".item-property").change(this._onEditItemProperty.bind(this))
         html.find(".skill-roll").click(this._onSkillRoll.bind(this))
@@ -322,14 +322,24 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
         html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
         html.find(".age-roll").click(this._onAgeRoll.bind(this))
+        html.find('.item').each((i, li) => {
+            li.setAttribute("draggable", true);
+            li.addEventListener("dragstart", this._onDragStart.bind(this), false);
+        });
     }
 
     _onDrop(event) {
+            try {
             let dragData = JSON.parse(event.dataTransfer.getData("text/plain"))
             if (dragData.type == "item")
                 this.actor.createEmbeddedDocuments("Item", [dragData.payload])
             else 
                 super._onDrop(event);
+            }
+            catch(e) 
+            {
+                super._onDrop(event);
+            }
     }
 
     _onItemEdit(event) {

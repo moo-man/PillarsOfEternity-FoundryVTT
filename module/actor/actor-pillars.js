@@ -160,6 +160,9 @@ export class PillarsActor extends Actor {
         try {
             super.prepareData();
             this.itemCategories = this.itemTypes
+            for(let type in this.itemCategories)
+                this.itemCategories[type] = this.itemCategories[type].sort((a, b) => a.data.sort > b.data.sort ? 1 : -1)
+
             this.prepareSpecies();
             this.prepareItems()
             this.prepareCombat()
