@@ -398,13 +398,11 @@ export class PillarsActor extends Actor {
 
         current += value
 
-        current = Math.clamped(current, 0, this[type].max)
-
-        if (type == "health", value < 0 && Math.abs(value) >= this.health.max)
+        if (type == "health" && value < 0 && Math.abs(value) >= this.health.max)
             await this.addWound("severe")
-        else if (type == "health", value < 0 && Math.abs(value) >= this.health.threshold.heavy)
+        else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.heavy)
             await this.addWound("heavy")
-        else if (type == "health", value < 0 && Math.abs(value) >= this.health.threshold.light)
+        else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.light)
             await this.addWound("light")
 
         ui.notifications.notify(`${-value} Damage applied to ${this.name}'s ${type.slice(0, 1).toUpperCase() + type.slice(1)}`)

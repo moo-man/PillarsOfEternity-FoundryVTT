@@ -155,7 +155,7 @@
             <span class="item-property-column">Dmg</span>
             <span class="item-property-column">Crit</span>
             <span class="item-property-column">Range</span>
-            <span class="item-property-column">Special</span>
+            <span class="item-property-column flex">Special</span>
             <div class="item-controls"></div>
         </li>
 
@@ -174,8 +174,8 @@
                 <span class="item-property-column">{{item.Skill.xp.rank}}</span>
                 <span class="item-property-column">{{item.misc.value}}</span>
                 <span class="item-property-column">{{item.accuracy.value}}</span>
-                <span class="item-property-column">{{item.damage.value}}</span>
-                <span class="item-property-column">{{item.crit.value}}</span>
+                <a class="item-property-column sheet-roll">{{item.damage.value}}</a>
+                <a class="item-property-column sheet-roll">{{item.crit.value}}</a>
                 <span class="item-property-column">{{item.range.value}}</span>
                 <span class="item-property-column flex">{{{array item.Specials "item-special"}}}</span>
 
