@@ -5,13 +5,25 @@ import PILLARS_UTILITY  from "../system/utility.js"
  */
 export class PillarsItem extends Item {
 
-    _preUpdate(updateData, options, user)
+    async _preUpdate(updateData, options, user)
     {
+        await super._preUpdate(updateData, options, user)
         if (this.type == "shield" && hasProperty(updateData, "data.health.current"))
             updateData.data.health.current = Math.clamped(updateData.data.health.current, 0, this.health.max)
 
         if (this.type=="powerSource" && hasProperty(updateData, "data.source.value"))
             updateData.name = game.pillars.config.powerSources[updateData.data.source.value]
+    }
+
+    async _preCreate(data, options, user)
+    {
+        await super._preCreate(data, options, user)
+        if ((this.type == "species" || this.type == "culture") && this.isOwned)
+        {
+            let item = this.actor.items.find(i => i.type == this.type && i.id != this.id)
+            if (item)
+                await item.delete()
+        }
     }
 
     //#region Data Preparation 

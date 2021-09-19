@@ -49,12 +49,7 @@ export class PillarsActor extends Actor {
         data.stride.value = speciesItem.stride.value
         data.details.species  = speciesItem.species.value;
         data.details.stock = speciesItem.stock.value
-
-
-
-
         return this.update({"data" : data})
-
     }
 
     setSizeData(data)
