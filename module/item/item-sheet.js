@@ -30,7 +30,7 @@ export class PillarsItemSheet extends ItemSheet {
                 label: "Post",
                 class: "post",
                 icon: "fas fa-comment",
-                onclick: ev => this.item.postToChat()
+                onclick: this.item.postToChat
             })
     }
     return buttons

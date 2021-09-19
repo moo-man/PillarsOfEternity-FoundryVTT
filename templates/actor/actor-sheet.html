@@ -7,8 +7,12 @@
                 <div class="property-value">
                     <input type="number" name="data.defenses.deflection.value" value="{{data.defenses.deflection.value}}" />
                 </div>
-                <div class="property-modifier">
-                    {{data.defenses.deflection.modifier}}
+                <div class="property-check">
+                    {{#if data.defenses.deflection.checked}}
+                    <a class="sheet-checkbox" data-target="data.defenses.deflection.checked"><i class="far fa-check-square"></i></a>
+                    {{else}}
+                    <a class="sheet-checkbox" data-target="data.defenses.deflection.checked"><i class="far fa-square"></i></a>
+                    {{/if}}
                 </div>
             </div>
 
@@ -17,8 +21,12 @@
                 <div class="property-value">
                     <input type="number" name="data.defenses.fortitude.value" value="{{data.defenses.fortitude.value}}" />
                 </div>
-                <div class="property-modifier">
-                    {{data.defenses.fortitude.modifier}}
+                <div class="property-check">
+                    {{#if data.defenses.fortitude.checked}}
+                    <a class="sheet-checkbox" data-target="data.defenses.fortitude.checked"><i class="far fa-check-square"></i></a>
+                    {{else}}
+                    <a class="sheet-checkbox" data-target="data.defenses.fortitude.checked"><i class="far fa-square"></i></a>
+                    {{/if}}
                 </div>
             </div>
 
@@ -27,8 +35,12 @@
                 <div class="property-value">
                     <input type="number" name="data.defenses.reflexes.value" value="{{data.defenses.reflexes.value}}" />
                 </div>
-                <div class="property-modifier">
-                    {{data.defenses.reflexes.modifier}}
+                <div class="property-check">
+                    {{#if data.defenses.reflexes.checked}}
+                    <a class="sheet-checkbox" data-target="data.defenses.reflexes.checked"><i class="far fa-check-square"></i></a>
+                    {{else}}
+                    <a class="sheet-checkbox" data-target="data.defenses.reflexes.checked"><i class="far fa-square"></i></a>
+                    {{/if}}
                 </div>
             </div>
 
@@ -37,8 +49,12 @@
                 <div class="property-value">
                     <input type="number" name="data.defenses.will.value" value="{{data.defenses.will.value}}" />
                 </div>
-                <div class="property-modifier">
-                    {{data.defenses.will.modifier}}
+                <div class="property-check">
+                    {{#if data.defenses.will.checked}}
+                    <a class="sheet-checkbox" data-target="data.defenses.will.checked"><i class="far fa-check-square"></i></a>
+                    {{else}}
+                    <a class="sheet-checkbox" data-target="data.defenses.will.checked"><i class="far fa-square"></i></a>
+                    {{/if}}
                 </div>
             </div>
 

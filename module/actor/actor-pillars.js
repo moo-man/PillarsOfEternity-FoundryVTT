@@ -76,16 +76,29 @@ export class PillarsActor extends Actor {
     }
 
     prepareBaseData() {
+        let checkedCount = 0;
+        for (let defense in this.defenses)
+            checkedCount += this.defenses[defense].checked ? 1 : 0
 
-       
+        if ( checkedCount > 0 && checkedCount != 3)
+        {
+            let bonus = 0
+            if (checkedCount == 1) bonus = 4
+            if (checkedCount == 2) bonus = 3
+            if (checkedCount == 4) bonus = 2
+            
+            for (let defense in this.defenses)
+                if(this.defenses[defense].checked)
+                    this.defenses[defense].value += bonus
+        }
     };
 
     prepareDerivedData() {
 
         if (game.actors && game.actors.get(this.id))
         {
-            this.data.update({"data.health.bloodied" :  this.health.bloodiedThreshold >= this.health.value})
-            this.data.update({"data.endurance.winded" :  this.endurance.windedThreshold >= this.endurance.value})
+            this.health.bloodied = this.health.bloodiedThreshold >= this.health.value
+            this.endurance.winded = this.endurance.windedThreshold >= this.endurance.value
 
             if (this.health.bloodied)
             {
@@ -138,7 +151,6 @@ export class PillarsActor extends Actor {
     prepareData() {
         try {
             super.prepareData();
-            super.prepareEmbeddedEntities();
             this.itemCategories = this.itemTypes
             this.prepareSpecies();
             this.prepareItems()

@@ -12,22 +12,26 @@
           "deflection": {
             "value": 10,
             "bonus": 0,
-            "penalty": 0
+            "penalty": 0,
+            "checked" : false
           },
           "fortitude": {
             "value": 10,
             "bonus": 0,
-            "penalty": 0
+            "penalty": 0,
+            "checked" : false
           },
           "reflexes": {
             "value": 10,
             "bonus": 0,
-            "penalty": 0
+            "penalty": 0,
+            "checked" : false
           },
           "will": {
             "value": 10,
             "bonus": 0,
-            "penalty": 0
+            "penalty": 0,
+            "checked" : false
           }
         }
       },

@@ -52,7 +52,6 @@
 
 .pillars-of-eternity.actor.sheet .general section{
     display: flex;
-    padding: 5px;
     flex-wrap: wrap;
  }
 
@@ -67,6 +66,9 @@
 
 .pillars-of-eternity.actor.sheet .general .property-value{
     font-size: 22px
+}
+.pillars-of-eternity.actor.sheet .general section .property-check{
+  margin-top: 3px;
 }
 
  .pillars-of-eternity.actor.sheet .general .property-group.stacked{
