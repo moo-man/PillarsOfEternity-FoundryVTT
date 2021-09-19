@@ -382,6 +382,7 @@ POE.sizeAttributes = {
         {
             light: 1,
             heavy: 2,
+            severe : 4,
             maxHealthEndurance: 4,
             windedExert : 1
         },
@@ -389,6 +390,7 @@ POE.sizeAttributes = {
         {
             light: 2,
             heavy: 3,
+            severe : 8,
             maxHealthEndurance: 8,
             windedExert : 2
         },
@@ -396,6 +398,7 @@ POE.sizeAttributes = {
         {
             light: 6,
             heavy: 12,
+            severe : 16,
             maxHealthEndurance: 16,
             windedExert : 4
         },
@@ -403,6 +406,7 @@ POE.sizeAttributes = {
         {
             light: 10,
             heavy: 20,
+            severe : 32,
             maxHealthEndurance: 32,
             windedExert : 8
         },
@@ -410,6 +414,7 @@ POE.sizeAttributes = {
         {
             light: 12,
             heavy: 24,
+            severe : 36,
             maxHealthEndurance: 36,
             windedExert : 9
         },
@@ -417,6 +422,7 @@ POE.sizeAttributes = {
         {
             light: 14,
             heavy: 28,
+            severe : 40,
             maxHealthEndurance: 40,
             windedExert : 10
         },
@@ -424,6 +430,7 @@ POE.sizeAttributes = {
         {
             light: 24,
             heavy: 48,
+            severe : 75,
             maxHealthEndurance: 75,
             windedExert : 18
         },
@@ -431,6 +438,7 @@ POE.sizeAttributes = {
         {
             light: 40,
             heavy: 80,
+            severe : 125,
             maxHealthEndurance: 125,
             windedExert : 30
         },
@@ -438,6 +446,7 @@ POE.sizeAttributes = {
         {
             light: 80,
             heavy: 160,
+            severe : 250,
             maxHealthEndurance: 250,
             windedExert : 60
         },
@@ -445,6 +454,7 @@ POE.sizeAttributes = {
         {
             light: 166,
             heavy: 332,
+            severe : 500,
             maxHealthEndurance: 500,
             windedExert : 125
         }

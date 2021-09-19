@@ -42,9 +42,9 @@
           "bloodiedThreshold" : 0,
           "threshold" : {"light" : 0, "heavy" : 0},
           "wounds": {
-            "light": [0, 0, 0, 0],
-            "heavy": [0, 0],
-            "severe": [0],
+            "light": 0,
+            "heavy": 0,
+            "severe": 0,
             "injury" : ""
           }
         }

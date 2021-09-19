@@ -130,15 +130,22 @@
   border: 1px solid darkblue
 }
 
-.pillars-of-eternity.actor.sheet .general .wounds h4 {
+.pillars-of-eternity.actor.sheet .general .wounds {
+  justify-content: space-evenly;
+}
+  .pillars-of-eternity.actor.sheet .general .wounds h4 {
   width: 100%;
-  font-size: 18px
+  font-size: 18px;
+  margin-bottom: 0px;
+  text-align: center;
 }
 
 .pillars-of-eternity.actor.sheet .general .wounds .wound-group{
   display:flex;
   margin: 5px;
   font-size: 16px;
+  align-items: center;
+  flex-direction: column;
 }
 .pillars-of-eternity.actor.sheet .general .wounds .wound-group > *{
   margin-right: 5px

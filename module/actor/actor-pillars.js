@@ -61,7 +61,7 @@ export class PillarsActor extends Actor {
         data.defenses.fortitude.value = 15 + (data.size.value * 2)
         data.defenses.will.value = 15
 
-        data.health.threshold = {light : attributes.light, heavy : attributes.heavy}
+        data.health.threshold = {light : attributes.light, heavy : attributes.heavy, severe : attributes.severe}
         data.health.max = attributes.maxHealthEndurance
         data.endurance.max = attributes.maxHealthEndurance
         data.health.bloodiedThreshold = data.health.max / 2
@@ -77,7 +77,8 @@ export class PillarsActor extends Actor {
 
     prepareBaseData() {
 
-
+        this.health.base = this.health.value
+        this.endurance.base = this.endurance.value
 
         let tierBonus = (game.pillars.config.tierBonus[this.tier.value] || 0)
             
@@ -102,6 +103,9 @@ export class PillarsActor extends Actor {
     };
 
     prepareDerivedData() {
+
+        this.health.max -= this.woundModifier
+        this.health.bloodiedThreshold = this.health.max / 2
 
         if (game.actors && game.actors.get(this.id))
         {
@@ -144,11 +148,11 @@ export class PillarsActor extends Actor {
         }
 
         let thresholds = game.pillars.config.agePointsDeathRank
-        for(let pointThreshold in game.pillars.config.agePointsDeathRank)
+        for(let pointThreshold in thresholds)
         {
             if (parseInt(this.life.agingPoints) < parseInt(pointThreshold))
             {
-                this.life.march = game.pillars.config.agePointsDeathRank[pointThreshold]
+                this.life.march = thresholds[pointThreshold]
                 break;
             }
         }
@@ -409,7 +413,7 @@ export class PillarsActor extends Actor {
 
         current += value
 
-        if (type == "health" && value < 0 && Math.abs(value) >= this.health.max)
+        if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.severe)
             await this.addWound("severe")
         else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.heavy)
             await this.addWound("heavy")
@@ -423,20 +427,17 @@ export class PillarsActor extends Actor {
     
     addWound(type)
     {
-        let wounds = foundry.utils.deepClone(this.health.wounds[type])
-        for (let i = 0; i < wounds.length ; i++)
-        {
-            if (wounds[i] == 0 || wounds[i] == 2)
-            {
-                wounds[i] = 1
-                break;
-            }
-        }
-        return this.update({[`data.health.wounds.${type}`] : wounds})
+        return this.update({[`data.health.wounds.${type}`] : this.health.wounds[type] + 1 })
     }
     //#region Getters
     // @@@@@@@@ CALCULATION GETTERS @@@@@@
-
+    get woundModifier() {
+        let woundModifier = 0
+        woundModifier += this.health.wounds.light * (this.health.threshold.light / 2)
+        woundModifier += this.health.wounds.heavy * (this.health.threshold.heavy / 2)
+        woundModifier += this.health.wounds.severe * (this.health.threshold.severe / 2)
+        return woundModifier
+    }
 
     // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
 

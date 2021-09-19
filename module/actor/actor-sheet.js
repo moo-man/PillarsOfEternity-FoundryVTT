@@ -17,7 +17,7 @@ export class PillarsActorSheet extends ActorSheet {
             width: 1200,
             height: 700,
             tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".tab-content", initial: "main" }],
-            scrollY: [".details", ".inventory-lists", ".items", ".powers" ]
+            scrollY: [".details", ".inventory-lists", ".items", ".powers" , ".general"]
         });
     }
 
@@ -107,7 +107,7 @@ export class PillarsActorSheet extends ActorSheet {
         sheetData.items = this.constructItemLists(sheetData)
         sheetData.effects = this.constructEffectLists(sheetData) 
         this._setPowerSourcePercentage(sheetData)
-        this._createWoundsArrays(sheetData)
+        //this._createWoundsArrays(sheetData)
         this._enrichKnownConnections(sheetData)
         this._createDeathMarchArray(sheetData)
     }   
@@ -305,7 +305,9 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".effect-delete").click(this._onEffectDelete.bind(this));  
         html.find(".effect-toggle").click(this._onEffectToggle.bind(this));  
         html.find(".sheet-checkbox").click(this._onCheckboxClick.bind(this))
-        html.find(".wound-square").click(this._onWoundClick.bind(this))
+        //html.find(".wound-square").click(this._onWoundClick.bind(this))
+        html.find(".add-wound").click(this._onWoundClick.bind(this))
+        html.find(".subtract-wound").click(this._onWoundClick.bind(this))
         html.find(".item-dropdown h4").mousedown(this._onDropdown.bind(this))
         html.find(".item-dropdown-alt h4").mousedown(this._onDropdownAlt.bind(this))
         html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
@@ -522,14 +524,9 @@ export class PillarsActorSheet extends ActorSheet {
 
 
     _onWoundClick(event) {
-        let index = Number(event.currentTarget.dataset["index"])
-        let type = event.currentTarget.dataset["wound"];
-
-        let wounds = duplicate(this.actor.health.wounds[type])
-        wounds[index]++
-        if (wounds[index] > 2)
-            wounds[index] = 0
-        this.actor.update({[`data.health.wounds.${type}`] : wounds})
+        let multiplier = event.currentTarget.classList.contains("add-wound") ? 1 : -1
+        let type = event.currentTarget.dataset["type"]
+        return this.actor.update({[`data.health.wounds.${type}`] : this.actor.health.wounds[type] + 1 * multiplier })
     }
 
     /* -------------------------------------------- */
