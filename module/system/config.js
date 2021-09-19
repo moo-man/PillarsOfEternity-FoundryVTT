@@ -273,30 +273,30 @@ POE.areaTargetTypes = {
 
 POE.areaTargetDistances = {
     circle: {
-        "small": { distance: 1 },
-        "medium": { distance: 2.7 },
-        "large": { distance: 5.2 }
+        "small": { distance: 2.5 },
+        "medium": { distance: 5.4 },
+        "large": { distance: 10.4 }
     },
 
     aura: {
-        "small": { distance: 1 },
-        "large": { distance: 2.7 }
+        "small": { distance: 2.5 },
+        "large": { distance: 5.4 }
     },
 
     cone: {
-        "small": { distance: 3 },
-        "medium": { distance: 5 },
-        "large": { distance: 7 }
+        "small": { distance: 6 },
+        "medium": { distance: 10 },
+        "large": { distance: 14 }
     },
 
     ray: {
-        "narrow": { distance: 10, width: 1 },
-        "wide": { distance: 10, width: 3 }
+        "narrow": { distance: 20, width: 2 },
+        "wide": { distance: 20, width: 6 }
     },
 
     line: {
-        "short": { distance: 3 },
-        "long": { distance: 8 }
+        "short": { distance: 6 },
+        "long": { distance: 16 }
     }
 }
 

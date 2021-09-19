@@ -6,6 +6,7 @@ import diceSoNiceHooks from "./dsn.js"
 import readyHooks from "./ready.js"
 import effects from "./effects.js";
 import entryContextHooks from "./entryContext.js";
+import scene from "./scene.js";
 
 export default function () {
     actorHooks();
@@ -16,4 +17,5 @@ export default function () {
     readyHooks();
     effects();
     entryContextHooks();
+    scene();
 }
