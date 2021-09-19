@@ -40,6 +40,7 @@
    min-width: 300px;
    width: 30%;
    height:100%;
+   overflow: auto
 }
 
 .pillars-of-eternity.actor.sheet .general img.profile {
@@ -47,6 +48,12 @@
   width: 300px;
   object-fit: contain;
   BORDER: none
+}
+
+
+.pillars-of-eternity.actor.sheet .tier {
+  display:flex;
+  justify-content: center;
 }
 
 

@@ -21,6 +21,23 @@ POE.traitTypes = {
     "experience": "Experience"
 }
 
+POE.tiers = {
+    "novice" : "Novice",
+    "apprentice" : "Apprentice",
+    "master" : "Master",
+    "expert" : "Expert",
+    "paragon" : "Paragon"
+}
+
+POE.tierBonus = {
+    "novice" : 0,
+    "apprentice" : 1,
+    "master" : 2,
+    "expert" : 3,
+    "paragon" : 4 
+}
+
+
 POE.lifePhases = {
     childhood : "Childhood",
     adolescence : "Adolescence",

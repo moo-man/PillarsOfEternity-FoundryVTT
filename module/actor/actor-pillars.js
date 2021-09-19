@@ -76,6 +76,14 @@ export class PillarsActor extends Actor {
     }
 
     prepareBaseData() {
+
+
+
+        let tierBonus = (game.pillars.config.tierBonus[this.tier.value] || 0)
+            
+        for (let defense in this.defenses)
+            this.defenses[defense].value += tierBonus
+
         let checkedCount = 0;
         for (let defense in this.defenses)
             checkedCount += this.defenses[defense].checked ? 1 : 0
@@ -314,7 +322,7 @@ export class PillarsActor extends Actor {
 
     constructAssisterList(item)
     {
-        let assisters = game.users.filter(i => i.active && !i.isGM).map(i => i.character)
+        let assisters = game.actors.contents.filter(i => i.hasPlayerOwner)
         assisters = assisters.filter(a => a.items.getName(item.name))
         assisters = assisters.map(a => {
             return {
@@ -440,6 +448,7 @@ export class PillarsActor extends Actor {
     get health() { return this.data.data.health }
     get life() { return this.data.data.life}
     get size() { return this.data.data.size }
+    get tier() { return this.data.data.tier}
     get details() { return this.data.data.details}
     get knownConnections() { return this.data.data.knownConnections}
     get stride() { return this.data.data.stride}

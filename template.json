@@ -78,6 +78,11 @@
           "gm": ""
         }
       },
+      "tier" : {
+        "tier" : {
+          "value" : ""
+        }
+      }
       "wealth": {
         "wealth": {
           "cp": 0
@@ -95,6 +100,7 @@
         "health",
         "endurance",
         "species",
+        "tier",
         "size",
         "initiative",
         "stride",

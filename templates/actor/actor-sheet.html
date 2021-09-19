@@ -1,6 +1,16 @@
 <form class="{{cssClass}}" autocomplete="off">
     <section class="general">
         <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
+        <div class="tier">
+            <select name="data.tier.value">
+                {{#select data.tier.value}}
+                <option value=""></option>
+                {{#each (config "tiers") as |tier t|}}
+                <option value="{{t}}">{{tier}}</option>
+                {{/each}}
+                {{/select}}
+            </select>
+        </div>
         <section class="defenses">
             <div class="property-group">
                 <label>Def</label>
