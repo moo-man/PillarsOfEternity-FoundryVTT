@@ -322,6 +322,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".delete-connection").click(this._onDeleteConnection.bind(this))
         html.find(".connection-name").click(this._onConnectionClick.bind(this))
         html.find(".power-target").click(this._onPowerTargetClick.bind(this))
+        html.find(".restore-pool").click(this._onRestorePoolClick.bind(this))
         html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
         html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
         html.find(".age-roll").click(this._onAgeRoll.bind(this))
@@ -522,6 +523,13 @@ export class PillarsActorSheet extends ActorSheet {
         let item = this.actor.items.get(itemId)
         PowerTemplate.fromItem(item).drawPreview()
     }
+
+    _onRestorePoolClick(event) {
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId)
+        return item.update({"data.pool.current" : item.pool.max})
+    }
+
 
 
     _onWoundClick(event) {

@@ -387,6 +387,10 @@
   display: flex;
   align-items: center;
 }
+
+.pillars-of-eternity .items-list .items .item-property-column .restore-pool{
+  margin-left: 10px;
+}
 .pillars-of-eternity .items-list .items .item-property-column .progress-bar-container{
   width: 100%;
   border: 1px solid black;
@@ -398,6 +402,8 @@
   background: black;
   height: 100%
 }
+
+
 
 .pillars-of-eternity .items-list  .item-used {
   flex: 0 0 10px;

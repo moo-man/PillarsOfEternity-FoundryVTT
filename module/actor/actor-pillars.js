@@ -210,7 +210,10 @@ export class PillarsActor extends Actor {
             this.initiative.value += equippedArmor.initiative.value
         }
         if (equippedShield)
+        {
             this.combat.soak += equippedShield.soak.value || 0        
+            this.defenses.deflection.value += equippedShield.deflection.value
+        }
     }
 
     //#endregion
@@ -237,7 +240,7 @@ export class PillarsActor extends Actor {
         if (typeof weapon == "string")
             weapon = this.items.get(weapon)
 
-        if (!weapon.Skill)
+        if (!weapon.skill.value)
             throw ui.notifications.error("No skill assigned to the weapon")
 
         let data = this.getWeaponDialogData("weapon", weapon)
