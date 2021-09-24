@@ -49,7 +49,7 @@ export class PillarsItemSheet extends ItemSheet {
 
     if (this.item.type == "weapon" && this.item.isOwned)
     {
-      data.ownerMartialSkills = this.item.actor.getItemTypes("skill").filter(i => i.category.value == "martial")
+      data.martialSkills = this.item.actor.getItemTypes("skill").filter(i => i.category.value == "martial").concat(game.items.contents.filter(i => i.type == "skill" && i.category.value == "martial"))
     }
 
     return data;

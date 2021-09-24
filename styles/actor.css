@@ -130,6 +130,19 @@
   border: 1px solid darkblue
 }
 
+.pillars-of-eternity.actor.sheet .skills .roll-untrained {
+  opacity: 0.5;
+  flex: 0 0 30px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.pillars-of-eternity.actor.sheet .skills .roll-untrained img{
+  border: none
+}
+
 .pillars-of-eternity.actor.sheet .general .wounds {
   justify-content: space-evenly;
 }

@@ -59,7 +59,7 @@ export default class AgingDialog extends Dialog {
     _onEffectSelect(ev) 
     {
         let selectedEffects = $(ev.currentTarget).val().map(i => this.data.effects[parseInt(i)])
-        let changes = selectedEffects.reduce((prev, current) => prev = prev.concat(current.data.changes), [])
+        let changes = selectedEffects.reduce((prev, current) => prev = prev.concat(current.data.changes), []).filter(i => i.mode == 0)
 
         for(let type in this.dynamicInputs)
         {

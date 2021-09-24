@@ -11,7 +11,8 @@ export default class SkillTest
                     proxy : data.proxy,
                     assister : data.assister,
                     state : data.state || "normal",
-                    skillId : data.skillId
+                    skillId : data.skillId,
+                    skillName : data.skillName
                 },
                 context : {
                     speaker : data.speaker,
@@ -90,7 +91,9 @@ export default class SkillTest
             let terms = this.getTerms()
             this.roll = Roll.fromTerms(terms)
             await this.roll.evaluate({async:true})  
-            this.skill.update({"data.used.value" : true})
+
+            if (this.actor.type == "character")
+                this.actor.use("skill", this.testData.skillName)
             //this.data.result = this._computeResult()   
         }
     

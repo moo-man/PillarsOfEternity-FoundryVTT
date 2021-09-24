@@ -34,8 +34,8 @@
                     <select name="data.skill.value">
                         {{#select data.skill.value}}
                         <option value=""></option>
-                        {{#each ownerMartialSkills as |value k|}}
-                        <option value="{{value.id}}">{{value.name}}</option>
+                        {{#each martialSkills as |value k|}}
+                        <option value="{{value.name}}">{{value.name}}</option>
                         {{/each}}
                         {{/select}}
                     </select>

@@ -219,13 +219,15 @@ export class PillarsActor extends Actor {
 
     async setupSkillTest(skill)
     {
+        let skillItem
         if (typeof skill == "string")
-            skill = this.items.get(skill)
+            skillItem = this.items.getName(skill)   
 
-        let data = this.getSkillDialogData("skill", skill)
+        let data = this.getSkillDialogData("skill", skillItem, {name : skill})
         let testData =  await RollDialog.create(data)
+        testData.skillName = skill
         testData.title = data.title
-        testData.skillId = skill.id
+        testData.skillId = skillItem?.id
         testData.speaker = this.speakerData();
         return testData
     }
@@ -241,7 +243,8 @@ export class PillarsActor extends Actor {
         let data = this.getWeaponDialogData("weapon", weapon)
         let testData =  await RollDialog.create(data)
         testData.title = data.title
-        testData.skillId = weapon.Skill.id
+        testData.skillId = weapon.Skill?.id
+        testData.skillName = weapon.skill.value
         testData.itemId = weapon.id
         testData.speaker = this.speakerData();
         return testData
@@ -289,34 +292,34 @@ export class PillarsActor extends Actor {
         return (this.itemCategories || this.itemTypes)[type]
     }
 
-    getDialogData(type, item)
+    getDialogData(type, item, options)
     {
         let dialogData = {}
-        dialogData.title = `${item.name} Test`
+        dialogData.title = `${item?.name || options.name} Test`
         dialogData.modifier = ""
         dialogData.steps = 0
         dialogData.effects = this.getDialogRollEffects()
         return dialogData
     }
 
-    getSkillDialogData(type, item)
+    getSkillDialogData(type, item, options)
     {
-        let dialogData = this.getDialogData(type, item)
-        dialogData.assisters = this.constructAssisterList(item)
-        dialogData.hasRank = item.xp.rank
+        let dialogData = this.getDialogData(type, item, options)
+        dialogData.assisters = this.constructAssisterList(item?.name || options.name)
+        dialogData.hasRank = item ? item.xp.rank : false
         return dialogData
     }
 
-    getWeaponDialogData(type, item)
+    getWeaponDialogData(type, item, options)
     {
         let dialogData = this.getDialogData(type, item)
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0)
-        dialogData.hasRank = item.Skill.rank
+        dialogData.hasRank = item.Skill ? item.Skill.rank : false
         return dialogData
     }
 
-    getPowerDialogData(type, item)
+    getPowerDialogData(type, item, options)
     {
         let dialogData = this.getDialogData(type, item)
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
@@ -327,16 +330,16 @@ export class PillarsActor extends Actor {
 
 
 
-    constructAssisterList(item)
+    constructAssisterList(itemName)
     {
         let assisters = game.actors.contents.filter(i => i.hasPlayerOwner)
-        assisters = assisters.filter(a => a.items.getName(item.name))
+        assisters = assisters.filter(a => a.items.getName(itemName))
         assisters = assisters.map(a => {
             return {
                 name : a.name,
                 id : a.id,
-                rank : a.items.getName(item.name).rank,
-                die : `d${SkillTest.rankToDie(a.items.getName(item.name))}`
+                rank : a.items.getName(itemName).rank,
+                die : `d${SkillTest.rankToDie(a.items.getName(itemName))}`
             }
         })
         return assisters.filter(a => a.rank > 5)
@@ -388,6 +391,8 @@ export class PillarsActor extends Actor {
         return targetEffects.concat(selfEffects).map(e => new PillarsActiveEffect(e))
     }
 
+    //#endregion
+
     speakerData() {
         if (this.isToken)
         {
@@ -404,7 +409,24 @@ export class PillarsActor extends Actor {
         }
     }
 
-    //#endregion
+
+    use (type, name)
+    {
+        let item = this.getItemTypes(type).find(i => i.name == name)
+        if (item)
+            return item.update({"data.used.value" : true})
+        let worldItem = game.items.contents.find(i => i.type == type && i.name == name)
+        if (worldItem) 
+        {
+            worldItem = worldItem.toObject()
+            worldItem.data.used.value = true;
+            return this.createEmbeddedDocuments("Item", [worldItem])
+        }
+
+        // If no owned item and no world item, just make the item
+        return this.createEmbeddedDocuments("Item", [{name, type, sort: 0, data : {used : {value : true}}}])
+
+    }
 
     async applyDamage(value, type, multiplier)
     {

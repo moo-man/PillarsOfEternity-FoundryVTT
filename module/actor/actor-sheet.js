@@ -313,6 +313,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
         html.find(".item-property").change(this._onEditItemProperty.bind(this))
         html.find(".skill-roll").click(this._onSkillRoll.bind(this))
+        html.find(".roll-untrained").click(this._onUntrainedSkillClick.bind(this))
         html.find(".weapon-roll").click(this._onWeaponRoll.bind(this))
         html.find(".power-roll").click(this._onPowerRoll.bind(this))
         html.find(".property-counter").mousedown(this._onCounterClick.bind(this))
@@ -543,6 +544,36 @@ export class PillarsActorSheet extends ActorSheet {
         let test = new SkillTest(testData)
         await test.rollTest();
         test.sendToChat()
+    }
+
+    async _onUntrainedSkillClick(event) {
+
+        let dialog = new Dialog({
+            title : "Untrained Skill",
+            content : `<div style="display:flex; align-items: center"><label style="flex: 1">Name of Skill</label><input style="flex: 1" type='text' name='skill'/></div>`,
+            buttons : {
+                roll : {
+                    label : "Roll",
+                    callback : async dlg => {
+                        let skill = dlg.find("[name='skill']")[0].value
+                        if (skill)
+                        {
+                            let testData = await this.actor.setupSkillTest(skill)
+                            let test = new SkillTest(testData)
+                            await test.rollTest();
+                            test.sendToChat()
+                        }
+                        else
+                            ui.notifications.error("Please enter a skill name")
+                    }
+                }
+            },
+            default: "roll"
+        })
+        await dialog._render(true)
+        dialog.element.find("input")[0].focus()
+
+
     }
 
     async _onWeaponRoll(event) {
