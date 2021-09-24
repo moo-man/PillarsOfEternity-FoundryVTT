@@ -145,6 +145,9 @@
 
 .pillars-of-eternity.actor.sheet .general .wounds {
   justify-content: space-evenly;
+  flex-wrap: wrap;
+  display: flex;
+  flex: 1
 }
   .pillars-of-eternity.actor.sheet .general .wounds h4 {
   width: 100%;
@@ -189,6 +192,21 @@
   text-align: center;
   width: 25px;
 }
+
+.pillars-of-eternity.actor.sheet .general .thresholds {
+  display: flex;
+  flex-direction: column;
+  flex: 0.3;
+  justify-content: center;
+  align-items: center;
+}
+
+.pillars-of-eternity.actor.sheet .general .thresholds input{
+  width: 30px;
+  text-align: center;
+  height: 20px;
+}
+
 
 
 
