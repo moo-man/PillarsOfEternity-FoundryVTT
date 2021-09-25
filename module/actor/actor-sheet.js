@@ -555,10 +555,16 @@ export class PillarsActorSheet extends ActorSheet {
     }
 
     async _onUntrainedSkillClick(event) {
+        let allSkills = game.items.contents.filter(i => i.type == "skill")
+        let selectElement = `<select name="skill">`
+        for(let s of allSkills)
+            selectElement += `<option name=${s.name}>${s.name}</option>`
+        selectElement += "</select>"
 
         let dialog = new Dialog({
             title : "Untrained Skill",
-            content : `<div style="display:flex; align-items: center"><label style="flex: 1">Name of Skill</label><input style="flex: 1" type='text' name='skill'/></div>`,
+            //content : `<div style="display:flex; align-items: center"><label style="flex: 1">Name of Skill</label><input style="flex: 1" type='text' name='skill'/></div>`,
+            content : `<div style="display:flex; align-items: center"><label style="flex: 1">Skill</label>${selectElement}</div>`,
             buttons : {
                 roll : {
                     label : "Roll",
