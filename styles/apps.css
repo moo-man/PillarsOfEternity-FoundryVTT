@@ -82,8 +82,9 @@
     width: 100%
 }
 
-#roll-dialog .form-group.steps .form-fields input{
-    width: 40px;
+#roll-dialog .form-group.steps .form-fields input,
+    #roll-dialog .form-group.steps .form-fields select{
+    width: 45px;
     text-align: center;
     margin-right: 3px;
 }

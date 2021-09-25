@@ -22,7 +22,7 @@ export default class RollDialog extends Dialog {
                         callback : (html, test) => {
                             let data = {}
                             data.modifier = html.find("input[name='modifier']").val()
-                            data.steps = parseInt(html.find("input[name='steps']").val())
+                            data.steps = parseInt(html.find("select[name='steps']").val())
                             data.proxy = html.find("input[name='proxy']").is(":checked")
                             data.assister = html.find("select[name='assistance']").val()
                             data.state = html.find("input:radio[name='state']:checked").val()
@@ -61,7 +61,7 @@ export default class RollDialog extends Dialog {
                 select.removeAttribute("disabled")
         })
 
-        this.dynamicInputs.steps = html.find("input[name='steps']").change(ev => {
+        this.dynamicInputs.steps = html.find("select[name='steps']").change(ev => {
             this.userEntry.steps = parseInt(ev.currentTarget.value)
             this._setStepDice()
 
@@ -86,7 +86,7 @@ export default class RollDialog extends Dialog {
 
     _setStepDice() {
         let stepDice = this._element.find("input[name='step-dice']")[0]
-        let steps = parseInt(this._element.find("input[name='steps']")[0].value)
+        let steps = parseInt(this._element.find("select[name='steps']")[0].value)
         if (steps == 0)
         {
             stepDice.value = ""
