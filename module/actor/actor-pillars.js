@@ -303,7 +303,12 @@ export class PillarsActor extends Actor {
     {
         let skillItem
         if (typeof skill == "string")
-            skillItem = this.items.getName(skill)   
+            skillItem = this.items.getName(skill)
+        else 
+        {
+            skillItem = skill;
+            skill = skillItem.name
+        }
 
         let data = this.getSkillDialogData("skill", skillItem, {name : skill})
         let testData =  await RollDialog.create(data)

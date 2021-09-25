@@ -558,14 +558,14 @@ export class PillarsActorSheet extends ActorSheet {
 
     async _onSkillRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let testData = await this.actor.setupSkillTest(itemId)
+        let testData = await this.actor.setupSkillTest(this.actor.items.get(itemId))
         let test = new SkillTest(testData)
         await test.rollTest();
         test.sendToChat()
     }
 
     async _onUntrainedSkillClick(event) {
-        let allSkills = game.items.contents.filter(i => i.type == "skill")
+        let allSkills = game.items.contents.filter(i => i.type == "skill").sort((a, b) => a.name > b.name ? 1 : -1)
         let selectElement = `<select name="skill">`
         for(let s of allSkills)
             selectElement += `<option name=${s.name}>${s.name}</option>`
