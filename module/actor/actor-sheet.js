@@ -98,9 +98,9 @@ export class PillarsActorSheet extends ActorSheet {
     getData() {
         const data = super.getData();
         data.data = data.data.data
-
         this.prepareSheetData(data);
-        return data;
+        this.formatTooltips(data)
+        return data
     }
 
     prepareSheetData(sheetData) {
@@ -111,6 +111,16 @@ export class PillarsActorSheet extends ActorSheet {
         this._enrichKnownConnections(sheetData)
         this._createDeathMarchArray(sheetData)
     }   
+
+    formatTooltips(data)
+    {
+        data.tooltips = foundry.utils.deepClone(this.actor.data.flags.tooltips)
+        for (let def in data.tooltips.defenses)
+            data.tooltips.defenses[def] = data.tooltips.defenses[def].join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.health.max = data.tooltips.health.max.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.endurance.max = data.tooltips.endurance.max.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.initiative.value = data.tooltips.initiative.value.join(" + ").replaceAll("+ -", "- ")
+    }
 
 
     constructItemLists(sheetData) {

@@ -75,6 +75,12 @@ export class PillarsActor extends Actor {
         data.defenses.fortitude.value = 15 + (data.size.value * 2)
         data.defenses.will.value = 15
 
+
+        this.data.flags.tooltips.defenses.deflection.push(data.defenses.deflection.value + " (Base)")
+        this.data.flags.tooltips.defenses.reflexes.push(data.defenses.reflexes.value + " (Base)")
+        this.data.flags.tooltips.defenses.fortitude.push(data.defenses.fortitude.value + " (Base)")
+        this.data.flags.tooltips.defenses.will.push(data.defenses.will.value + " (Base)")
+
         data.health.threshold = {light : attributes.light, heavy : attributes.heavy, severe : attributes.severe}
         data.health.max = attributes.maxHealthEndurance
         data.endurance.max = attributes.maxHealthEndurance
@@ -90,19 +96,46 @@ export class PillarsActor extends Actor {
     }
 
     prepareBaseData() {
+        this.data.flags.tooltips = {
+            defenses : {
+                deflection: [],
+                reflexes: [],
+                fortitude: [],
+                will: []
+            },
+            health : {
+                max : [],
+            },
+            endurance : {
+                max : []
+            },
+            initiative : {
+                value : []
+            }
+        }
+
         this.setSpeciesData(this.data.data)
 
         this.health.base = this.health.max
         this.endurance.base = this.endurance.max
+        this.data.flags.tooltips.health.max.push(this.health.base + " (Base)")
+        this.data.flags.tooltips.endurance.max.push(this.endurance.base + " (Base)")
 
         let tierBonus = (game.pillars.config.tierBonus[this.tier.value])
         
         if (tierBonus)
         {
-            this.health.max += Math.floor(this.health.max * tierBonus.bonus)
-            this.endurance.max += Math.floor(this.endurance.max * tierBonus.bonus)
+            this.health.max += Math.floor(this.health.base * tierBonus.bonus)
+            this.data.flags.tooltips.health.max.push(Math.floor(this.health.base * tierBonus.bonus) + " (Tier)")
+
+            this.endurance.max += Math.floor(this.endurance.base * tierBonus.bonus)
+            this.data.flags.tooltips.endurance.max.push(Math.floor(this.endurance.base * tierBonus.bonus) + " (Tier)")
+
             for (let defense in this.defenses)
+            {
                 this.defenses[defense].value += tierBonus.def
+                this.data.flags.tooltips.defenses[defense].push(tierBonus.def + " (Tier)")
+            }
         }
     
 
@@ -119,13 +152,18 @@ export class PillarsActor extends Actor {
             
             for (let defense in this.defenses)
                 if(this.defenses[defense].checked)
+                {
                     this.defenses[defense].value += bonus
+                    this.data.flags.tooltips.defenses[defense].push(bonus + " (Checked Bonus)")
+                }
         }
     };
 
     prepareDerivedData() {
 
         this.health.max -= this.woundModifier
+        if (this.woundModifier)
+            this.data.flags.tooltips.health.max.push(-this.woundModifier + " (Wounds)")
         this.health.bloodiedThreshold = this.health.max / 2
 
         if (game.actors && game.actors.get(this.id))
@@ -191,6 +229,7 @@ export class PillarsActor extends Actor {
             this.prepareSpecies();
             this.prepareItems()
             this.prepareCombat()
+            this.prepareEffectTooltips()
 
         }
         catch (e) {
@@ -229,11 +268,30 @@ export class PillarsActor extends Actor {
         {
             this.combat.soak += equippedArmor.soak.value || 0
             this.initiative.value += equippedArmor.initiative.value
+            this.data.flags.tooltips.initiative.value.push(equippedArmor.initiative.value + " (Armor)")
         }
         if (equippedShield)
         {
             this.combat.soak += equippedShield.soak.value || 0        
             this.defenses.deflection.value += equippedShield.deflection.value
+            this.data.flags.tooltips.defenses.deflection.push(equippedShield.deflection.value + " (Shield)")
+        }
+    }
+
+    prepareEffectTooltips() {
+        let tooltips = this.data.flags.tooltips
+        let tooltipKeys = Object.keys(flattenObject(this.data.flags.tooltips))
+        for (let effect of this.effects)
+        {
+            for (let change of effect.data.changes)
+            {
+                let foundTooltipKey = tooltipKeys.find(key => change.key.includes(key))
+                if (foundTooltipKey)
+                {
+                    let tooltip = getProperty(tooltips, foundTooltipKey)
+                    tooltip.push(change.value + ` (${effect.data.label})`)
+                }
+            }
         }
     }
 
