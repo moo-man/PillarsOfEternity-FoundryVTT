@@ -15,7 +15,7 @@
             <div class="property-group">
                 <label>Def</label>
                 <div class="property-value">
-                    <input type="number" name="data.defenses.deflection.value" value="{{data.defenses.deflection.value}}" />
+                    <input type="number" disabled value="{{data.defenses.deflection.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if data.defenses.deflection.checked}}
@@ -29,7 +29,7 @@
             <div class="property-group">
                 <label>Fort</label>
                 <div class="property-value">
-                    <input type="number" name="data.defenses.fortitude.value" value="{{data.defenses.fortitude.value}}" />
+                    <input type="number" disabled value="{{data.defenses.fortitude.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if data.defenses.fortitude.checked}}
@@ -43,7 +43,7 @@
             <div class="property-group">
                 <label>Ref</label>
                 <div class="property-value">
-                    <input type="number" name="data.defenses.reflexes.value" value="{{data.defenses.reflexes.value}}" />
+                    <input type="number" disabled value="{{data.defenses.reflexes.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if data.defenses.reflexes.checked}}
@@ -57,7 +57,7 @@
             <div class="property-group">
                 <label>Will</label>
                 <div class="property-value">
-                    <input type="number" name="data.defenses.will.value" value="{{data.defenses.will.value}}" />
+                    <input type="number" disabled value="{{data.defenses.will.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if data.defenses.will.checked}}
@@ -76,7 +76,7 @@
                 <div class="property-group stacked">
                     <input type="number" name="data.health.value" value="{{data.health.value}}" />
                     <hr>
-                    <input type="number" name="data.health.max" value="{{data.health.max}}" />
+                    <input type="number" disabled value="{{data.health.max}}" />
                 </div>
             </div>
             <div class="property-group {{#if actor.endurance.winded}}winded{{/if}}">
@@ -84,7 +84,7 @@
                 <div class="property-group stacked">
                     <input type="number" name="data.endurance.value" value="{{data.endurance.value}}" />
                     <hr>
-                    <input type="number" name="data.endurance.max" value="{{data.endurance.max}}" />
+                    <input type="number" disabled value="{{data.endurance.max}}" />
                 </div>
             </div>
             <div class="property-stack">

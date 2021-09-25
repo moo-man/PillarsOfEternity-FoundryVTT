@@ -30,11 +30,26 @@ POE.tiers = {
 }
 
 POE.tierBonus = {
-    "novice" : 0,
-    "apprentice" : 1,
-    "master" : 2,
-    "expert" : 3,
-    "paragon" : 4 
+    "novice" : {
+        def : 0,
+        bonus: 0,
+    },
+    "apprentice" : {
+        def : 3,
+        bonus: 0.1,
+    },
+    "master" : {
+        def : 6,
+        bonus: 0.25,
+    },
+    "expert" : {
+        def : 9,
+        bonus: 0.5,
+    },
+    "paragon" :{
+        def : 2,
+        bonus: 1,
+    } 
 }
 
 

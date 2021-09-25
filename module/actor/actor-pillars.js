@@ -40,16 +40,30 @@ export class PillarsActor extends Actor {
         }
     }
 
-    setSpeciesData(speciesItem) 
+    // setSpeciesData(speciesItem) 
+    // {
+    //     let data = this.toObject().data
+    //     data.size.value = speciesItem.size.value
+    //     this.setSizeData(data)
+
+    //     data.stride.value = speciesItem.stride.value
+    //     data.details.species  = speciesItem.species.value;
+    //     data.details.stock = speciesItem.stock.value
+    //     return this.update({"data" : data})
+    // }
+
+    setSpeciesData(data) 
     {
-        let data = this.toObject().data
+        let speciesItem = this.getItemTypes("species")[0]
+        if (!speciesItem)
+            return
         data.size.value = speciesItem.size.value
         this.setSizeData(data)
 
         data.stride.value = speciesItem.stride.value
         data.details.species  = speciesItem.species.value;
         data.details.stock = speciesItem.stock.value
-        return this.update({"data" : data})
+        //return this.update({"data" : data})
     }
 
     setSizeData(data)
@@ -76,14 +90,21 @@ export class PillarsActor extends Actor {
     }
 
     prepareBaseData() {
+        this.setSpeciesData(this.data.data)
 
-        this.health.base = this.health.value
-        this.endurance.base = this.endurance.value
+        this.health.base = this.health.max
+        this.endurance.base = this.endurance.max
 
-        let tierBonus = (game.pillars.config.tierBonus[this.tier.value] || 0)
-            
-        for (let defense in this.defenses)
-            this.defenses[defense].value += tierBonus
+        let tierBonus = (game.pillars.config.tierBonus[this.tier.value])
+        
+        if (tierBonus)
+        {
+            this.health.max += Math.floor(this.health.max * tierBonus.bonus)
+            this.endurance.max += Math.floor(this.endurance.max * tierBonus.bonus)
+            for (let defense in this.defenses)
+                this.defenses[defense].value += tierBonus.def
+        }
+    
 
         let checkedCount = 0;
         for (let defense in this.defenses)
