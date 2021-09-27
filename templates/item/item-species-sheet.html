@@ -14,23 +14,8 @@
         <div class="tab details active" data-tab="details"> 
 
             <div class="form-group">
-                <label>Species</label>
-                <div class="form-fields">
-                    <input type="text" name="data.species.value" value="{{data.species.value}}" data-dtype="String">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Stock</label>
-                <div class="form-fields">
-                    <input type="text" name="data.stock.value" value="{{data.stock.value}}" data-dtype="String">
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label>Size</label>
                 <div class="form-fields">
-                    {{log data.size}}
                     <select name="data.size.value">
                         {{#select data.size.value}}
                         <option value=""></option>

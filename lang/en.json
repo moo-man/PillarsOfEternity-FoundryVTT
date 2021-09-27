@@ -20,5 +20,7 @@
     "ITEM.TypeSpecies" : "Species",
     "ITEM.TypeTrait" : "Trait",
     "ITEM.TypeWeapon" : "Weapon",
-    "ITEM.TypeReputation" : "Reputation"
+    "ITEM.TypeReputation" : "Reputation",
+    "ITEM.TypeStock" : "Stock",
+    "ITEM.TypeGodlike" : "Godlike"
 }

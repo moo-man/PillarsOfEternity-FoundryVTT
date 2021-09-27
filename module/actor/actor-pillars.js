@@ -55,14 +55,25 @@ export class PillarsActor extends Actor {
     setSpeciesData(data) 
     {
         let speciesItem = this.getItemTypes("species")[0]
-        if (!speciesItem)
-            return
-        data.size.value = speciesItem.size.value
-        this.setSizeData(data)
+        let stockItem = this.getItemTypes("stock")[0]
+        let godlikeItem = this.getItemTypes("godlike")[0]
+        let cultureItem = this.getItemTypes("culture")[0]
+        if (speciesItem)
+        {
+            data.details.species  = speciesItem.name;
+            data.stride.value = speciesItem.stride.value
+            data.size.value = speciesItem.size.value
+            this.setSizeData(data)
+        }
+        if (stockItem)
+            data.details.stock = stockItem.name
+        if (cultureItem)
+            data.details.culture = cultureItem.name
+        if (godlikeItem)
+            data.details.godlike = godlikeItem.name
+        
+        console.log("PREPARE", data)
 
-        data.stride.value = speciesItem.stride.value
-        data.details.species  = speciesItem.species.value;
-        data.details.stock = speciesItem.stock.value
         //return this.update({"data" : data})
     }
 
@@ -88,11 +99,6 @@ export class PillarsActor extends Actor {
 
         data.endurance.windedThreshold = attributes.windedExert
         data.endurance.exert = attributes.windedExert
-    }
-
-    setCultureData(cultureItem)
-    {
-        return this.update({"data.details.culture" : cultureItem.name})
     }
 
     prepareBaseData() {

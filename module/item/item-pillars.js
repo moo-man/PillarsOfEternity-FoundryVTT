@@ -18,11 +18,13 @@ export class PillarsItem extends Item {
     async _preCreate(data, options, user)
     {
         await super._preCreate(data, options, user)
-        if ((this.type == "species" || this.type == "culture") && this.isOwned)
+        if ((this.type == "species" || this.type == "culture" || this.type == "stock" || this.type == "godlike") && this.isOwned)
         {
             let item = this.actor.items.find(i => i.type == this.type && i.id != this.id)
             if (item)
                 await item.delete()
+            
+            this.actor.update({[`data.details.${this.type}`] : this.name})
         }
     }
 

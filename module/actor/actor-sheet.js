@@ -98,6 +98,7 @@ export class PillarsActorSheet extends ActorSheet {
     getData() {
         const data = super.getData();
         data.data = data.data.data
+        console.log("get", data)
         this.prepareSheetData(data);
         this.formatTooltips(data)
         return data
@@ -315,6 +316,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".effect-delete").click(this._onEffectDelete.bind(this));  
         html.find(".effect-toggle").click(this._onEffectToggle.bind(this));  
         html.find(".sheet-checkbox").click(this._onCheckboxClick.bind(this))
+        html.find(".open-info").click(this._onInfoClick.bind(this))
         //html.find(".wound-square").click(this._onWoundClick.bind(this))
         html.find(".add-wound").click(this._onWoundClick.bind(this))
         html.find(".subtract-wound").click(this._onWoundClick.bind(this))
@@ -431,6 +433,14 @@ export class PillarsActorSheet extends ActorSheet {
         }
         if (target)
             return this.actor.update({[`${target}`] : !getProperty(this.actor.data, target)});
+    }
+
+    _onInfoClick(event) {
+        let type = $(event.currentTarget).attr("data-type")
+        let item = this.actor.getItemTypes(type)[0]
+        if (!item)
+            return ui.notifications.error(`No owned item of type ${type}`)
+       item.sheet.render(true)
     }
 
     _onEditItemProperty(event) {

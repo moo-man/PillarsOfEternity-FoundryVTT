@@ -247,13 +247,37 @@
   margin: 3px;
 }
 
- .pillars-of-eternity.actor.sheet .sheet-content .char-info .info-group input{
+ .pillars-of-eternity.actor.sheet .sheet-content .char-info .info-group .fake-input,
+  .pillars-of-eternity.actor.sheet .sheet-content .char-info .info-group input{
    text-align: center;
 } 
+
+.pillars-of-eternity.actor.sheet .sheet-content .char-info .info-group .fake-input
+{
+    width: calc(100% - 2px);
+    min-width: 20px;
+    height: 26px;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 1px 3px;
+    margin: 0;
+    color: #191813;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    border: 1px solid #7a7971;
+    border-radius: 3px;
+    border: none;
+    color: #4b4a44;
+}
 
 .pillars-of-eternity.actor.sheet .sheet-content .char-info .info-group.age input{
   width: 25%
 } 
+
+.pillars-of-eternity.actor.sheet .sheet-content .char-info .info-group .open-info {
+  cursor: pointer;
+}
+
 
 .pillars-of-eternity .items-list {
     list-style: none;

@@ -120,7 +120,8 @@
         "relationships" : "",
         "culture" : "",
         "species" : "",
-        "stock" : ""
+        "stock" : "",
+        "godlike" : ""
       },
       "knownConnections": {
         "value": []
@@ -157,6 +158,8 @@
       "background",
       "setting",
       "species",
+      "stock",
+      "godlike",
       "reputation"
     ],
     "templates": {
@@ -438,13 +441,13 @@
         },
         "species": {
           "value": ""
-        },
-        "stock": {
-          "value": ""
-        },
-        "godlike": {
-          "value": ""
         }
+      },
+      "stock": {
+        "templates": ["description"]
+      },
+      "godlike": {
+        "templates": ["description"]
       },
       "attribute": {
         "templates": [

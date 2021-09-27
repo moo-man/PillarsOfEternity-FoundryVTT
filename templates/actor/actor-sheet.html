@@ -1,4 +1,5 @@
 <form class="{{cssClass}}" autocomplete="off">
+    {{log this}}
     <section class="general">
         <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
         <div class="tier">
@@ -152,25 +153,29 @@
             </h1>
         </div>
         <div class="char-info">
-            <div class="info-group">
+            <div class="info-group" >
                 <label>Culture</label>
-                <input type="text" disabled value="{{data.details.culture}}">
+                <div data-type="culture" class="fake-input open-info">{{data.details.culture}}</div>
             </div>
-            <div class="info-group">
+            <div class="info-group" >
                 <label>Species</label>
-                <input type="text" disabled value="{{data.details.species}}">
+                <div data-type="species" class="fake-input open-info">{{data.details.species}}</div>
             </div>
-            <div class="info-group">
+            <div class="info-group" >
                 <label>Stock</label>
-                <input type="text" disabled value="{{data.details.stock}}">
+                <div data-type="stock" class="fake-input open-info">{{data.details.stock}}</div>
             </div>
-            <div class="info-group age">
-                <label>Apparent Age</label>
-                <input type="text" disabled value="{{data.life.apparentAge}}">
+            <div class="info-group" >
+                <label>Godlike</label>
+                <div data-type="godlike" class="fake-input open-info">{{data.details.godlike}}</div>
             </div>
             <div class="info-group">
                 <label>Size</label>
                 <input type="text" disabled value="{{data.size.value}}">
+            </div>
+            <div class="info-group age">
+                <label>Apparent Age</label>
+                <input type="text" disabled value="{{data.life.apparentAge}}">
             </div>
         </div>
         <section class="tab-section">
