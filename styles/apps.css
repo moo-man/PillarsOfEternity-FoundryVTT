@@ -121,6 +121,19 @@
     color: unset
 }
 
+#combat .initiative-buttons {
+    display: flex;
+    width: 130px
+}
+
+#combat .initiative-buttons a[data-control="rollInitiativeAdv"] {
+    filter : sepia(100%) saturate(1500%) brightness(70%) hue-rotate(380deg)
+}
+
+#combat .initiative-buttons a[data-control="rollInitiativeDis"] {
+    filter : sepia(100%) saturate(1500%) brightness(70%) hue-rotate(280deg)
+}
+
 #roll-dialog .dialog-content {
     display: flex;
 }

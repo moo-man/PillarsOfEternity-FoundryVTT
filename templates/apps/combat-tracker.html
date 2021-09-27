@@ -85,7 +85,11 @@
                 {{#if this.hasRolled}}
                 <span class="initiative">{{this.initiative}}</span>
                 {{else if this.owner}}
-                <a class="combatant-control roll" title="{{localize 'COMBAT.InitiativeRoll'}}" data-control="rollInitiative"></a>
+                <div class="initiative-buttons">
+                    <a class="combatant-control roll" title="Roll Initiative (Advantage)" data-control="rollInitiativeAdv"></a>
+                    <a class="combatant-control roll" title="Roll Initiative (Disadvantage)" data-control="rollInitiativeDis"></a>
+                    <a class="combatant-control roll" title="{{localize 'COMBAT.InitiativeRoll'}}" data-control="rollInitiative"></a>
+                </div>
                 {{/if}}
             </div>
         </li>
