@@ -134,6 +134,11 @@
     filter : sepia(100%) saturate(1500%) brightness(70%) hue-rotate(280deg)
 }
 
+
+.dialog .quick-effect > * {
+    margin: 5px;display: flex; align-items: center; justify-content: space-between;
+}
+
 #roll-dialog .dialog-content {
     display: flex;
 }

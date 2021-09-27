@@ -395,13 +395,40 @@ export class PillarsActorSheet extends ActorSheet {
         return this.actor.items.get(itemId).postToChat()
     }
     
-    _onEffectCreate(ev) {
+    async _onEffectCreate(ev) {
         let type = ev.currentTarget.attributes["data-type"].value
         let effectData = { label: "New Effect" , icon: "icons/svg/aura.svg"}
         if (type == "temporary") {
-          effectData["duration.rounds"] = 1;
-        }
-        this.actor.createEmbeddedDocuments("ActiveEffect", [effectData])
+            effectData["duration.rounds"] = 1;
+          }
+
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/quick-effect.html")
+        let dialog = new Dialog({
+            title : "Quick Effect",
+            content : html,
+            buttons : {
+                "create" : {
+                    label : "Create",
+                    callback : html => {
+                        let mode = 2
+                        let label = html.find(".label").val()
+                        let key = html.find(".key").val()
+                        let value = parseInt(html.find(".modifier").val())
+                        effectData.label = label
+                        effectData.changes = [{key, mode, value}]
+                        this.actor.createEmbeddedDocuments("ActiveEffect", [effectData])
+                    }
+                },
+                "skip" : {
+                    label : "Skip",
+                    callback : () => this.actor.createEmbeddedDocuments("ActiveEffect", [effectData])
+                }
+            }
+        })
+        await dialog._render(true)
+        dialog._element.find(".label").select()
+
+ 
       }
 
     _onEffectEdit(ev)

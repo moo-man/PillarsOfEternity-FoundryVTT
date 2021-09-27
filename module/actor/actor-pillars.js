@@ -98,7 +98,7 @@ export class PillarsActor extends Actor {
         data.health.bloodiedThreshold = data.health.max / 2
 
         data.endurance.windedThreshold = attributes.windedExert
-        data.endurance.exert = attributes.windedExert
+        //data.endurance.exert = attributes.windedExert
     }
 
     prepareBaseData() {
@@ -232,7 +232,6 @@ export class PillarsActor extends Actor {
             for(let type in this.itemCategories)
                 this.itemCategories[type] = this.itemCategories[type].sort((a, b) => a.data.sort > b.data.sort ? 1 : -1)
 
-            this.prepareSpecies();
             this.prepareItems()
             this.prepareCombat()
             this.prepareEffectTooltips()
@@ -241,12 +240,6 @@ export class PillarsActor extends Actor {
         catch (e) {
             console.error(e);
         }
-    }
-
-    prepareSpecies(){
-        let culture = this.getItemTypes("culture")[0]
-        if (culture)
-            this.details.culture = culture.name
     }
 
     prepareItems() {
