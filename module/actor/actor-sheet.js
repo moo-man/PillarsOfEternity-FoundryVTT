@@ -237,7 +237,7 @@ export class PillarsActorSheet extends ActorSheet {
         }
 
         if (marchVal != 7)
-            sheetData.data.life.march[6] = `<i style="opacity:0.5" class="fas fa-skull"></i>`
+            sheetData.data.life.march[6] = `<i style="opacity:0.2" class="fas fa-skull"></i>`
         else
             sheetData.data.life.march[6] = `<i class="fas fa-skull"></i>`
 

@@ -225,42 +225,48 @@
 </div>
 <hr>
 <div class="aging">
-    <div class="aging-inputs">
-        <div class="phase">
-            <label>Current Phase: </label>
-            <select name="data.life.phase">
-                {{#select data.life.phase}}
-                <option value="">-</option>
-                {{#each (config "lifePhases") as |value key|}}
-                <option value="{{key}}">{{value}}</option>
+    <div class="section-header"><h3>Aging</h3></div>
+    <div class="aging-details">
+        <div class="aging-inputs">
+            
+            <div class="points">
+                <label>Actual Age: </label>
+                <input type="text" name="data.life.age" value="{{data.life.age}}">
+            </div>
+            
+            <div class="points">
+                <label>Apparent Age: </label>
+                <input type="text" name="data.life.apparentAge" value="{{data.life.apparentAge}}">
+            </div>
+            
+            <div class="points">
+                <label>Aging Points: </label>
+                <input type="text" name="data.life.agingPoints" value="{{data.life.agingPoints}}">
+            </div>
+            <div class="phase">
+                <label>Current Phase: </label>
+                <select name="data.life.phase">
+                    {{#select data.life.phase}}
+                    <option value="">-</option>
+                    {{#each (config "lifePhases") as |value key|}}
+                    <option value="{{key}}">{{value}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+            </div>
+        </div>
+    
+        <div class="death-march">
+            <h3>Death March</h3>
+            <div class="track">
+                {{#each data.life.march as |value index|}}        
+                {{{value}}}
                 {{/each}}
-                {{/select}}
-            </select>
+            </div>
+            <button type="button" class="age-roll">Roll Aging</button>
+   
         </div>
-
-        <div class="points">
-            <label>Actual Age: </label>
-            <input type="text" name="data.life.age" value="{{data.life.age}}">
-        </div>
-
-        <div class="points">
-            <label>Apparent Age: </label>
-            <input type="text" name="data.life.apparentAge" value="{{data.life.apparentAge}}">
-        </div>
-
-        <div class="points">
-            <label>Aging Points: </label>
-            <input type="text" name="data.life.agingPoints" value="{{data.life.agingPoints}}">
-        </div>
+    
     </div>
-
-    <div class="death-march">
-        {{#each data.life.march as |value index|}}        
-        {{{value}}}
-        {{/each}}
-    </div>
-
-    <button type="button" class="age-roll">Roll Aging</button>
-
 </div>
 <!-- Aging Points -->
