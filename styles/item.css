@@ -111,4 +111,9 @@
 }
 
 
+.pillars-of-eternity.item.sheet .details .base-effect-cost {
+  flex: 0 0 70px;
+  text-align: center;
+}
+
 

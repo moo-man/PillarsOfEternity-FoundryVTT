@@ -240,14 +240,12 @@
         "level": {
           "value": 0
         },
-        "cost": {
-          "value": 0
-        },
         "source": {
           "value": ""
         },
         "base": {
           "value": [],
+          "cost" : 0,
           "ritual": false
         },
         "range": {

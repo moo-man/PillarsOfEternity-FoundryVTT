@@ -17,7 +17,7 @@ export default class PowerTest extends SkillTest
             let terms = this.getTerms()
             this.roll = Roll.fromTerms(terms)
             await this.roll.evaluate({async:true})  
-            this.powerSource.update({"data.used.value" : true, "data.pool.current" : this.powerSource.pool.current - this.power.cost.value})
+            this.powerSource.update({"data.used.value" : true, "data.pool.current" : this.powerSource.pool.current - this.power.level.value})
             //this.data.result = this._computeResult()   
         }
 

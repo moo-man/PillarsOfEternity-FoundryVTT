@@ -11,19 +11,12 @@
         {{> systems/pillars-of-eternity/templates/item/item-description.html}}
 
 
-        <div class="tab details active" data-tab="details"> 
+        <div class="tab details active" data-tab="details">
 
             <div class="form-group">
                 <label>Power Level</label>
                 <div class="form-fields">
-                    <input type="number" name="data.level.value" value="{{data.level.value}}" data-dtype="Number">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Power Cost</label>
-                <div class="form-fields">
-                    <input type="number" name="data.cost.value" value="{{data.cost.value}}" data-dtype="Number">
+                    <input type="number" disabled value="{{item.level.value}}" data-dtype="Number">
                 </div>
             </div>
 
@@ -46,9 +39,11 @@
                 <label>Base Effects</label>
                 <div class="form-fields">
                     <input type="text" name="data.base.value" value="{{data.base.value}}" data-dtype="String">
-            </div>
-            <input type="checkbox" name="data.base.ritual" value="{{data.base.ritual}}" {{checked data.base.ritual}}>
-                    R
+                    <input class="base-effect-cost" type="text" name="data.base.cost" value="{{data.base.cost}}" data-dtype="Number">
+                </div>
+
+                <input type="checkbox" name="data.base.ritual" value="{{data.base.ritual}}"
+                    {{checked data.base.ritual}}>R
 
             </div>
 
@@ -61,81 +56,86 @@
                     {{/each}}
                     {{/select}}
                 </select>
-                <input type="checkbox" name="data.range.ritual" value="{{data.range.ritual}}" {{checked data.range.ritual}}>
+                <input type="checkbox" name="data.range.ritual" value="{{data.range.ritual}}"
+                    {{checked data.range.ritual}}>
                 R
             </div>
 
-        <div class="form-group">
+            <div class="form-group">
                 <label>Target</label>
                 <div class="form-fields">
-                <select name="data.target.value">
-                    {{#select data.target.value}}
-                    <option value=""></option>
-                    {{#each (config "powerTargetTypes") as |value k|}}
+                    <select name="data.target.value">
+                        {{#select data.target.value}}
+                        <option value=""></option>
+                        {{#each (config "powerTargetTypes") as |value k|}}
+                        <option value="{{k}}">{{value}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                    <select name="data.target.subtype">
+                        {{#select data.target.subtype}}
+                        <option value=""></option>
+                        {{#each (config targetSubTypes) as |value k|}}
+                        <option value="{{k}}">{{value}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+                <input type="checkbox" name="data.target.ritual" value="{{data.target.ritual}}"
+                    {{checked data.target.ritual}}>
+                R
+            </div>
+
+
+            <div class="form-group">
+                <label>Duration</label>
+                <select name="data.duration.value">
+                    {{#select data.duration.value}}
+                    {{#each (config "powerDurations") as |value k|}}
                     <option value="{{k}}">{{value}}</option>
                     {{/each}}
                     {{/select}}
                 </select>
-                <select name="data.target.subtype">
-                    {{#select data.target.subtype}}
-                    <option value=""></option>
-                    {{#each (config targetSubTypes) as |value k|}}
+                <input type="checkbox" name="data.duration.ritual" value="{{data.duration.ritual}}"
+                    {{checked data.duration.ritual}}>
+                R
+            </div>
+
+            <div class="form-group">
+                <label>Speed</label>
+                <select name="data.speed.value">
+                    {{#select data.speed.value}}
+                    {{#each (config "powerSpeeds") as |value k|}}
+                    <option value="{{k}}">{{value}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+                <input type="checkbox" name="data.speed.ritual" value="{{data.speed.ritual}}"
+                    {{checked data.speed.ritual}}>
+                R
+            </div>
+
+            <div class="form-group">
+                <label>Exclusion</label>
+                <select name="data.exclusion.value">
+                    {{#select data.exclusion.value}}
+                    {{#each (config "powerExclusions") as |value k|}}
                     <option value="{{k}}">{{value}}</option>
                     {{/each}}
                     {{/select}}
                 </select>
             </div>
-            <input type="checkbox" name="data.target.ritual" value="{{data.target.ritual}}" {{checked data.target.ritual}}>
-            R
-        </div>
 
-        
-        <div class="form-group">
-            <label>Duration</label>
-            <select name="data.duration.value">
-                {{#select data.duration.value}}
-                {{#each (config "powerDurations") as |value k|}}
-                <option value="{{k}}">{{value}}</option>
-                {{/each}}
-                {{/select}}
-            </select>
-            <input type="checkbox" name="data.duration.ritual" value="{{data.duration.ritual}}" {{checked data.duration.ritual}}>
-            R
-        </div>
-        
-        <div class="form-group">
-            <label>Speed</label>
-            <select name="data.speed.value">
-                {{#select data.speed.value}}
-                {{#each (config "powerSpeeds") as |value k|}}
-                <option value="{{k}}">{{value}}</option>
-                {{/each}}
-                {{/select}}
-            </select>
-            <input type="checkbox" name="data.speed.ritual" value="{{data.speed.ritual}}" {{checked data.speed.ritual}}>
-            R
-        </div>
-
-        <div class="form-group">
-            <label>Exclusion</label>
-            <select name="data.exclusion.value">
-                {{#select data.exclusion.value}}
-                {{#each (config "powerExclusions") as |value k|}}
-                <option value="{{k}}">{{value}}</option>
-                {{/each}}
-                {{/select}}
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Limitations</label>
-            <div class="form-fields">
-                <input type="text" name="data.limitations.value" value="{{data.limitations.value}}" data-dtype="String">
+            <div class="form-group">
+                <label>Limitations</label>
+                <div class="form-fields">
+                    <input type="text" name="data.limitations.value" value="{{data.limitations.value}}"
+                        data-dtype="String">
+                </div>
             </div>
-        </div>
 
-        <h3>PL: {{item.data.data.pl}}</h3>
-        
+            <h3>Abstract: {{item.data.data.pl}}</h3>
+
         </div>
 
         {{> systems/pillars-of-eternity/templates/item/item-effects.html}}

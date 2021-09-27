@@ -64,7 +64,9 @@ export class PillarsItem extends Item {
             pl += values.powerDurations[this.duration.value]
             pl += values.powerSpeeds[this.speed.value]
             pl += values.powerExclusions[this.exclusion.value]
+            pl += this.base.cost || 0
             this.data.data.pl = pl
+            this.level.value = PillarsItem._abstractToLevel(pl)
         }
         catch(e) 
         {   
@@ -110,6 +112,35 @@ export class PillarsItem extends Item {
 
     dropdownData() {
         return {text : this.description.value}//this[`_${this.type}DropdownData`]()
+    }
+
+    static _abstractToLevel(abstract)
+    {
+        let level = 0
+        if (abstract >= 26)
+            level = 10
+        else if (abstract >= 24)
+            level = 9
+        else if (abstract >= 22)
+            level = 8
+        else if (abstract >= 20)
+            level = 7
+        else if (abstract >= 18)
+            level = 6
+        else if (abstract >= 16)
+            level = 5
+        else if (abstract >= 14)
+            level = 4
+        else if (abstract >= 12)
+            level = 3
+        else if (abstract >= 10)
+            level = 2
+        else if (abstract >= 8)
+            level = 1
+        else 
+            level = 0
+
+        return level
     }
 
     //#endregion
@@ -228,6 +259,8 @@ export class PillarsItem extends Item {
     get species() {return this.data.data.species}
     get stock() {return this.data.data.stock}
     get source() {return this.data.data.source}
+    get base() {return this.data.data.base}
+    get level() {return this.data.data.level}
 
     // Processed data getters
     get rank() {return this.xp.rank}

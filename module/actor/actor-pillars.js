@@ -166,11 +166,11 @@ export class PillarsActor extends Actor {
             this.data.flags.tooltips.health.max.push(-this.woundModifier + " (Wounds)")
         this.health.bloodiedThreshold = this.health.max / 2
 
+        this.health.bloodied = this.health.bloodiedThreshold >= this.health.value
+        this.endurance.winded = this.endurance.windedThreshold >= this.endurance.value
+
         if (game.actors && game.actors.get(this.id))
         {
-            this.health.bloodied = this.health.bloodiedThreshold >= this.health.value
-            this.endurance.winded = this.endurance.windedThreshold >= this.endurance.value
-
             if (this.health.bloodied)
             {
                 let existing = this.effects.find(e => e.getFlag("core", "statusId") == "bloodied")
@@ -345,7 +345,7 @@ export class PillarsActor extends Actor {
         if (!power.SourceItem)
             throw ui.notifications.error("Could not find Power Source")
 
-        if (power.SourceItem.pool.current < power.cost.value)
+        if (power.SourceItem.pool.current < power.level.value)
             throw ui.notifications.error("Not enough power!")
 
         let data = this.getPowerDialogData("power", power)
