@@ -368,12 +368,6 @@ export class PillarsActor extends Actor {
 
     //#endregion
 
-    //#Region Rolling 
-    async rollSkillTest(testData)
-    {
-
-    }
-
     //#region Convenience Helpers
     getItemTypes(type) {
         return (this.itemCategories || this.itemTypes)[type]
@@ -538,6 +532,8 @@ export class PillarsActor extends Actor {
     {
         return this.update({[`data.health.wounds.${type}`] : this.health.wounds[type] + 1 })
     }
+
+
     //#region Getters
     // @@@@@@@@ CALCULATION GETTERS @@@@@@
     get woundModifier() {

@@ -59,7 +59,6 @@
 
 .pillars-of-eternity.actor.sheet .general section{
     display: flex;
-    flex-wrap: wrap;
  }
 
  .pillars-of-eternity.actor.sheet .general .property-group{
@@ -130,7 +129,8 @@
   border: 1px solid darkblue
 }
 
-.pillars-of-eternity.actor.sheet .skills .roll-untrained {
+.pillars-of-eternity.actor.sheet .roll-initiative,
+  .pillars-of-eternity.actor.sheet .skills .roll-untrained {
   opacity: 0.5;
   flex: 0 0 30px;
   cursor: pointer;
@@ -139,9 +139,22 @@
   display: flex;
 }
 
+.pillars-of-eternity.actor.sheet .roll-initiative img,
 .pillars-of-eternity.actor.sheet .skills .roll-untrained img{
   border: none
 }
+
+.pillars-of-eternity.actor.sheet .roll-initiative {
+  flex: 0 0 20px;
+  margin-top: 5px;
+}
+
+.pillars-of-eternity.actor.sheet .initiative label {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
 
 .pillars-of-eternity.actor.sheet .general .wounds {
   justify-content: space-evenly;

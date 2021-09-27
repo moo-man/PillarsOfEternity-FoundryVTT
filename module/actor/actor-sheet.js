@@ -336,6 +336,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
         html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
         html.find(".age-roll").click(this._onAgeRoll.bind(this))
+        html.find(".roll-initiative").click(this._onInitiativeClick.bind(this))
         html.find('.item').each((i, li) => {
             li.setAttribute("draggable", true);
             li.addEventListener("dragstart", this._onDragStart.bind(this), false);
@@ -555,6 +556,31 @@ export class PillarsActorSheet extends ActorSheet {
         new Roll(event.target.text).roll().toMessage({speaker : this.actor.speakerData()})
     }
 
+
+    _onInitiativeClick(event) {
+
+        new Dialog({
+            title : "Roll Initiative",
+            content : "",
+            buttons : {
+                adv : {
+                    label : "Advantaged",
+                    callback : () => {this.actor.rollInitiative({createCombatants: true, rerollInitiative : true, initiativeOptions : {formula : "{2d10, 1d20}kh + (1d12 / 100) + @initiative.value"}})}
+                },
+                normal : {
+                    label : "Normal",
+                    callback : () => {this.actor.rollInitiative({createCombatants: true, rerollInitiative : true});}
+                },
+                dis : {
+                    label : "Disadvantaged",
+                    callback : () => {this.actor.rollInitiative({createCombatants: true, rerollInitiative : true, initiativeOptions : {formula : "{2d10, 1d20}kl + (1d12 / 100) + @initiative.value"}})}
+                }
+            },
+            default : "normal"
+        }).render(true)
+
+      }
+    
 
     async _onSkillRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
