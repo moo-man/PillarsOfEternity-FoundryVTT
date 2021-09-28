@@ -7,8 +7,10 @@ import readyHooks from "./ready.js"
 import effects from "./effects.js";
 import entryContextHooks from "./entryContext.js";
 import scene from "./scene.js";
+import initHooks from "./init.js"
 
 export default function () {
+    initHooks()
     actorHooks();
     itemHooks();
     chatHooks();

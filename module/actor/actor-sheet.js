@@ -98,7 +98,6 @@ export class PillarsActorSheet extends ActorSheet {
     getData() {
         const data = super.getData();
         data.data = data.data.data
-        console.log("get", data)
         this.prepareSheetData(data);
         this.formatTooltips(data)
         return data
@@ -339,7 +338,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
         html.find(".age-roll").click(this._onAgeRoll.bind(this))
         html.find(".roll-initiative").click(this._onInitiativeClick.bind(this))
-        html.find('.item').each((i, li) => {
+        html.find('.item:not(".tab-select")').each((i, li) => {
             li.setAttribute("draggable", true);
             li.addEventListener("dragstart", this._onDragStart.bind(this), false);
         });

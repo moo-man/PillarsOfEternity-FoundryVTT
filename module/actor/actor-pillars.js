@@ -65,6 +65,10 @@ export class PillarsActor extends Actor {
             data.size.value = speciesItem.size.value
             this.setSizeData(data)
         }
+        else if (Number.isNumeric(data.size.value))
+        {
+            this.setSizeData(data)
+        }
         if (stockItem)
             data.details.stock = stockItem.name
         if (cultureItem)
@@ -72,7 +76,6 @@ export class PillarsActor extends Actor {
         if (godlikeItem)
             data.details.godlike = godlikeItem.name
         
-        console.log("PREPARE", data)
 
         //return this.update({"data" : data})
     }
@@ -412,7 +415,7 @@ export class PillarsActor extends Actor {
 
     constructAssisterList(itemName)
     {
-        let assisters = game.actors.contents.filter(i => i.hasPlayerOwner)
+        let assisters = game.actors.contents.filter(i => i.hasPlayerOwner && i.id != this.id)
         assisters = assisters.filter(a => a.items.getName(itemName))
         assisters = assisters.map(a => {
             return {

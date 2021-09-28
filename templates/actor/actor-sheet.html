@@ -1,5 +1,4 @@
 <form class="{{cssClass}}" autocomplete="off">
-    {{log this}}
     <section class="general">
         <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
         <div class="tier">
@@ -137,7 +136,6 @@
                     </div>
                 </div>
             </div>
-            {{log this}}
             <div class="thresholds">
                 <div>Bloodied</div> <input type="number" disabled value="{{data.health.bloodiedThreshold}}"/>
                 <div>Winded</div> <input type="number" disabled value="{{data.endurance.windedThreshold}}"/>
@@ -180,12 +178,12 @@
         </div>
         <section class="tab-section">
             <nav class="sheet-tabs tabs">
-                <a class="item active" data-tab="main">Main</a>
-                <a class="item" data-tab="combat">Combat</a>
-                <a class="item" data-tab="effects">Effects</a>
-                <a class="item" data-tab="powers">Powers</a>
-                <a class="item" data-tab="inventory">Inventory</a>
-                <a class="item" data-tab="details">Details</a>
+                <a  class="tab-select item active" data-tab="main">Main</a>
+                <a  class="tab-select item" data-tab="combat">Combat</a>
+                <a  class="tab-select item" data-tab="effects">Effects</a>
+                <a  class="tab-select item" data-tab="powers">Powers</a>
+                <a  class="tab-select item" data-tab="inventory">Inventory</a>
+                <a  class="tab-select item" data-tab="details">Details</a>
             </nav>
             <div class="tab-content">
                 <div class="tab main save-scroll" data-tab="main">

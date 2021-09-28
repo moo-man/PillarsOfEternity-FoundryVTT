@@ -21,6 +21,7 @@ import SkillTest from "./module/system/skill-test.js";
 import PillarsCombatTracker from "./module/apps/combat-tracker.js";
 import PillarsActiveEffect from "./module/system/pillars-effect.js";
 import PillarsEffectConfig from "./module/apps/effect-config.js";
+import Migration from "./module/system/migrations.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -51,6 +52,7 @@ Hooks.on("init", () => {
     rollClass : {
       SkillTest
     },
+    migration : Migration,
     utility: PILLARS_UTILITY,
     config : POE,
     chat : PillarsChat,
