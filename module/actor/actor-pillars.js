@@ -26,8 +26,6 @@ export class PillarsActor extends Actor {
 
         let createData = foundry.utils.deepClone(this.data.data)
 
-        this.setSizeData(createData)
-
         createData.health.value = createData.health.max
         createData.endurance.value = createData.endurance.max
 
