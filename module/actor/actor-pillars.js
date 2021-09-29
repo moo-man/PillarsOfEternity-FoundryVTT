@@ -150,13 +150,9 @@ export class PillarsActor extends Actor {
         for (let defense in this.defenses)
             checkedCount += this.defenses[defense].checked ? 1 : 0
 
-        if ( checkedCount > 0 && checkedCount != 3)
+        if ( checkedCount > 0)
         {
-            let bonus = 0
-            if (checkedCount == 1) bonus = 4
-            if (checkedCount == 2) bonus = 3
-            if (checkedCount == 4) bonus = 2
-            
+            let bonus = 5 - checkedCount
             for (let defense in this.defenses)
                 if(this.defenses[defense].checked)
                 {

@@ -190,7 +190,7 @@ export class PillarsItem extends Item {
     get Duration() {return game.pillars.config.powerDurations[this.data.data.duration.value]}
     get Speed() {return game.pillars.config.powerSpeeds[this.data.data.speed.value]}
     get Exclusion() {return game.pillars.config.powerExclusions[this.data.data.exclusion.value]}
-    get Skill() {return this.actor.items.get(this.skill.value)}
+    get Skill() {return this.actor.items.getName(this.skill.value)}
 
     get SourceItem() {
         if (!this.isOwned)
