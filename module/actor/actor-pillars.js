@@ -24,7 +24,7 @@ export class PillarsActor extends Actor {
                     "token.displayBars": CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,    // Default display bars to be on owner hover
                 })
 
-        let createData = foundry.utils.deepClone(this.data.data)
+        let createData = foundry.utils.deepClone(this.toObject().data)
 
         createData.health.value = createData.health.max
         createData.endurance.value = createData.endurance.max
