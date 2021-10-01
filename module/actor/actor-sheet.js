@@ -38,7 +38,8 @@ export class PillarsActorSheet extends ActorSheet {
 
     //this._refocus(this._element)
   }
-    
+
+
   /**
    * Saves all the scroll positions in the sheet for setScrollPos() to use
    * 
@@ -90,6 +91,11 @@ export class PillarsActorSheet extends ActorSheet {
         icon: "fas fa-book",
         onclick: ev => {new game.pillars.apps.BookOfSeasons(this.actor).render(true)}
       })
+    buttons.unshift({
+        class: "configure",
+        icon: "fas fa-wrench",
+        onclick: async (ev) => new game.pillars.apps.ActorConfigure(this.actor).render(true)
+    })
     return buttons
   }
 

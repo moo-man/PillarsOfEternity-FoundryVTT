@@ -22,7 +22,7 @@ import PillarsCombatTracker from "./module/apps/combat-tracker.js";
 import PillarsActiveEffect from "./module/system/pillars-effect.js";
 import PillarsEffectConfig from "./module/apps/effect-config.js";
 import Migration from "./module/system/migrations.js";
-
+import ActorConfigure from "./module/apps/actor-configure.js"
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -47,7 +47,8 @@ Hooks.on("init", () => {
       PillarsActorSheet,
       PillarsItemSheet,
       BookOfSeasons,
-      RollDialog
+      RollDialog,
+      ActorConfigure
     },
     rollClass : {
       SkillTest

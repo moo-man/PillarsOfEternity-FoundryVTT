@@ -30,7 +30,7 @@ export class PillarsActor extends Actor {
         createData.endurance.value = createData.endurance.max
 
         this.data.update({data : createData})
-
+        this.data.update({"flags.pillars-of-eternity.autoEffects" : true})
         // Default characters to HasVision = true and Link Data = true
         if (data.type == "character") {
             this.data.update({ "token.vision": true });
@@ -172,7 +172,7 @@ export class PillarsActor extends Actor {
         this.health.bloodied = this.health.bloodiedThreshold >= this.health.value
         this.endurance.winded = this.endurance.windedThreshold >= this.endurance.value
 
-        if (game.actors && game.actors.get(this.id))
+        if (this.getFlag("pillars-of-eternity", "autoEffects") && game.actors && game.actors.get(this.id))
         {
             if (this.health.bloodied)
             {
