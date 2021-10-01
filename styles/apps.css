@@ -158,6 +158,31 @@
     height: 100%;
 }
 
+#damage-dialog h3 {
+    text-align: center;
+    width: 100%
+}
+    #damage-dialog li {
+    list-style: decimal;
+}
+
+#damage-dialog .damage {
+    display: flex;
+    align-items: center;
+    padding: 5px 0px 5px 0px
+}
+
+#damage-dialog .damage select {
+    margin: 0px 5px 0px 5px;
+    height: 25px;
+}
+
+#damage-dialog .damage-control {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;;
+}
+
 #chat-log .post-item{
     padding: 5px;
 }

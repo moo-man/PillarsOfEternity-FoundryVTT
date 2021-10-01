@@ -251,6 +251,10 @@
           "cost" : 0,
           "ritual": false
         },
+        "damage" : 
+        {
+         "value" :  []
+        },
         "range": {
           "value": "none",
           "ritual": false

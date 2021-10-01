@@ -201,10 +201,10 @@ export class PillarsItem extends Item {
 
     get Specials() {
         let specials = this.specialList
-        let notSkilledEnough = this.special.value.filter(i => this.isOwned && specials[i.name].skilled && ( !this.Skill || this.Skill?.rank < 5))
+        let notSkilledEnough = this.special.value.filter(i => this.isOwned && specials[i.name]?.skilled && ( !this.Skill || this.Skill?.rank < 5))
 
         return this.special.value.map(i => {
-            let display = this.specialList[i.name].label
+            let display = this.specialList[i.name]?.label
             if (i.value)
                 display += ` (${i.value})`
             if (notSkilledEnough.find(sp => sp.name == i.name))

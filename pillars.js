@@ -23,6 +23,9 @@ import PillarsActiveEffect from "./module/system/pillars-effect.js";
 import PillarsEffectConfig from "./module/apps/effect-config.js";
 import Migration from "./module/system/migrations.js";
 import ActorConfigure from "./module/apps/actor-configure.js"
+import DamageDialog from "./module/apps/damage-dialog.js";
+import WeaponTest from "./module/system/weapon-test.js";
+import PowerTest from "./module/system/power-test.js";
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -48,10 +51,13 @@ Hooks.on("init", () => {
       PillarsItemSheet,
       BookOfSeasons,
       RollDialog,
-      ActorConfigure
+      ActorConfigure,
+      DamageDialog : DamageDialog
     },
     rollClass : {
-      SkillTest
+      SkillTest,
+      WeaponTest,
+      PowerTest,
     },
     migration : Migration,
     utility: PILLARS_UTILITY,

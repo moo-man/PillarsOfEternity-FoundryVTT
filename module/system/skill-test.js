@@ -27,7 +27,7 @@ export default class SkillTest
         {
             let test = new game.pillars.rollClass[data.context.rollClass]()
             test.data = data;
-            return data
+            return test
         }
     
         getTerms() 
@@ -94,7 +94,8 @@ export default class SkillTest
 
             if (this.actor.type == "character")
                 this.actor.use("skill", this.testData.skillName)
-            //this.data.result = this._computeResult()   
+            this.data.result = this.roll.toJSON()
+            game.user.updateTokenTargets([])
         }
     
     

@@ -312,6 +312,7 @@ export class PillarsActor extends Actor {
         testData.title = data.title
         testData.skillId = skillItem?.id
         testData.speaker = this.speakerData();
+        testData.targetSpeaker = this.targetSpeakerData();
         return testData
     }
 
@@ -330,6 +331,7 @@ export class PillarsActor extends Actor {
         testData.skillName = weapon.skill.value
         testData.itemId = weapon.id
         testData.speaker = this.speakerData();
+        testData.targetSpeaker = this.targetSpeakerData();
         return testData
     }
 
@@ -350,6 +352,7 @@ export class PillarsActor extends Actor {
         testData.sourceId = power.SourceItem.id
         testData.itemId = power.id
         testData.speaker = this.speakerData();
+        testData.targetSpeaker = this.targetSpeakerData();
         return testData
     }
 
@@ -486,6 +489,12 @@ export class PillarsActor extends Actor {
         }
     }
 
+    
+    targetSpeakerData() {
+        if (game.user.targets.size > 0)
+            return Array.from(game.user.targets).map(i => i.actor)[0].speakerData();
+    }
+
 
     use (type, name)
     {
@@ -509,6 +518,9 @@ export class PillarsActor extends Actor {
     {
         value *= multiplier
         let current  = this[type].value
+
+        if (value < 0)
+            value += this.combat.soak
 
         current += value
 

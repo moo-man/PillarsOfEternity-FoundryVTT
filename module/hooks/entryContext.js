@@ -4,34 +4,45 @@ export default function () {
 
 
  function addChatMessageContextOptions (html, options) {
-    let canApply = li => {
+   let isTest = li => {
+     const message = game.messages.get(li.data("messageId"));
+     return message?.getTest()
+   }
+    let isRoll = li => {
       const message = game.messages.get(li.data("messageId"));
-      return message?.isRoll && message?.isContentVisible && canvas.tokens?.controlled.length;
+      return message?.isRoll && !message?.getTest() && message?.isContentVisible && canvas.tokens?.controlled.length;
     };
+    console.log(isRoll)
     options.push(
       {
         name: game.i18n.localize("Reduce Health"),
         icon: '<i class="fas fa-user-minus"></i>',
-        condition: canApply,
+        condition: isRoll,
         callback: li => applyChatCardDamage(li, "health", -1)
       },
       {
         name: game.i18n.localize("Reduce Endurance"),
         icon: '<i class="fas fa-user-minus"></i>',
-        condition: canApply,
+        condition: isRoll,
         callback: li => applyChatCardDamage(li, "endurance", -1)
       },
       {
         name: game.i18n.localize("Increase Health"),
         icon: '<i class="fas fa-user-plus"></i>',
-        condition: canApply,
+        condition: isRoll,
         callback: li => applyChatCardDamage(li, "health", 1)
       },
       {
         name: game.i18n.localize("Increase Endurance"),
         icon: '<i class="fas fa-user-plus"></i>',
-        condition: canApply,
+        condition: isRoll,
         callback: li => applyChatCardDamage(li, "endurance", 1)
+      },
+      {
+        name: game.i18n.localize("Roll Damage"),
+        icon: '<i class="fas fa-user-minus"></i>',
+        condition: isTest,
+        callback: li => rollTestDamage(li)
       }
     );
     return options;
@@ -54,4 +65,13 @@ export default function () {
       const a = t.actor;
       return a.applyDamage(roll.total, type, multiplier);
     }));
+  }
+
+  function rollTestDamage(li)
+  {
+    const message = game.messages.get(li.data("messageId"));
+    let test = message.getTest();
+    let target = Array.from(game.user.targets)[0]?.actor
+    console.log(test)
+    new game.pillars.apps.DamageDialog(test.item, test, target).render(true)
   }

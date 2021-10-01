@@ -341,6 +341,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".power-target").click(this._onPowerTargetClick.bind(this))
         html.find(".restore-pool").click(this._onRestorePoolClick.bind(this))
         html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
+        html.find(".damage-roll").click(this._onDamageRollClick.bind(this))
         html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
         html.find(".age-roll").click(this._onAgeRoll.bind(this))
         html.find(".roll-initiative").click(this._onInitiativeClick.bind(this))
@@ -596,6 +597,12 @@ export class PillarsActorSheet extends ActorSheet {
 
     _onSheetRollClick(event) {
         new Roll(event.target.text).roll().toMessage({speaker : this.actor.speakerData()})
+    }
+
+    _onDamageRollClick(event) {
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId)
+        new game.pillars.apps.DamageDialog(item).render(true)
     }
 
 
