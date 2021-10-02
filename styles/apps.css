@@ -173,17 +173,22 @@
     text-align:center;
 }
 
+#damage-dialog li .damage-element.control {
+    flex: 0 0 20px;
+}
+
 #damage-dialog li .damage-element.target {
     display:flex;
     flex: 2
 }
 
 #damage-dialog li .damage-element.target img {
-    border: none
+    border: none;
+    margin: 3px;
 }
 
 
-#damage-dialog li .damage-element.crit {
+#damage-dialog li .damage-element.mult-crit {
     flex: 2
 }
 
@@ -201,13 +206,14 @@
     padding: 5px 0px 5px 0px
 }
 
-#damage-dialog .damage select {
+#damage-dialog .damage input,
+    #damage-dialog .damage select {
     margin: 0px 5px 0px 5px;
     height: 25px;
 }
 
 #damage-dialog .damage .target select {
-    max-width: 100px;
+    width: 100%
 }
 
 
@@ -217,6 +223,16 @@
     margin-bottom: 10px;;
 }
 
+.damage-inputs{
+    display:flex;
+    align-items: center;
+  }
+  
+  .damage-inputs > *{
+    flex : 1;
+    margin: 3px
+  }
+  
 #chat-log .post-item{
     padding: 5px;
 }

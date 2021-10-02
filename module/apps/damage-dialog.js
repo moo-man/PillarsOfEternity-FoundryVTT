@@ -16,6 +16,7 @@ export default class DamageDialog extends Application
             classes : ["pillars-of-eternity"],
             title : "Damage",
             height: "auto",
+            resizable: true,
             width: 500,
             template : "systems/pillars-of-eternity/templates/apps/damage-dialog.html"
         })
@@ -25,40 +26,14 @@ export default class DamageDialog extends Application
         let data = super.getData();
         data.damages = this.damages;
         data.targets = this.targets
-        //this.setTargetData(data);
         
         return data;
     }
 
     constructDamages() {
         let damages = []
-        if (this.item.type == "weapon")
-        {
-            damages.push({
-                type : "physical",
-                defense : "deflection",
-                base : this.item.damage.value,
-                crit : this.item.crit.value,
-                mult : 0
-            })
-
-            for (let i = 0; i < this.additionalDamages; i++)
-            {
-                damages.push({
-                    type : "physical",
-                    base : this.item.damage.value,
-                    crit : this.item.crit.value,
-                    defense : "deflection",
-                    mult : 0
-                })
-            }
-        }
-        else if (this.item.type == "power")
-        {
-            damages = foundry.utils.deepClone(this.item.damage.value)
-            damages.forEach(i => i.mult = 0)
-        }
-
+        damages = foundry.utils.deepClone(this.item.damage.value)
+        damages.forEach(i => i.mult = 0)
         return damages
     }
 
@@ -76,7 +51,7 @@ export default class DamageDialog extends Application
         try {
             for (let damage of this.damages.filter(d => d.target))
             {
-                let defense = damage.defense || "deflection"
+                let defense = damage.defense.toLowerCase() || "deflection"
                 let margin = this.test.result.total - damage.target.actor.defenses[defense].value
                 let multiplier = Math.floor(margin / 5)
                 damage.mult = multiplier    
@@ -92,11 +67,10 @@ export default class DamageDialog extends Application
     submit() {
         this.element.find()
         this.damages.forEach(async (damage, i) => {
-            let select = this.element.find(`select[name='${i}']`)
-            let multiplier = select.val()
+            let multiplier = damage.mult
             let critTotal = parseInt(damage.crit[0]) * parseInt(multiplier) + damage.crit.slice(1)
             let roll = await new Roll(`${damage.base} + ${critTotal}`).evaluate({async : true})
-            await roll.toMessage({flavor : damage.label ? `${this.item.name} Damage - ${damage.label}` : `${this.item.name} Damage ${this.damages.length > 1 ? i + 1 : ""}`, speaker : this.item.actor.speakerData()});
+            await roll.toMessage({flavor : damage.label ? `${damage.label} Damage` : `${this.item.name} Damage ${this.damages.length > 1 ? i + 1 : ""}`, speaker : this.item.actor.speakerData()});
         })
         this.close();
     }
@@ -118,11 +92,18 @@ export default class DamageDialog extends Application
         html.find(".add-damage").click(this.addDamage.bind(this))
         html.find("button").click(this.submit.bind(this))
 
+        html.find(".label,.type,.base,.crit,.mult").change(ev => {
+            let parent = $(ev.currentTarget).parents(".damage")
+            let index = parent.attr("data-index")
+            let property = ev.currentTarget.classList[1]
+            this.damages[index][property] = ev.target.value
+        })
+
         html.find(".target-select").change(ev => {
             let targetIndex = parseInt(ev.target.value)
             let target = this.targets[targetIndex]
             let parent = $(ev.currentTarget).parents(".damage")
-            let critSelect = parent.find("select.crit")[0]
+            let critSelect = parent.find("select.mult")[0]
             if (target)
             {
                 let img = target.data.img
@@ -130,8 +111,8 @@ export default class DamageDialog extends Application
                 let damageIndex = parent.attr("data-index")
                 this.damages[damageIndex].target = target
                 this.calculateCritDice()
-                let critDice = this.damages[damageIndex].mult || 0
-                critSelect.value = critDice
+                let mult = this.damages[damageIndex].mult || 0
+                critSelect.value = mult
             }
             else {
                 $(ev.currentTarget).parents(".target").find("img").attr("src", "")

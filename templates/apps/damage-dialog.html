@@ -9,12 +9,18 @@
         </li>
         {{#each damages as |damage d|}}
         <li class="damage" data-index={{d}}>
-                <label class="damage-element">{{damage.label}}</label>
-                <span class="damage-element">{{configLookup "damageTypes" damage.type}}</span>
-                <span class="damage-element">{{damage.base}}</span>
-                <div class="damage-element crit" style="display: flex;">
+                <input type="text" class="damage-element label" placeholder="Label" value="{{damage.label}}"/>
+                <select class="damage-element type">
+                    {{#select damage.type}}
+                    {{#each (config "damageTypes") as |type t|}}
+                    <option value="{{t}}">{{type}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+                <input type="text" class="damage-element base" placeholder="Base" value="{{damage.base}}"/>
+                <div class="damage-element mult-crit" style="display: flex;">
                     +
-                    <select  name={{d}} class="crit">
+                    <select  name={{d}} class="damage-element mult">
                         {{#select damage.mult}}
                         <option value="0">0</option>
                         <option value="1">1</option>
@@ -29,7 +35,8 @@
                         <option value="10">10</option>
                         {{/select}}
                     </select>
-                    <span>x {{damage.crit}}</span>
+                    <span>x</span>
+                    <input type="text" class="damage-element crit" placeholder="Crit" value="{{damage.crit}}"/>
                 </div>
                 <div class="damage-element target">
                     <select class="target-select">
@@ -40,8 +47,6 @@
                     </select>
                     <img src="" height="30" width="30">
                 </div>
-
-
         </li>
         {{/each}}
     </ol>

@@ -43,18 +43,39 @@
             </div>
             {{/if}}
 
+
+            <hr>
             <div class="form-group">
-                <label>Damage</label>
-                <div class="form-fields">
-                    <input type="text" name="data.damage.value" value="{{data.damage.value}}" data-dtype="String">
+                <label>Damage <a class="add-damage"><i class="fas fa-plus-square"></i></a></label>
+                <div class="damage-list">
+                {{#each item.damage.value as |damage d|}}
+                <div class="damage-inputs" data-index="{{d}}">
+                    <input type="text" class="damage label" placeholder="Label" value="{{damage.label}}">
+                    <input type="text" class="damage base" placeholder="Base" value="{{damage.base}}">
+                    <input type="text" class="damage crit" placeholder="Crit" value="{{damage.crit}}">
+                    <select class="damage type">
+                        {{#select damage.type}}
+                        {{#each (config "damageTypes") as |type t|}}
+                        <option value="{{t}}">{{type}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                    vs.
+                    <select class="damage defense">
+                        {{#select damage.defense}}
+                        {{#each (config "defenses") as |defense def|}}
+                        <option value="{{def}}">{{defense}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                    <div class="damage-control">
+                        <a class="remove-damage"><i class="fas fa-times"></i></a>
+                    </div>
+                </div>
+                {{/each}}
                 </div>
             </div>
-            <div class="form-group">
-                <label>Crit Die</label>
-                <div class="form-fields">
-                    <input type="text" name="data.crit.value" value="{{data.crit.value}}" data-dtype="String">
-                </div>
-            </div>
+            <hr>
 
             <div class="form-group">
                 <label>Accuracy</label>

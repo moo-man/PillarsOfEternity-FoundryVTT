@@ -101,13 +101,7 @@ export default class Migration {
    */
   migrateActorData(actor) {
     const updateData = {};
-    updateData["data.health.wounds"] = {
-        "light": 0,
-        "heavy": 0,
-        "severe": 0,
-        "injury" : ""
-    }
-    let items = actor.items.map(i => this.migrateOwnedItemData(i, actor)).filter(i => !foundry.utils.isObjectEmpty(i))
+    let items = actor.items.map(i => this.migrateItemData(i, actor)).filter(i => !foundry.utils.isObjectEmpty(i))
     if (items.length)
       updateData.items = items
     return updateData;
@@ -125,27 +119,17 @@ export default class Migration {
   migrateItemData(item) {
     const updateData = {};
 
+    if (item.type == "weapon")
+    {
+      let base = item.data.damage.value;
+      let crit = item.data.crit.value;
+      updateData["data.damage.value"] = [{label : item.name, defense : "deflection", base, crit, type : "physical"}]
+      updateData._id = item._id
+    }
   
     return updateData;
   };
 
-  migrateOwnedItemData(item, actor) {
-    const updateData = {};
-
-    if (item.type == "weapon")
-    {
-      let skill = actor.items.find(i => i._id == item.data.skill.value)
-
-      if (skill)
-      {
-        updateData["data.skill.value"] = skill.name
-        updateData["_id"] = item._id
-      }
-    }
-
-  
-    return updateData;
-  }
 
   /* -------------------------------------------- */
 

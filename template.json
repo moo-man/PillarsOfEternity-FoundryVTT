@@ -316,15 +316,9 @@
         "misc" : {
           "value" : null
         },
-        "damage": {
-          "value": ""
-        },
-        "crit": {
-          "value": ""
-        },
-        "defense" : {
-          "value" : "deflection"
-        },
+        "damage" : {
+          "value" :  []
+         },
         "special": {
           "value": []
         },
