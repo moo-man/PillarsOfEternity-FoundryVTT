@@ -60,6 +60,7 @@
         <h3 class="item-name flexrow">Powers</h3>
             <!--<span class="item-property-column flex">Base Effects</span>-->
         <span class="item-property-column small">Level</span>
+        <span class="item-property-column">Dmg</span>
         <span class="item-property-column small">Range</span>
         <span class="item-property-column small">Target</span>
         <span class="item-property-column small">Duration</span>
@@ -83,6 +84,11 @@
 
             <!--<span class="item-property-column flex">Base Effects</span>-->
             <span class="item-property-column small">{{item.level.value}}</span>
+            {{#if item.damage.value.length}}
+            <button type = "button" class="item-property-column damage-roll">Roll</button>
+            {{else}}
+            <div class="item-property-column">None</div>
+            {{/if}}
             <span class="item-property-column small">{{item.Range}}</span>
             <a class="item-property-column small power-target">{{item.Target}}</a>
             <span class="item-property-column small">{{item.Duration}}</span>

@@ -117,3 +117,28 @@
 }
 
 
+.pillars-of-eternity.item.sheet .damage-list {
+  display:flex;
+  flex-direction: column;
+  flex: 5
+}
+
+.pillars-of-eternity.item.sheet .damage-list .damage-inputs{
+  display:flex;
+  align-items: center;
+}
+
+.pillars-of-eternity.item.sheet .damage-list .damage-inputs > *{
+  flex : 1;
+  margin: 3px
+}
+
+.pillars-of-eternity.item.sheet .damage-list .damage-inputs .damage-control {
+  flex: 0 0 20px;
+}
+
+.pillars-of-eternity.item.sheet .damage-button{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

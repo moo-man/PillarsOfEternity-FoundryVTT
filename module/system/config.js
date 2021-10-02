@@ -1,5 +1,12 @@
 export const POE = {};
 
+POE.defenses = {
+    deflection : "Deflection",
+    fortitude : "Fortitude",
+    reflexes : "Reflexes",
+    will : "Will"
+}
+
 POE.attributeTypes = {
     "benefit": "Benefit",
     "hindrance": "Hindrance"
@@ -354,6 +361,7 @@ POE.powerEffectResistTypes = {
 
 
 POE.damageTypes = {
+    "physical" : "Physical",
     "burn" : "Burn",
     "freeze" : "Freeze",
     "raw" : "Raw",

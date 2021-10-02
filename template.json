@@ -241,7 +241,8 @@
           "category"
         ],
         "level": {
-          "value": 0
+          "value": 0,
+          "modifier" : 0
         },
         "source": {
           "value": ""
@@ -251,8 +252,7 @@
           "cost" : 0,
           "ritual": false
         },
-        "damage" : 
-        {
+        "damage" : {
          "value" :  []
         },
         "range": {
@@ -321,6 +321,9 @@
         },
         "crit": {
           "value": ""
+        },
+        "defense" : {
+          "value" : "deflection"
         },
         "special": {
           "value": []

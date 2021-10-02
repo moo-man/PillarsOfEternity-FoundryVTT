@@ -98,5 +98,36 @@ export class PillarsItemSheet extends ItemSheet {
       this.item.effects.get(id).sheet.render(true)
     })
 
+    html.find(".add-damage").click(ev => {
+      let damage = foundry.utils.deepClone(this.item.damage.value)
+      damage.push({
+        label : "",
+        base : "",
+        crit : "",
+        defense : "Deflection",
+        type : "Physical"
+      })
+      return this.item.update({"data.damage.value" : damage})
+    })
+
+    html.find(".remove-damage").click(ev => {
+      let index = $(ev.currentTarget).parents(".damage-inputs").attr("data-index")
+      let damage = foundry.utils.deepClone(this.item.damage.value)
+      damage.splice(index, 1)
+      return this.item.update({"data.damage.value" : damage})
+    })
+    
+    html.find(".damage").change(ev => {
+      let el = ev.currentTarget
+      let index = $(el).parents(".damage-inputs").attr("data-index")
+      let target = el.classList[1]
+      let damage = foundry.utils.deepClone(this.item.damage.value)
+
+      damage[index][target] = ev.currentTarget.value
+
+      return this.item.update({"data.damage.value" : damage})
+
+    })
+
   }
 }

@@ -1,27 +1,47 @@
 <div>
-    {{#if targetName}}
-    <h3>Damage against {{targetName}}</h3>
-    {{/if}}
     <ol>
+        <li class="damage section-header">
+            <div class="damage-element">Label</div>
+            <div class="damage-element">Type</div>
+            <div class="damage-element">Base</div>
+            <div class="damage-element crit">Crit</div>
+            <div class="damage-element target">Target</div>
+        </li>
         {{#each damages as |damage d|}}
-        <li class="damage">
-                <span>Base: {{damage.base}} + </span>
-                <select name={{d}} class="crit">
-                    {{#select damage.mult}}
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    {{/select}}
-                </select>
-                <span>x {{damage.crit}}</span>
+        <li class="damage" data-index={{d}}>
+                <label class="damage-element">{{damage.label}}</label>
+                <span class="damage-element">{{configLookup "damageTypes" damage.type}}</span>
+                <span class="damage-element">{{damage.base}}</span>
+                <div class="damage-element crit" style="display: flex;">
+                    +
+                    <select  name={{d}} class="crit">
+                        {{#select damage.mult}}
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        {{/select}}
+                    </select>
+                    <span>x {{damage.crit}}</span>
+                </div>
+                <div class="damage-element target">
+                    <select class="target-select">
+                    <option value=""> - </option>
+                    {{#each ../targets as |target t|}}
+                    <option value="{{t}}">{{target.name}}</option>
+                    {{/each}}
+                    </select>
+                    <img src="" height="30" width="30">
+                </div>
+
+
         </li>
         {{/each}}
     </ol>

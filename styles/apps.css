@@ -162,8 +162,37 @@
     text-align: center;
     width: 100%
 }
-    #damage-dialog li {
+#damage-dialog li {
     list-style: decimal;
+}
+
+#damage-dialog li .damage-element {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    text-align:center;
+}
+
+#damage-dialog li .damage-element.target {
+    display:flex;
+    flex: 2
+}
+
+#damage-dialog li .damage-element.target img {
+    border: none
+}
+
+
+#damage-dialog li .damage-element.crit {
+    flex: 2
+}
+
+#damage-dialog li.damage-header {
+    flex: 1
+}
+
+#damage-dialog ol {
+    padding: 0px
 }
 
 #damage-dialog .damage {
@@ -176,6 +205,11 @@
     margin: 0px 5px 0px 5px;
     height: 25px;
 }
+
+#damage-dialog .damage .target select {
+    max-width: 100px;
+}
+
 
 #damage-dialog .damage-control {
     display: flex;

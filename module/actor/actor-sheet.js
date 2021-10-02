@@ -602,7 +602,7 @@ export class PillarsActorSheet extends ActorSheet {
     _onDamageRollClick(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
         let item = this.actor.items.get(itemId)
-        new game.pillars.apps.DamageDialog(item).render(true)
+        new game.pillars.apps.DamageDialog(item, undefined, Array.from(game.user.targets)).render(true)
     }
 
 

@@ -71,7 +71,5 @@ export default function () {
   {
     const message = game.messages.get(li.data("messageId"));
     let test = message.getTest();
-    let target = Array.from(game.user.targets)[0]?.actor
-    console.log(test)
-    new game.pillars.apps.DamageDialog(test.item, test, target).render(true)
+    new game.pillars.apps.DamageDialog(test.item, test, Array.from(game.user.targets)).render(true)
   }
