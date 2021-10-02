@@ -1,5 +1,5 @@
 import RollDialog from "../apps/roll-dialog.js";
-import SkillTest from "../system/skill-test.js";
+import SkillCheck from "../system/skill-check.js";
 import PillarsActiveEffect from "../system/pillars-effect.js"
 import AgingDialog from "../apps/aging-dialog.js";
 
@@ -295,7 +295,7 @@ export class PillarsActor extends Actor {
 
     //#region Roll Setup
 
-    async setupSkillTest(skill)
+    async setupSkillCheck(skill)
     {
         let skillItem
         if (typeof skill == "string")
@@ -307,16 +307,16 @@ export class PillarsActor extends Actor {
         }
 
         let data = this.getSkillDialogData("skill", skillItem, {name : skill})
-        let testData =  await RollDialog.create(data)
-        testData.skillName = skill
-        testData.title = data.title
-        testData.skillId = skillItem?.id
-        testData.speaker = this.speakerData();
-        testData.targetSpeaker = this.targetSpeakerData();
-        return testData
+        let checkData =  await RollDialog.create(data)
+        checkData.skillName = skill
+        checkData.title = data.title
+        checkData.skillId = skillItem?.id
+        checkData.speaker = this.speakerData();
+        checkData.targetSpeaker = this.targetSpeakerData();
+        return checkData
     }
 
-    async setupWeaponTest(weapon)
+    async setupWeaponCheck(weapon)
     {
         if (typeof weapon == "string")
             weapon = this.items.get(weapon)
@@ -325,17 +325,17 @@ export class PillarsActor extends Actor {
             throw ui.notifications.error("No skill assigned to the weapon")
 
         let data = this.getWeaponDialogData("weapon", weapon)
-        let testData =  await RollDialog.create(data)
-        testData.title = data.title
-        testData.skillId = weapon.Skill?.id
-        testData.skillName = weapon.skill.value
-        testData.itemId = weapon.id
-        testData.speaker = this.speakerData();
-        testData.targetSpeaker = this.targetSpeakerData();
-        return testData
+        let checkData =  await RollDialog.create(data)
+        checkData.title = data.title
+        checkData.skillId = weapon.Skill?.id
+        checkData.skillName = weapon.skill.value
+        checkData.itemId = weapon.id
+        checkData.speaker = this.speakerData();
+        checkData.targetSpeaker = this.targetSpeakerData();
+        return checkData
     }
 
-    async setupPowerTest(power)
+    async setupPowerCheck(power)
     {
         if (typeof power == "string")
             power = this.items.get(power)
@@ -347,22 +347,22 @@ export class PillarsActor extends Actor {
             throw ui.notifications.error("Not enough power!")
 
         let data = this.getPowerDialogData("power", power)
-        let testData =  await RollDialog.create(data)
-        testData.title = data.title
-        testData.sourceId = power.SourceItem.id
-        testData.itemId = power.id
-        testData.speaker = this.speakerData();
-        testData.targetSpeaker = this.targetSpeakerData();
-        return testData
+        let checkData =  await RollDialog.create(data)
+        checkData.title = data.title
+        checkData.sourceId = power.SourceItem.id
+        checkData.itemId = power.id
+        checkData.speaker = this.speakerData();
+        checkData.targetSpeaker = this.targetSpeakerData();
+        return checkData
     }
 
     async setupAgingRoll()
     {
         let dialogData = {modifier : game.pillars.config.lifePhaseModifier[this.life.phase] || 0, effects : this.getDialogRollEffects()} 
-        let testData =  await AgingDialog.create(dialogData)
-        testData.title = "Aging Roll"
-        testData.speaker = this.speakerData();
-        return testData
+        let checkData =  await AgingDialog.create(dialogData)
+        checkData.title = "Aging Roll"
+        checkData.speaker = this.speakerData();
+        return checkData
     }
 
     //#endregion
@@ -375,7 +375,7 @@ export class PillarsActor extends Actor {
     getDialogData(type, item, options)
     {
         let dialogData = {}
-        dialogData.title = `${item?.name || options.name} Test`
+        dialogData.title = `${item?.name || options.name} Check`
         dialogData.modifier = ""
         dialogData.steps = 0
         dialogData.effects = this.getDialogRollEffects()
@@ -393,6 +393,7 @@ export class PillarsActor extends Actor {
     getWeaponDialogData(type, item, options)
     {
         let dialogData = this.getDialogData(type, item)
+        dialogData.title = `${item?.name || options.name} Attack`
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0)
         dialogData.hasRank = item.Skill ? item.Skill.rank : false
@@ -402,6 +403,10 @@ export class PillarsActor extends Actor {
     getPowerDialogData(type, item, options)
     {
         let dialogData = this.getDialogData(type, item)
+        if (item.damage.value.length)
+            dialogData.title = `${item?.name || options.name} Attack`
+        else 
+            dialogData.title = item?.name || options.name
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.SourceItem.attack || 0)
         dialogData.hasRank = false;
@@ -419,7 +424,7 @@ export class PillarsActor extends Actor {
                 name : a.name,
                 id : a.id,
                 rank : a.items.getName(itemName).rank,
-                die : `d${SkillTest.rankToDie(a.items.getName(itemName))}`
+                die : `d${SkillCheck.rankToDie(a.items.getName(itemName))}`
             }
         })
         return assisters.filter(a => a.rank > 5)

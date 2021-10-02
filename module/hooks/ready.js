@@ -1,10 +1,10 @@
 export default function () {
 
     Hooks.on("ready", () => {
-        CONFIG.ChatMessage.documentClass.prototype.getTest = function () {
+        CONFIG.ChatMessage.documentClass.prototype.getCheck = function () {
             let rollData = this.getFlag("pillars-of-eternity", "rollData")
             if (rollData)
-                return game.pillars.rollClass.SkillTest.recreate(rollData)
+                return game.pillars.rollClass.SkillCheck.recreate(rollData)
         }
 
 

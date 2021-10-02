@@ -1,10 +1,10 @@
-export default class SkillTest
+export default class SkillCheck
 {
         constructor(data) {
             if (!data)
                 return 
             this.data = {
-                testData : {
+                checkData : {
                     title : data.title,
                     modifier : data.modifier,
                     steps : data.steps,
@@ -25,24 +25,24 @@ export default class SkillTest
     
         static recreate(data)
         {
-            let test = new game.pillars.rollClass[data.context.rollClass]()
-            test.data = data;
-            return test
+            let check = new game.pillars.rollClass[data.context.rollClass]()
+            check.data = data;
+            return check
         }
     
         getTerms() 
         {
             let terms = []
 
-            if(this.testData.state == "normal")
+            if(this.checkData.state == "normal")
             {
                 terms.push(new Die({number : 2, faces : 10, modifiers : ["xp"]}))
             }
             else 
             {
                 let modifier = ""
-                if (this.testData.state == "adv") modifier = "kh"
-                else if (this.testData.state == "dis") modifier = "kl"
+                if (this.checkData.state == "adv") modifier = "kh"
+                else if (this.checkData.state == "dis") modifier = "kl"
 
                 terms.push(new PoolTerm({terms : ["2d10xp", "1d20"], modifiers : [modifier] }))
             }
@@ -55,28 +55,28 @@ export default class SkillTest
                 terms.push(new Die(assisterDie))
             }
 
-            if (this.testData.modifier)
+            if (this.checkData.modifier)
             {
                 terms.push(new OperatorTerm({operator : "+"}))
-                terms = terms.concat(Roll.parse(this.testData.modifier))
+                terms = terms.concat(Roll.parse(this.checkData.modifier))
             }
 
-            if (this.testData.steps)
+            if (this.checkData.steps)
             {
-                if (this.testData.steps > 0)
+                if (this.checkData.steps > 0)
                     terms.push(new OperatorTerm({operator : "+"}))
-                else if (this.testData.steps < 0)
+                else if (this.checkData.steps < 0)
                     terms.push(new OperatorTerm({operator : "-"}))
 
-                terms.push(new Die(game.pillars.utility.stepsToDice(this.testData.steps)))
+                terms.push(new Die(game.pillars.utility.stepsToDice(this.checkData.steps)))
             }
 
-            if (!this.testData.proxy && this.skill)
+            if (!this.checkData.proxy && this.skill)
             {
                 terms.push(new OperatorTerm({operator : "+"}))
                 terms.push(new NumericTerm({number : this.skill.rank}))
             }
-            else if (this.testData.proxy)
+            else if (this.checkData.proxy)
             {
                 terms.push(new OperatorTerm({operator : "+"}))
                 terms.push(new Die(this.proxyDie()))
@@ -86,14 +86,14 @@ export default class SkillTest
 
         }
     
-        async rollTest() {
+        async rollCheck() {
             
             let terms = this.getTerms()
             this.roll = Roll.fromTerms(terms)
             await this.roll.evaluate({async:true})  
 
             if (this.actor.type == "character")
-                this.actor.use("skill", this.testData.skillName)
+                this.actor.use("skill", this.checkData.skillName)
             this.data.result = this.roll.toJSON()
             game.user.updateTokenTargets([])
         }
@@ -109,25 +109,7 @@ export default class SkillTest
     
         async sendToChat()
         {
-            // const html = await renderTemplate("systems/pillars-of-eternity/template/chat/roll.html", this);
-            // let chatData = {
-            //     user: game.user.id,
-            //     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-            //     roll: this.roll,
-            //     rollMode: game.settings.get("core", "rollMode"),
-            //     content: html,
-            //     flags: {
-            //         "pillars-of-eternity.rollData" : this.data
-            //     }
-            // };
-            // if (["gmroll", "blindroll"].includes(chatData.rollMode)) {
-            //     chatData.whisper = ChatMessage.getWhisperRecipients("GM");
-            // } else if (chatData.rollMode === "selfroll") {
-            //     chatData.whisper = [game.user];
-            // }
-            // ChatMessage.create(chatData);
-
-            this.roll.toMessage({flavor: this.testData.title, speaker : ChatMessage.getSpeaker({actor : this.actor}), flags : {"pillars-of-eternity.rollData" : this.data}})
+            this.roll.toMessage({flavor: this.checkData.title, speaker : ChatMessage.getSpeaker({actor : this.actor}), flags : {"pillars-of-eternity.rollData" : this.data}})
         }
 
         static rankToDie(skill) {
@@ -141,18 +123,18 @@ export default class SkillTest
         }
 
         proxyDie() {
-            return {number : 1, faces : SkillTest.rankToDie(this.skill)}
+            return {number : 1, faces : SkillCheck.rankToDie(this.skill)}
         }
 
         assisterDie() {
-            if (this.testData.assister)
-                return {number : 1, faces : SkillTest.rankToDie(this.assister.items.getName(this.skill.name)), options : {appearance : this.assistDieAppearance()}}
+            if (this.checkData.assister)
+                return {number : 1, faces : SkillCheck.rankToDie(this.assister.items.getName(this.skill.name)), options : {appearance : this.assistDieAppearance()}}
             else return ""
         }
 
         assisterDieString() {
-            if (this.testData.assister)
-                return `d${SkillTest.rankToDie(this.assister.items.getName(this.skill.name))}`
+            if (this.checkData.assister)
+                return `d${SkillCheck.rankToDie(this.assister.items.getName(this.skill.name))}`
             else return ""
         }
 
@@ -162,7 +144,7 @@ export default class SkillTest
         }
         
     
-        get testData() { return this.data.testData }
+        get checkData() { return this.data.checkData }
         get context() { return this.data.context}
         get result() { return this.data.result}
     
@@ -171,11 +153,11 @@ export default class SkillTest
         }
     
         get assister() {
-            return game.actors.get(this.testData.assister)
+            return game.actors.get(this.checkData.assister)
         }
 
         get assisterUser() {
-            let actor = game.actors.get(this.testData.assister)
+            let actor = game.actors.get(this.checkData.assister)
             if (actor)
                 return game.users.find(i => i.character?.id == actor.id)
         }
@@ -185,6 +167,6 @@ export default class SkillTest
         }
 
         get skill() {
-            return this.actor.items.get(this.testData.skillId)
+            return this.actor.items.get(this.checkData.skillId)
         }
 }

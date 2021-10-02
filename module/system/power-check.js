@@ -1,18 +1,18 @@
-import SkillTest from "./skill-test.js"
+import SkillCheck from "./skill-check.js"
 
-export default class PowerTest extends SkillTest
+export default class PowerCheck extends SkillCheck
 {
         constructor(data) {
             super(data)
             if (!data)
                 return 
-            this.data.testData.sourceId = data.sourceId
-            this.data.testData.itemId = data.itemId
+            this.data.checkData.sourceId = data.sourceId
+            this.data.checkData.itemId = data.itemId
 
         }   
 
 
-        async rollTest() {
+        async rollCheck() {
             
             let terms = this.getTerms()
             this.roll = Roll.fromTerms(terms)
@@ -24,7 +24,7 @@ export default class PowerTest extends SkillTest
 
         get item()
         {
-            return this.actor.items.get(this.testData.itemId)
+            return this.actor.items.get(this.checkData.itemId)
         }
 
         get power() {
@@ -32,6 +32,6 @@ export default class PowerTest extends SkillTest
         }
 
         get powerSource() {
-            return this.actor.items.get(this.testData.sourceId)
+            return this.actor.items.get(this.checkData.sourceId)
         }
 }

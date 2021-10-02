@@ -1,10 +1,10 @@
 export default class DamageDialog extends Application
 {
-    constructor(item, test, targets)
+    constructor(item, check, targets)
     {
         super();
         this.item = item;
-        this.test = test;
+        this.check = check;
         this.targets = targets
         this.additionalDamages = 0
         this.damages = this.constructDamages()
@@ -45,14 +45,14 @@ export default class DamageDialog extends Application
 
     calculateCritDice()
     {
-        if (!this.test)
+        if (!this.check)
             return false
 
         try {
             for (let damage of this.damages.filter(d => d.target))
             {
                 let defense = damage.defense.toLowerCase() || "deflection"
-                let margin = this.test.result.total - damage.target.actor.defenses[defense].value
+                let margin = this.check.result.total - damage.target.actor.defenses[defense].value
                 let multiplier = Math.floor(margin / 5)
                 damage.mult = multiplier    
             }

@@ -1,7 +1,7 @@
 import PowerTemplate from "../system/power-template.js";
-import SkillTest from "../system/skill-test.js";
-import WeaponTest from "../system/weapon-test.js";
-import PowerTest from "../system/power-test.js";
+import SkillCheck from "../system/skill-check.js";
+import WeaponCheck from "../system/weapon-check.js";
+import PowerCheck from "../system/power-check.js";
 import AgingRoll from "../system/aging-roll.js";
 
 /**
@@ -614,7 +614,7 @@ export class PillarsActorSheet extends ActorSheet {
             buttons : {
                 adv : {
                     label : "Advantaged",
-                    callback : () => {this.actor.rollInitiative({createCombatants: true, rerollInitiative : true, initiativeOptions : {formula : "{2d10, 1d20}kh + (1d12 / 100) + @initiative.value"}})}
+                    callback : () => {this.actor.rollInitiative({createCombatants: true, rerollInitiative : true, initiativeOptions : {formula : "{2d10, 1d20}kh[Initiative] + (1d12[Tiebreaker] / 100) + @initiative.value"}})}
                 },
                 normal : {
                     label : "Normal",
@@ -622,7 +622,7 @@ export class PillarsActorSheet extends ActorSheet {
                 },
                 dis : {
                     label : "Disadvantaged",
-                    callback : () => {this.actor.rollInitiative({createCombatants: true, rerollInitiative : true, initiativeOptions : {formula : "{2d10, 1d20}kl + (1d12 / 100) + @initiative.value"}})}
+                    callback : () => {this.actor.rollInitiative({createCombatants: true, rerollInitiative : true, initiativeOptions : {formula : "{2d10, 1d20}kl[Initiative] + (1d12[Tiebreaker] / 100) + @initiative.value"}})}
                 }
             },
             default : "normal"
@@ -633,10 +633,10 @@ export class PillarsActorSheet extends ActorSheet {
 
     async _onSkillRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let testData = await this.actor.setupSkillTest(this.actor.items.get(itemId))
-        let test = new SkillTest(testData)
-        await test.rollTest();
-        test.sendToChat()
+        let checkData = await this.actor.setupSkillCheck(this.actor.items.get(itemId))
+        let check = new SkillCheck(checkData)
+        await check.rollCheck();
+        check.sendToChat()
     }
 
     async _onUntrainedSkillClick(event) {
@@ -657,10 +657,10 @@ export class PillarsActorSheet extends ActorSheet {
                         let skill = dlg.find("[name='skill']")[0].value
                         if (skill)
                         {
-                            let testData = await this.actor.setupSkillTest(skill)
-                            let test = new SkillTest(testData)
-                            await test.rollTest();
-                            test.sendToChat()
+                            let checkData = await this.actor.setupSkillCheck(skill)
+                            let check = new SkillCheck(checkData)
+                            await check.rollCheck();
+                            check.sendToChat()
                         }
                         else
                             ui.notifications.error("Please enter a skill name")
@@ -677,18 +677,18 @@ export class PillarsActorSheet extends ActorSheet {
 
     async _onWeaponRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let testData = await this.actor.setupWeaponTest(itemId)
-        let test = new WeaponTest(testData)
-        await test.rollTest();
-        test.sendToChat()
+        let checkData = await this.actor.setupWeaponCheck(itemId)
+        let check = new WeaponCheck(checkData)
+        await check.rollCheck();
+        check.sendToChat()
     }
 
     async _onPowerRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let testData = await this.actor.setupPowerTest(itemId)
-        let test = new PowerTest(testData)
-        await test.rollTest();
-        test.sendToChat()
+        let checkData = await this.actor.setupPowerCheck(itemId)
+        let check = new PowerCheck(checkData)
+        await check.rollCheck();
+        check.sendToChat()
     }
 
     async _onItemSkillClick(event) {
@@ -697,16 +697,16 @@ export class PillarsActorSheet extends ActorSheet {
         let skill = this.actor.items.getName(item.skill.value)
         if (!skill)
             return ui.notifications.warn(`Could not find skill ${item.skill.value}`)
-        let testData = await this.actor.setupSkillTest(skill)
-        let test = new SkillTest(testData)
-        await test.rollTest()
-        test.sendToChat()
+        let checkData = await this.actor.setupSkillCheck(skill)
+        let check = new SkillCheck(checkData)
+        await check.rollCheck()
+        check.sendToChat()
     }
 
     async _onAgeRoll(event) {
-        let testData = await this.actor.setupAgingRoll()
-        let test = new AgingRoll(testData)
-        await test.rollTest();
-        test.sendToChat()
+        let checkData = await this.actor.setupAgingRoll()
+        let check = new AgingRoll(checkData)
+        await check.rollCheck();
+        check.sendToChat()
     }
 }

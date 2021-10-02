@@ -1,17 +1,17 @@
-import SkillTest from "./skill-test.js"
+import SkillCheck from "./skill-check.js"
 
-export default class WeaponTest extends SkillTest
+export default class WeaponCheck extends SkillCheck
 {
         constructor(data) {
             super(data)
             if (!data)
                 return 
-            this.data.testData.itemId = data.itemId
+            this.data.checkData.itemId = data.itemId
         }   
 
         get item()
         {
-            return this.actor.items.get(this.testData.itemId)
+            return this.actor.items.get(this.checkData.itemId)
         }
 
         get weapon() {

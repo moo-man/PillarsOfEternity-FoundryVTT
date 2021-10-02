@@ -20,7 +20,7 @@
   ],
   "gridDistance": 5,
   "gridUnits": "ft",
-  "initiative": "2d10 + (1d12 / 100) + @initiative.value",
+  "initiative": "2d10[Initiative] + (1d12[Tiebreaker] / 100) + @initiative.value",
   "background" : "",
   "url": "",
   "manifest": "https://raw.githubusercontent.com/moo-man/PillarsOfEternity-FoundryVTT/master/system.json",

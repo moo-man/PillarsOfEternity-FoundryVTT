@@ -19,7 +19,7 @@ export default class AgingDialog extends Dialog {
                 buttons : {
                     roll : {
                         label : "Roll",
-                        callback : (html, test) => {
+                        callback : (html, check) => {
                             let data = {}
                             data.modifier = html.find("input[name='modifier']").val()
                             data.lifestyle = html.find("select[name='lifestyle']").val()

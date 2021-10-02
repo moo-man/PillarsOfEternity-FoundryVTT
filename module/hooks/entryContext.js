@@ -4,13 +4,13 @@ export default function () {
 
 
  function addChatMessageContextOptions (html, options) {
-   let isTest = li => {
+   let isCheck = li => {
      const message = game.messages.get(li.data("messageId"));
-     return message?.getTest()
+     return message?.getCheck()
    }
     let isRoll = li => {
       const message = game.messages.get(li.data("messageId"));
-      return message?.isRoll && !message?.getTest() && message?.isContentVisible && canvas.tokens?.controlled.length;
+      return message?.isRoll && !message?.getCheck() && message?.isContentVisible && canvas.tokens?.controlled.length;
     };
     console.log(isRoll)
     options.push(
@@ -41,8 +41,8 @@ export default function () {
       {
         name: game.i18n.localize("Roll Damage"),
         icon: '<i class="fas fa-user-minus"></i>',
-        condition: isTest,
-        callback: li => rollTestDamage(li)
+        condition: isCheck,
+        callback: li => rollCheckDamage(li)
       }
     );
     return options;
@@ -67,9 +67,9 @@ export default function () {
     }));
   }
 
-  function rollTestDamage(li)
+  function rollCheckDamage(li)
   {
     const message = game.messages.get(li.data("messageId"));
-    let test = message.getTest();
-    new game.pillars.apps.DamageDialog(test.item, test, Array.from(game.user.targets)).render(true)
+    let check = message.getCheck();
+    new game.pillars.apps.DamageDialog(check.item, check, Array.from(game.user.targets)).render(true)
   }

@@ -5,7 +5,8 @@
   overflow: hidden
 }
   .pillars-of-eternity.item.sheet .content{
-  height: 70%
+  height: calc(100% - 145px);
+  overflow-y: auto
 }
 
 .pillars-of-eternity.item.sheet .item-header {

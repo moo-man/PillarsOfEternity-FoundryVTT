@@ -17,15 +17,15 @@ import PowerTemplate from "./module/system/power-template.js";
 import BookOfSeasons from "./module/apps/book-of-seasons.js"
 import RollDialog from "./module/apps/roll-dialog.js";
 import PillarsExplode from "./module/system/explode.js";
-import SkillTest from "./module/system/skill-test.js";
+import SkillCheck from "./module/system/skill-check.js";
 import PillarsCombatTracker from "./module/apps/combat-tracker.js";
 import PillarsActiveEffect from "./module/system/pillars-effect.js";
 import PillarsEffectConfig from "./module/apps/effect-config.js";
 import Migration from "./module/system/migrations.js";
 import ActorConfigure from "./module/apps/actor-configure.js"
 import DamageDialog from "./module/apps/damage-dialog.js";
-import WeaponTest from "./module/system/weapon-test.js";
-import PowerTest from "./module/system/power-test.js";
+import WeaponCheck from "./module/system/weapon-check.js";
+import PowerCheck from "./module/system/power-check.js";
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -55,9 +55,9 @@ Hooks.on("init", () => {
       DamageDialog : DamageDialog
     },
     rollClass : {
-      SkillTest,
-      WeaponTest,
-      PowerTest,
+      SkillCheck,
+      WeaponCheck,
+      PowerCheck,
     },
     migration : Migration,
     utility: PILLARS_UTILITY,

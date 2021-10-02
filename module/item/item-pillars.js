@@ -68,7 +68,7 @@ export class PillarsItem extends Item {
             pl += values.powerExclusions[this.exclusion.value]
             pl += this.base.cost || 0
             this.data.data.pl = pl
-            this.level.value = PillarsItem._abstractToLevel(pl)
+            this.level.value = PillarsItem._abstractToLevel(pl) + (this.level.modifier || 0)
         }
         catch(e) 
         {   
