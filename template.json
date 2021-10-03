@@ -1,482 +1,489 @@
 {
-  "Actor": {
-    "types": [
-      "character",
-      "creature",
-      "follower",
-      "headquarters"
-    ],
-    "templates": {
-      "defenses": {
-        "defenses": {
-          "deflection": {
-            "value": 10,
-            "bonus": 0,
-            "penalty": 0,
-            "checked" : false
-          },
-          "fortitude": {
-            "value": 10,
-            "bonus": 0,
-            "penalty": 0,
-            "checked" : false
-          },
-          "reflexes": {
-            "value": 10,
-            "bonus": 0,
-            "penalty": 0,
-            "checked" : false
-          },
-          "will": {
-            "value": 10,
-            "bonus": 0,
-            "penalty": 0,
-            "checked" : false
-          }
+    "Actor": {
+        "types": [
+            "character",
+            "creature",
+            "follower",
+            "headquarters"
+        ],
+        "templates": {
+            "defenses": {
+                "defenses": {
+                    "deflection": {
+                        "value": 10,
+                        "bonus": 0,
+                        "penalty": 0,
+                        "checked": false
+                    },
+                    "fortitude": {
+                        "value": 10,
+                        "bonus": 0,
+                        "penalty": 0,
+                        "checked": false
+                    },
+                    "reflexes": {
+                        "value": 10,
+                        "bonus": 0,
+                        "penalty": 0,
+                        "checked": false
+                    },
+                    "will": {
+                        "value": 10,
+                        "bonus": 0,
+                        "penalty": 0,
+                        "checked": false
+                    }
+                }
+            },
+            "health": {
+                "health": {
+                    "max": 36,
+                    "value": 36,
+                    "bloodiedThreshold": 0,
+                    "threshold": {
+                        "light": 0,
+                        "heavy": 0
+                    },
+                    "wounds": {
+                        "light": 0,
+                        "heavy": 0,
+                        "severe": 0,
+                        "injury": ""
+                    }
+                }
+            },
+            "endurance": {
+                "endurance": {
+                    "max": 36,
+                    "value": 36,
+                    "windedThreshold": 0,
+                    "exert": 0
+                }
+            },
+            "size": {
+                "size": {
+                    "value": 0
+                }
+            },
+            "stride": {
+                "stride": {
+                    "value": 0
+                }
+            },
+            "initiative": {
+                "initiative": {
+                    "value": 0
+                }
+            },
+            "description": {
+                "description": {
+                    "value": "",
+                    "gm": ""
+                }
+            },
+            "tier": {
+                "tier": {
+                    "value": ""
+                }
+            },
+            "wealth": {
+                "wealth": {
+                    "cp": 0
+                }
+            },
+            "notes": {
+                "notes": {
+                    "value": ""
+                }
+            }
+        },
+        "character": {
+            "templates": [
+                "defenses",
+                "health",
+                "endurance",
+                "species",
+                "tier",
+                "size",
+                "initiative",
+                "stride",
+                "notes"
+            ],
+            "life": {
+                "age": 0,
+                "apparentAge": 0,
+                "phase": "",
+                "agingPoints": 0,
+                "march": 0
+            },
+            "details": {
+                "cause": "",
+                "call": "",
+                "goal": "",
+                "relationships": "",
+                "culture": "",
+                "species": "",
+                "stock": "",
+                "godlike": ""
+            },
+            "knownConnections": {
+                "value": []
+            },
+            "childhood": {
+                "value": ""
+            },
+            "seasons": [
+                {
+                    "year": 0,
+                    "spring": "",
+                    "summer": "",
+                    "autumn": "",
+                    "winter": "",
+                    "aging": ""
+                }
+            ]
+        },
+        "npc": {
+            "templates": []
         }
-      },
-      "health": {
-        "health": {
-          "max": 36,
-          "value": 36,
-          "bloodiedThreshold" : 0,
-          "threshold" : {"light" : 0, "heavy" : 0},
-          "wounds": {
-            "light": 0,
-            "heavy": 0,
-            "severe": 0,
-            "injury" : ""
-          }
-        }
-      },
-      "endurance": {
-        "endurance": {
-          "max": 36,
-          "value": 36,
-          "windedThreshold": 0,
-          "exert" : 0
-        }
-      },
-      "size": {
-        "size": {
-          "value": 0
-        }
-      },
-      "stride": {
-        "stride": {
-          "value": 0
-        }
-      },
-      "initiative": {
-        "initiative": {
-          "value": 0
-        }
-      },
-      "description": {
-        "description": {
-          "value": "",
-          "gm": ""
-        }
-      },
-      "tier" : {
-        "tier" : {
-          "value" : ""
-        }
-      },
-      "wealth": {
-        "wealth": {
-          "cp": 0
-        }
-      },
-      "notes" : {
-        "notes" : {
-          "value" : ""
-        }
-      }
     },
-    "character": {
-      "templates": [
-        "defenses",
-        "health",
-        "endurance",
-        "species",
-        "tier",
-        "size",
-        "initiative",
-        "stride",
-        "notes"
-      ],
-      "life": {
-        "age": 0,
-        "apparentAge" : 0,
-        "phase": "",
-        "agingPoints": 0,
-        "march": 0
-      },
-      "details": {
-        "cause": "",
-        "call" : "",
-        "goal" : "",
-        "relationships" : "",
-        "culture" : "",
-        "species" : "",
-        "stock" : "",
-        "godlike" : ""
-      },
-      "knownConnections": {
-        "value": []
-      },
-      "childhood": {
-        "value": ""
-      },
-      "seasons" : [{
-        "year" : 0,
-        "spring" : "",
-        "summer" : "",
-        "autumn" : "",
-        "winter" : "",
-        "aging" : ""
-      }]
-    },
-    "npc": {
-      "templates": []
-    }
-  },
-  "Item": {
-    "types": [
-      "attribute",
-      "skill",
-      "trait",
-      "power",
-      "powerSource",
-      "weapon",
-      "armor",
-      "shield",
-      "equipment",
-      "connection",
-      "culture",
-      "background",
-      "setting",
-      "species",
-      "stock",
-      "godlike",
-      "reputation"
-    ],
-    "templates": {
-      "category": {
-        "category": {
-          "value": ""
-        }
-      },
-      "description": {
-        "description": {
-          "value": "",
-          "gm" : ""
-        }
-      },
-      "rank": {
-        "rank": {
-          "value": 0
-        }
-      },
-      "xp": {
-        "xp": {
-          "value": 0,
-          "rank" : 0
-        }
-      },
-      "physical": {
-        "cost": {
-          "value": 0
-        },
-        "weight": {
-          "value": 0
-        },
-        "quantity": {
-          "value": 1
-        }
-      },
-        "used": {
-          "used": {
-            "value": false
-          }
-      },
-      "equipped" : {
-        "equipped" : {
-          "value" : false
-        }
-      }
-    },
-      "skill": {
-        "templates": [
-          "description",
-          "category",
-          "xp",
-          "used"
+    "Item": {
+        "types": [
+            "attribute",
+            "skill",
+            "trait",
+            "power",
+            "powerSource",
+            "weapon",
+            "armor",
+            "shield",
+            "equipment",
+            "connection",
+            "culture",
+            "background",
+            "setting",
+            "species",
+            "stock",
+            "godlike",
+            "reputation"
         ],
-        "specialization": {
-          "value": "",
-          "has": false
-        },
-        "requires": {
-          "value": []
-        },
-        "modifier": {
-          "value": 0
-        }
-      },
-      "trait": {
-        "templates": [
-          "description",
-          "category",
-          "used"
-        ],
-        "category": {
-          "value": "adventure"
-        }
-      },
-      "power": {
-        "templates": [
-          "description",
-          "category"
-        ],
-        "level": {
-          "value": 0,
-          "modifier" : 0
-        },
-        "source": {
-          "value": ""
-        },
-        "base": {
-          "value": [],
-          "cost" : 0,
-          "ritual": false
-        },
-        "damage" : {
-         "value" :  []
-        },
-        "range": {
-          "value": "none",
-          "ritual": false
-        },
-        "target": {
-          "value": "target",
-          "subtype": "self",
-          "targeted" : false,
-          "ritual": false
-        },
-        "duration": {
-          "value": "momentary",
-          "ritual": false
-        },
-        "speed": {
-          "value": "slow",
-          "ritual": false
-        },
-        "exclusion": {
-          "value": "none"
-        },
-        "limitations": {
-          "value": ""
-        }
-      },
-      "powerSource": {
-        "templates": [
-          "description",
-          "category"
-        ],
-        "category": {
-          "value": "personal"
-        },
-        "source" : {
-          "value" : ""
-        },
-        "xp": {
-          "value": 0,
-          "level": 0
-        },
-        "pool": {
-          "max": 0,
-          "current": 0
-        }
-      },
-      "weapon": {
-        "templates": [
-          "description",
-          "category",
-          "physical",
-          "equipped"
-        ],
-        "skill" : {
-          "value" : ""
-        },
-        "accuracy" : {
-          "value" : null
-        },
-        "misc" : {
-          "value" : null
-        },
-        "damage" : {
-          "value" :  []
-         },
-        "special": {
-          "value": []
-        },
-        "range": {
-          "value": ""
-        }
-      },
-      "armor": {
-        "templates": [
-          "description",
-          "category",
-          "physical",
-          "equipped"
-        ],
-        "soak": {
-          "value": 0
-        },
-        "winded": {
-          "value": 0
-        },
-        "initiative": {
-          "value": 0
-        }
-      },
-      "shield": {
-        "templates": [
-          "description",
-          "physical",
-          "used",
-          "equipped"
-        ],
-        "soak": {
-          "value": 0
-        },
-        "health": {
-          "max": 0,
-          "current": 0
-        },
-        "winded": {
-          "value": 0
-        },
-        "deflection": {
-          "value": 0
-        }
-      },
-      "equipment": {
-        "templates": [
-          "description",
-          "category",
-          "physical",
-          "equipped"
-        ],
-        "category": {
-          "value": "gear"
+        "templates": {
+            "category": {
+                "category": {
+                    "value": ""
+                }
+            },
+            "description": {
+                "description": {
+                    "value": "",
+                    "gm": ""
+                }
+            },
+            "rank": {
+                "rank": {
+                    "value": 0
+                }
+            },
+            "xp": {
+                "xp": {
+                    "value": 0,
+                    "rank": 0
+                }
+            },
+            "physical": {
+                "cost": {
+                    "value": 0
+                },
+                "weight": {
+                    "value": 0
+                },
+                "quantity": {
+                    "value": 1
+                }
+            },
+            "used": {
+                "used": {
+                    "value": false
+                }
+            },
+            "equipped": {
+                "equipped": {
+                    "value": false
+                }
+            }
         },
         "skill": {
-          "value": "",
-          "suitability": "none"
+            "templates": [
+                "description",
+                "category",
+                "xp",
+                "used"
+            ],
+            "specialization": {
+                "value": "",
+                "has": false
+            },
+            "requires": {
+                "value": []
+            },
+            "modifier": {
+                "value": 0
+            }
         },
-        "wearable" : {
-          "value" : false
-        }
-
-      },
-      "connection": {
-        "templates" : [
-          "descirption",
-          "xp"
-        ],
-        "group" : {
-          "value" : ""
+        "trait": {
+            "templates": [
+                "description",
+                "category",
+                "used"
+            ],
+            "category": {
+                "value": "adventure"
+            }
         },
-        "modifier": {
-          "value": 0
+        "power": {
+            "templates": [
+                "description",
+                "category"
+            ],
+            "level": {
+                "value": 0,
+                "modifier": 0
+            },
+            "source": {
+                "value": ""
+            },
+            "base": {
+                "value": [],
+                "cost": 0,
+                "ritual": false
+            },
+            "damage": {
+                "value": []
+            },
+            "range": {
+                "value": "none",
+                "ritual": false
+            },
+            "target": {
+                "value": "target",
+                "subtype": "self",
+                "targeted": false,
+                "ritual": false
+            },
+            "duration": {
+                "value": "momentary",
+                "ritual": false
+            },
+            "speed": {
+                "value": "slow",
+                "ritual": false
+            },
+            "exclusion": {
+                "value": "none"
+            },
+            "limitations": {
+                "value": ""
+            }
+        },
+        "powerSource": {
+            "templates": [
+                "description",
+                "category"
+            ],
+            "category": {
+                "value": "personal"
+            },
+            "source": {
+                "value": ""
+            },
+            "xp": {
+                "value": 0,
+                "level": 0
+            },
+            "pool": {
+                "max": 0,
+                "current": 0
+            }
+        },
+        "weapon": {
+            "templates": [
+                "description",
+                "category",
+                "physical",
+                "equipped"
+            ],
+            "skill": {
+                "value": ""
+            },
+            "accuracy": {
+                "value": null
+            },
+            "misc": {
+                "value": null
+            },
+            "damage": {
+                "value": []
+            },
+            "special": {
+                "value": []
+            },
+            "range": {
+                "value": ""
+            }
+        },
+        "armor": {
+            "templates": [
+                "description",
+                "category",
+                "physical",
+                "equipped"
+            ],
+            "soak": {
+                "value": 0
+            },
+            "winded": {
+                "value": 0
+            },
+            "initiative": {
+                "value": 0
+            }
+        },
+        "shield": {
+            "templates": [
+                "description",
+                "physical",
+                "used",
+                "equipped"
+            ],
+            "soak": {
+                "value": 0
+            },
+            "health": {
+                "max": 0,
+                "current": 0
+            },
+            "winded": {
+                "value": 0
+            },
+            "deflection": {
+                "value": 0
+            }
+        },
+        "equipment": {
+            "templates": [
+                "description",
+                "category",
+                "physical",
+                "equipped"
+            ],
+            "category": {
+                "value": "gear"
+            },
+            "skill": {
+                "value": "",
+                "suitability": "none"
+            },
+            "wearable": {
+                "value": false
+            }
+        },
+        "connection": {
+            "templates": [
+                "descirption",
+                "xp"
+            ],
+            "group": {
+                "value": ""
+            },
+            "modifier": {
+                "value": 0
+            }
         }
-      }
-      },
-      "culture": {
+    },
+    "culture": {
         "templates": [
-          "description"
+            "description"
         ],
         "languages": {
-          "native": [],
-          "local": []
+            "native": [],
+            "local": []
         },
         "skills": {
-          "value": []
+            "value": []
         }
-      },
-      "background": {
+    },
+    "background": {
         "templates": [
-          "description"
+            "description"
         ],
         "setting": {
-          "value": "",
-          "id" : ""
+            "value": "",
+            "id": ""
         },
         "skills": {
-          "value": []
+            "value": []
         },
-        "years" : {
-          "value" : 0
+        "years": {
+            "value": 0
         }
-      },
-      "setting": {
+    },
+    "setting": {
         "templates": [
-          "description"
+            "description"
         ],
         "xp": {
-          "free": 0,
-          "connections": 0
+            "free": 0,
+            "connections": 0
         },
         "cp": {
-          "value": 0
+            "value": 0
         },
         "transition": {
-          "value": 0
+            "value": 0
         }
-      },
-      "species": {
+    },
+    "species": {
         "templates": [
-          "description"
+            "description"
         ],
-        "size" : {
-          "value" : 0
+        "size": {
+            "value": 0
         },
-        "stride" : {
-          "value" : 6
+        "stride": {
+            "value": 6
         },
         "species": {
-          "value": ""
+            "value": ""
         }
-      },
-      "stock": {
-        "templates": ["description"]
-      },
-      "godlike": {
-        "templates": ["description"]
-      },
-      "attribute": {
+    },
+    "stock": {
         "templates": [
-          "description"
+            "description"
+        ]
+    },
+    "godlike": {
+        "templates": [
+            "description"
+        ]
+    },
+    "attribute": {
+        "templates": [
+            "description"
         ],
         "category": {
-          "value": "benefit"
+            "value": "benefit"
         }
-      },
-      "reputation" : {
-        "templates" : [
-          "descirption",
-          "xp"
+    },
+    "reputation": {
+        "templates": [
+            "descirption",
+            "xp"
         ],
-        "group" : {
-          "value" : ""
+        "group": {
+            "value": ""
         },
         "modifier": {
-          "value": 0
+            "value": 0
         }
-      }
     }
-  }
+}
