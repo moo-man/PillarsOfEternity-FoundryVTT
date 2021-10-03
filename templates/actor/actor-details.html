@@ -30,14 +30,14 @@
             {{#select data.childhood.value}}
             <option value=""></option>
             {{#each items.settings as |setting s|}}
-            <option value="setting.id">{{setting.name}}</option>
+            <option value="{{setting.id}}" >{{setting.name}}</option>
             {{/each}}
             {{/select}}
         </select>
         <div class="settings">
             <label>Settings: </label>
             {{#each items.settings as |setting s|}}
-            <a class="setting">{{setting.name}},</a>
+            <a class="setting" data-item-id={{setting.id}}>{{setting.name}},</a>
             {{/each}}
         </div>
     </div>

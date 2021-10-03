@@ -345,6 +345,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
         html.find(".age-roll").click(this._onAgeRoll.bind(this))
         html.find(".roll-initiative").click(this._onInitiativeClick.bind(this))
+        html.find(".setting").click(this._onSettingClick.bind(this))
         html.find('.item:not(".tab-select")').each((i, li) => {
             li.setAttribute("draggable", true);
             li.addEventListener("dragstart", this._onDragStart.bind(this), false);
@@ -628,6 +629,14 @@ export class PillarsActorSheet extends ActorSheet {
             default : "normal"
         }).render(true)
 
+      }
+
+      _onSettingClick(ev) 
+      {
+        let itemId = $(event.currentTarget).attr("data-item-id")
+        let item = this.actor.items.get(itemId)
+        if (item)
+            item.sheet.render(true)
       }
     
 
