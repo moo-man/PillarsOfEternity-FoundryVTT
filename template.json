@@ -384,9 +384,17 @@
 
       },
       "connection": {
-        "templates": [
-          "rank"
-        ]
+        "templates" : [
+          "descirption",
+          "xp"
+        ],
+        "group" : {
+          "value" : ""
+        },
+        "modifier": {
+          "value": 0
+        }
+      }
       },
       "culture": {
         "templates": [
@@ -465,6 +473,9 @@
         ],
         "group" : {
           "value" : ""
+        },
+        "modifier": {
+          "value": 0
         }
       }
     }

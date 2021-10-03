@@ -109,6 +109,7 @@
             <h3 class="item-name flexrow">Connection</h3>
             <span class="item-property-column">XP</span>
             <span class="item-property-column">Rank</span>
+            <span class="item-property-column">Mod</span>
             <div class="item-controls">
                 <a class="item-control item-create" title="Create" data-type="connection"><i
                         class="fas fa-plus"></i></a>
@@ -127,9 +128,12 @@
                         </a>
                     </div>
 
-
-                    <span class="item-property-column"><input class="item-property" data-target="" value="{{a}}"></span>
-                    <span class="item-property-column"><input class="item-property" data-target="" value="{{a}}"></span>
+                    <span class="item-property-column"><input type="number" class="item-property"
+                        data-target="data.xp.value" value="{{item.xp.value}}"></span>
+                <span class="item-property-column"><input type="number" class="item-property"
+                        data-target="data.xp.rank" value="{{item.xp.rank}}"></span>
+                <span class="item-property-column"><input type="number" class="item-property"
+                        data-target="data.modifier.value" value="{{item.modifier.value}}"></span>
 
 
                     <div class="item-controls flexrow">
@@ -184,6 +188,8 @@
             <span class="item-property-column flex">Group</span>
             <span class="item-property-column">XP</span>
             <span class="item-property-column">Rank</span>
+            <span class="item-property-column">Mod</span>
+
             <div class="item-controls">
                 <a class="item-control item-create" title="Create" data-type="reputation"><i
                         class="fas fa-plus"></i></a>
@@ -207,6 +213,9 @@
                             data-target="data.xp.value" value="{{item.xp.value}}"></span>
                     <span class="item-property-column"><input type="number" class="item-property"
                             data-target="data.xp.rank" value="{{item.xp.rank}}"></span>
+                    <span class="item-property-column"><input type="number" class="item-property"
+                            data-target="data.modifier.value" value="{{item.modifier.value}}"></span>
+                    
 
 
                     <div class="item-controls flexrow">

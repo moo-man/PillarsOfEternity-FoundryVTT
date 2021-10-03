@@ -417,7 +417,7 @@ export class PillarsActor extends Actor {
 
     constructAssisterList(itemName)
     {
-        let assisters = game.actors.contents.filter(i => i.hasPlayerOwner && i.id != this.id)
+        let assisters = game.actors.contents.filter(i => (i.hasPlayerOwner || i.data.token.disposition > 0) && i.id != this.id)
         assisters = assisters.filter(a => a.items.getName(itemName))
         assisters = assisters.map(a => {
             return {

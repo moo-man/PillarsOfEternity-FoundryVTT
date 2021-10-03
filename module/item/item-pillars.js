@@ -80,6 +80,14 @@ export class PillarsItem extends Item {
         this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier.value
     }
 
+    prepareOwnedReputation() {
+        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier.value
+    }
+
+    prepareOwnedConnection() {
+        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier.value
+    }
+
     prepareOwnedPowerSource() {
         this.xp.level = PILLARS_UTILITY.getPowerSourceLevel(this.xp.value)
         this.data.data.attack = PILLARS_UTILITY.getPowerSourceAttackBonus(this.xp.level)
