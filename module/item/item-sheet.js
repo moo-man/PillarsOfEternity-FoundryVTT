@@ -84,8 +84,34 @@ export class PillarsItemSheet extends ItemSheet {
 
     })
 
-    html.find(".effect-create").click(ev => {
-      return this.item.createEmbeddedDocuments("ActiveEffect", [{label : "New Effect", icon: "icons/svg/aura.svg"}])
+    html.find(".effect-create").click(async ev => {
+
+        let effectData = { label: this.item.name , icon: "icons/svg/aura.svg"}
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/quick-effect.html", effectData)
+        let dialog = new Dialog({
+            title : "Quick Effect",
+            content : html,
+            buttons : {
+                "create" : {
+                    label : "Create",
+                    callback : html => {
+                        let mode = 2
+                        let label = html.find(".label").val()
+                        let key = html.find(".key").val()
+                        let value = parseInt(html.find(".modifier").val())
+                        effectData.label = label
+                        effectData.changes = [{key, mode, value}]
+                        this.item.createEmbeddedDocuments("ActiveEffect", [effectData])
+                    }
+                },
+                "skip" : {
+                    label : "Skip",
+                    callback : () => this.item.createEmbeddedDocuments("ActiveEffect", [effectData])
+                }
+            }
+        })
+        await dialog._render(true)
+        dialog._element.find(".label").select()
     })
     
     html.find(".effect-delete").click(ev => {
