@@ -85,6 +85,11 @@ export default class DamageDialog extends Application
         }
     }
 
+    async close(options) {
+        $(document).off('keydown');
+        return super.close(options);
+      }
+
     activateListeners(html)
     {
         super.activateListeners(html)
