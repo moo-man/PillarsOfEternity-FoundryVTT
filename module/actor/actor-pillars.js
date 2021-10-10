@@ -88,15 +88,25 @@ export class PillarsActor extends Actor {
         data.defenses.will.value = 15
 
 
-        this.data.flags.tooltips.defenses.deflection.push(data.defenses.deflection.value + " (Base)")
-        this.data.flags.tooltips.defenses.reflexes.push(data.defenses.reflexes.value + " (Base)")
-        this.data.flags.tooltips.defenses.fortitude.push(data.defenses.fortitude.value + " (Base)")
-        this.data.flags.tooltips.defenses.will.push(data.defenses.will.value + " (Base)")
+        this.data.flags.tooltips.defenses.deflection.push("10" + " (Base)")
+        this.data.flags.tooltips.defenses.reflexes.push("15" + " (Base)")
+        this.data.flags.tooltips.defenses.fortitude.push("15" + " (Base)")
+        this.data.flags.tooltips.defenses.will.push("15" + " (Base)")
+
+        this.data.flags.tooltips.defenses.deflection.push(-data.size.value * 2 + " (Size)")
+        this.data.flags.tooltips.defenses.reflexes.push(data.size.value * 2 + " (Size)")
+        this.data.flags.tooltips.defenses.fortitude.push(data.size.value * 2 + " (Size)")
 
         data.health.threshold = {light : attributes.light, heavy : attributes.heavy, severe : attributes.severe}
         data.health.max = attributes.maxHealthEndurance
         data.endurance.max = attributes.maxHealthEndurance
         data.health.bloodiedThreshold = data.health.max / 2
+
+        this.data.flags.tooltips.health.max.push("36" + " (Base)")
+        this.data.flags.tooltips.endurance.max.push("36" + " (Base)")
+
+        this.data.flags.tooltips.health.max.push((attributes.maxHealthEndurance - 36) + " (Size)")
+        this.data.flags.tooltips.endurance.max.push((attributes.maxHealthEndurance - 36)  + " (Size)")
 
         data.endurance.windedThreshold = attributes.windedExert
         //data.endurance.exert = attributes.windedExert
@@ -125,8 +135,8 @@ export class PillarsActor extends Actor {
 
         this.health.base = this.health.max
         this.endurance.base = this.endurance.max
-        this.data.flags.tooltips.health.max.push(this.health.base + " (Base)")
-        this.data.flags.tooltips.endurance.max.push(this.endurance.base + " (Base)")
+        // this.data.flags.tooltips.health.max.push(this.health.base + " (Base)")
+        // this.data.flags.tooltips.endurance.max.push(this.endurance.base + " (Base)")
 
         let tierBonus = (game.pillars.config.tierBonus[this.tier.value])
         
@@ -277,7 +287,7 @@ export class PillarsActor extends Actor {
     prepareEffectTooltips() {
         let tooltips = this.data.flags.tooltips
         let tooltipKeys = Object.keys(flattenObject(this.data.flags.tooltips))
-        for (let effect of this.effects)
+        for (let effect of this.effects.filter(e => !e.data.disabled))
         {
             for (let change of effect.data.changes)
             {
