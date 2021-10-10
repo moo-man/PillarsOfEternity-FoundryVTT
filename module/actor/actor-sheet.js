@@ -410,7 +410,7 @@ export class PillarsActorSheet extends ActorSheet {
             effectData["duration.rounds"] = 1;
           }
 
-        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/quick-effect.html")
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/quick-effect.html", effectData)
         let dialog = new Dialog({
             title : "Quick Effect",
             content : html,
