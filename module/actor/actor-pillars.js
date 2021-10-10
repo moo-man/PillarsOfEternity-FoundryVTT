@@ -167,7 +167,7 @@ export class PillarsActor extends Actor {
         this.health.max -= this.woundModifier
         if (this.woundModifier)
             this.data.flags.tooltips.health.max.push(-this.woundModifier + " (Wounds)")
-        this.health.bloodiedThreshold = this.health.max / 2
+        this.health.bloodiedThreshold = this.health.base / 2
 
         this.health.bloodied = this.health.bloodiedThreshold >= this.health.value
         this.endurance.winded = this.endurance.windedThreshold >= this.endurance.value

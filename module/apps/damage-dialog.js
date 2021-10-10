@@ -86,7 +86,7 @@ export default class DamageDialog extends Application
     }
 
     async close(options) {
-        $(document).off('keydown');
+        $(document).off('keydown.damage');
         return super.close(options);
       }
 
@@ -126,6 +126,6 @@ export default class DamageDialog extends Application
         })
 
 
-        $(document).on('keydown', this._onKeyDown.bind(this))
+        $(document).on('keydown.damage', this._onKeyDown.bind(this))
     }
 }

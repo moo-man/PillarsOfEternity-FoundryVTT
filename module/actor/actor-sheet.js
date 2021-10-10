@@ -325,6 +325,7 @@ export class PillarsActorSheet extends ActorSheet {
         //html.find(".wound-square").click(this._onWoundClick.bind(this))
         html.find(".add-wound").click(this._onWoundClick.bind(this))
         html.find(".subtract-wound").click(this._onWoundClick.bind(this))
+        html.find(".item-dropdown.item-control").mousedown(this._onDropdown.bind(this))
         html.find(".item-dropdown h4").mousedown(this._onDropdown.bind(this))
         html.find(".item-dropdown-alt h4").mousedown(this._onDropdownAlt.bind(this))
         html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
