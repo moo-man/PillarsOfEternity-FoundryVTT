@@ -77,15 +77,15 @@ export class PillarsItem extends Item {
     }
 
     prepareOwnedSkill() {
-        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier.value
+        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier?.value
     }
 
     prepareOwnedReputation() {
-        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier.value
+        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier?.value
     }
 
     prepareOwnedConnection() {
-        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier.value
+        this.xp.rank = PILLARS_UTILITY.getSkillRank(this.xp.value) + this.modifier?.value
     }
 
     prepareOwnedPowerSource() {
@@ -198,7 +198,7 @@ export class PillarsItem extends Item {
     get Duration() {return game.pillars.config.powerDurations[this.data.data.duration.value]}
     get Speed() {return game.pillars.config.powerSpeeds[this.data.data.speed.value]}
     get Exclusion() {return game.pillars.config.powerExclusions[this.data.data.exclusion.value]}
-    get Skill() {return this.actor.items.getName(this.skill.value)}
+    get Skill() {return this.actor.getItemTypes("skill").find(i => i.name == this.skill.value)}
 
     get SourceItem() {
         if (!this.isOwned)
