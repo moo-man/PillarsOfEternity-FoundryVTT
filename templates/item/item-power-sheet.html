@@ -42,21 +42,55 @@
                     <input type="text" name="data.base.value" value="{{data.base.value}}" data-dtype="String">
                     <input class="base-effect-cost" type="text" name="data.base.cost" value="{{data.base.cost}}" data-dtype="Number">
                 </div>
+            </div>
 
-                <input type="checkbox" name="data.base.ritual" value="{{data.base.ritual}}"
-                    {{checked data.base.ritual}}>R
+
+            <hr>
+
+            
+            <div class="form-group" data-property="base.effects">
+                <label>Effects <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+                <div class="property-list">
+                    {{#each  item.base.effects as |effect i|}}
+                    <div class="property-inputs" data-index="{{i}}">
+                        <input type="text" data-path="group" class="power-property group" title="Group" value="{{effect.group}}">
+                        <select class="power-property" data-path="value">
+                            {{#select effect.value}}
+                            <option value=""></option>
+                            {{#if ../powerEffects.item}}
+                            <optgroup label="Item">
+                                {{#each ../powerEffects.item as |value k|}}
+                                <option value="{{value.id}}">{{value.label}}</option>
+                                {{/each}}
+                            </optgroup>
+                            {{/if}}
+                            <optgroup label="Conditions">
+                                {{#each ../powerEffects.conditions as |value k|}}
+                                <option value="{{value.id}}">{{value.label}}</option>
+                                {{/each}}
+                            </optgroup>
+                            {{/select}}
+                        </select>
+                        <div class="property-control">
+                            <a class="remove-property"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
             </div>
 
             <hr>
-            <div class="form-group">
-                <label>Damage <a class="add-damage"><i class="fas fa-plus-square"></i></a></label>
-                <div class="damage-list">
-                {{#each item.damage.value as |damage d|}}
-                <div class="damage-inputs" data-index="{{d}}">
-                    <input type="text" class="damage label" placeholder="Label" value="{{damage.label}}">
-                    <input type="text" class="damage base" placeholder="Base" value="{{damage.base}}">
-                    <input type="text" class="damage crit" placeholder="Crit" value="{{damage.crit}}">
-                    <select class="damage type">
+             
+            <div class="form-group" data-property="damage.value">
+                <label>Damage <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+                <div class="property-list">
+                {{#each item.damage.value as |damage i|}}
+                <div class="property-inputs" data-index="{{i}}">
+                    <input type="text" data-path="group" class="power-property group" title="Group" value="{{damage.group}}">
+                    <input type="text" data-path="label" class="power-property" placeholder="Label" value="{{damage.label}}">
+                    <input type="text" data-path="base" class="power-property" placeholder="Base" value="{{damage.base}}">
+                    <input type="text" data-path="crit" class="power-property" placeholder="Crit" value="{{damage.crit}}">
+                    <select data-path="type" class="power-property type">
                         {{#select damage.type}}
                         {{#each (config "damageTypes") as |type t|}}
                         <option value="{{t}}">{{type}}</option>
@@ -64,74 +98,107 @@
                         {{/select}}
                     </select>
                     vs.
-                    <select class="damage defense">
+                    <select data-path="defense" class="power-property">
                         {{#select damage.defense}}
                         {{#each (config "defenses") as |defense def|}}
                         <option value="{{def}}">{{defense}}</option>
                         {{/each}}
                         {{/select}}
                     </select>
-                    <div class="damage-control">
-                        <a class="remove-damage"><i class="fas fa-times"></i></a>
+                    <div class="property-control">
+                        <a class="remove-property"><i class="fas fa-times"></i></a>
                     </div>
                 </div>
                 {{/each}}
                 </div>
             </div>
+
             <hr>
 
-            <div class="form-group">
-                <label>Range</label>
-                <select name="data.range.value">
-                    {{#select data.range.value}}
-                    {{#each (config "powerRanges") as |value k|}}
-                    <option value="{{k}}">{{value}}</option>
-                    {{/each}}
-                    {{/select}}
-                </select>
-                <input type="checkbox" name="data.range.ritual" value="{{data.range.ritual}}"
-                    {{checked data.range.ritual}}>
-                R
-            </div>
-
-            <div class="form-group">
-                <label>Target</label>
-                <div class="form-fields">
-                    <select name="data.target.value">
-                        {{#select data.target.value}}
-                        <option value=""></option>
-                        {{#each (config "powerTargetTypes") as |value k|}}
+            <div class="form-group" data-property="range">
+                <label>Range <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+                <div class="property-list">
+                {{#each item.range as |range i|}}
+                <div class="property-inputs" data-index="{{i}}">
+                    <input type="text" data-path="group" class="power-property group" title="Group" value="{{range.group}}">
+                    <select class="power-property" data-path="value">
+                        {{#select range.value}}
+                        {{#each (config "powerRanges") as |value k|}}
                         <option value="{{k}}">{{value}}</option>
                         {{/each}}
                         {{/select}}
                     </select>
-                    <select name="data.target.subtype">
-                        {{#select data.target.subtype}}
-                        <option value=""></option>
-                        {{#each (config targetSubTypes) as |value k|}}
-                        <option value="{{k}}">{{value}}</option>
-                        {{/each}}
-                        {{/select}}
-                    </select>
+                    <div class="property-control">
+                        <a class="remove-property"><i class="fas fa-times"></i></a>
+                    </div>
                 </div>
-                <input type="checkbox" name="data.target.ritual" value="{{data.target.ritual}}"
-                    {{checked data.target.ritual}}>
-                R
+                {{/each}}
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group" data-property="target">
+                <label>Target <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+                <div class="property-list">
+                    {{#each  item.target as |target i|}}
+                    <div class="property-inputs" data-index="{{i}}">
+                        <input type="text" data-path="group" class="power-property group" title="Group" value="{{target.group}}">
+                        <select class="power-property" data-path="value">
+                            {{#select target.value}}
+                            <option value=""></option>
+                            {{#each (config "powerTargetTypes") as |value k|}}
+                            <option value="{{k}}">{{value}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                        <select class="power-property" data-path="subtype">
+                            {{#select target.subtype}}
+                            <option value=""></option>
+                            {{#each target.subchoices as |value k|}}
+                            <option value="{{k}}">{{value}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                        <select class="power-property" data-path="exclusion">
+                            {{#select target.exclusion}}
+                            {{#each (config "powerExclusions") as |value k|}}
+                            <option value="{{k}}">{{value}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                        <div class="power-property-form-group" title="Targeted">
+                            <label>T</label>
+                            <input type="checkbox" class="power-property-checkbox" data-path="targeted" {{checked target.targeted}}>
+                        </div>
+                        <div class="property-control">
+                            <a class="remove-property"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
             </div>
 
 
-            <div class="form-group">
-                <label>Duration</label>
-                <select name="data.duration.value">
-                    {{#select data.duration.value}}
-                    {{#each (config "powerDurations") as |value k|}}
-                    <option value="{{k}}">{{value}}</option>
+            <div class="form-group" data-property="duration">
+                <label>Duration <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+                <div class="property-list">
+                    {{#each  item.duration as |duration i|}}
+                    <div class="property-inputs" data-index="{{i}}">
+                        <input type="text" data-path="group" class="power-property group" title="Group" value="{{duration.group}}">
+                        <select class="power-property" data-path="value">
+                            {{#select duration.value}}
+                            {{#each (config "powerDurations") as |value k|}}
+                            <option value="{{k}}">{{value}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                        <div class="property-control">
+                            <a class="remove-property"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
                     {{/each}}
-                    {{/select}}
-                </select>
-                <input type="checkbox" name="data.duration.ritual" value="{{data.duration.ritual}}"
-                    {{checked data.duration.ritual}}>
-                R
+                </div>
             </div>
 
             <div class="form-group">
@@ -139,20 +206,6 @@
                 <select name="data.speed.value">
                     {{#select data.speed.value}}
                     {{#each (config "powerSpeeds") as |value k|}}
-                    <option value="{{k}}">{{value}}</option>
-                    {{/each}}
-                    {{/select}}
-                </select>
-                <input type="checkbox" name="data.speed.ritual" value="{{data.speed.ritual}}"
-                    {{checked data.speed.ritual}}>
-                R
-            </div>
-
-            <div class="form-group">
-                <label>Exclusion</label>
-                <select name="data.exclusion.value">
-                    {{#select data.exclusion.value}}
-                    {{#each (config "powerExclusions") as |value k|}}
                     <option value="{{k}}">{{value}}</option>
                     {{/each}}
                     {{/select}}

@@ -435,8 +435,6 @@ export class PillarsActorSheet extends ActorSheet {
         })
         await dialog._render(true)
         dialog._element.find(".label").select()
-
- 
       }
 
     _onEffectEdit(ev)

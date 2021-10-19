@@ -118,27 +118,40 @@
 }
 
 
-.pillars-of-eternity.item.sheet .damage-list {
+.pillars-of-eternity.item.sheet .property-list {
   display:flex;
   flex-direction: column;
-  flex: 5
+  flex: 12
 }
 
-.pillars-of-eternity.item.sheet .damage-list .damage-inputs{
+.pillars-of-eternity.item.sheet .property-list .property-inputs{
   display:flex;
   align-items: center;
 }
 
-.pillars-of-eternity.item.sheet .damage-list .damage-inputs > *{
+.pillars-of-eternity.item.sheet .property-list .property-inputs > *{
   flex : 1;
   margin: 3px
 }
 
-.pillars-of-eternity.item.sheet .damage-list .damage-inputs .damage-control {
+
+.pillars-of-eternity.item.sheet .property-list .property-inputs .group{
+  flex: 0 0 30px;
+  text-align: center;
+}
+
+.pillars-of-eternity.item.sheet .property-list .property-inputs .power-property-form-group {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  flex: unset
+}
+
+.pillars-of-eternity.item.sheet .property-list .property-inputs .property-control {
   flex: 0 0 20px;
 }
 
-.pillars-of-eternity.item.sheet .damage-button{
+.pillars-of-eternity.item.sheet .property-button{
   width: 100%;
   display: flex;
   justify-content: center;

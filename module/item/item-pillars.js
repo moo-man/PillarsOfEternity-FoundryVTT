@@ -55,25 +55,9 @@ export class PillarsItem extends Item {
     }
 
     preparePower() {
-        try 
-        {
-            let pl = 0
-            let values = game.pillars.config.powerLevelValues
-            pl += values.powerRanges[this.range.value] || 0
 
-            let targetSubTypes = values[`power${this.target.value[0].toUpperCase() + this.target.value.slice(1)}s`]
-            pl += targetSubTypes[this.target.subtype] || 0
-            pl += values.powerDurations[this.duration.value]
-            pl += values.powerSpeeds[this.speed.value]
-            pl += values.powerExclusions[this.exclusion.value]
-            pl += this.base.cost || 0
-            this.data.data.pl = pl
-            this.level.value = PillarsItem._abstractToLevel(pl) + (this.level.modifier || 0)
-        }
-        catch(e) 
-        {   
-            console.log(`Could not calculate PL for ${this.name}: ${e}`)
-        }
+        this.groups = this.preparePowerGroups()
+        this.level.value = this.calculatePowerLevel()
     }
 
     prepareOwnedSkill() {
@@ -98,7 +82,6 @@ export class PillarsItem extends Item {
     //#endregion
 
     //#region General Functions
-
     async postToChat()
     {
         let chatData = this.dropdownData();
@@ -152,6 +135,71 @@ export class PillarsItem extends Item {
 
         return level
     }
+
+    //#endregion
+
+
+    //#region Power Functions
+
+    preparePowerGroups() {
+        let groupIds = []
+        groupIds = groupIds.concat(this.target.map(i => i.group).filter(g => !groupIds.includes(g)))
+        groupIds = groupIds.concat(this.range.map(i => i.group).filter(g => !groupIds.includes(g)))
+        groupIds = groupIds.concat(this.duration.map(i => i.group).filter(g => !groupIds.includes(g)))
+        groupIds = groupIds.concat(this.damage.value.map(i => i.group).filter(g => !groupIds.includes(g)))
+        groupIds = groupIds.concat(this.base.effects.map(i => i.group).filter(g => !groupIds.includes(g)))
+        
+        let groups = {};
+        for(let g of groupIds)
+        {
+            if (!g)
+                continue
+
+            groups[g] = {}
+            groups[g].target = this.target.filter(i => i.group == g)
+            groups[g].range = this.range.filter(i => i.group == g)
+            groups[g].duration = this.duration.filter(i => i.group == g)
+            groups[g].damage = this.damage.value.filter(i => i.group == g)
+            groups[g].effects = this.base.effects.filter(i => i.group == g)
+        }
+        return groups
+    }
+
+
+    calculatePowerLevel() {
+        let level = 0
+        try 
+        {
+            let pl = 0
+            let values = game.pillars.config.powerLevelValues
+
+            for (let range of this.range)
+                pl += values.powerRanges[range.value] || 0
+
+            for (let target of this.target)
+            {
+                let targetSubTypes = values[`power${target.value[0].toUpperCase() + target.value.slice(1)}s`]
+                pl += targetSubTypes[target.subtype] || 0
+                pl += values.powerExclusions[target.exclusion]
+            }
+            for (let duration of this.duration)
+                pl += values.powerDurations[duration.value]
+
+            pl += values.powerSpeeds[this.speed.value]
+            pl += this.base.cost || 0
+            this.data.data.pl = pl
+            level = PillarsItem._abstractToLevel(pl) + (this.level.modifier || 0)
+        }
+        catch(e) 
+        {   
+            console.log(`Could not calculate PL for ${this.name}: ${e}`)
+        }
+
+        return level
+        
+    }
+
+
 
     //#endregion
 
@@ -278,4 +326,11 @@ export class PillarsItem extends Item {
 
     //#endregion
 
+    static baseData = {
+        target : {group: "", value: "target", subtype: "self", targeted: false, exclusion : "none"},
+        range : {group: "", value : "none"},
+        duration : {group: "", value : "momentary"},
+        "damage.value" : {group: "", label : "",base : "",crit : "",defense : "deflection",type : "physical"},
+        "base.effects" : {group: "", value : ""}
+      }
 }

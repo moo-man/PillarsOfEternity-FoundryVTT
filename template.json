@@ -253,36 +253,46 @@
                 "value": ""
             },
             "base": {
-                "value": [],
-                "cost": 0,
-                "ritual": false
+                "value": "",
+                "effects" : [],
+                "cost": 0
             },
             "damage": {
                 "value": []
             },
-            "range": {
-                "value": "none",
-                "ritual": false
-            },
-            "target": {
-                "value": "target",
-                "subtype": "self",
-                "targeted": false,
-                "ritual": false
-            },
-            "duration": {
-                "value": "momentary",
-                "ritual": false
-            },
+            "range": [
+                {
+                    "group" : "",
+                    "value" : "none"
+                }
+            ],
+            "target":[
+                {
+                    "group" : "",
+                    "value": "target",
+                    "subtype": "self",
+                    "targeted": false,
+                    "exclusion" : "none"
+                }
+            ],
+            "duration": [
+                {
+                    "group" : "",
+                    "value" : "momentary"
+                }
+            ],
             "speed": {
-                "value": "slow",
-                "ritual": false
-            },
-            "exclusion": {
-                "value": "none"
+                "group" : "",
+                "value": "slow"
             },
             "limitations": {
+                "group" : "",
                 "value": ""
+            },
+            "special" : {
+                "attacksAgainstDefense" : false,
+                "bounce" : false,
+                "jump" : "none"
             }
         },
         "powerSource": {

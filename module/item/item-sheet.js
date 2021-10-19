@@ -1,4 +1,5 @@
 import ItemSpecials from "../apps/item-specials.js";
+import { PillarsItem } from "./item-pillars.js";
 
 /**
  * Extend the basic ItemSheet with for Pillars
@@ -42,9 +43,12 @@ export class PillarsItemSheet extends ItemSheet {
     const data = super.getData();
     data.data = data.item.data._source.data
 
-    if (this.item.type == "power" && this.item.target.value)
+    if (this.item.type == "power" && this.item.target.length)
     {
-      data.targetSubTypes = `power${this.item.target.value[0].toUpperCase() + this.item.target.value.slice(1)}s`
+      this.item.target.forEach(target => target.subchoices = game.pillars.config[`power${target.value[0].toUpperCase() + target.value.slice(1)}s`])
+      data.powerEffects = {conditions : foundry.utils.deepClone(CONFIG.statusEffects)}
+      if (this.item.effects.size)
+        data.powerEffects.item = Array.from(this.item.effects)
     }
 
     if (this.item.type == "weapon" && this.item.isOwned)
@@ -124,36 +128,52 @@ export class PillarsItemSheet extends ItemSheet {
       this.item.effects.get(id).sheet.render(true)
     })
 
-    html.find(".add-damage").click(ev => {
-      let damage = foundry.utils.deepClone(this.item.damage.value)
-      damage.push({
-        label : "",
-        base : "",
-        crit : "",
-        defense : "Deflection",
-        type : "Physical"
-      })
-      return this.item.update({"data.damage.value" : damage})
+
+    html.find(".add-property").click(ev => {
+      let property = $(ev.currentTarget).parents(".form-group").attr("data-property")
+      let data = foundry.utils.deepClone(getProperty(this.item, property))
+      data.push(PillarsItem.baseData[property])
+      return this.item.update({[`data.${property}`] : data})
     })
 
-    html.find(".remove-damage").click(ev => {
-      let index = $(ev.currentTarget).parents(".damage-inputs").attr("data-index")
-      let damage = foundry.utils.deepClone(this.item.damage.value)
-      damage.splice(index, 1)
-      return this.item.update({"data.damage.value" : damage})
+    html.find(".remove-property").click(ev => {
+      let property = $(ev.currentTarget).parents(".form-group").attr("data-property")
+      let index = $(ev.currentTarget).parents(".property-inputs").attr("data-index")
+      let data = foundry.utils.deepClone(getProperty(this.item, property))
+      data.splice(index, 1)
+      return this.item.update({[`data.${property}`] : data})
     })
     
-    html.find(".damage").change(ev => {
+    // html.find(".add-damage").click(ev => {
+    //   let damage = foundry.utils.deepClone(this.item.damage.value)
+    //   damage.push({
+    //     label : "",
+    //     base : "",
+    //     crit : "",
+    //     defense : "Deflection",
+    //     type : "Physical"
+    //   })
+    //   return this.item.update({"data.damage.value" : damage})
+    // })
+
+    // html.find(".remove-damage").click(ev => {
+    //   let index = $(ev.currentTarget).parents(".property-inputs").attr("data-index")
+    //   let damage = foundry.utils.deepClone(this.item.damage.value)
+    //   damage.splice(index, 1)
+    //   return this.item.update({"data.damage.value" : damage})
+    // })
+    
+    html.find(".power-property").change(ev => {
       let el = ev.currentTarget
-      let index = $(el).parents(".damage-inputs").attr("data-index")
-      let target = el.classList[1]
-      let damage = foundry.utils.deepClone(this.item.damage.value)
+      let property = $(el).parents(".form-group").attr("data-property")
+      let index = $(el).parents(".property-inputs").attr("data-index")
+      let data = foundry.utils.deepClone(getProperty(this.item, property))
+      let target = $(ev.currentTarget).attr("data-path")
 
-      damage[index][target] = ev.currentTarget.value
+      data[index][target] = ev.currentTarget.value
 
-      return this.item.update({"data.damage.value" : damage})
+      return this.item.update({[`data.${property}`] : data})
 
     })
-
   }
 }

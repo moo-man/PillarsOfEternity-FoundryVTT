@@ -211,6 +211,12 @@ POE.powerExclusions = {
     "selective": "Selective"
 }
 
+POE.powerJumps = {
+    "jump3" : "3 Hexes",
+    "jump6" : "6 Hexes",
+    "jump9" : "9 Hexes"
+}
+
 
 POE.powerLevelValues = {
     powerRanges :  {
@@ -286,7 +292,14 @@ POE.powerLevelValues = {
         "target": 0.5,
         "single": 1,
         "selective": 2
-    }
+    },
+    powerJumps : {
+        "jump3" : 0.5,
+        "jump6" : 1,
+        "jump9" : 2
+    },
+    bounce : 1,
+    attacksDecreaseDefense : -1.5
 }
 
 POE.powerSources = {
