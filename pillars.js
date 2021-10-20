@@ -26,6 +26,7 @@ import ActorConfigure from "./module/apps/actor-configure.js"
 import DamageDialog from "./module/apps/damage-dialog.js";
 import WeaponCheck from "./module/system/weapon-check.js";
 import PowerCheck from "./module/system/power-check.js";
+import loadHandlebarsPartials from "./module/system/handlebars.js";
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -75,7 +76,8 @@ Hooks.on("init", () => {
         if (typeof POE[group][key] == "string")
           POE[group][key] = game.i18n.localize(POE[group][key])
     }
-  })
+  loadHandlebarsPartials();
+})
 
   // Register all other hooks
   hooks();

@@ -104,7 +104,13 @@ export class PillarsItem extends Item {
     }
 
     dropdownData() {
-        return {text : this.description.value}//this[`_${this.type}DropdownData`]()
+        let data = {text : this.description.value}
+
+        if (this.type=="power")
+            data.groups = this.groups
+        return data
+        
+        //this[`_${this.type}DropdownData`]()
     }
 
     static _abstractToLevel(abstract)
@@ -142,6 +148,7 @@ export class PillarsItem extends Item {
     //#region Power Functions
 
     preparePowerGroups() {
+        let config = game.pillars.config
         let groupIds = []
         groupIds = groupIds.concat(this.target.map(i => i.group).filter(g => !groupIds.includes(g)))
         groupIds = groupIds.concat(this.range.map(i => i.group).filter(g => !groupIds.includes(g)))
@@ -161,8 +168,63 @@ export class PillarsItem extends Item {
             groups[g].duration = this.duration.filter(i => i.group == g)
             groups[g].damage = this.damage.value.filter(i => i.group == g)
             groups[g].effects = this.base.effects.filter(i => i.group == g)
-        }
+            groups[g].healing = this.healing.filter(i => i.group == g)
+
+            groups[g].display = {
+                target : [],
+                range : [],
+                duration : [],
+                damage : [],
+                effects : [],
+                healing: [],
+            }
+
+            groups[g].display.target = groups[g].target.reduce((prev, current, index) => {
+                prev.push(`<a class="power-target" data-group=${g} data-index=${index}>${this.getTargetDisplay(current)}</a>`)
+                return prev
+            },[]).join(", ")
+
+            groups[g].display.range = groups[g].range.reduce((prev, current) => {
+                prev.push(config.powerRanges[current.value])
+                return prev
+            },[]).join(", ")
+
+            groups[g].display.duration = groups[g].duration.reduce((prev, current) => {
+                prev.push(config.powerDurations[current.value])
+                return prev
+            },[]).join(", ")
+
+            groups[g].display.damage = groups[g].damage.reduce((prev, current) => {
+                prev.push(`${current.base} ${config.damageTypes[current.type]} vs. ${config.defenses[current.defense]}`)
+                return prev
+            },[]).join(", ") 
+            
+            groups[g].display.effects = groups[g].effects.reduce((prev, current) => {
+                prev.push(`${CONFIG.statusEffects.find(i => i.id == current.value) ? CONFIG.statusEffects.find(i => i.id == current.value).label : this.effects.get(current.value).label } vs. ${config.defenses[current.defense]}`)
+                return prev 
+            },[]).join(", ")
+            
+            groups[g].display.healing = groups[g].healing.reduce((prev, current) => {
+                prev.push(`${current.value} ${current.type[0].toUpperCase() + current.type.slice(1)}`)
+                return prev 
+            },[]).join(", ")
+            
+            
+            
+            if (groups[g].display.damage)
+                groups[g].display.damage = `<a class='damage-roll' data-group="${g}">${groups[g].display.damage}</a>`
+    }
+
         return groups
+    }
+
+    getTargetDisplay(target)
+    {
+        let targetSubTypes = game.pillars.config[`power${target.value[0].toUpperCase() + target.value.slice(1)}s`]
+        target = targetSubTypes[target.subtype]
+        if (!target)
+            target = game.pillars.config.powerTargetTypes[target.value]
+        return target
     }
 
 
@@ -319,6 +381,7 @@ export class PillarsItem extends Item {
     get source() {return this.data.data.source}
     get base() {return this.data.data.base}
     get level() {return this.data.data.level}
+    get healing() {return this.data.data.healing}
 
     // Processed data getters
     get rank() {return this.xp.rank}
@@ -330,7 +393,8 @@ export class PillarsItem extends Item {
         target : {group: "", value: "target", subtype: "self", targeted: false, exclusion : "none"},
         range : {group: "", value : "none"},
         duration : {group: "", value : "momentary"},
+        healing : {group: "", value : "", type:"health"},
         "damage.value" : {group: "", label : "",base : "",crit : "",defense : "deflection",type : "physical"},
-        "base.effects" : {group: "", value : ""}
+        "base.effects" : {group: "", value : "", defense : ""}
       }
 }

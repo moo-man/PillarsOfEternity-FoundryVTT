@@ -1,11 +1,12 @@
 export default class DamageDialog extends Application
 {
-    constructor(item, check, targets)
+    constructor(item, check, targets, group)
     {
         super();
         this.item = item;
         this.check = check;
         this.targets = targets
+        this.group = group
         this.additionalDamages = 0
         this.damages = this.constructDamages()
     }
@@ -32,7 +33,11 @@ export default class DamageDialog extends Application
 
     constructDamages() {
         let damages = []
-        damages = foundry.utils.deepClone(this.item.damage.value)
+        if (this.group == undefined)
+            damages = foundry.utils.deepClone(this.item.damage.value)
+        else 
+            damages = this.item.damage.value.filter(i => i.group == this.group)
+
         damages.forEach(i => i.mult = 0)
         return damages
     }

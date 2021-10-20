@@ -1,0 +1,48 @@
+<div class="power-group-container">
+    <div>
+        <h3>Group {{groupId}}</h4>
+    </div>
+    <div class="power-group-elements">
+        {{#if group.display.damage}}
+        <div class="group-element">
+            <label>Damage: </label>
+            {{{group.display.damage}}}            
+        </div>
+        {{/if}}
+
+        {{#if group.display.healing}}
+        <div class="group-element">
+            <label>Healing: </label>
+            {{{group.display.healing}}}            
+        </div>
+        {{/if}}
+
+        {{#if group.display.effect}}
+        <div class="group-element">
+            <label>Effects: </label>
+            {{{group.display.effect}}}            
+        </div>
+        {{/if}}
+
+        {{#if group.display.target}}
+        <div class="group-element">
+            <label>Target: </label>
+            {{{group.display.target}}}                
+        </div>
+        {{/if}}
+
+        {{#if group.display.range}}
+        <div class="group-element">
+            <label>Range: </label>
+            {{{group.display.range}}}            
+        </div>
+        {{/if}}
+
+        {{#if group.display.duration}}
+        <div class="group-element">
+            <label>Duration: </label>
+            {{{group.display.duration}}}            
+        </div>
+        {{/if}}
+    </div>
+</div>

@@ -260,6 +260,7 @@
             "damage": {
                 "value": []
             },
+            "healing": [],
             "range": [
                 {
                     "group" : "",

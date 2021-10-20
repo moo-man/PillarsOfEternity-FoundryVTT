@@ -256,7 +256,7 @@ export class PillarsActorSheet extends ActorSheet {
         })
     }
 
-     _dropdown(event, dropdownData) {
+     async _dropdown(event, dropdownData) {
         let dropdownHTML = ""
         event.preventDefault()
         let li = $(event.currentTarget).parents(".item")
@@ -273,12 +273,14 @@ export class PillarsActorSheet extends ActorSheet {
             } else {
                 dropdownHTML = `<div class="item-summary">${TextEditor.enrichHTML(dropdownData.text)}`;
             }
-            if (dropdownData.tags) {
-                let tags = `<div class='tags'>`
-                dropdownData.tags.forEach(tag => {
-                    tags = tags.concat(`<span class='tag'>${tag}</span>`)
-                })
-                dropdownHTML = dropdownHTML.concat(tags)
+            if (dropdownData.groups) {
+                let groups = `<div class='power-groups'>`
+                for (let g in dropdownData.groups)
+                {
+                    let html = await renderTemplate("systems/pillars-of-eternity/templates/partials/power-group.html", {group : dropdownData.groups[g], groupId : g})
+                    groups = groups.concat(html)
+                }
+                dropdownHTML = dropdownHTML.concat(groups)
             }
             dropdownHTML += "</div>"
             div = $(dropdownHTML)
@@ -339,10 +341,10 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".edit-connection").click(this._onEditConnection.bind(this))
         html.find(".delete-connection").click(this._onDeleteConnection.bind(this))
         html.find(".connection-name").click(this._onConnectionClick.bind(this))
-        html.find(".power-target").click(this._onPowerTargetClick.bind(this))
+        html.on("click", ".power-target", this._onPowerTargetClick.bind(this))
         html.find(".restore-pool").click(this._onRestorePoolClick.bind(this))
         html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
-        html.find(".damage-roll").click(this._onDamageRollClick.bind(this))
+        html.on("click", ".damage-roll", this._onDamageRollClick.bind(this))
         html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
         html.find(".age-roll").click(this._onAgeRoll.bind(this))
         html.find(".roll-initiative").click(this._onInitiativeClick.bind(this))
@@ -574,8 +576,10 @@ export class PillarsActorSheet extends ActorSheet {
 
     _onPowerTargetClick(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let groupId = $(event.currentTarget).attr("data-group")
+        let index = $(event.currentTarget).attr("data-index")
         let item = this.actor.items.get(itemId)
-        PowerTemplate.fromItem(item).drawPreview()
+        PowerTemplate.fromItem(item, groupId, index).drawPreview()
     }
 
     _onRestorePoolClick(event) {
@@ -601,8 +605,9 @@ export class PillarsActorSheet extends ActorSheet {
 
     _onDamageRollClick(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let group = $(event.currentTarget).attr("data-group")
         let item = this.actor.items.get(itemId)
-        new game.pillars.apps.DamageDialog(item, undefined, Array.from(game.user.targets)).render(true)
+        new game.pillars.apps.DamageDialog(item, undefined, Array.from(game.user.targets), group).render(true)
     }
 
 

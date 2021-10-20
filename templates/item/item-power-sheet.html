@@ -37,6 +37,25 @@
             </div>
 
             <div class="form-group">
+                <label>Speed</label>
+                <select name="data.speed.value">
+                    {{#select data.speed.value}}
+                    {{#each (config "powerSpeeds") as |value k|}}
+                    <option value="{{k}}">{{value}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Limitations</label>
+                <div class="form-fields">
+                    <input type="text" name="data.limitations.value" value="{{data.limitations.value}}"
+                        data-dtype="String">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>Base Effects</label>
                 <div class="form-fields">
                     <input type="text" name="data.base.value" value="{{data.base.value}}" data-dtype="String">
@@ -48,8 +67,8 @@
             <hr>
 
             
-            <div class="form-group" data-property="base.effects">
-                <label>Effects <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+            <div class="form-group power-group" data-property="base.effects">
+                <h3>Effects <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
                 <div class="property-list">
                     {{#each  item.base.effects as |effect i|}}
                     <div class="property-inputs" data-index="{{i}}">
@@ -71,6 +90,14 @@
                             </optgroup>
                             {{/select}}
                         </select>
+                        vs.
+                        <select data-path="defense" class="power-property">
+                            {{#select effect.defense}}
+                            {{#each (config "defenses") as |defense def|}}
+                            <option value="{{def}}">{{defense}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
                         <div class="property-control">
                             <a class="remove-property"><i class="fas fa-times"></i></a>
                         </div>
@@ -81,8 +108,8 @@
 
             <hr>
              
-            <div class="form-group" data-property="damage.value">
-                <label>Damage <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+            <div class="form-group power-group" data-property="damage.value">
+                <h3>Damage <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
                 <div class="property-list">
                 {{#each item.damage.value as |damage i|}}
                 <div class="property-inputs" data-index="{{i}}">
@@ -114,9 +141,32 @@
             </div>
 
             <hr>
+             
+            <div class="form-group power-group" data-property="healing">
+                <h3>Healing <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                {{#each item.healing as |healing i|}}
+                <div class="property-inputs" data-index="{{i}}">
+                    <input type="text" data-path="group" class="power-property group" title="Group" value="{{healing.group}}">
+                    <input type="text" data-path="value" class="power-property" value="{{healing.value}}">
+                    <select data-path="type" class="power-property">
+                        {{#select healing.type}}
+                        <option value="health">Health</option>
+                        <option value="endurance">Endurance</option>
+                        {{/select}}
+                    </select>
+                    <div class="property-control">
+                        <a class="remove-property"><i class="fas fa-times"></i></a>
+                    </div>
+                </div>
+                {{/each}}
+                </div>
+            </div>
 
-            <div class="form-group" data-property="range">
-                <label>Range <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+            <hr>
+
+            <div class="form-group power-group" data-property="range">
+                <h3>Range <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
                 <div class="property-list">
                 {{#each item.range as |range i|}}
                 <div class="property-inputs" data-index="{{i}}">
@@ -138,8 +188,8 @@
 
             <hr>
 
-            <div class="form-group" data-property="target">
-                <label>Target <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+            <div class="form-group power-group" data-property="target">
+                <h3>Target <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
                 <div class="property-list">
                     {{#each  item.target as |target i|}}
                     <div class="property-inputs" data-index="{{i}}">
@@ -180,8 +230,8 @@
             </div>
 
 
-            <div class="form-group" data-property="duration">
-                <label>Duration <a class="add-property"><i class="fas fa-plus-square"></i></a></label>
+            <div class="form-group power-group" data-property="duration">
+                <h3>Duration <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
                 <div class="property-list">
                     {{#each  item.duration as |duration i|}}
                     <div class="property-inputs" data-index="{{i}}">
@@ -201,26 +251,13 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Speed</label>
-                <select name="data.speed.value">
-                    {{#select data.speed.value}}
-                    {{#each (config "powerSpeeds") as |value k|}}
-                    <option value="{{k}}">{{value}}</option>
-                    {{/each}}
-                    {{/select}}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Limitations</label>
-                <div class="form-fields">
-                    <input type="text" name="data.limitations.value" value="{{data.limitations.value}}"
-                        data-dtype="String">
-                </div>
-            </div>
-
             <h3>Abstract: {{item.data.data.pl}}</h3>
+
+            <div class="power-groups">
+                {{#each item.groups as |group g|}}
+                    {{> systems/pillars-of-eternity/templates/partials/power-group.html group=group groupId=g}}
+                {{/each}}
+            </div>
 
         </div>
 
