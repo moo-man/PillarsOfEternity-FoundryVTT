@@ -1,7 +1,7 @@
 
 export default class PowerTemplate extends MeasuredTemplate {
 
-  static fromItem(item, groupId, index) {
+  static fromItem(item, groupId, index=0) {
     let type = item.groups[groupId].target[index].value
     let subtype = item.groups[groupId].target[index].subtype
     const templateShape = game.pillars.config.areaTargetTypes[type];

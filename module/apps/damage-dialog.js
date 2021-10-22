@@ -3,7 +3,7 @@ export default class DamageDialog extends Application
     constructor(item, check, targets, group)
     {
         super();
-        this.item = item;
+        this.item = item.clone();
         this.check = check;
         this.targets = targets
         this.group = group
@@ -39,6 +39,9 @@ export default class DamageDialog extends Application
             damages = this.item.damage.value.filter(i => i.group == this.group)
 
         damages.forEach(i => i.mult = 0)
+        damages.forEach(i => {
+            if (!i.label) i.label = this.item.name
+        })
         return damages
     }
 
@@ -73,9 +76,12 @@ export default class DamageDialog extends Application
         this.element.find()
         this.damages.forEach(async (damage, i) => {
             let multiplier = damage.mult
-            let critTotal = parseInt(damage.crit[0]) * parseInt(multiplier) + damage.crit.slice(1)
-            let roll = await new Roll(`${damage.base} + ${critTotal}`).evaluate({async : true})
-            await roll.toMessage({flavor : damage.label ? `${damage.label} Damage` : `${this.item.name} Damage ${this.damages.length > 1 ? i + 1 : ""}`, speaker : this.item.actor.speakerData()});
+            let type = game.pillars.config.damageTypes[damage.type]
+            let rollString = damage.base
+            if (damage.crit[0])
+                rollString  += `+ ${parseInt(damage.crit[0]) * parseInt(multiplier) + damage.crit.slice(1)}`
+            let roll = await new Roll(rollString).evaluate({async : true})
+            await roll.toMessage({flavor : damage.label ? `${damage.label} Damage - ${type}` : `${this.item.name} Damage ${this.damages.length > 1 ? i + 1 : ""} - ${type}`, speaker : this.item.actor.speakerData()});
         })
         this.close();
     }

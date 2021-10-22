@@ -60,6 +60,17 @@
                     "exert": 0
                 }
             },
+            "soak" : {
+                "soak" : {
+                    "base" : 0,
+                    "physical" : 0,
+                    "burn" : 0,
+                    "freeze" : 0,
+                    "raw" : 0,
+                    "corrode" : 0,
+                    "shock" : 0
+                }
+            },
             "size": {
                 "size": {
                     "value": 0
@@ -104,6 +115,7 @@
                 "endurance",
                 "species",
                 "tier",
+                "soak",
                 "size",
                 "initiative",
                 "stride",
@@ -252,8 +264,10 @@
             "source": {
                 "value": ""
             },
+            "roll" : {
+                "value" : true
+            },
             "base": {
-                "value": "",
                 "effects" : [],
                 "cost": 0
             },
@@ -282,9 +296,11 @@
                     "value" : "momentary"
                 }
             ],
+            "misc": [],
+
             "speed": {
-                "group" : "",
-                "value": "slow"
+                "value": "slow",
+                "text" :  ""
             },
             "limitations": {
                 "group" : "",

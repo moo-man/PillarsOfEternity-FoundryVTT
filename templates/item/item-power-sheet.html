@@ -37,31 +37,42 @@
             </div>
 
             <div class="form-group">
+                <label>Requires Roll</label>
+                <div class="form-fields">
+                    <input type="checkbox" name="data.roll.value" {{checked data.roll.value}}>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>Speed</label>
-                <select name="data.speed.value">
-                    {{#select data.speed.value}}
-                    {{#each (config "powerSpeeds") as |value k|}}
-                    <option value="{{k}}">{{value}}</option>
-                    {{/each}}
-                    {{/select}}
-                </select>
+                <div class="form-fields">
+                    <select name="data.speed.value">
+                        {{#select data.speed.value}}
+                        {{#each (config "powerSpeeds") as |value k|}}
+                        <option value="{{k}}">{{value}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                    <input type="text" name="data.speed.text" value="{{data.speed.text}}" placeholder="Text" data-dtype="String">
+                </div>
             </div>
 
             <div class="form-group">
                 <label>Limitations</label>
                 <div class="form-fields">
-                    <input type="text" name="data.limitations.value" value="{{data.limitations.value}}"
-                        data-dtype="String">
+                    <input type="text" name="data.limitations.value" value="{{data.limitations.value}}" data-dtype="String">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Base Effects</label>
+                <label>Base Abstract Modifier</label>
                 <div class="form-fields">
-                    <input type="text" name="data.base.value" value="{{data.base.value}}" data-dtype="String">
+                    <!-- <input type="text" name="data.base.value" value="{{data.base.value}}" data-dtype="String"> -->
                     <input class="base-effect-cost" type="text" name="data.base.cost" value="{{data.base.cost}}" data-dtype="Number">
                 </div>
             </div>
+
+
 
 
             <hr>
@@ -93,11 +104,13 @@
                         vs.
                         <select data-path="defense" class="power-property">
                             {{#select effect.defense}}
+                            <option value="">-</option>
                             {{#each (config "defenses") as |defense def|}}
                             <option value="{{def}}">{{defense}}</option>
                             {{/each}}
                             {{/select}}
                         </select>
+                        <input type="text" data-path="text" class="power-property" placeholder="Text" value="{{effect.text}}">
                         <div class="property-control">
                             <a class="remove-property"><i class="fas fa-times"></i></a>
                         </div>
@@ -114,7 +127,6 @@
                 {{#each item.damage.value as |damage i|}}
                 <div class="property-inputs" data-index="{{i}}">
                     <input type="text" data-path="group" class="power-property group" title="Group" value="{{damage.group}}">
-                    <input type="text" data-path="label" class="power-property" placeholder="Label" value="{{damage.label}}">
                     <input type="text" data-path="base" class="power-property" placeholder="Base" value="{{damage.base}}">
                     <input type="text" data-path="crit" class="power-property" placeholder="Crit" value="{{damage.crit}}">
                     <select data-path="type" class="power-property type">
@@ -132,6 +144,13 @@
                         {{/each}}
                         {{/select}}
                     </select>
+                    <select data-path="damages" class="power-property">
+                        {{#select damage.damages}}
+                        <option value="health">Health</option>
+                        <option value="endurance">Endurance</option>
+                        {{/select}}
+                    </select>
+                    <input type="text" data-path="text" class="power-property" placeholder="Text" value="{{damage.text}}">
                     <div class="property-control">
                         <a class="remove-property"><i class="fas fa-times"></i></a>
                     </div>
@@ -250,6 +269,24 @@
                     {{/each}}
                 </div>
             </div>
+
+            
+            <div class="form-group power-group" data-property="misc">
+                <h3>Misc. <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each  item.misc as |misc i|}}
+                    <div class="property-inputs" data-index="{{i}}">
+                        <input type="text" data-path="group" class="power-property group" title="Group" value="{{misc.group}}">
+                        <input type="text" data-path="value" class="power-property" placeholder="Description" value="{{misc.value}}">
+                        <input type="number" data-path="modifier" class="power-property group" title="Abstract Modifier" value="{{misc.modifier}}">
+                        <div class="property-control">
+                            <a class="remove-property"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
 
             <h3>Abstract: {{item.data.data.pl}}</h3>
 

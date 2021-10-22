@@ -170,7 +170,11 @@ export class PillarsItemSheet extends ItemSheet {
       let data = foundry.utils.deepClone(getProperty(this.item, property))
       let target = $(ev.currentTarget).attr("data-path")
 
-      data[index][target] = ev.currentTarget.value
+      let value = ev.currentTarget.value
+      if (Number.isNumeric(value))
+        value = parseInt(value)
+
+      data[index][target] = value
 
       return this.item.update({[`data.${property}`] : data})
 

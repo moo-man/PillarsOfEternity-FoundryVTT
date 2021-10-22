@@ -198,6 +198,14 @@ export class PillarsActorSheet extends ActorSheet {
         return effects;
     }
 
+    constructPowerDisplay(sheetData)
+    {
+        sheetData.items.powers.forEach(p => {
+            let lowestKey = Object.keys(p.groups).filter(i => i).sort((a, b) => {a - b > 0 ? 1 : -1})
+            p.display = p.groups[lowestKey]
+        })
+    }
+
     _enrichKnownConnections(sheetData)
     {
         let connections = sheetData.actor.knownConnections.value
@@ -576,9 +584,9 @@ export class PillarsActorSheet extends ActorSheet {
 
     _onPowerTargetClick(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let groupId = $(event.currentTarget).attr("data-group")
         let index = $(event.currentTarget).attr("data-index")
         let item = this.actor.items.get(itemId)
+        let groupId = item.displayGroupKey//$(event.currentTarget).attr("data-group")
         PowerTemplate.fromItem(item, groupId, index).drawPreview()
     }
 

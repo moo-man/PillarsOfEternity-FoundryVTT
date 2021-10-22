@@ -159,9 +159,6 @@ export class PillarsItem extends Item {
         let groups = {};
         for(let g of groupIds)
         {
-            if (!g)
-                continue
-
             groups[g] = {}
             groups[g].target = this.target.filter(i => i.group == g)
             groups[g].range = this.range.filter(i => i.group == g)
@@ -169,6 +166,7 @@ export class PillarsItem extends Item {
             groups[g].damage = this.damage.value.filter(i => i.group == g)
             groups[g].effects = this.base.effects.filter(i => i.group == g)
             groups[g].healing = this.healing.filter(i => i.group == g)
+            groups[g].misc = this.misc.filter(i => i.group == g)
 
             groups[g].display = {
                 target : [],
@@ -177,6 +175,7 @@ export class PillarsItem extends Item {
                 damage : [],
                 effects : [],
                 healing: [],
+                misc: [],
             }
 
             groups[g].display.target = groups[g].target.reduce((prev, current, index) => {
@@ -195,12 +194,30 @@ export class PillarsItem extends Item {
             },[]).join(", ")
 
             groups[g].display.damage = groups[g].damage.reduce((prev, current) => {
-                prev.push(`${current.base} ${config.damageTypes[current.type]} vs. ${config.defenses[current.defense]}`)
+                let text = (`${current.base} ${config.damageTypes[current.type]} @DAMAGES vs. ${config.defenses[current.defense]}` + " ")                
+                if (current.text)
+                    text += " " + current.text
+
+                if (current.damages == "endurance")
+                    text = text.replace("@DAMAGES", "(Endurance)")
+                else 
+                    text = text.replace("@DAMAGES", "")
+
+                prev.push(text)
                 return prev
             },[]).join(", ") 
             
             groups[g].display.effects = groups[g].effects.reduce((prev, current) => {
-                prev.push(`${CONFIG.statusEffects.find(i => i.id == current.value) ? CONFIG.statusEffects.find(i => i.id == current.value).label : this.effects.get(current.value).label } vs. ${config.defenses[current.defense]}`)
+                let text = "";
+                if (current.defense)
+                    text = (`${CONFIG.statusEffects.find(i => i.id == current.value) ? CONFIG.statusEffects.find(i => i.id == current.value).label : this.effects.get(current.value).label } vs. ${config.defenses[current.defense]}`)
+                else if (current.value)
+                    text = (`${CONFIG.statusEffects.find(i => i.id == current.value) ? CONFIG.statusEffects.find(i => i.id == current.value).label : this.effects.get(current.value).label }`)
+
+                if (current.text)
+                    text += " " + current.text
+                
+                prev.push(text)
                 return prev 
             },[]).join(", ")
             
@@ -209,22 +226,42 @@ export class PillarsItem extends Item {
                 return prev 
             },[]).join(", ")
             
-            
+            groups[g].display.misc = groups[g].misc.reduce((prev, current) => {
+                prev.push(current.value)
+                return prev 
+            },[]).join(", ")
             
             if (groups[g].display.damage)
                 groups[g].display.damage = `<a class='damage-roll' data-group="${g}">${groups[g].display.damage}</a>`
     }
 
+
+    // assign any ungrouped value to any group that does not have the corresponding key
+    for(let g of groupIds)
+    {
+        if(g)
+        {
+            for(let display in groups[g].display)
+            {
+                if (!groups[g].display[display] && groups[""])
+                {
+                    groups[g].display[display] = groups[""].display[display]
+                }
+            }
+        }
+    }
+
+        delete groups[""]
         return groups
     }
 
     getTargetDisplay(target)
     {
         let targetSubTypes = game.pillars.config[`power${target.value[0].toUpperCase() + target.value.slice(1)}s`]
-        target = targetSubTypes[target.subtype]
-        if (!target)
-            target = game.pillars.config.powerTargetTypes[target.value]
-        return target
+        let  targetDisplay = targetSubTypes[target.subtype]
+        if (!targetDisplay)
+            targetDisplay = game.pillars.config.powerTargetTypes[target.value]
+        return targetDisplay
     }
 
 
@@ -246,6 +283,10 @@ export class PillarsItem extends Item {
             }
             for (let duration of this.duration)
                 pl += values.powerDurations[duration.value]
+
+
+            for (let misc of this.misc)
+                pl += (misc.modifier || 0)
 
             pl += values.powerSpeeds[this.speed.value]
             pl += this.base.cost || 0
@@ -294,20 +335,23 @@ export class PillarsItem extends Item {
 
     get Type() {return game.i18n.localize(CONFIG.Item.typeLabels[this.type])}
 
-    get Range() {return game.pillars.config.powerRanges[this.data.data.range.value]}
+    get Range() {return game.pillars.config.powerRanges[this.data.data.range.find(i => i.group == this.displayGroupKey)?.value]}
 
     get Target() {
 
-        let targetSubTypes = game.pillars.config[`power${this.target.value[0].toUpperCase() + this.target.value.slice(1)}s`]
-        let target = targetSubTypes[this.target.subtype]
+        let targetObj = this.target.find(i => i.group == this.displayGroupKey)
+        if (!targetObj)    
+            return
+        let targetSubTypes = game.pillars.config[`power${targetObj.value[0].toUpperCase() + targetObj.value.slice(1)}s`]
+        let target = targetSubTypes[targetObj.subtype]
         if (!target)
-            target = game.pillars.config.powerTargetTypes[this.data.data.target.value]
+            target = game.pillars.config.powerTargetTypes[targetObj.value]
 
         return target
     }
-    get Duration() {return game.pillars.config.powerDurations[this.data.data.duration.value]}
-    get Speed() {return game.pillars.config.powerSpeeds[this.data.data.speed.value]}
-    get Exclusion() {return game.pillars.config.powerExclusions[this.data.data.exclusion.value]}
+    get Duration() {return game.pillars.config.powerDurations[this.duration.find(i => i.group == this.displayGroupKey)?.value]}
+    get Speed() {return game.pillars.config.powerSpeeds[this.speed.value]}
+    get Exclusion() {return game.pillars.config.powerExclusions[this.target.find(i => i.group == this.displayGroupKey)?.exclusion]}
     get Skill() {return this.actor.getItemTypes("skill").find(i => i.name == this.skill.value)}
 
     get SourceItem() {
@@ -330,7 +374,12 @@ export class PillarsItem extends Item {
             return display
         })
     }
+
+    get displayGroupKey() {
+        return  Object.keys(this.groups).filter(i => i).sort((a, b) => {a - b > 0 ? 1 : -1})[0]
+    }
     
+
 
     get specials() {
         let specials = {}
@@ -394,7 +443,8 @@ export class PillarsItem extends Item {
         range : {group: "", value : "none"},
         duration : {group: "", value : "momentary"},
         healing : {group: "", value : "", type:"health"},
-        "damage.value" : {group: "", label : "",base : "",crit : "",defense : "deflection",type : "physical"},
-        "base.effects" : {group: "", value : "", defense : ""}
+        misc : {group : "", value : "", modifier : 0},
+        "damage.value" : {text : "", group: "",base : "",crit : "",defense : "deflection",type : "physical", damages: "health"},
+        "base.effects" : {text: "", group: "", value : "", defense : ""}
       }
 }
