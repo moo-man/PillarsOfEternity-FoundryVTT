@@ -111,22 +111,48 @@
 }
 
 
-.pillars-of-eternity.actor.sheet .general .property-group.bloodied label{
+.pillars-of-eternity.actor.sheet .general .status  {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.pillars-of-eternity.actor.sheet .general .status .property-group {
+  text-align: left;
+}
+  .pillars-of-eternity.actor.sheet .general .status .status-array{
+  display: flex;
+  font-size: 16px;
+  align-items: center;
+}
+
+.pillars-of-eternity.actor.sheet .general .status .status-array .threshold{
+  display: flex;
+  font-size: 20px;
+}
+
+.pillars-of-eternity.actor.sheet .general .status .status-array > *{
+  display: flex;
+  margin-right: 3px;
+  width: 14px;
+  justify-content: center;
+}
+
+.pillars-of-eternity.actor.sheet .general .status .status-array .bonus{
+  color: green
+}
+
+.pillars-of-eternity.actor.sheet .general .status .status-array .penalty{
   color: darkred
 }
 
-.pillars-of-eternity.actor.sheet .general .property-group.bloodied input{
-  color: darkred;
-  border: 1px solid darkred
+
+.pillars-of-eternity.actor.sheet .general .bloodied{
+  color: darkred
 }
 
-.pillars-of-eternity.actor.sheet .general .property-group.winded label{
+.pillars-of-eternity.actor.sheet .general .winded {
   color: darkblue
-}
-
-.pillars-of-eternity.actor.sheet .general .property-group.winded input{
-  color: darkblue;
-  border: 1px solid darkblue
 }
 
 .pillars-of-eternity.actor.sheet .roll-initiative,
@@ -146,7 +172,7 @@
 
 .pillars-of-eternity.actor.sheet .roll-initiative {
   flex: 0 0 20px;
-  margin-top: 5px;
+  margin-bottom: 3px;
 }
 
 .pillars-of-eternity.actor.sheet .initiative label {
@@ -156,11 +182,23 @@
 }
 
 
+.pillars-of-eternity.actor.sheet .general .wounds-injuries {
+  display: flex;
+}
+
+.pillars-of-eternity.actor.sheet .general .injuries {
+  flex: 1
+}
+
+.pillars-of-eternity.actor.sheet .general .injuries .items-list {
+  margin: 0px;
+}
+
 .pillars-of-eternity.actor.sheet .general .wounds {
   justify-content: space-evenly;
   flex-wrap: wrap;
   display: flex;
-  flex: 1
+  flex: .5
 }
   .pillars-of-eternity.actor.sheet .general .wounds h4 {
   width: 100%;
@@ -513,7 +551,8 @@
     justify-content: space-between;
     margin: 10px 10px -10px 10px;
   }
-    .pillars-of-eternity.actor.sheet .combat-items .combat-fields > * {
+  .pillars-of-eternity.actor.sheet .combat-items .combat-fields > * {
+    align-items: center;
   font-size: 20px;
   display: flex;
 }

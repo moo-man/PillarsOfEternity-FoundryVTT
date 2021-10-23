@@ -22,5 +22,6 @@
     "ITEM.TypeWeapon" : "Weapon",
     "ITEM.TypeReputation" : "Reputation",
     "ITEM.TypeStock" : "Stock",
+    "ITEM.TypeInjury" : "Injury",
     "ITEM.TypeGodlike" : "Godlike"
 }

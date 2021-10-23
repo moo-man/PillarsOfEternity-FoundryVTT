@@ -106,6 +106,7 @@ export class PillarsActorSheet extends ActorSheet {
         data.data = data.data.data
         this.prepareSheetData(data);
         this.formatTooltips(data)
+        console.log(data)
         return data
     }
 
@@ -116,6 +117,8 @@ export class PillarsActorSheet extends ActorSheet {
         //this._createWoundsArrays(sheetData)
         this._enrichKnownConnections(sheetData)
         this._createDeathMarchArray(sheetData)
+        this._createHealthEnduranceArray(sheetData.data.health)
+        this._createHealthEnduranceArray(sheetData.data.endurance)
     }   
 
     formatTooltips(data)
@@ -141,6 +144,7 @@ export class PillarsActorSheet extends ActorSheet {
         items.powers = sheetData.actor.getItemTypes("power")
         items.powerSources = sheetData.actor.getItemTypes("powerSource")
 
+        items.injuries = sheetData.actor.getItemTypes("injury")  
         items.backgrounds = sheetData.actor.getItemTypes("background")  
         items.settings = sheetData.actor.getItemTypes("setting")  
         items.connections = sheetData.actor.getItemTypes("connection")  
@@ -219,23 +223,32 @@ export class PillarsActorSheet extends ActorSheet {
         })
     }
 
-    _createWoundsArrays(sheetData)
+    _createHealthEnduranceArray(data)
     {
-        for (let woundType in sheetData.data.health.wounds)
+        // +1 for the separator
+        data.array = new Array(data.max).fill().map(i => {return {state: 0}})
+        if (data.bonus)
+            data.array = new Array(data.bonus).fill({bonus: true, state : 0}).concat(data.array)
+        if (data.penalty)
         {
-            if (woundType != "injury")
+            let penaltyCounter = 0
+            for (let i = data.array.length - 1; i >= 0 && penaltyCounter < data.penalty; i--)
             {
-                sheetData.data.health.wounds[woundType] = sheetData.data.health.wounds[woundType].map(i => {
-                    switch(i)
-                    {
-                        case 0: return `<i class="far fa-square"></i>`
-                        case 1: return `<i class="fas fa-skull"></i>`
-                        case 2: return `<i class="fas fa-band-aid"></i>`
-                    }
-                })
+                data.array[i].state = -1;
+                penaltyCounter++;
             }
         }
+        data.array.forEach((e, i) => {
+            if (i < data.value)
+                e.state = 1
+        })
+
+        data.array.forEach((e, i) => {
+            if (i < data.wounds)
+                e.state = 2
+        })
     }
+
     _createDeathMarchArray(sheetData)
     {
         let marchVal = sheetData.data.life.march
@@ -358,6 +371,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".roll-initiative").click(this._onInitiativeClick.bind(this))
         html.find(".setting").click(this._onSettingClick.bind(this))
         html.find(".displayGroup").click(this._onDisplayGroupClick.bind(this))
+        html.find(".box-click").click(this._onBoxClick.bind(this))
         html.find('.item:not(".tab-select")').each((i, li) => {
             li.setAttribute("draggable", true);
             li.addEventListener("dragstart", this._onDragStart.bind(this), false);
@@ -601,8 +615,7 @@ export class PillarsActorSheet extends ActorSheet {
 
     _onWoundClick(event) {
         let multiplier = event.currentTarget.classList.contains("add-wound") ? 1 : -1
-        let type = event.currentTarget.dataset["type"]
-        return this.actor.update({[`data.health.wounds.${type}`] : this.actor.health.wounds[type] + 1 * multiplier })
+        return this.actor.update({"data.health.wounds" : this.actor.health.wounds + 1 * multiplier })
     }
 
     /* -------------------------------------------- */
@@ -731,7 +744,7 @@ export class PillarsActorSheet extends ActorSheet {
     }
 
     
-    async _onDisplayGroupClick(ev){
+    _onDisplayGroupClick(ev){
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
         let item = this.actor.items.get(itemId)
         let groupIndex = item.getFlag("pillars-of-eternity", "displayGroup")
@@ -743,5 +756,18 @@ export class PillarsActorSheet extends ActorSheet {
           groupIndex = 0;
 
         return item.setFlag("pillars-of-eternity", "displayGroup", groupIndex)
+    }
+
+    _onBoxClick(ev) {
+        let index = parseInt($(event.currentTarget).attr("data-index"))
+        let target = $(event.currentTarget).attr("data-target")
+
+        let data = foundry.utils.deepClone(getProperty(this.actor.data, target));
+        if (index + 1 == data.value )
+            data.value = data.value -1
+        else
+            data.value = Number(index) + 1;
+
+        this.actor.update({[`${target}.value`] : data.value})
     }
 }

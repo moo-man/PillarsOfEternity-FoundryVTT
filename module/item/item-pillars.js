@@ -386,7 +386,7 @@ export class PillarsItem extends Item {
             {
                 if (group && this.groups[group] && this.groups[group][type]?.length)
                     return group
-                else if (this.groups[first][type]?.length)
+                else if (this.groups[first] && this.groups[first][type]?.length)
                     return first
                 else
                     return ""

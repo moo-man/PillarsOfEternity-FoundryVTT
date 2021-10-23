@@ -1,5 +1,15 @@
 <div class="combat-items">
     <div class="combat-fields">
+
+        <div class="initiative">
+            <h3>Initiative</h3><a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a>
+            <input type="number" class="value" title="{{tooltips.initiative.value}}" disabled value="{{data.initiative.value}}" />
+        </div>
+        <div class="stride">
+            <h3>Stride: </h3>
+            <input type="number" disabled class="value" value="{{data.stride.value}}">
+        </div>
+
         <div class="soak">
             <h3>Soak: </h3>
             <input type="number" disabled class="value" value="{{actor.combat.soak}}">

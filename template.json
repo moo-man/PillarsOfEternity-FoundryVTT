@@ -37,26 +37,27 @@
             },
             "health": {
                 "health": {
-                    "max": 36,
-                    "value": 36,
-                    "bloodiedThreshold": 0,
+                    "max": 9,
+                    "value": 0,
+                    "bonus" : 0,
+                    "penalty" : 0,
                     "threshold": {
-                        "light": 0,
-                        "heavy": 0
+                        "value" : 6
                     },
                     "wounds": {
-                        "light": 0,
-                        "heavy": 0,
-                        "severe": 0,
-                        "injury": ""
+                        "value" : 0
                     }
                 }
             },
             "endurance": {
                 "endurance": {
-                    "max": 36,
-                    "value": 36,
-                    "windedThreshold": 0,
+                    "max": 8,
+                    "value": 0,
+                    "bonus" : 0,
+                    "penalty" : 0,
+                    "threshold": {
+                        "value" : 4
+                    },
                     "exert": 0
                 }
             },
@@ -69,6 +70,16 @@
                     "raw" : 0,
                     "corrode" : 0,
                     "shock" : 0
+                }
+            },
+            "toughness" : {
+                "toughness" : {
+                    "value" : 1
+                }
+            },
+            "damageIncrement" : {
+                "damageIncrement" : {
+                    "value" : 1
                 }
             },
             "size": {
@@ -113,6 +124,8 @@
                 "defenses",
                 "health",
                 "endurance",
+                "toughness",
+                "damageIncrement",
                 "species",
                 "tier",
                 "soak",
@@ -177,7 +190,8 @@
             "species",
             "stock",
             "godlike",
-            "reputation"
+            "reputation",
+            "injury"
         ],
         "templates": {
             "category": {
@@ -503,7 +517,7 @@
     },
     "reputation": {
         "templates": [
-            "descirption",
+            "description",
             "xp"
         ],
         "group": {
@@ -512,5 +526,10 @@
         "modifier": {
             "value": 0
         }
+    },
+    "injury" : {
+        "templates" : [
+            "description"
+        ]
     }
 }

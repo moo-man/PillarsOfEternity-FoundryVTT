@@ -2,8 +2,20 @@
 export default class PowerTemplate extends MeasuredTemplate {
 
   static fromItem(item, groupId, index=0) {
-    let type = item.groups[groupId].target[index].value
-    let subtype = item.groups[groupId].target[index].subtype
+    let target = item.groups[groupId].target[index]
+    let type
+    let subtype
+    if (!target)
+    {
+      let target = item.target.find(i => !i.group)
+      type = target.value;
+      subtype = target.subtype
+    }
+    else 
+    {
+      type = target[index].value
+      subtype = target[index].subtype
+    }
     const templateShape = game.pillars.config.areaTargetTypes[type];
     const templateData = mergeObject(game.pillars.config.areaTargetDistances[type][subtype], {t : templateShape})
     if ( !templateShape ) return null;

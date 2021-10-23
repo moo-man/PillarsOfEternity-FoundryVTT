@@ -73,21 +73,43 @@
         <section class="status">
             <div class="property-group {{#if actor.health.bloodied}}bloodied{{/if}}" >
                 <label>Health</label>
-                <div class="property-group stacked">
-                    <input type="number" name="data.health.value" value="{{data.health.value}}" />
-                    <hr>
-                    <input type="number" title="{{tooltips.health.max}}" disabled value="{{data.health.max}}" />
+                <div class="status-array">
+                    {{#each data.health.array as | value key| }}
+                    {{#if (eq key ../data.health.threshold.value)}}
+                    <span class="threshold bloodied">|</span>
+                    {{/if}}
+                    {{#if (eq value.state 0)}}
+                    <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.health"><i class="far fa-circle"></i></a>
+                    {{else if (eq value.state 1)}}
+                    <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.health"><i class="far fa-times-circle"></i></a>
+                    {{else if (eq value.state 2)}}
+                    <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
+                    {{else if (eq value.state -1)}}
+                    <span class="penalty" data-index="{{key}}" data-target="data.health"><i class="fas fa-times-circle"></i></span>
+                    {{/if}}
+                    {{/each}}
                 </div>
             </div>
             <div class="property-group {{#if actor.endurance.winded}}winded{{/if}}">
                 <label>Endurance</label>
-                <div class="property-group stacked">
-                    <input type="number" name="data.endurance.value" value="{{data.endurance.value}}" />
-                    <hr>
-                    <input type="number" title="{{tooltips.endurance.max}}" disabled value="{{data.endurance.max}}" />
+                <div class="status-array">
+                    {{#each data.endurance.array as | value key| }}
+                    {{#if (eq key ../data.endurance.threshold.value)}}
+                    <span class="threshold winded">|</span>
+                    {{/if}}
+                    {{#if (eq value.state 0)}}
+                    <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.endurance"><i class="far fa-circle"></i></a>
+                    {{else if (eq value.state 1)}}
+                    <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.endurance"><i class="far fa-times-circle"></i></a>
+                    {{else if (eq value.state 2)}}
+                    <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
+                    {{else if (eq value.state -1)}}
+                    <span class="penalty" data-index="{{key}}" data-target="data.endurance"><i class="fas fa-times-circle"></i></span>
+                    {{/if}}
+                    {{/each}}
                 </div>
             </div>
-            <div class="property-stack">
+            <!-- <div class="property-stack">
                 <div class="property-group small">
                     <label>Stride</label>
                     <div class="property-value">
@@ -100,22 +122,58 @@
                         <input type="number" title="{{tooltips.initiative.value}}" disabled value="{{data.initiative.value}}" />
                     </div>
                 </div>
-            </div>
+            </div> -->
         </section>
         <hr>
-        <section>
+        <section class="wounds-injuries">
+            <div class="injuries">
+                <ol class="items-list">
+                    <li class="items-header flexrow">
+                        <h3 class="item-name flexrow">Injuries</h3>
+                        <div class="item-controls">
+                            <a class="item-control item-create" title="Create" data-type="injury" data-category="benefit"><i class="fas fa-plus"></i></a>
+                        </div>
+                    </li>
+            
+                    <ol class="items">
+                        {{#each items.injuries as |item i|}}
+                        <li class="item" draggable="true" data-item-id="{{item.id}}">
+                            <div class="row-content">
+                                <div class="item-name flexrow item-dropdown">
+                                    <div class="item-image" style="background-image: url('{{item.img}}')"></div>
+                                    <a>
+                                        <h4>{{item.name}}</h4>
+                                    </a>
+                                </div>
+            
+                                <div class="item-controls flexrow">
+                                    {{#if ../owner}}
+                                    <a class="item-control item-post" title="Post Item"><i class="fas fa-comment"></i></a>
+                                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                                    <a class="item-control item-dropdown" title="Dropdown"><i class="fas fa-chevron-down"></i></a>
+                                    <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ol>
+                </ol>
+            </div>
+
             <div class="wounds">
-                <h4>Wounds ({{data.health.threshold.light}} / {{data.health.threshold.heavy}})</h4>
                 <div class="wound-group">
                     <div class="wound-label">
-                        <label>Light:</label> {{data.health.wounds.light}} 
+                        <label>Wounds:</label> {{data.health.wounds}} 
                     </div>
                     <div class="wound-buttons">
-                        <a class="subtract-wound" data-type="light"> <i class="far fa-minus-square"></i></a>
-                        <a class="add-wound" data-type="light"> <i class="far fa-plus-square"></i></a>
+                        <a class="subtract-wound"> <i class="far fa-minus-square"></i></a>
+                        <a class="add-wound"> <i class="far fa-plus-square"></i></a>
                     </div>
     
                 </div>
+            </div>
+                <!--
                 <div class="wound-group">
                     <div class="wound-label">
                         <label>Heavy:</label> {{data.health.wounds.heavy}} 
@@ -139,7 +197,7 @@
             <div class="thresholds">
                 <div>Bloodied</div> <input type="number" disabled value="{{data.health.bloodiedThreshold}}"/>
                 <div>Winded</div> <input type="number" disabled value="{{data.endurance.windedThreshold}}"/>
-            </div>
+            </div> -->
         </section>
     </section>
 

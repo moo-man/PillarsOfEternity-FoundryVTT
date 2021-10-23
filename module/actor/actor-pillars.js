@@ -80,8 +80,11 @@ export class PillarsActor extends Actor {
 
     setSizeData(data)
     {
-        let attributes = game.pillars.config.sizeAttributes[data.size.value]
-        
+        let tier = this.tier.value || "novice"
+        let attributes = game.pillars.config.sizeAttributes[data.size.value][tier]
+        data.damageIncrement.value = attributes.damageIncrement
+        data.toughness.value = attributes.toughness
+
         data.defenses.deflection.value = 10 - (data.size.value * 2)
         data.defenses.reflexes.value = 15 - (data.size.value * 2)
         data.defenses.fortitude.value = 15 + (data.size.value * 2)
@@ -97,18 +100,18 @@ export class PillarsActor extends Actor {
         this.data.flags.tooltips.defenses.reflexes.push(data.size.value * 2 + " (Size)")
         this.data.flags.tooltips.defenses.fortitude.push(data.size.value * 2 + " (Size)")
 
-        data.health.threshold = {light : attributes.light, heavy : attributes.heavy, severe : attributes.severe}
-        data.health.max = attributes.maxHealthEndurance
-        data.endurance.max = attributes.maxHealthEndurance
-        data.health.bloodiedThreshold = data.health.max / 2
+        // data.health.threshold = {light : attributes.light, heavy : attributes.heavy, severe : attributes.severe}
+        // data.health.max = attributes.maxHealthEndurance
+        // data.endurance.max = attributes.maxHealthEndurance
+        // data.health.bloodiedThreshold = data.health.max / 2
 
-        this.data.flags.tooltips.health.max.push("36" + " (Base)")
-        this.data.flags.tooltips.endurance.max.push("36" + " (Base)")
+        // this.data.flags.tooltips.health.max.push("36" + " (Base)")
+        // this.data.flags.tooltips.endurance.max.push("36" + " (Base)")
 
-        this.data.flags.tooltips.health.max.push((attributes.maxHealthEndurance - 36) + " (Size)")
-        this.data.flags.tooltips.endurance.max.push((attributes.maxHealthEndurance - 36)  + " (Size)")
+        // this.data.flags.tooltips.health.max.push((attributes.maxHealthEndurance - 36) + " (Size)")
+        // this.data.flags.tooltips.endurance.max.push((attributes.maxHealthEndurance - 36)  + " (Size)")
 
-        data.endurance.windedThreshold = attributes.windedExert
+        // data.endurance.windedThreshold = attributes.windedExert
         //data.endurance.exert = attributes.windedExert
     }
 
@@ -133,8 +136,8 @@ export class PillarsActor extends Actor {
 
         this.setSpeciesData(this.data.data)
 
-        this.health.base = this.health.max
-        this.endurance.base = this.endurance.max
+        // this.health.base = this.health.max
+        // this.endurance.base = this.endurance.max
         // this.data.flags.tooltips.health.max.push(this.health.base + " (Base)")
         // this.data.flags.tooltips.endurance.max.push(this.endurance.base + " (Base)")
 
@@ -142,11 +145,11 @@ export class PillarsActor extends Actor {
         
         if (tierBonus)
         {
-            this.health.max += Math.floor(this.health.base * tierBonus.bonus)
-            this.data.flags.tooltips.health.max.push(Math.floor(this.health.base * tierBonus.bonus) + " (Tier)")
+            // this.health.max += Math.floor(this.health.base * tierBonus.bonus)
+            // this.data.flags.tooltips.health.max.push(Math.floor(this.health.base * tierBonus.bonus) + " (Tier)")
 
-            this.endurance.max += Math.floor(this.endurance.base * tierBonus.bonus)
-            this.data.flags.tooltips.endurance.max.push(Math.floor(this.endurance.base * tierBonus.bonus) + " (Tier)")
+            // this.endurance.max += Math.floor(this.endurance.base * tierBonus.bonus)
+            // this.data.flags.tooltips.endurance.max.push(Math.floor(this.endurance.base * tierBonus.bonus) + " (Tier)")
 
             for (let defense in this.defenses)
             {
@@ -174,13 +177,16 @@ export class PillarsActor extends Actor {
 
     prepareDerivedData() {
 
-        this.health.max -= this.woundModifier
-        if (this.woundModifier)
-            this.data.flags.tooltips.health.max.push(-this.woundModifier + " (Wounds)")
-        this.health.bloodiedThreshold = this.health.base / 2
+        // this.health.max -= this.woundModifier
+        // if (this.woundModifier)
+        //     this.data.flags.tooltips.health.max.push(-this.woundModifier + " (Wounds)")
 
-        this.health.bloodied = this.health.bloodiedThreshold >= this.health.value
-        this.endurance.winded = this.endurance.windedThreshold >= this.endurance.value
+        this.health.threshold.value += this.health.bonus
+        this.endurance.threshold.value += this.endurance.bonus
+
+
+        this.health.bloodied = this.health.value > this.health.threshold.value
+        this.endurance.winded = this.endurance.value > this.endurance.threshold.value
 
         if (this.getFlag("pillars-of-eternity", "autoEffects") && game.actors && game.actors.get(this.id))
         {
@@ -531,30 +537,30 @@ export class PillarsActor extends Actor {
 
     async applyDamage(value, type, multiplier)
     {
-        value *= multiplier
-        let current  = this[type].value
+        // value *= multiplier
+        // let current  = this[type].value
 
-        if (value < 0)
-            value += this.combat.soak
+        // if (value < 0)
+        //     value += this.combat.soak
 
-        current += value
+        // current += value
 
-        if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.severe)
-            await this.addWound("severe")
-        else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.heavy)
-            await this.addWound("heavy")
-        else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.light)
-            await this.addWound("light")
+        // // if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.severe)
+        // //     await this.addWound("severe")
+        // // else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.heavy)
+        // //     await this.addWound("heavy")
+        // // else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.light)
+        // //     await this.addWound("light")
 
-        ui.notifications.notify(`${-value} Damage applied to ${this.name}'s ${type.slice(0, 1).toUpperCase() + type.slice(1)}`)
+        // ui.notifications.notify(`${-value} Damage applied to ${this.name}'s ${type.slice(0, 1).toUpperCase() + type.slice(1)}`)
         
-        return this.update({[`data.${type}.value`] : current})
+        // return this.update({[`data.${type}.value`] : current})
     }
     
-    addWound(type)
-    {
-        return this.update({[`data.health.wounds.${type}`] : this.health.wounds[type] + 1 })
-    }
+    // addWound(type)
+    // {
+    //     return this.update({[`data.health.wounds.${type}`] : this.health.wounds[type] + 1 })
+    // }
 
 
     //#region Getters
