@@ -164,7 +164,7 @@
             <div class="wounds">
                 <div class="wound-group">
                     <div class="wound-label">
-                        <label>Wounds:</label> {{data.health.wounds}} 
+                        <label>Wounds:</label> {{data.health.wounds.value}} 
                     </div>
                     <div class="wound-buttons">
                         <a class="subtract-wound"> <i class="far fa-minus-square"></i></a>
@@ -260,7 +260,11 @@
                     {{> systems/pillars-of-eternity/templates/actor/actor-inventory.html}}
                 </div>
                 <div class="tab details save-scroll" data-tab="details">
+                    {{#if (eq actor.type "character")}}
                     {{> systems/pillars-of-eternity/templates/actor/actor-details.html}}
+                    {{else}}
+                    {{> systems/pillars-of-eternity/templates/actor/actor-creature-details.html}}
+                    {{/if}}
                 </div>
             </div>
         </section>

@@ -168,8 +168,21 @@
                 }
             ]
         },
-        "npc": {
-            "templates": []
+        "creature": {
+            "templates": [
+                "defenses",
+                "health",
+                "endurance",
+                "toughness",
+                "damageIncrement",
+                "species",
+                "tier",
+                "soak",
+                "size",
+                "initiative",
+                "stride",
+                "notes"
+            ]
         }
     },
     "Item": {

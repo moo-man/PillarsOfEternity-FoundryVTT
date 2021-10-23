@@ -629,6 +629,9 @@
   height: 100%;
   margin: 5px;
 }
+.pillars-of-eternity.actor.sheet .details .notes.creature{
+height: calc(100% - 15px);
+}
 
 .pillars-of-eternity.actor.sheet .details .detail-group {
   display: flex;

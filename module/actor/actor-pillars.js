@@ -24,12 +24,6 @@ export class PillarsActor extends Actor {
                     "token.displayBars": CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,    // Default display bars to be on owner hover
                 })
 
-        let createData = foundry.utils.deepClone(this.toObject().data)
-
-        createData.health.value = createData.health.max
-        createData.endurance.value = createData.endurance.max
-
-        this.data.update({data : createData})
         this.data.update({"flags.pillars-of-eternity.autoEffects" : true})
         // Default characters to HasVision = true and Link Data = true
         if (data.type == "character") {
@@ -225,16 +219,19 @@ export class PillarsActor extends Actor {
             }
         }
 
-        let thresholds = game.pillars.config.agePointsDeathRank
-        for(let pointThreshold in thresholds)
+        if (this.type == "character")
         {
-            if (parseInt(this.life.agingPoints) < parseInt(pointThreshold))
+            let thresholds = game.pillars.config.agePointsDeathRank
+            for(let pointThreshold in thresholds)
             {
-                this.life.march = thresholds[pointThreshold]
-                break;
+                if (parseInt(this.life.agingPoints) < parseInt(pointThreshold))
+                {
+                    this.life.march = thresholds[pointThreshold]
+                    break;
+                }
             }
-        }
-        this.life.march -= 1
+            this.life.march -= 1
+        }   
     }
 
     //#region Data Preparation

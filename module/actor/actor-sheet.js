@@ -115,8 +115,12 @@ export class PillarsActorSheet extends ActorSheet {
         sheetData.effects = this.constructEffectLists(sheetData) 
         this._setPowerSourcePercentage(sheetData)
         //this._createWoundsArrays(sheetData)
-        this._enrichKnownConnections(sheetData)
-        this._createDeathMarchArray(sheetData)
+        if (this.actor.type == "character")
+        {
+            this._enrichKnownConnections(sheetData)
+            this._createDeathMarchArray(sheetData)
+        }
+
         this._createHealthEnduranceArray(sheetData.data.health)
         this._createHealthEnduranceArray(sheetData.data.endurance)
     }   
@@ -615,7 +619,7 @@ export class PillarsActorSheet extends ActorSheet {
 
     _onWoundClick(event) {
         let multiplier = event.currentTarget.classList.contains("add-wound") ? 1 : -1
-        return this.actor.update({"data.health.wounds" : this.actor.health.wounds + 1 * multiplier })
+        return this.actor.update({"data.health.wounds.value" : this.actor.health.wounds.value + 1 * multiplier })
     }
 
     /* -------------------------------------------- */
