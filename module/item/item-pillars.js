@@ -155,6 +155,8 @@ export class PillarsItem extends Item {
         groupIds = groupIds.concat(this.duration.map(i => i.group).filter(g => !groupIds.includes(g)))
         groupIds = groupIds.concat(this.damage.value.map(i => i.group).filter(g => !groupIds.includes(g)))
         groupIds = groupIds.concat(this.base.effects.map(i => i.group).filter(g => !groupIds.includes(g)))
+        groupIds = groupIds.filter(i => i || Number.isNumeric(i))
+        groupIds.push("")
         
         let groups = {};
         for(let g of groupIds)
@@ -335,11 +337,11 @@ export class PillarsItem extends Item {
 
     get Type() {return game.i18n.localize(CONFIG.Item.typeLabels[this.type])}
 
-    get Range() {return game.pillars.config.powerRanges[this.data.data.range.find(i => i.group == this.displayGroupKey)?.value]}
+    get Range() {return game.pillars.config.powerRanges[this.range.find(i => i.group == this.displayGroupKey("range"))?.value]}
 
     get Target() {
 
-        let targetObj = this.target.find(i => i.group == this.displayGroupKey)
+        let targetObj = this.target.find(i => i.group == this.displayGroupKey("target"))
         if (!targetObj)    
             return
         let targetSubTypes = game.pillars.config[`power${targetObj.value[0].toUpperCase() + targetObj.value.slice(1)}s`]
@@ -349,9 +351,9 @@ export class PillarsItem extends Item {
 
         return target
     }
-    get Duration() {return game.pillars.config.powerDurations[this.duration.find(i => i.group == this.displayGroupKey)?.value]}
+    get Duration() {return game.pillars.config.powerDurations[this.duration.find(i => i.group == this.displayGroupKey("duration"))?.value]}
     get Speed() {return game.pillars.config.powerSpeeds[this.speed.value]}
-    get Exclusion() {return game.pillars.config.powerExclusions[this.target.find(i => i.group == this.displayGroupKey)?.exclusion]}
+    get Exclusion() {return game.pillars.config.powerExclusions[this.target.find(i => i.group == this.displayGroupKey("target"))?.exclusion]}
     get Skill() {return this.actor.getItemTypes("skill").find(i => i.name == this.skill.value)}
 
     get SourceItem() {
@@ -375,8 +377,41 @@ export class PillarsItem extends Item {
         })
     }
 
-    get displayGroupKey() {
-        return  Object.keys(this.groups).filter(i => i).sort((a, b) => {a - b > 0 ? 1 : -1})[0]
+    displayGroupKey(type) {
+        try {
+            let groupIndex = this.getFlag("pillars-of-eternity", "displayGroup")
+            let group = Object.keys(this.groups)[groupIndex]
+            let first =  Object.keys(this.groups).filter(i => i).sort((a, b) => {a - b > 0 ? 1 : -1})[0]
+            if (type)
+            {
+                if (group && this.groups[group] && this.groups[group][type]?.length)
+                    return group
+                else if (this.groups[first][type]?.length)
+                    return first
+                else
+                    return ""
+            }
+            else
+            {
+
+                if (group && this.groups[group]?.length)
+                    return group
+                else
+                    return first
+            }
+        }
+        catch (e)
+        {
+            console.error("Error getting power group display key: " + e)
+            return ""
+        }
+    }
+
+    get currentDisplayGroup()
+    {
+        let groupIndex = this.getFlag("pillars-of-eternity", "displayGroup")
+        let group = Object.keys(this.groups)[groupIndex]
+        return group
     }
     
 

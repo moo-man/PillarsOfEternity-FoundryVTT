@@ -357,6 +357,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".age-roll").click(this._onAgeRoll.bind(this))
         html.find(".roll-initiative").click(this._onInitiativeClick.bind(this))
         html.find(".setting").click(this._onSettingClick.bind(this))
+        html.find(".displayGroup").click(this._onDisplayGroupClick.bind(this))
         html.find('.item:not(".tab-select")').each((i, li) => {
             li.setAttribute("draggable", true);
             li.addEventListener("dragstart", this._onDragStart.bind(this), false);
@@ -586,7 +587,7 @@ export class PillarsActorSheet extends ActorSheet {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
         let index = $(event.currentTarget).attr("data-index")
         let item = this.actor.items.get(itemId)
-        let groupId = item.displayGroupKey//$(event.currentTarget).attr("data-group")
+        let groupId = item.displayGroupKey()//$(event.currentTarget).attr("data-group")
         PowerTemplate.fromItem(item, groupId, index).drawPreview()
     }
 
@@ -692,8 +693,6 @@ export class PillarsActorSheet extends ActorSheet {
         })
         await dialog._render(true)
         dialog.element.find("input")[0].focus()
-
-
     }
 
     async _onWeaponRoll(event) {
@@ -729,5 +728,20 @@ export class PillarsActorSheet extends ActorSheet {
         let check = new AgingRoll(checkData)
         await check.rollCheck();
         check.sendToChat()
+    }
+
+    
+    async _onDisplayGroupClick(ev){
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId)
+        let groupIndex = item.getFlag("pillars-of-eternity", "displayGroup")
+        if (!Number.isNumeric(groupIndex))
+          groupIndex = 0
+        else 
+          groupIndex++
+        if (groupIndex >= Object.keys(item.groups).length)
+          groupIndex = 0;
+
+        return item.setFlag("pillars-of-eternity", "displayGroup", groupIndex)
     }
 }

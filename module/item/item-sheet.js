@@ -55,7 +55,6 @@ export class PillarsItemSheet extends ItemSheet {
     {
       data.martialSkills = this.item.actor.getItemTypes("skill").filter(i => i.category.value == "martial").concat(game.items.contents.filter(i => i.type == "skill" && i.category.value == "martial"))
     }
-
     return data;
   }
   /** @override */
@@ -174,7 +173,7 @@ export class PillarsItemSheet extends ItemSheet {
       if (Number.isNumeric(value))
         value = parseInt(value)
 
-      data[index][target] = value
+      data[index][target] = value || ""
 
       return this.item.update({[`data.${property}`] : data})
 

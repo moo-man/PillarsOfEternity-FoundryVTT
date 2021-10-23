@@ -58,7 +58,6 @@
 <ol class="items-list powers-list">
     <li class="items-header flexrow">
         <h3 class="item-name flexrow">Powers</h3>
-            <!--<span class="item-property-column flex">Base Effects</span>-->
         <span class="item-property-column small">Level</span>
         <span class="item-property-column">Dmg</span>
         <span class="item-property-column small">Range</span>
@@ -81,6 +80,13 @@
                     <h4>{{item.name}}</h4>
                 </a>
             </div>
+
+
+            {{#if item.currentDisplayGroup}}
+            <a class="displayGroup" style="flex:0; opacity: 0.5; margin-top: 12px;">({{item.currentDisplayGroup}})</a>
+            {{else}}
+            <a class="displayGroup" style="flex:0; opacity: 0.5; margin-top: 12px;">(Default)</a>
+            {{/if}}
 
             <!--<span class="item-property-column flex">Base Effects</span>-->
             <span class="item-property-column small">{{item.level.value}}</span>
