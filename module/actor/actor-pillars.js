@@ -125,6 +125,9 @@ export class PillarsActor extends Actor {
             },
             initiative : {
                 value : []
+            },
+            soak : {
+                base : []
             }
         }
 
@@ -266,22 +269,20 @@ export class PillarsActor extends Actor {
 
     prepareCombat()
     {
-        this.data.data.combat = {
-            soak : 0
-        }
-
         let equippedArmor = this.getItemTypes("armor").filter(i => i.equipped.value)[0]
         let equippedShield = this.getItemTypes("shield").filter(i => i.equipped.value)[0]
 
         if (equippedArmor)
         {
-            this.combat.soak += equippedArmor.soak.value || 0
+            this.soak.base += equippedArmor.soak.value || 0
+            this.data.flags.tooltips.soak.base.push(equippedArmor.soak.value + " (Armor)")
             this.initiative.value += equippedArmor.initiative.value
             this.data.flags.tooltips.initiative.value.push(equippedArmor.initiative.value + " (Armor)")
         }
         if (equippedShield)
         {
-            this.combat.soak += equippedShield.soak.value || 0        
+            this.soak.base += equippedShield.soak.value || 0        
+            this.data.flags.tooltips.soak.base.push(equippedShield.soak.value + " (Shield)")
             this.defenses.deflection.value += equippedShield.deflection.value
             this.data.flags.tooltips.defenses.deflection.push(equippedShield.deflection.value + " (Shield)")
         }
@@ -589,6 +590,7 @@ export class PillarsActor extends Actor {
     get stride() { return this.data.data.stride}
     get initiative() { return this.data.data.initiative}
     get seasons() { return this.data.data.seasons}
+    get soak() {return this.data.data.soak}
 
 
     get combat() {return this.data.data.combat}

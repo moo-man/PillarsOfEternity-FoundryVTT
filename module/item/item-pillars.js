@@ -148,113 +148,122 @@ export class PillarsItem extends Item {
     //#region Power Functions
 
     preparePowerGroups() {
-        let config = game.pillars.config
-        let groupIds = []
-        groupIds = groupIds.concat(this.target.map(i => i.group).filter(g => !groupIds.includes(g)))
-        groupIds = groupIds.concat(this.range.map(i => i.group).filter(g => !groupIds.includes(g)))
-        groupIds = groupIds.concat(this.duration.map(i => i.group).filter(g => !groupIds.includes(g)))
-        groupIds = groupIds.concat(this.damage.value.map(i => i.group).filter(g => !groupIds.includes(g)))
-        groupIds = groupIds.concat(this.base.effects.map(i => i.group).filter(g => !groupIds.includes(g)))
-        groupIds = groupIds.filter(i => i || Number.isNumeric(i))
-        groupIds.push("")
-        
-        let groups = {};
+        try {
+            let config = game.pillars.config
+            let groupIds = []
+            groupIds = groupIds.concat(this.target.map(i => i.group).filter(g => !groupIds.includes(g)))
+            groupIds = groupIds.concat(this.range.map(i => i.group).filter(g => !groupIds.includes(g)))
+            groupIds = groupIds.concat(this.duration.map(i => i.group).filter(g => !groupIds.includes(g)))
+            groupIds = groupIds.concat(this.damage.value.map(i => i.group).filter(g => !groupIds.includes(g)))
+            groupIds = groupIds.concat(this.base.effects.map(i => i.group).filter(g => !groupIds.includes(g)))
+            groupIds = groupIds.filter(i => i || Number.isNumeric(i))
+            groupIds.push("")
+            
+            let groups = {};
+            for(let g of groupIds)
+            {
+                groups[g] = {}
+                groups[g].target = this.target.filter(i => i.group == g)
+                groups[g].range = this.range.filter(i => i.group == g)
+                groups[g].duration = this.duration.filter(i => i.group == g)
+                groups[g].damage = this.damage.value.filter(i => i.group == g)
+                groups[g].effects = this.base.effects.filter(i => i.group == g)
+                groups[g].healing = this.healing.filter(i => i.group == g)
+                groups[g].misc = this.misc.filter(i => i.group == g)
+
+                groups[g].display = {
+                    target : [],
+                    range : [],
+                    duration : [],
+                    damage : [],
+                    effects : [],
+                    healing: [],
+                    misc: [],
+                }
+
+                groups[g].display.target = groups[g].target.reduce((prev, current, index) => {
+                    prev.push(`<a class="power-target" data-group=${g} data-index=${index}>${this.getTargetDisplay(current)}</a>`)
+                    return prev
+                },[]).join(", ")
+
+                groups[g].display.range = groups[g].range.reduce((prev, current) => {
+                    prev.push(config.powerRanges[current.value])
+                    return prev
+                },[]).join(", ")
+
+                groups[g].display.duration = groups[g].duration.reduce((prev, current) => {
+                    prev.push(config.powerDurations[current.value])
+                    return prev
+                },[]).join(", ")
+
+                groups[g].display.damage = groups[g].damage.reduce((prev, current) => {
+                    let text = (`${current.base} ${config.damageTypes[current.type]} @DAMAGES vs. ${config.defenses[current.defense]}` + " ")                
+                    if (current.text)
+                        text += " " + current.text
+
+                    if (current.damages == "endurance")
+                        text = text.replace("@DAMAGES", "(Endurance)")
+                    else 
+                        text = text.replace("@DAMAGES", "")
+
+                    prev.push(text)
+                    return prev
+                },[]).join(", ") 
+                
+                groups[g].display.effects = groups[g].effects.reduce((prev, current) => {
+                    let text = "";
+                    if (current.defense && current.value)
+                        text = (`${CONFIG.statusEffects.find(i => i.id == current.value) ? CONFIG.statusEffects.find(i => i.id == current.value).label : this.effects.get(current.value).label } vs. ${config.defenses[current.defense]}`)
+                    else if (current.value)
+                        text = (`${CONFIG.statusEffects.find(i => i.id == current.value) ? CONFIG.statusEffects.find(i => i.id == current.value).label : this.effects.get(current.value).label }`)
+
+                    if (current.text)
+                        text += " " + current.text
+                    
+                    prev.push(text)
+                    return prev 
+                },[]).join(", ")
+                
+                groups[g].display.healing = groups[g].healing.reduce((prev, current) => {
+                    prev.push(`${current.value} ${current.type[0].toUpperCase() + current.type.slice(1)}`)
+                    return prev 
+                },[]).join(", ")
+                
+                groups[g].display.misc = groups[g].misc.reduce((prev, current) => {
+                    prev.push(current.value)
+                    return prev 
+                },[]).join(", ")
+                
+                if (groups[g].display.damage)
+                    groups[g].display.damage = `<a class='damage-roll' data-group="${g}">${groups[g].display.damage}</a>`
+        }
+
+
+        // assign any ungrouped value to any group that does not have the corresponding key
         for(let g of groupIds)
         {
-            groups[g] = {}
-            groups[g].target = this.target.filter(i => i.group == g)
-            groups[g].range = this.range.filter(i => i.group == g)
-            groups[g].duration = this.duration.filter(i => i.group == g)
-            groups[g].damage = this.damage.value.filter(i => i.group == g)
-            groups[g].effects = this.base.effects.filter(i => i.group == g)
-            groups[g].healing = this.healing.filter(i => i.group == g)
-            groups[g].misc = this.misc.filter(i => i.group == g)
-
-            groups[g].display = {
-                target : [],
-                range : [],
-                duration : [],
-                damage : [],
-                effects : [],
-                healing: [],
-                misc: [],
-            }
-
-            groups[g].display.target = groups[g].target.reduce((prev, current, index) => {
-                prev.push(`<a class="power-target" data-group=${g} data-index=${index}>${this.getTargetDisplay(current)}</a>`)
-                return prev
-            },[]).join(", ")
-
-            groups[g].display.range = groups[g].range.reduce((prev, current) => {
-                prev.push(config.powerRanges[current.value])
-                return prev
-            },[]).join(", ")
-
-            groups[g].display.duration = groups[g].duration.reduce((prev, current) => {
-                prev.push(config.powerDurations[current.value])
-                return prev
-            },[]).join(", ")
-
-            groups[g].display.damage = groups[g].damage.reduce((prev, current) => {
-                let text = (`${current.base} ${config.damageTypes[current.type]} @DAMAGES vs. ${config.defenses[current.defense]}` + " ")                
-                if (current.text)
-                    text += " " + current.text
-
-                if (current.damages == "endurance")
-                    text = text.replace("@DAMAGES", "(Endurance)")
-                else 
-                    text = text.replace("@DAMAGES", "")
-
-                prev.push(text)
-                return prev
-            },[]).join(", ") 
-            
-            groups[g].display.effects = groups[g].effects.reduce((prev, current) => {
-                let text = "";
-                if (current.defense)
-                    text = (`${CONFIG.statusEffects.find(i => i.id == current.value) ? CONFIG.statusEffects.find(i => i.id == current.value).label : this.effects.get(current.value).label } vs. ${config.defenses[current.defense]}`)
-                else if (current.value)
-                    text = (`${CONFIG.statusEffects.find(i => i.id == current.value) ? CONFIG.statusEffects.find(i => i.id == current.value).label : this.effects.get(current.value).label }`)
-
-                if (current.text)
-                    text += " " + current.text
-                
-                prev.push(text)
-                return prev 
-            },[]).join(", ")
-            
-            groups[g].display.healing = groups[g].healing.reduce((prev, current) => {
-                prev.push(`${current.value} ${current.type[0].toUpperCase() + current.type.slice(1)}`)
-                return prev 
-            },[]).join(", ")
-            
-            groups[g].display.misc = groups[g].misc.reduce((prev, current) => {
-                prev.push(current.value)
-                return prev 
-            },[]).join(", ")
-            
-            if (groups[g].display.damage)
-                groups[g].display.damage = `<a class='damage-roll' data-group="${g}">${groups[g].display.damage}</a>`
-    }
-
-
-    // assign any ungrouped value to any group that does not have the corresponding key
-    for(let g of groupIds)
-    {
-        if(g)
-        {
-            for(let display in groups[g].display)
+            if(g)
             {
-                if (!groups[g].display[display] && groups[""])
+                for(let display in groups[g].display)
                 {
-                    groups[g].display[display] = groups[""].display[display]
+                    if (!groups[g].display[display] && groups[""])
+                    {
+                        groups[g].display[display] = groups[""].display[display]
+                    }
                 }
             }
         }
-    }
 
-        delete groups[""]
-        return groups
+            if (Object.keys(groups).length == 1 && groups[""])
+                groups["Default"] = groups[""]
+            delete groups[""]
+            return groups
+        }
+        catch(e)
+        {
+            console.error(`Something went wrong when organizing power groups for ${this.name}: ` + e)
+            console.log(this)
+        }
     }
 
     getTargetDisplay(target)

@@ -133,6 +133,7 @@ export class PillarsActorSheet extends ActorSheet {
         data.tooltips.health.max = data.tooltips.health.max.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.endurance.max = data.tooltips.endurance.max.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.initiative.value = data.tooltips.initiative.value.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.soak.base = data.tooltips.soak.base.join(" + ").replaceAll("+ -", "- ")
     }
 
 
@@ -247,10 +248,13 @@ export class PillarsActorSheet extends ActorSheet {
                 e.state = 1
         })
 
-        data.array.forEach((e, i) => {
-            if (i < data.wounds)
-                e.state = 2
-        })
+        if (data.wounds)
+        {
+            data.array.forEach((e, i) => {
+                if (i < data.wounds.value)
+                    e.state = 2
+            })
+        }
     }
 
     _createDeathMarchArray(sheetData)

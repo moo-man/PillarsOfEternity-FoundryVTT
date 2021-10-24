@@ -31,6 +31,22 @@ export default class Migration {
       }
     }
 
+  // Migrate World Actors
+    for (let s of game.scenes.contents) {
+      try {
+        const updateData = this.migrateSceneData(s.data);
+        if (!foundry.utils.isObjectEmpty(updateData)) {
+          console.log(`Migrating Scene entity ${s.name}`);
+          await s.update(updateData);
+        }
+      } catch (err) {
+        err.message = `Failed pillars-of-eternity system migration for Scene ${s.name}: ${err.message}`;
+        console.error(err);
+      }
+    }
+
+    
+
     // // Set the migration as complete
     game.settings.set("pillars-of-eternity", "systemMigrationVersion", game.system.data.version);
     ui.notifications.info(`pillars-of-eternity System Migration to version ${game.system.data.version} completed!`, { permanent: true });
@@ -102,6 +118,30 @@ export default class Migration {
   migrateActorData(actor) {
     const updateData = {};
     let items = actor.items.map(i => this.migrateItemData(i, actor)).filter(i => !foundry.utils.isObjectEmpty(i))
+
+    updateData["data.health"] = {
+      "max": 9,
+      "value": 0,
+      "bonus" : 0,
+      "penalty" : 0,
+      "threshold": {
+          "value" : 6
+      },
+      "wounds": {
+          "value" : 0
+      }
+    }
+
+    updateData["data.endurance"] = {
+      "max": 8,
+      "value": 0,
+      "bonus" : 0,
+      "penalty" : 0,
+      "threshold": {
+          "value" : 4
+      }
+    }
+
     if (items.length)
       updateData.items = items
     return updateData;
@@ -119,12 +159,12 @@ export default class Migration {
   migrateItemData(item) {
     const updateData = {};
 
-    if (item.type == "weapon")
+    if (item.type == "power")
     {
-      let base = item.data.damage.value;
-      let crit = item.data.crit.value;
-      updateData["data.damage.value"] = [{label : item.name, defense : "deflection", base, crit, type : "physical"}]
-      updateData._id = item._id
+      updateData["data.range"] = [{value : item.data.range.value, group : ""}]
+      updateData["data.target"] = [{group : "", value : item.data.target.value, subtype : item.data.target.subtype, exclusion : item.data.exclusion.value}]
+      updateData["data.duration"] = [{group : "", value : item.data.duration.value}]
+      updateData["_id"] = item._id
     }
   
     return updateData;

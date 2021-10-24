@@ -2,7 +2,7 @@
     "Pillars.Title" : "Pillars of Eternity",
 
     "ACTOR.TypeCharacter" : "Character",
-    "ACTOR.TypeCreature" : "Creature",
+    "ACTOR.TypeNpc" : "Non-Player Character",
     "ACTOR.TypeFollower" : "Follower",
     "ACTOR.TypeHeadquarters" : "Headquarters",
 

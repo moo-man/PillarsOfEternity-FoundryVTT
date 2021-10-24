@@ -32,7 +32,7 @@ export default class PILLARS_UTILITY {
             if (speaker.actor)
                 return game.actors.get(speaker.actor)
             else if (speaker.token && speaker.scene)
-                return game.scenes.get(speaker.scene).tokens.get(speaker.token)
+                return game.scenes.get(speaker.scene).tokens.get(speaker.token).actor
             else
                 throw "Could not find speaker"
         }

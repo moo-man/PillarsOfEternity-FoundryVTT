@@ -2,7 +2,7 @@
     "Actor": {
         "types": [
             "character",
-            "creature",
+            "npc",
             "follower",
             "headquarters"
         ],
@@ -168,7 +168,7 @@
                 }
             ]
         },
-        "creature": {
+        "npc": {
             "templates": [
                 "defenses",
                 "health",
@@ -332,11 +332,6 @@
             "limitations": {
                 "group" : "",
                 "value": ""
-            },
-            "special" : {
-                "attacksAgainstDefense" : false,
-                "bounce" : false,
-                "jump" : "none"
             }
         },
         "powerSource": {
