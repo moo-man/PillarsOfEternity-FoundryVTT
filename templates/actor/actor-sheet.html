@@ -71,58 +71,60 @@
         </section>
         <hr>
         <section class="status">
-            <div class="property-group {{#if actor.health.bloodied}}bloodied{{/if}}" >
-                <label>Health</label>
-                <div class="status-array">
-                    {{#each data.health.array as | value key| }}
-                    {{#if (eq key ../data.health.threshold.value)}}
-                    <span class="threshold bloodied">|</span>
-                    {{/if}}
-                    {{#if (eq value.state 0)}}
-                    <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.health"><i class="far fa-circle"></i></a>
-                    {{else if (eq value.state 1)}}
-                    <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.health"><i class="far fa-times-circle"></i></a>
-                    {{else if (eq value.state 2)}}
-                    <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
-                    {{else if (eq value.state -1)}}
-                    <span class="penalty" data-index="{{key}}" data-target="data.health"><i class="fas fa-times-circle"></i></span>
-                    {{/if}}
-                    {{/each}}
-                </div>
-            </div>
-            <div class="property-group {{#if actor.endurance.winded}}winded{{/if}}">
-                <label>Endurance</label>
-                <div class="status-array">
-                    {{#each data.endurance.array as | value key| }}
-                    {{#if (eq key ../data.endurance.threshold.value)}}
-                    <span class="threshold winded">|</span>
-                    {{/if}}
-                    {{#if (eq value.state 0)}}
-                    <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.endurance"><i class="far fa-circle"></i></a>
-                    {{else if (eq value.state 1)}}
-                    <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.endurance"><i class="far fa-times-circle"></i></a>
-                    {{else if (eq value.state 2)}}
-                    <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
-                    {{else if (eq value.state -1)}}
-                    <span class="penalty" data-index="{{key}}" data-target="data.endurance"><i class="fas fa-times-circle"></i></span>
-                    {{/if}}
-                    {{/each}}
-                </div>
-            </div>
-            <!-- <div class="property-stack">
-                <div class="property-group small">
-                    <label>Stride</label>
-                    <div class="property-value">
-                        <input type="number" name="data.stride.value" value="{{data.stride.value}}" />
+            <div class="health-endurance">
+                <div class="property-group {{#if actor.health.bloodied}}bloodied{{/if}}" >
+                    <label>Health</label>
+                    <div class="status-array">
+                        {{#each data.health.array as | value key| }}
+                        {{#if (eq key ../data.health.threshold.value)}}
+                        <span class="threshold bloodied">|</span>
+                        {{/if}}
+                        {{#if (eq value.state 0)}}
+                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.health"><i class="far fa-circle"></i></a>
+                        {{else if (eq value.state 1)}}
+                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.health"><i class="far fa-times-circle"></i></a>
+                        {{else if (eq value.state 2)}}
+                        <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
+                        {{else if (eq value.state -1)}}
+                        <span class="penalty" data-index="{{key}}" data-target="data.health"><i class="fas fa-times-circle"></i></span>
+                        {{/if}}
+                        {{/each}}
                     </div>
                 </div>
-                <div class="property-group small initiative">
-                    <label>Initiative<a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a></label>
-                    <div class="property-value">
-                        <input type="number" title="{{tooltips.initiative.value}}" disabled value="{{data.initiative.value}}" />
+                <div class="property-group {{#if actor.endurance.winded}}winded{{/if}}">
+                    <label>Endurance</label>
+                    <div class="status-array">
+                        {{#each data.endurance.array as | value key| }}
+                        {{#if (eq key ../data.endurance.threshold.value)}}
+                        <span class="threshold winded">|</span>
+                        {{/if}}
+                        {{#if (eq value.state 0)}}
+                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.endurance"><i class="far fa-circle"></i></a>
+                        {{else if (eq value.state 1)}}
+                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.endurance"><i class="far fa-times-circle"></i></a>
+                        {{else if (eq value.state 2)}}
+                        <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
+                        {{else if (eq value.state -1)}}
+                        <span class="penalty" data-index="{{key}}" data-target="data.endurance"><i class="fas fa-times-circle"></i></span>
+                        {{/if}}
+                        {{/each}}
                     </div>
                 </div>
-            </div> -->
+            </div>
+            <div class="toughness-di">
+                    <div class="property-group small">
+                        <label>Tough.</label>
+                        <div class="property-value">
+                            <input type="number" disabled value="{{data.toughness.value}}" />
+                        </div>
+                    </div>
+                    <div class="property-group small">
+                        <label>D.I.</label>
+                        <div class="property-value">
+                            <input type="number" title="" disabled value="{{data.damageIncrement.value}}" />
+                        </div>
+                    </div>
+            </div>
         </section>
         <hr>
         <section class="wounds-injuries">

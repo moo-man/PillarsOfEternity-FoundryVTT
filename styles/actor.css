@@ -81,17 +81,10 @@
      margin: 0px 20px 0px 20px
 }
 
-.pillars-of-eternity.actor.sheet .general .property-stack {
-    display: flex;
-    flex-direction: column;
-}
 
-.pillars-of-eternity.actor.sheet .general .property-stack label{
-    font-size: 22px;
-}
 
-.pillars-of-eternity.actor.sheet .general .property-stack .property-value{
-    font-size: 18px
+.pillars-of-eternity.actor.sheet .general .property-value{
+    font-size: 15px
 }
 
 .pillars-of-eternity.actor.sheet .general .property-group input{
@@ -99,23 +92,55 @@
     width: 40px;
     font-size: 20px;
     text-align: center;
-    border: 1px solid black;
     border-radius: 5px;
     background: rgba(0, 0, 0, 0.05);
 }
 
-.pillars-of-eternity.actor.sheet .general .property-stack .property-value input{
-    height: 30px;
-    width: 40px;
-    font-size: 18px
+.pillars-of-eternity.actor.sheet .general .toughness-di .property-value input{
+    height: 25px;
+    width: 25px;
+    font-size: 15px
 }
 
 
 .pillars-of-eternity.actor.sheet .general .status  {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin-left: 10px;
 }
+
+
+.pillars-of-eternity.actor.sheet .general .status .health-endurance  {
+  display:flex;
+  flex-direction: column;
+  flex: 1
+}
+
+.pillars-of-eternity.actor.sheet .general .status .toughness-di  {
+  display:flex;
+  flex-direction: column;
+  flex: 0.3;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+
+.pillars-of-eternity.actor.sheet .general .status .toughness-di  .property-group{
+  text-align: center;
+  justify-content: center;
+  align-items: center;  
+}
+
+.pillars-of-eternity.actor.sheet .general .status .toughness-di  .property-group label {
+  font-size: 15px;
+}
+
+
+.pillars-of-eternity.actor.sheet .general .status .toughness-di  .property-group .property-value{
+  justify-content: center;
+  align-items: center;  
+}
+
 
 .pillars-of-eternity.actor.sheet .general .status .property-group {
   text-align: left;
