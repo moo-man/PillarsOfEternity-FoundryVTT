@@ -1,3 +1,4 @@
+
 export default function () {
 
     Hooks.on("ready", () => {
@@ -32,6 +33,5 @@ export default function () {
         {
             game.settings.set("pillars-of-eternity", "systemMigrationVersion", game.system.data.version);
         }
-        
     })
 }

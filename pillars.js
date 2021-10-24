@@ -4,6 +4,7 @@
  */
 
 // Import Modules
+import FoundryOverrides from "./module/system/overrides.js"
 import { PillarsItemSheet } from "./module/item/item-sheet.js";
 import { PillarsItem } from "./module/item/item-pillars.js";
 import { PillarsActorSheet } from "./module/actor/actor-sheet.js";
@@ -75,6 +76,7 @@ Hooks.on("init", () => {
         if (typeof POE[group][key] == "string")
           POE[group][key] = game.i18n.localize(POE[group][key])
     }
+    FoundryOverrides()
 })
 
   // Register all other hooks
