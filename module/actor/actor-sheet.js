@@ -121,8 +121,8 @@ export class PillarsActorSheet extends ActorSheet {
             this._createDeathMarchArray(sheetData)
         }
 
-        this._createHealthEnduranceArray(sheetData.data.health)
-        this._createHealthEnduranceArray(sheetData.data.endurance)
+        this._createHealthEnduranceArray(sheetData.data.health, "health")
+        this._createHealthEnduranceArray(sheetData.data.endurance, "endurance")
     }   
 
     formatTooltips(data)
@@ -228,9 +228,8 @@ export class PillarsActorSheet extends ActorSheet {
         })
     }
 
-    _createHealthEnduranceArray(data)
+    _createHealthEnduranceArray(data, type)
     {
-        // +1 for the separator
         data.array = new Array(data.max).fill().map(i => {return {state: 0}})
         if (data.bonus)
             data.array = new Array(data.bonus).fill({bonus: true, state : 0}).concat(data.array)

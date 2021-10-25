@@ -178,12 +178,13 @@ export class PillarsActor extends Actor {
         // if (this.woundModifier)
         //     this.data.flags.tooltips.health.max.push(-this.woundModifier + " (Wounds)")
 
-        this.health.threshold.value += this.health.bonus
-        this.endurance.threshold.value += this.endurance.bonus
+        this.health.threshold.bloodied += this.health.bonus
+        this.health.threshold.incap += this.health.bonus
+        this.endurance.threshold.winded += this.endurance.bonus
 
 
-        this.health.bloodied = this.health.value > this.health.threshold.value
-        this.endurance.winded = this.endurance.value > this.endurance.threshold.value
+        this.health.bloodied = this.health.value > this.health.threshold.bloodied
+        this.endurance.winded = this.endurance.value > this.endurance.threshold.winded
 
         if (this.getFlag("pillars-of-eternity", "autoEffects") && game.actors && game.actors.get(this.id))
         {

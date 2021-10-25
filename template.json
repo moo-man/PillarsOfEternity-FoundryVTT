@@ -42,7 +42,8 @@
                     "bonus" : 0,
                     "penalty" : 0,
                     "threshold": {
-                        "value" : 6
+                        "bloodied" : 3,
+                        "incap" : 6
                     },
                     "wounds": {
                         "value" : 0
@@ -56,7 +57,7 @@
                     "bonus" : 0,
                     "penalty" : 0,
                     "threshold": {
-                        "value" : 5
+                        "winded" : 5
                     },
                     "exert": 0
                 }
