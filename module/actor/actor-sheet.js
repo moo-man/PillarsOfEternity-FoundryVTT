@@ -121,8 +121,8 @@ export class PillarsActorSheet extends ActorSheet {
             this._createDeathMarchArray(sheetData)
         }
 
-        this._createHealthEnduranceArray(sheetData.data.health, "health")
-        this._createHealthEnduranceArray(sheetData.data.endurance, "endurance")
+        this._createHealthArray(sheetData.data.health, "health")
+        this._createEnduranceArray(sheetData.data.endurance, "endurance")
     }   
 
     formatTooltips(data)
@@ -228,7 +228,53 @@ export class PillarsActorSheet extends ActorSheet {
         })
     }
 
-    _createHealthEnduranceArray(data, type)
+    _createHealthArray(data)
+    {
+        let healthBonus, healthPenalty
+        if (data.modifier > 0)
+            healthBonus = data.modifier;
+        else 
+            healthPenalty = Math.abs(data.modifier)
+        
+        data.array = new Array(data.max).fill().map(i => {return {state: 0}})
+        if (healthBonus)
+            data.array = new Array(healthBonus).fill({bonus: true, state : 0}).concat(data.array)
+        else if (healthPenalty)
+            data.array = data.array.slice(healthPenalty)
+
+        let deathBonus, deathPenalty
+        if (data.death.modifier > 0)
+            deathBonus = data.death.modifier
+        else
+            deathPenalty = Math.abs(data.death.modifier)
+
+        if (deathBonus)
+            data.array = data.array.concat(new Array(data.death.modifier).fill().map(i => {return {state : 0, bonus: true}}))
+        else if (deathPenalty)
+        {
+            let counter = 0;
+            for (let i = data.array.length - 1; i >= 0 && counter < deathPenalty; i--)
+            {
+                data.array[i].state = -1;
+                counter++;
+            }
+        }
+
+        data.array.forEach((e, i) => {
+            if (i < data.value)
+                e.state = 1
+        })
+
+        if (data.wounds)
+        {
+            data.array.forEach((e, i) => {
+                if (i < data.wounds.value)
+                    e.state = 2
+            })
+        }
+    }
+
+    _createEnduranceArray(data)
     {
         data.array = new Array(data.max).fill().map(i => {return {state: 0}})
         if (data.bonus)
@@ -242,18 +288,11 @@ export class PillarsActorSheet extends ActorSheet {
                 penaltyCounter++;
             }
         }
+
         data.array.forEach((e, i) => {
             if (i < data.value)
                 e.state = 1
         })
-
-        if (data.wounds)
-        {
-            data.array.forEach((e, i) => {
-                if (i < data.wounds.value)
-                    e.state = 2
-            })
-        }
     }
 
     _createDeathMarchArray(sheetData)

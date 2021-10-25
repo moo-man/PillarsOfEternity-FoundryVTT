@@ -178,8 +178,8 @@ export class PillarsActor extends Actor {
         // if (this.woundModifier)
         //     this.data.flags.tooltips.health.max.push(-this.woundModifier + " (Wounds)")
 
-        this.health.threshold.bloodied += this.health.bonus
-        this.health.threshold.incap += this.health.bonus
+        this.health.threshold.bloodied += this.health.modifier
+        this.health.threshold.incap += this.health.modifier
         this.endurance.threshold.winded += this.endurance.bonus
 
 
@@ -278,7 +278,7 @@ export class PillarsActor extends Actor {
             this.soak.base += equippedArmor.soak.value || 0
             this.data.flags.tooltips.soak.base.push(equippedArmor.soak.value + " (Armor)")
             this.initiative.value += equippedArmor.initiative.value
-            this.endurance.threshold.value += equippedArmor.winded.value
+            this.endurance.threshold.winded += equippedArmor.winded.value
             this.data.flags.tooltips.initiative.value.push(equippedArmor.initiative.value + " (Armor)")
         }
         if (equippedShield)

@@ -39,8 +39,10 @@
                 "health": {
                     "max": 9,
                     "value": 0,
-                    "bonus" : 0,
-                    "penalty" : 0,
+                    "modifier" : 0,
+                    "death" : {
+                        "modifier" :  0
+                    },
                     "threshold": {
                         "bloodied" : 3,
                         "incap" : 6
