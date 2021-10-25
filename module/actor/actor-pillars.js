@@ -277,6 +277,7 @@ export class PillarsActor extends Actor {
             this.soak.base += equippedArmor.soak.value || 0
             this.data.flags.tooltips.soak.base.push(equippedArmor.soak.value + " (Armor)")
             this.initiative.value += equippedArmor.initiative.value
+            this.endurance.threshold.value += equippedArmor.winded.value
             this.data.flags.tooltips.initiative.value.push(equippedArmor.initiative.value + " (Armor)")
         }
         if (equippedShield)

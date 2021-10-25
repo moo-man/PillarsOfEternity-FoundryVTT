@@ -56,7 +56,7 @@
                     "bonus" : 0,
                     "penalty" : 0,
                     "threshold": {
-                        "value" : 4
+                        "value" : 5
                     },
                     "exert": 0
                 }
