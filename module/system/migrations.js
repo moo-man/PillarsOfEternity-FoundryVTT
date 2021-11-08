@@ -121,7 +121,7 @@ export default class Migration {
     let effects = actor.effects.map(i => this.migrateEffectData(i, actor)).filter(i => !foundry.utils.isObjectEmpty(i))
 
     updateData["data.defenses.reflex"] = actor.data.defenses.reflexes
-    updateData["data.defenses.-=reflexex"] = null
+    updateData["data.defenses.-=reflexes"] = null
 
     if (items.length)
       updateData.items = items
@@ -164,21 +164,6 @@ export default class Migration {
       updateData._id = effect._id
     }
 
-    return updateData;
-  };
-
-
-  /* -------------------------------------------- */
-
-  /**
-   * Migrate a single Effect entity to incorporate latest data model changes
-   *
-   * @param {object} effect Effect data to migrate
-   * @return {object}      The updateData to apply
-   */
-  migrateEffectData(effect) {
-    const updateData = {};
-    this._migrateEffectScript(effect, updateData)
     return updateData;
   };
 

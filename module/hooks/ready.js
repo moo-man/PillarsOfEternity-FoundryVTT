@@ -10,7 +10,7 @@ export default function () {
 
 
 
-            const NEEDS_MIGRATION_VERSION = "0.4.0";
+            const NEEDS_MIGRATION_VERSION = "0.4.3";
             let needMigration
         if (!game.settings.get("pillars-of-eternity", "systemMigrationVersion"))
         {
