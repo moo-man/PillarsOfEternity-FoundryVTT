@@ -22,6 +22,8 @@ export class PillarsActor extends Actor {
                     "token.bar2": { "attribute": "endurance" },               // Default Bar 2 to Advantage
                     "token.displayName": CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,    // Default display name to be on owner hover
                     "token.displayBars": CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,    // Default display bars to be on owner hover
+                    "token.dimSight": 12, 
+                    "token.brightSight": 6, 
                 })
 
         this.data.update({"flags.pillars-of-eternity.autoEffects" : true})

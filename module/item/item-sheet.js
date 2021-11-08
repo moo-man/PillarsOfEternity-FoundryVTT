@@ -127,6 +127,17 @@ export class PillarsItemSheet extends ItemSheet {
       this.item.effects.get(id).sheet.render(true)
     })
 
+    html.find(".add-damage").click(ev => {
+      let damage = foundry.utils.deepClone(this.item.damage.value)
+      damage.push({
+        label : "",
+        base : "",
+        crit : "",
+        defense : "Deflection",
+        type : "Physical"
+      })
+      return this.item.update({"data.damage.value" : damage})
+    })
 
     html.find(".add-property").click(ev => {
       let property = $(ev.currentTarget).parents(".form-group").attr("data-property")

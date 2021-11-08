@@ -43,40 +43,6 @@
             </div>
             {{/if}}
 
-
-            <hr>
-            <div class="form-group">
-                <label>Damage <a class="add-damage"><i class="fas fa-plus-square"></i></a></label>
-                <div class="damage-list">
-                {{#each item.damage.value as |damage d|}}
-                <div class="damage-inputs" data-index="{{d}}">
-                    <input type="text" class="damage label" placeholder="Label" value="{{damage.label}}">
-                    <input type="text" class="damage base" placeholder="Base" value="{{damage.base}}">
-                    <input type="text" class="damage crit" placeholder="Crit" value="{{damage.crit}}">
-                    <select class="damage type">
-                        {{#select damage.type}}
-                        {{#each (config "damageTypes") as |type t|}}
-                        <option value="{{t}}">{{type}}</option>
-                        {{/each}}
-                        {{/select}}
-                    </select>
-                    vs.
-                    <select class="damage defense">
-                        {{#select damage.defense}}
-                        {{#each (config "defenses") as |defense def|}}
-                        <option value="{{def}}">{{defense}}</option>
-                        {{/each}}
-                        {{/select}}
-                    </select>
-                    <div class="damage-control">
-                        <a class="remove-damage"><i class="fas fa-times"></i></a>
-                    </div>
-                </div>
-                {{/each}}
-                </div>
-            </div>
-            <hr>
-
             <div class="form-group">
                 <label>Accuracy</label>
                 <div class="form-fields small">
@@ -99,6 +65,42 @@
                 </div>
             </div>
             {{/if}}
+
+
+            <hr>
+            <div class="form-group power-group" data-property="damage.value">
+                <h3>Damage <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                {{#each item.damage.value as |damage d|}}
+                <div class="property-inputs" data-index="{{d}}">
+                    <input type="text" data-path="label" class="power-property" placeholder="Label" value="{{damage.label}}">
+                    <input type="text" data-path="base" class="power-property" placeholder="Base" value="{{damage.base}}">
+                    <input type="text" data-path="crit" class="power-property" placeholder="Crit" value="{{damage.crit}}">
+                    <select data-path="type" class="power-property">
+                        {{#select damage.type}}
+                        {{#each (config "damageTypes") as |type t|}}
+                        <option value="{{t}}">{{type}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                    vs.
+                    <select data-path="defense" class="power-property">
+                        {{#select damage.defense}}
+                        {{#each (config "defenses") as |defense def|}}
+                        <option value="{{def}}">{{defense}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                    <div class="property-control">
+                        <a class="remove-property"><i class="fas fa-times"></i></a>
+                    </div>
+                </div>
+                {{/each}}
+                </div>
+            </div>
+
+
+            <hr>
 
             <button type="button" class="item-specials">Configure Special Properties</button>
         
