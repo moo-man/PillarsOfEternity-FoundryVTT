@@ -76,7 +76,10 @@
                     <label>Health</label>
                     <div class="status-array">
                         {{#each data.health.array as | value key| }}
-                        {{#if (eq key ../data.health.threshold.value)}}
+                        {{#if (eq key ../data.health.threshold.bloodied)}}
+                        <span class="threshold bloodied">|</span>
+                        {{/if}}
+                        {{#if (eq key ../data.health.threshold.incap)}}
                         <span class="threshold bloodied">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
@@ -95,7 +98,7 @@
                     <label>Endurance</label>
                     <div class="status-array">
                         {{#each data.endurance.array as | value key| }}
-                        {{#if (eq key ../data.endurance.threshold.value)}}
+                        {{#if (eq key ../data.endurance.threshold.winded)}}
                         <span class="threshold winded">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
