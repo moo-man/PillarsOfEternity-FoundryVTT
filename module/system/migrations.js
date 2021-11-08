@@ -118,32 +118,15 @@ export default class Migration {
   migrateActorData(actor) {
     const updateData = {};
     let items = actor.items.map(i => this.migrateItemData(i, actor)).filter(i => !foundry.utils.isObjectEmpty(i))
+    let effects = actor.effects.map(i => this.migrateEffectData(i, actor)).filter(i => !foundry.utils.isObjectEmpty(i))
 
-    updateData["data.health"] = {
-      "max": 9,
-      "value": 0,
-      "bonus" : 0,
-      "penalty" : 0,
-      "threshold": {
-          "value" : 6
-      },
-      "wounds": {
-          "value" : 0
-      }
-    }
-
-    updateData["data.endurance"] = {
-      "max": 8,
-      "value": 0,
-      "bonus" : 0,
-      "penalty" : 0,
-      "threshold": {
-          "value" : 4
-      }
-    }
+    updateData["data.defenses.reflex"] = actor.data.defenses.reflexes
+    updateData["data.defenses.-=reflexex"] = null
 
     if (items.length)
       updateData.items = items
+    if (effects.length)
+      updateData.effects = effects
     return updateData;
   };
 
@@ -158,15 +141,29 @@ export default class Migration {
    */
   migrateItemData(item) {
     const updateData = {};
+    let effects = item.effects.map(i => this.migrateEffectData(i)).filter(i => !foundry.utils.isObjectEmpty(i))
+    if (effects.length)
+      updateData.effects = effects
+    return updateData;
+  };
 
-    if (item.type == "power")
+
+  migrateEffectData(effect) {
+    const updateData = {};
+
+    let changes = duplicate(effect.changes)
+    let changed = false;
+    changes.forEach(c => {
+      if(c.key.includes("reflexes"))
+        changed = true;
+      c.key = c.key.replace("reflexes", "reflex")
+    })
+    if (changed)
     {
-      updateData["data.range"] = [{value : item.data.range.value, group : ""}]
-      updateData["data.target"] = [{group : "", value : item.data.target.value, subtype : item.data.target.subtype, exclusion : item.data.exclusion.value}]
-      updateData["data.duration"] = [{group : "", value : item.data.duration.value}]
-      updateData["_id"] = item._id
+      updateData.changes = changes
+      updateData._id = effect._id
     }
-  
+
     return updateData;
   };
 

@@ -82,18 +82,18 @@ export class PillarsActor extends Actor {
         data.toughness.value = attributes.toughness
 
         data.defenses.deflection.value = 10 - (data.size.value * 2)
-        data.defenses.reflexes.value = 15 - (data.size.value * 2)
+        data.defenses.reflex.value = 15 - (data.size.value * 2)
         data.defenses.fortitude.value = 15 + (data.size.value * 2)
         data.defenses.will.value = 15
 
 
         this.data.flags.tooltips.defenses.deflection.push("10" + " (Base)")
-        this.data.flags.tooltips.defenses.reflexes.push("15" + " (Base)")
+        this.data.flags.tooltips.defenses.reflex.push("15" + " (Base)")
         this.data.flags.tooltips.defenses.fortitude.push("15" + " (Base)")
         this.data.flags.tooltips.defenses.will.push("15" + " (Base)")
 
         this.data.flags.tooltips.defenses.deflection.push(-data.size.value * 2 + " (Size)")
-        this.data.flags.tooltips.defenses.reflexes.push(data.size.value * 2 + " (Size)")
+        this.data.flags.tooltips.defenses.reflex.push(-data.size.value * 2 + " (Size)")
         this.data.flags.tooltips.defenses.fortitude.push(data.size.value * 2 + " (Size)")
 
         // data.health.threshold = {light : attributes.light, heavy : attributes.heavy, severe : attributes.severe}
@@ -115,7 +115,7 @@ export class PillarsActor extends Actor {
         this.data.flags.tooltips = {
             defenses : {
                 deflection: [],
-                reflexes: [],
+                reflex: [],
                 fortitude: [],
                 will: []
             },

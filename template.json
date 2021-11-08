@@ -21,7 +21,7 @@
                         "penalty": 0,
                         "checked": false
                     },
-                    "reflexes": {
+                    "reflex": {
                         "value": 10,
                         "bonus": 0,
                         "penalty": 0,

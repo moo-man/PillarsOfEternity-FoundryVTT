@@ -3,7 +3,7 @@ export const POE = {};
 POE.defenses = {
     deflection: "Deflection",
     fortitude: "Fortitude",
-    reflexes: "Reflexes",
+    reflex: "Reflex",
     will: "Will"
 }
 
@@ -654,7 +654,7 @@ CONFIG.statusEffects = [
             { key: "steps", mode: 0, value: -2 },
             { key: "data.defenses.deflection.value", mode: 2, value: -3 },
             { key: "data.defenses.fortitude.value", mode: 2, value: -3 },
-            { key: "data.defenses.reflexes.value", mode: 2, value: -3 },
+            { key: "data.defenses.reflex.value", mode: 2, value: -3 },
             { key: "data.defenses.will.value", mode: 2, value: -3 }],
         flags: { "pillars-of-eternity.description": "All Rolls", "pillars-of-eternity.manual": true }
     },
@@ -666,7 +666,7 @@ CONFIG.statusEffects = [
             { key: "steps", mode: 0, value: -1 },
             { key: "data.defenses.deflection.value", mode: 2, value: -2 },
             { key: "data.defenses.fortitude.value", mode: 2, value: -2 },
-            { key: "data.defenses.reflexes.value", mode: 2, value: -2 },
+            { key: "data.defenses.reflex.value", mode: 2, value: -2 },
             { key: "data.defenses.will.value", mode: 2, value: -2 }],
         flags: { "pillars-of-eternity.description": "All Rolls", "pillars-of-eternity.manual": true }
     },
