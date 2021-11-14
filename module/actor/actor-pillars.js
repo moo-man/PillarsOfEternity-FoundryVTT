@@ -56,6 +56,7 @@ export class PillarsActor extends Actor {
         {
             data.details.species  = speciesItem.name;
             data.stride.value = speciesItem.stride.value
+            this.data.flags.tooltips.stride.value.push(`${speciesItem.stride.value} (${speciesItem.name})`)
             data.size.value = speciesItem.size.value
             this.setSizeData(data)
         }
@@ -80,6 +81,8 @@ export class PillarsActor extends Actor {
         let attributes = game.pillars.config.sizeAttributes[data.size.value][tier]
         data.damageIncrement.value = attributes.damageIncrement
         data.toughness.value = attributes.toughness
+        this.data.flags.tooltips.toughness.value.push(data.toughness.value + " (Base)")
+        this.data.flags.tooltips.damageIncrement.value.push(data.damageIncrement.value + " (Base)")
 
         data.defenses.deflection.value = 10 - (data.size.value * 2)
         data.defenses.reflex.value = 15 - (data.size.value * 2)
@@ -95,20 +98,6 @@ export class PillarsActor extends Actor {
         this.data.flags.tooltips.defenses.deflection.push(-data.size.value * 2 + " (Size)")
         this.data.flags.tooltips.defenses.reflex.push(-data.size.value * 2 + " (Size)")
         this.data.flags.tooltips.defenses.fortitude.push(data.size.value * 2 + " (Size)")
-
-        // data.health.threshold = {light : attributes.light, heavy : attributes.heavy, severe : attributes.severe}
-        // data.health.max = attributes.maxHealthEndurance
-        // data.endurance.max = attributes.maxHealthEndurance
-        // data.health.bloodiedThreshold = data.health.max / 2
-
-        // this.data.flags.tooltips.health.max.push("36" + " (Base)")
-        // this.data.flags.tooltips.endurance.max.push("36" + " (Base)")
-
-        // this.data.flags.tooltips.health.max.push((attributes.maxHealthEndurance - 36) + " (Size)")
-        // this.data.flags.tooltips.endurance.max.push((attributes.maxHealthEndurance - 36)  + " (Size)")
-
-        // data.endurance.windedThreshold = attributes.windedExert
-        //data.endurance.exert = attributes.windedExert
     }
 
     prepareBaseData() {
@@ -130,25 +119,31 @@ export class PillarsActor extends Actor {
             },
             soak : {
                 base : []
+            },
+            stride : {
+                value : []
+            },
+            run : {
+                value : []
+            },
+            toughness: {
+                value : []
+            },
+            damageIncrement : {
+                value : []
             }
         }
 
         this.setSpeciesData(this.data.data)
+        this.run.value = 0 // Set run to 0 so active effects can still be applied to the the derived value
+        this.data.flags.tooltips.run.value.push(`Stride x 2 (Base)`)
 
-        // this.health.base = this.health.max
-        // this.endurance.base = this.endurance.max
-        // this.data.flags.tooltips.health.max.push(this.health.base + " (Base)")
-        // this.data.flags.tooltips.endurance.max.push(this.endurance.base + " (Base)")
+      
 
         let tierBonus = (game.pillars.config.tierBonus[this.tier.value])
         
         if (tierBonus)
         {
-            // this.health.max += Math.floor(this.health.base * tierBonus.bonus)
-            // this.data.flags.tooltips.health.max.push(Math.floor(this.health.base * tierBonus.bonus) + " (Tier)")
-
-            // this.endurance.max += Math.floor(this.endurance.base * tierBonus.bonus)
-            // this.data.flags.tooltips.endurance.max.push(Math.floor(this.endurance.base * tierBonus.bonus) + " (Tier)")
 
             for (let defense in this.defenses)
             {
@@ -176,11 +171,9 @@ export class PillarsActor extends Actor {
 
     prepareDerivedData() {
 
-        // this.health.max -= this.woundModifier
-        // if (this.woundModifier)
-        //     this.data.flags.tooltips.health.max.push(-this.woundModifier + " (Wounds)")
-
         let equippedArmor = this.getItemTypes("armor").filter(i => i.equipped.value)[0]
+
+        this.run.value += this.stride.value * 2
 
         this.health.threshold.bloodied += this.health.modifier
         this.health.threshold.incap += this.health.modifier
@@ -594,6 +587,7 @@ export class PillarsActor extends Actor {
     get details() { return this.data.data.details}
     get knownConnections() { return this.data.data.knownConnections}
     get stride() { return this.data.data.stride}
+    get run() { return this.data.data.run}
     get initiative() { return this.data.data.initiative}
     get seasons() { return this.data.data.seasons}
     get soak() {return this.data.data.soak}

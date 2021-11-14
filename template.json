@@ -60,8 +60,7 @@
                     "penalty" : 0,
                     "threshold": {
                         "winded" : 5
-                    },
-                    "exert": 0
+                    }
                 }
             },
             "soak" : {
@@ -93,6 +92,9 @@
             "stride": {
                 "stride": {
                     "value": 0
+                },
+                "run" : {
+                    "value" : 0
                 }
             },
             "initiative": {
