@@ -2,7 +2,7 @@ export default class PillarsActiveEffect extends ActiveEffect {
     
 
     prepareData() {
-        if (this.requiresEquip && this.item?.canEquip)
+        if (game.ready && this.requiresEquip && this.item?.canEquip)
             this.data.disabled = !this.item.equipped.value
     }
 
