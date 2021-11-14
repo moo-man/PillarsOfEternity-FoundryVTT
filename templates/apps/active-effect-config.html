@@ -61,6 +61,14 @@
             </div>
         </div>
         {{/if}}
+        {{#if showEquip}}
+        <div class="form-group">
+            <label>Item Equip</label>
+            <div class="form-fields">
+                <input type="checkbox" name="flags.pillars-of-eternity.itemEquip" {{checked data.flags.pillars-of-eternity.itemEquip}}/>
+            </div>
+        </div>
+        {{/if}}
     </section>
 
     <!-- Duration Tab -->

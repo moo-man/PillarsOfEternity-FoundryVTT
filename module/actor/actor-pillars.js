@@ -33,19 +33,7 @@ export class PillarsActor extends Actor {
             this.data.update({ "token.actorLink": true });
         }
     }
-
-    // setSpeciesData(speciesItem) 
-    // {
-    //     let data = this.toObject().data
-    //     data.size.value = speciesItem.size.value
-    //     this.setSizeData(data)
-
-    //     data.stride.value = speciesItem.stride.value
-    //     data.details.species  = speciesItem.species.value;
-    //     data.details.stock = speciesItem.stock.value
-    //     return this.update({"data" : data})
-    // }
-
+    
     setSpeciesData(data) 
     {
         let speciesItem = this.getItemTypes("species")[0]

@@ -91,7 +91,7 @@ export class PillarsItemSheet extends ItemSheet {
         if (this.item.isOwned)
           return ui.notifications.error("Creating effects on Owned Items is not currently supported by Foundry. You must create the effect on a World Item and then add that Item to the actor.")
 
-        let effectData = { label: this.item.name , icon: "icons/svg/aura.svg"}
+        let effectData = { label: this.item.name , icon: this.item.data.img || "icons/svg/aura.svg"}
         let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/quick-effect.html", effectData)
         let dialog = new Dialog({
             title : "Quick Effect",

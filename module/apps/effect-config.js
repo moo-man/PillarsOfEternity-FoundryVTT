@@ -9,6 +9,7 @@ export default class PillarsEffectConfig extends ActiveEffectConfig {
     getData()
     {
         let data = super.getData();
+        data.showEquip = this.object.item?.canEquip
         data.modes[6] = "Roll Dialog"
         data.modes[7] = "Targeter's Roll Dialog"
         return data
