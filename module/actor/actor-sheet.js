@@ -139,6 +139,9 @@ export class PillarsActorSheet extends ActorSheet {
         data.tooltips.run.value = data.tooltips.run.value.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.toughness.value = data.tooltips.toughness.value.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.damageIncrement.value = data.tooltips.damageIncrement.value.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.health.threshold.bloodied = data.tooltips.health.threshold.bloodied.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.health.threshold.incap = data.tooltips.health.threshold.incap.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.endurance.threshold.winded = data.tooltips.endurance.threshold.winded.join(" + ").replaceAll("+ -", "- ")
     }
 
 

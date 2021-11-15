@@ -475,6 +475,9 @@ export class PillarsItem extends Item {
     get base() {return this.data.data.base}
     get level() {return this.data.data.level}
     get healing() {return this.data.data.healing}
+    get toughness() {return this.data.data.toughness}
+    get stride() {return this.data.data.stride}
+    get run() {return this.data.data.run}
 
     // Processed data getters
     get rank() {return this.xp.rank}

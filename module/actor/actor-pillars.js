@@ -77,6 +77,9 @@ export class PillarsActor extends Actor {
         data.defenses.fortitude.value = 15 + (data.size.value * 2)
         data.defenses.will.value = 15
 
+        this.data.flags.tooltips.endurance.threshold.winded.push(this.endurance.threshold.winded + " (Base)")
+        this.data.flags.tooltips.health.threshold.bloodied.push(this.health.threshold.bloodied + " (Base)")
+        this.data.flags.tooltips.health.threshold.incap.push(this.health.threshold.incap + " (Base)")
 
         this.data.flags.tooltips.defenses.deflection.push("10" + " (Base)")
         this.data.flags.tooltips.defenses.reflex.push("15" + " (Base)")
@@ -98,9 +101,16 @@ export class PillarsActor extends Actor {
             },
             health : {
                 max : [],
+                threshold : {
+                    bloodied: [],
+                    incap : []
+                }
             },
             endurance : {
-                max : []
+                max : [],
+                threshold :{
+                    winded : []
+                }
             },
             initiative : {
                 value : []
@@ -169,9 +179,15 @@ export class PillarsActor extends Actor {
         this.health.threshold.incap += this.health.modifier
         this.endurance.threshold.winded += this.endurance.bonus
         if (equippedArmor)
+        {
             this.endurance.threshold.winded += (equippedArmor.winded.value || 0)
+            this.data.flags.tooltips.endurance.threshold.winded.push(equippedArmor.winded.value + " (Armor)")
+        }
         if (equippedShield)
+        {
             this.endurance.threshold.winded += (equippedShield.winded.value || 0)
+            this.data.flags.tooltips.endurance.threshold.winded.push(equippedShield.winded.value + " (Shield)")
+        }
 
         this.health.bloodied = this.health.value > this.health.threshold.bloodied
         this.endurance.winded = this.endurance.value > this.endurance.threshold.winded
@@ -266,9 +282,16 @@ export class PillarsActor extends Actor {
         if (equippedArmor)
         {
             this.soak.base += equippedArmor.soak.value || 0
-            this.data.flags.tooltips.soak.base.push(equippedArmor.soak.value + " (Armor)")
             this.initiative.value += equippedArmor.initiative.value
+            this.toughness.value += equippedArmor.toughness.value
+            this.stride.value += equippedArmor.stride.value
+            this.run.value += equippedArmor.run.value
+
+            this.data.flags.tooltips.soak.base.push(equippedArmor.soak.value + " (Armor)")
             this.data.flags.tooltips.initiative.value.push(equippedArmor.initiative.value + " (Armor)")
+            this.data.flags.tooltips.toughness.value.push(equippedArmor.toughness.value + " (Armor)")
+            this.data.flags.tooltips.stride.value.push(equippedArmor.stride.value + " (Armor)")
+            this.data.flags.tooltips.run.value.push(equippedArmor.run.value + " (Armor)")
         }
         if (equippedShield)
         {
@@ -584,6 +607,7 @@ export class PillarsActor extends Actor {
     get initiative() { return this.data.data.initiative}
     get seasons() { return this.data.data.seasons}
     get soak() {return this.data.data.soak}
+    get toughness() {return this.data.data.toughness}
 
 
     get combat() {return this.data.data.combat}

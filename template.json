@@ -401,6 +401,15 @@
             },
             "initiative": {
                 "value": 0
+            },
+            "stride": {
+                "value": 0
+            },
+            "run": {
+                "value": 0
+            },
+            "toughness": {
+                "value": 0
             }
         },
         "shield": {

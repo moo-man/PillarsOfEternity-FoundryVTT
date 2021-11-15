@@ -77,10 +77,10 @@
                     <div class="status-array">
                         {{#each data.health.array as | value key| }}
                         {{#if (eq key ../data.health.threshold.bloodied)}}
-                        <span class="threshold bloodied">|</span>
+                        <span title="{{../tooltips.health.threshold.bloodied}}" class="threshold bloodied">|</span>
                         {{/if}}
                         {{#if (eq key ../data.health.threshold.incap)}}
-                        <span class="threshold bloodied">|</span>
+                        <span title="{{../tooltips.health.threshold.incap}}" class="threshold bloodied">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
                         <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.health"><i class="far fa-circle"></i></a>
@@ -99,7 +99,7 @@
                     <div class="status-array">
                         {{#each data.endurance.array as | value key| }}
                         {{#if (eq key ../data.endurance.threshold.winded)}}
-                        <span class="threshold winded">|</span>
+                        <span title="{{../tooltips.endurance.threshold.winded}}" class="threshold winded">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
                         <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.endurance"><i class="far fa-circle"></i></a>
