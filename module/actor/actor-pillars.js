@@ -160,6 +160,7 @@ export class PillarsActor extends Actor {
     prepareDerivedData() {
 
         let equippedArmor = this.getItemTypes("armor").filter(i => i.equipped.value)[0]
+        let equippedShield = this.getItemTypes("shield").filter(i => i.equipped.value)[0]
 
         this.run.value += this.stride.value * 2
 
@@ -168,6 +169,8 @@ export class PillarsActor extends Actor {
         this.endurance.threshold.winded += this.endurance.bonus
         if (equippedArmor)
             this.endurance.threshold.winded += (equippedArmor.winded.value || 0)
+        if (equippedShield)
+            this.endurance.threshold.winded += (equippedShield.winded.value || 0)
 
         this.health.bloodied = this.health.value > this.health.threshold.bloodied
         this.endurance.winded = this.endurance.value > this.endurance.threshold.winded
