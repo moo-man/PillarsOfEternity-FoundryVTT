@@ -106,7 +106,8 @@ export class PillarsActor extends Actor {
                 value : []
             },
             soak : {
-                base : []
+                base : [],
+                shield : []
             },
             stride : {
                 value : []
@@ -271,8 +272,9 @@ export class PillarsActor extends Actor {
         }
         if (equippedShield)
         {
-            this.soak.base += equippedShield.soak.value || 0        
-            this.data.flags.tooltips.soak.base.push(equippedShield.soak.value + " (Shield)")
+            this.soak.shield = this.soak.base + (equippedShield.soak.value || 0)
+            this.data.flags.tooltips.soak.shield = this.data.flags.tooltips.soak.shield.concat(this.data.flags.tooltips.soak.base) 
+            this.data.flags.tooltips.soak.shield.push(equippedShield.soak.value + " (Shield)")
             this.defenses.deflection.value += equippedShield.deflection.value
             this.data.flags.tooltips.defenses.deflection.push(equippedShield.deflection.value + " (Shield)")
         }

@@ -17,6 +17,10 @@
         <div class="soak">
             <h3>Soak: </h3>
             <input type="number" disabled class="value" title="{{tooltips.soak.base}}" value="{{data.soak.base}}">
+            {{#if items.equipped.shields.length}}
+            <img class="soak-shield" src="icons/svg/shield.svg"/>
+            <input class="soak-shield-num" type="number" disabled class="value" title="{{tooltips.soak.shield}}" value="{{data.soak.shield}}">
+            {{/if}}
         </div>
     </div>
 

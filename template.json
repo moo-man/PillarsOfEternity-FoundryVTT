@@ -66,6 +66,7 @@
             "soak" : {
                 "soak" : {
                     "base" : 0,
+                    "shield" : 0,
                     "physical" : 0,
                     "burn" : 0,
                     "freeze" : 0,
