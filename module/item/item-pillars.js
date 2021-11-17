@@ -349,16 +349,22 @@ export class PillarsItem extends Item {
     get Range() {return game.pillars.config.powerRanges[this.range.find(i => i.group == this.displayGroupKey("range"))?.value]}
 
     get Target() {
+        try {
 
-        let targetObj = this.target.find(i => i.group == this.displayGroupKey("target"))
-        if (!targetObj)    
+            let targetObj = this.target.find(i => i.group == this.displayGroupKey("target"))
+            if (!targetObj)    
             return
-        let targetSubTypes = game.pillars.config[`power${targetObj.value[0].toUpperCase() + targetObj.value.slice(1)}s`]
-        let target = targetSubTypes[targetObj.subtype]
-        if (!target)
+            let targetSubTypes = game.pillars.config[`power${targetObj.value[0].toUpperCase() + targetObj.value.slice(1)}s`]
+            let target = targetSubTypes[targetObj.subtype]
+            if (!target)
             target = game.pillars.config.powerTargetTypes[targetObj.value]
-
-        return target
+            
+            return target
+        }
+        catch(e)
+        {
+            console.error("Error when getting target")
+        }
     }
     get Duration() {return game.pillars.config.powerDurations[this.duration.find(i => i.group == this.displayGroupKey("duration"))?.value]}
     get Speed() {return game.pillars.config.powerSpeeds[this.speed.value]}
@@ -418,9 +424,15 @@ export class PillarsItem extends Item {
 
     get currentDisplayGroup()
     {
-        let groupIndex = this.getFlag("pillars-of-eternity", "displayGroup")
-        let group = Object.keys(this.groups)[groupIndex]
-        return group
+        try {
+            let groupIndex = this.getFlag("pillars-of-eternity", "displayGroup")
+            let group = Object.keys(this.groups)[groupIndex]
+            return group
+        }
+        catch(e)
+        {
+            console.error("Error when trying to get current display group")
+        }
     }
     
 
