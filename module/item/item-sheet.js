@@ -51,9 +51,11 @@ export class PillarsItemSheet extends ItemSheet {
         data.powerEffects.item = Array.from(this.item.effects)
     }
 
-    if (this.item.type == "weapon" && this.item.isOwned)
+    if (this.item.type == "weapon")
     {
-      data.martialSkills = this.item.actor.getItemTypes("skill").filter(i => i.category.value == "martial").concat(game.items.contents.filter(i => i.type == "skill" && i.category.value == "martial"))
+      data.martialSkills = game.items.contents.filter(i => i.type == "skill" && i.category.value == "martial")
+      if (this.item.isOwned)
+        data.martialSkills = data.martialSkills.concat(this.item.actor.getItemTypes("skill").filter(i => i.category.value == "martial"));
     }
     return data;
   }
