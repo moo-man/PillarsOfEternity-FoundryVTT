@@ -472,6 +472,9 @@ export class PillarsActorSheet extends ActorSheet {
         let type = $(event.currentTarget).attr("data-type");
         let category = $(event.currentTarget).attr("data-category");
         let createData = { name: `New ${game.i18n.localize(CONFIG.Item.typeLabels[type])}`, type}
+        if (type == "power")
+            createData["data.improvised.value"] = true
+            
         if (category)
             createData["data.category.value"] = category
         return this.actor.createEmbeddedDocuments("Item", [createData])

@@ -601,6 +601,12 @@ POE.rangedSpecials = {
         hasValue: false,
         skilled: false
     },
+    "stationaryReload": {
+        label: "Stationary Reload",
+        description: "This weapon must be reloaded as a Move after firing before it can be fired again, but the character cannot move.",
+        hasValue: false,
+        skilled: false
+    },
     "snapshot": {
         label: "Snapshot",
         description: "In the first round of a character's combat, if this weapon is already loaded and in hand, it can be fired before the Move phase. Characters perform Snapshots in standard Initiative order. Additionally, Snapshot makes the Standard Attack of this weapon an Immediate instead of an Action.",

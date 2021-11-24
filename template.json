@@ -338,6 +338,9 @@
             "limitations": {
                 "group" : "",
                 "value": ""
+            },
+            "improvised" : {
+                "value" : false
             }
         },
         "powerSource": {

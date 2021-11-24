@@ -89,7 +89,7 @@
             {{/if}}
 
             <!--<span class="item-property-column flex">Base Effects</span>-->
-            <span class="item-property-column small">{{item.level.value}}</span>
+            <span class="item-property-column small" {{item.level.value}} {{#if item.improvised.value}} title="Improvised Cost" {{/if}}>{{item.level.value}} {{#if item.improvised.value}} ({{item.level.cost}}) {{/if}}</span>
             {{#if item.damage.value.length}}
             <button type = "button" class="item-property-column damage-roll">Roll</button>
             {{else}}

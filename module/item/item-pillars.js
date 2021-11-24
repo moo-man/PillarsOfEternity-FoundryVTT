@@ -58,6 +58,7 @@ export class PillarsItem extends Item {
 
         this.groups = this.preparePowerGroups()
         this.level.value = this.calculatePowerLevel()
+        this.level.cost = this.improvised.value ? this.level.value * 2 : this.level.value 
     }
 
     prepareOwnedSkill() {
@@ -490,6 +491,7 @@ export class PillarsItem extends Item {
     get toughness() {return this.data.data.toughness}
     get stride() {return this.data.data.stride}
     get run() {return this.data.data.run}
+    get improvised() {return this.data.data.improvised}
 
     // Processed data getters
     get rank() {return this.xp.rank}
