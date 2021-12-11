@@ -877,5 +877,15 @@ CONFIG.statusEffects = [
         id: "inspiring",
         label: "Inspiring",
         icon: "systems/pillars-of-eternity/assets/conditions/inspiring.png"
+    },
+    {
+        id: "incapacitated",
+        label: "Incapacitated",
+        icon: "icons/svg/skull.svg"
+    },
+    {
+        id: "dead",
+        label: "Dead",
+        icon: "systems/pillars-of-eternity/assets/conditions/dead.svg"
     }
 ]

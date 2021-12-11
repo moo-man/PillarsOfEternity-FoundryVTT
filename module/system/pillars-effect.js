@@ -51,6 +51,10 @@ export default class PillarsActiveEffect extends ActiveEffect {
         }
     }
 
+    get conditionId() {
+        return this.getFlag("core", "statusId")
+    }
+
     get requiresEquip() {
         return getProperty(this.data, "flags.pillars-of-eternity.itemEquip")
     }

@@ -27,6 +27,7 @@ import ActorConfigure from "./module/apps/actor-configure.js"
 import DamageDialog from "./module/apps/damage-dialog.js";
 import WeaponCheck from "./module/system/weapon-check.js";
 import PowerCheck from "./module/system/power-check.js";
+import PillarsTokenDocument from "./module/system/token.js";
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -44,6 +45,8 @@ Hooks.on("init", () => {
   CONFIG.Combat.documentClass = PillarsCombat;
   CONFIG.ActiveEffect.documentClass = PillarsActiveEffect;
   CONFIG.ActiveEffect.sheetClass = PillarsEffectConfig;
+  CONFIG.Token.documentClass = PillarsTokenDocument
+  CONFIG.Combat.defeatedStatusId = "incapacitated"
   PillarsExplode()
 
   game.pillars = {
