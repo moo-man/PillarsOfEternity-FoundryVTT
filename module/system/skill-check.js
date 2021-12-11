@@ -44,7 +44,7 @@ export default class SkillCheck
                 if (this.checkData.state == "adv") modifier = "kh"
                 else if (this.checkData.state == "dis") modifier = "kl"
 
-                terms.push(new PoolTerm({terms : ["2d10xp", "1d20"], modifiers : [modifier] }))
+                terms.push(new PoolTerm({terms : ["2d10xp", "1d20xp"], modifiers : [modifier] }))
             }
 
             let assisterDie = this.assisterDie()

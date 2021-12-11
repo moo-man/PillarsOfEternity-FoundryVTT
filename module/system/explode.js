@@ -11,13 +11,25 @@ export default function () {
             if (!r.active) continue;
 
 
-            // Determine whether to explode the result and roll again!
-            if (DiceTerm.compareResult(r.result, "=", this.results[checked].result)) {
-                r.exploded = true;
-                this.results[checked].exploded = true
-                this.roll();
+            if (this.results.length == 1)
+            {
+                if (DiceTerm.compareResult(r.result, "=", this.faces))
+                {
+                    r.exploded = true;
+                    this.roll();
+                }
             }
-            else break
+
+            else 
+            {
+                // Determine whether to explode the result and roll again!
+                if (this.results[checked] && DiceTerm.compareResult(r.result, "=", this.results[checked].result)) {
+                    r.exploded = true;
+                    this.results[checked].exploded = true
+                    this.roll();
+                }
+                else break
+            }
 
 
             // Limit recursion
