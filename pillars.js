@@ -72,7 +72,6 @@ Hooks.on("init", () => {
 })
 
   CONFIG.ui.combat = PillarsCombatTracker
-  CONST.ACTIVE_EFFECT_MODES.ROLL = 6
   Hooks.on("setup", () => {
     for (let group in POE) {
       for (let key in POE[group])

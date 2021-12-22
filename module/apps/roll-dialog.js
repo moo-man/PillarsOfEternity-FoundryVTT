@@ -9,8 +9,8 @@ export default class RollDialog extends Dialog {
         })
     }
 
-    static async create({title, assisters, state={normal : true}, modifier, steps, hasRank, effects}) {
-        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/roll-dialog.html", {title, assisters, state, modifier, steps, hasRank, effects})
+    static async create({title, assisters, state={normal : true}, modifier, steps, hasRank, effects, rollModes}) {
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/roll-dialog.html", {title, assisters, state, modifier, steps, hasRank, effects, rollModes, rollMode : game.settings.get("core", "rollMode")})
         return new Promise((resolve) => {
             return new this({
                 title: title,
@@ -26,7 +26,7 @@ export default class RollDialog extends Dialog {
                             data.proxy = html.find("input[name='proxy']").is(":checked")
                             data.assister = html.find("select[name='assistance']").val()
                             data.state = html.find("input:radio[name='state']:checked").val()
-                            console.log(data)
+                            data.rollMode = html.find("select[name='rollMode']").val()
                             resolve(data)
                         }
                     }

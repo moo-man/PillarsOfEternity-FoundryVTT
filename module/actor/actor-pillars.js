@@ -2,6 +2,9 @@ import RollDialog from "../apps/roll-dialog.js";
 import SkillCheck from "../system/skill-check.js";
 import PillarsActiveEffect from "../system/pillars-effect.js"
 import AgingDialog from "../apps/aging-dialog.js";
+import WeaponCheck from "../system/weapon-check.js";
+import PowerCheck from "../system/power-check.js";
+import AgingRoll from "../system/aging-roll.js";
 
 /**
  * Extend FVTT Actor class for Pillars functionality
@@ -286,7 +289,7 @@ export class PillarsActor extends Actor {
         checkData.skillId = skillItem?.id
         checkData.speaker = this.speakerData();
         checkData.targetSpeaker = this.targetSpeakerData();
-        return checkData
+        return new SkillCheck(checkData)
     }
 
     async setupWeaponCheck(weapon) {
@@ -304,7 +307,7 @@ export class PillarsActor extends Actor {
         checkData.itemId = weapon.id
         checkData.speaker = this.speakerData();
         checkData.targetSpeaker = this.targetSpeakerData();
-        return checkData
+        return new WeaponCheck(checkData)
     }
 
     async setupPowerCheck(power) {
@@ -324,7 +327,7 @@ export class PillarsActor extends Actor {
         checkData.itemId = power.id
         checkData.speaker = this.speakerData();
         checkData.targetSpeaker = this.targetSpeakerData();
-        return checkData
+        return new PowerCheck(checkData)
     }
 
     async setupAgingRoll() {
@@ -332,7 +335,7 @@ export class PillarsActor extends Actor {
         let checkData = await AgingDialog.create(dialogData)
         checkData.title = "Aging Roll"
         checkData.speaker = this.speakerData();
-        return checkData
+        return new AgingRoll(checkData)
     }
 
     //#endregion
@@ -348,6 +351,7 @@ export class PillarsActor extends Actor {
         dialogData.modifier = ""
         dialogData.steps = 0
         dialogData.effects = this.getDialogRollEffects()
+        dialogData.rollModes = CONFIG.Dice.rollModes
         return dialogData
     }
 

@@ -725,8 +725,7 @@ export class PillarsActorSheet extends ActorSheet {
 
     async _onSkillRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let checkData = await this.actor.setupSkillCheck(this.actor.items.get(itemId))
-        let check = new SkillCheck(checkData)
+        let check = await this.actor.setupSkillCheck(this.actor.items.get(itemId))
         await check.rollCheck();
         check.sendToChat()
     }
@@ -749,8 +748,7 @@ export class PillarsActorSheet extends ActorSheet {
                         let skill = dlg.find("[name='skill']")[0].value
                         if (skill)
                         {
-                            let checkData = await this.actor.setupSkillCheck(skill)
-                            let check = new SkillCheck(checkData)
+                            let check = await this.actor.setupSkillCheck(skill)
                             await check.rollCheck();
                             check.sendToChat()
                         }
@@ -767,16 +765,14 @@ export class PillarsActorSheet extends ActorSheet {
 
     async _onWeaponRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let checkData = await this.actor.setupWeaponCheck(itemId)
-        let check = new WeaponCheck(checkData)
+        let check = await this.actor.setupWeaponCheck(itemId)
         await check.rollCheck();
         check.sendToChat()
     }
 
     async _onPowerRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let checkData = await this.actor.setupPowerCheck(itemId)
-        let check = new PowerCheck(checkData)
+        let check = await this.actor.setupPowerCheck(itemId)
         await check.rollCheck();
         check.sendToChat()
     }
@@ -787,15 +783,13 @@ export class PillarsActorSheet extends ActorSheet {
         let skill = this.actor.items.getName(item.skill.value)
         if (!skill)
             return ui.notifications.warn(`Could not find skill ${item.skill.value}`)
-        let checkData = await this.actor.setupSkillCheck(skill)
-        let check = new SkillCheck(checkData)
+        let check = await this.actor.setupSkillCheck(skill)
         await check.rollCheck()
         check.sendToChat()
     }
 
     async _onAgeRoll(event) {
-        let checkData = await this.actor.setupAgingRoll()
-        let check = new AgingRoll(checkData)
+        let check = await this.actor.setupAgingRoll()
         await check.rollCheck();
         check.sendToChat()
     }

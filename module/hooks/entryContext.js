@@ -12,7 +12,6 @@ export default function () {
       const message = game.messages.get(li.data("messageId"));
       return message?.isRoll && !message?.getCheck() && message?.isContentVisible && canvas.tokens?.controlled.length;
     };
-    console.log(isRoll)
     options.push(
       {
         name: game.i18n.localize("Reduce Health"),
@@ -37,12 +36,6 @@ export default function () {
         icon: '<i class="fas fa-user-plus"></i>',
         condition: isRoll,
         callback: li => applyChatCardDamage(li, "endurance", 1)
-      },
-      {
-        name: game.i18n.localize("Roll Damage"),
-        icon: '<i class="fas fa-user-minus"></i>',
-        condition: isCheck,
-        callback: li => rollCheckDamage(li)
       }
     );
     return options;
@@ -65,11 +58,4 @@ export default function () {
       const a = t.actor;
       return a.applyDamage(roll.total, type, multiplier);
     }));
-  }
-
-  function rollCheckDamage(li)
-  {
-    const message = game.messages.get(li.data("messageId"));
-    let check = message.getCheck();
-    new game.pillars.apps.DamageDialog(check.item, check, Array.from(game.user.targets)).render(true)
   }

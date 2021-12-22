@@ -17,7 +17,8 @@ export default class SkillCheck
                 context : {
                     speaker : data.speaker,
                     targetSpeaker : data.targetSpeaker,
-                    rollClass : this.constructor.name
+                    rollClass : this.constructor.name,
+                    rollMode : data.rollMode
                 },
                 result : {}
             }
@@ -27,6 +28,7 @@ export default class SkillCheck
         {
             let check = new game.pillars.rollClass[data.context.rollClass]()
             check.data = data;
+            check.roll = Roll.fromData(check.data.result)
             return check
         }
     
@@ -101,15 +103,21 @@ export default class SkillCheck
     
     
         _computeResult()
-        {
-            // let result = this._applyFocus();
-            // return result
+        {   
         }
 
     
         async sendToChat()
         {
-            this.roll.toMessage({flavor: this.checkData.title, speaker : ChatMessage.getSpeaker({actor : this.actor}), flags : {"pillars-of-eternity.rollData" : this.data}})
+            let tooltip = await this.roll.getTooltip()
+            let content = await renderTemplate("systems/pillars-of-eternity/templates/chat/check.html", {check : this, tooltip})
+            let chatData = {
+                content,
+                speaker : this.context.speaker,
+                "flags.pillars-of-eternity.rollData" : this.data
+            }
+            ChatMessage.applyRollMode(chatData, this.context.rollMode)
+            return ChatMessage.create(chatData)
         }
 
         static rankToDie(skill) {
@@ -143,7 +151,7 @@ export default class SkillCheck
             return game.dice3d.DiceFactory.getAppearanceForDice(game.dice3d.constructor.APPEARANCE(this.assisterUser), this.assisterDieString())
         }
         
-    
+
         get checkData() { return this.data.checkData }
         get context() { return this.data.context}
         get result() { return this.data.result}
@@ -166,7 +174,31 @@ export default class SkillCheck
             return game.pillars.utility.getSpeaker(this.context.targetSpeaker)
         }
 
+        get effects () {
+            let effects = this.item?.base?.effects || []
+            let effectObjects = []
+            effects.map(e => {
+                let effectObject 
+                if (this.item?.effects)
+                    effectObject = this.item.effects.get(e.value)
+                if (!effectObject)
+                    effectObject = {data : CONFIG.statusEffects.find(i => i.id == e.value), id : e.value}
+                if (effectObject)
+                    effectObjects.push(effectObject)
+            })
+            return effectObjects
+        }
+
         get skill() {
             return this.actor.items.get(this.checkData.skillId)
         }
+
+        get doesDamage() {
+            return this.item?.damage?.value?.length  > 0
+        }
+
+        get hasEffects() {
+            return this.effects.length
+        }
+
 }

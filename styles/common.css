@@ -19,3 +19,41 @@
 .power-groups .power-group-container label {
   font-weight: bold;
 }
+
+
+.message .pillars-of-eternity.check .check-total{
+  flex: 0;
+  font-size: var(--font-size-20);
+  font-weight: bold;
+  position: relative;
+  margin: 0;
+  margin-bottom: 5px;
+  line-height: 24px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 3px;
+  box-shadow: 0 0 2px #fff inset;
+  word-break: break-all;
+}
+
+.message .pillars-of-eternity.check .check-title{
+  text-align: center;
+}
+.message .pillars-of-eternity.check button{
+  margin-bottom: 5px;
+}
+
+.message .pillars-of-eternity.check .apply-effect{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.message .pillars-of-eternity.check .apply-effect img{
+  height: 25px;
+  width: 25px;
+  flex: 0 0 25px;
+  margin-right: 5px;
+}

@@ -1,0 +1,12 @@
+<hr>
+{{#if check.doesDamage}}
+<button type="button" class="roll-damage">Roll Damage</button>
+{{/if}}
+
+
+{{#if check.hasEffects}}
+{{#each check.effects as |effect e|}}
+{{log effect}}
+<button type="button" data-effect="{{effect.id}}" class="apply-effect"><img src="{{effect.data.icon}}">Apply {{effect.data.label}}</button>
+{{/each}}
+{{/if}}
