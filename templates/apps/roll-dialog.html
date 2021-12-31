@@ -73,8 +73,8 @@
 </div>
 <div class="effects">
     <select multiple class="effect-select">
-        {{#each effects as |effect e|}}
-        <option title="{{effect.description}}" value="{{e}}">{{effect.label}}</option>
+        {{#each changeList as |change c|}}
+        <option title="{{change.document.label}}: {{change.conditional.description}}" value="{{change.index}}">{{#if change.target}}Target: {{/if}} {{change.conditional.description}}</option>
         {{/each}}
     </select>
 </div>

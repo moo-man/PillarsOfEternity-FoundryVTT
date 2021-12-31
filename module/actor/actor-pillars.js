@@ -350,8 +350,14 @@ export class PillarsActor extends Actor {
         dialogData.title = `${item?.name || options.name} Check`
         dialogData.modifier = ""
         dialogData.steps = 0
-        dialogData.effects = this.getDialogRollEffects()
+        dialogData.changeList = this.getDialogChanges({condense: true}),
+        dialogData.changes = this.getDialogChanges(),
+        dialogData.actor = this,
+        dialogData.targets = Array.from(game.user.targets)
         dialogData.rollModes = CONFIG.Dice.rollModes
+        dialogData.rollMode = game.settings.get("core", "rollMode")
+        dialogData.item = item
+        dialogData.options = options
         return dialogData
     }
 
@@ -359,6 +365,7 @@ export class PillarsActor extends Actor {
         let dialogData = this.getDialogData(type, item, options)
         dialogData.assisters = this.constructAssisterList(item?.name || options.name)
         dialogData.hasRank = item ? item.xp.rank : false
+        dialogData.skill = item;
         return dialogData
     }
 
@@ -368,6 +375,7 @@ export class PillarsActor extends Actor {
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0)
         dialogData.hasRank = item.Skill ? item.Skill.rank : false
+        dialogData.skill = item.Skill || {}
         return dialogData
     }
 
@@ -403,44 +411,19 @@ export class PillarsActor extends Actor {
     /**
      * Get effects listed in the dialog
      * Effects are sourced from the rolling actor and targeted actor, if applicable
-     * Effects from the rolling actor are filtered to remove "targeter" effects
-     * Effects from the target are filtered to remove "self" effects
      */
-    getDialogRollEffects() {
-        let effects = this.effects.filter(i => i.hasRollEffect).map(i => i.toObject())
-        let selfEffects = []
-        let targetEffects = []
-
-        // Remove "target" effects from self actor
-        effects.forEach(e => {
-            for (let i = 0; i < e.changes.length; i++) {
-                if (e.changes[i].key.includes("targeter."))
-                    delete e.changes[i]
-            }
-            e.changes = e.changes.filter(i => i)
-        })
-
-        // If the effect only had target effects, remove the effect entirely
-        selfEffects = effects.filter(i => i.changes.length > 0)
-
-        // Get target effects, removing "target" from the keys to get the proper path, and delete effects that don't refer to the targeter
-        let target = Array.from(game.user.targets)[0]
-        if (target) {
-            targetEffects = target.actor.effects.filter(i => i.hasRollEffect).filter(i => i.data.changes.find(i => i.key.includes("targeter."))).map(i => i.toObject())
-            targetEffects.forEach(e => {
-                for (let i = 0; i < e.changes.length; i++) {
-                    if (!e.changes[i].key.includes("targeter."))
-                        delete e.changes[i]
-                    else
-                        e.changes[i].key = e.changes[i].key.replace("targeter.", "")
-                }
-                e.changes = e.changes.filter(i => i)
-                e.label = `Target: ${e.label}`
-            })
+    getDialogChanges({condense = false}={}) {
+        // Aggregate dialog changes from each effect
+        let changes =  this.effects.reduce((prev, current) => prev.concat(current.getDialogChanges({condense})), [])
+        if (game.user.targets.size > 0)
+        {
+            let target = Array.from(game.user.targets)[0].actor
+            let targetChanges = target.effects.reduce((prev, current) => prev.concat(current.getDialogChanges({target, condense, indexOffset : changes.length})), [])
+            changes = changes.concat(targetChanges)
         }
-
-        return targetEffects.concat(selfEffects).map(e => new PillarsActiveEffect(e))
+        return changes
     }
+
 
     //#endregion
 
