@@ -288,7 +288,7 @@ export class PillarsActor extends Actor {
         checkData.title = data.title
         checkData.skillId = skillItem?.id
         checkData.speaker = this.speakerData();
-        checkData.targetSpeaker = this.targetSpeakerData();
+        checkData.targetSpeakers = this.targetSpeakerData();
         return new SkillCheck(checkData)
     }
 
@@ -306,7 +306,7 @@ export class PillarsActor extends Actor {
         checkData.skillName = weapon.skill.value
         checkData.itemId = weapon.id
         checkData.speaker = this.speakerData();
-        checkData.targetSpeaker = this.targetSpeakerData();
+        checkData.targetSpeakers = this.targetSpeakerData();
         return new WeaponCheck(checkData)
     }
 
@@ -326,7 +326,7 @@ export class PillarsActor extends Actor {
         checkData.sourceId = power.SourceItem.id
         checkData.itemId = power.id
         checkData.speaker = this.speakerData();
-        checkData.targetSpeaker = this.targetSpeakerData();
+        checkData.targetSpeakers = this.targetSpeakerData();
         return new PowerCheck(checkData)
     }
 
@@ -461,7 +461,7 @@ export class PillarsActor extends Actor {
 
     targetSpeakerData() {
         if (game.user.targets.size > 0)
-            return Array.from(game.user.targets).map(i => i.actor)[0].speakerData();
+            return Array.from(game.user.targets).map(i => i.actor.speakerData());
     }
 
 

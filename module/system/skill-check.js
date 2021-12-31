@@ -16,7 +16,7 @@ export default class SkillCheck
                 },
                 context : {
                     speaker : data.speaker,
-                    targetSpeaker : data.targetSpeaker,
+                    targetSpeakers : data.targetSpeakers,
                     rollClass : this.constructor.name,
                     rollMode : data.rollMode
                 },
@@ -171,7 +171,11 @@ export default class SkillCheck
         }
 
         get target() {
-            return game.pillars.utility.getSpeaker(this.context.targetSpeaker)
+            return game.pillars.utility.getSpeaker(this.context.targetSpeakers[0])
+        }
+
+        get targets() {
+            game.pillars.utility.getSpeaker(this.context.targetSpeakers)
         }
 
         get effects () {
