@@ -21,7 +21,8 @@
 }
 
 
-.message .pillars-of-eternity.check .check-total{
+.message .pillars-of-eternity.damage .damage-total,
+  .message .pillars-of-eternity.check .check-total{
   flex: 0;
   font-size: var(--font-size-20);
   font-weight: bold;
@@ -56,4 +57,16 @@
   width: 25px;
   flex: 0 0 25px;
   margin-right: 5px;
+}
+
+.message .part-targets {
+  display : flex;
+  justify-content: end;
+}
+
+.message .part-targets img {
+  width: 23px;
+  height: 23px;  
+  margin: 0px 2px;
+  border : none;
 }

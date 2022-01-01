@@ -7,10 +7,12 @@ export default class DamageDialog extends Application
         super();
         this.item = item.clone();
         this.check = check;
-        this.targets = targets
+        this.targets = targets.map(i => i.document)
         this.group = group
         this.additionalDamages = 0
         this.damages = this.constructDamages()
+        this.assignTargets()
+        this.calculateCritDice()
     }
 
     static get defaultOptions() {
@@ -40,16 +42,16 @@ export default class DamageDialog extends Application
         else 
             damages = this.item.damage.value.filter(i => i.group == this.group)
 
-        damages.forEach(i => i.mult = 0)
-        damages.forEach(i => {
-            if (!i.label) i.label = this.item.name
+        damages.forEach((damage, i) => {
+            damage.mult = 0
+            if (!damage.label) damage.label = this.item.name
         })
         return damages
     }
 
     addDamage() {
         this.additionalDamages++;
-        this.damages.push(this.damages[this.damages.length-1])
+        this.damages.push(duplicate(this.damages[this.damages.length-1]))
         this.render(true)
     }
 
@@ -62,7 +64,8 @@ export default class DamageDialog extends Application
             for (let damage of this.damages.filter(d => d.target))
             {
                 let defense = damage.defense.toLowerCase() || "deflection"
-                let margin = this.check.result.total - damage.target.actor.defenses[defense].value
+                let target = this.targets.find(i => i.id == damage.target)
+                let margin = this.check.result.total - target.actor.defenses[defense].value
                 let multiplier = Math.floor(margin / 5)
                 damage.mult = multiplier    
             }
@@ -74,8 +77,52 @@ export default class DamageDialog extends Application
 
     }
 
+    assignTargets() 
+    {
+        let sizeDiff = this.targets.length - this.damages.length
+
+
+        for (let i = 0; i < sizeDiff; i++)
+        {
+            this.damages.push(duplicate(this.damages[this.damages.length-1]))
+            this.additionalDamages++;
+        }
+
+        this.damages.forEach((damage, i) => {
+            damage.target = this.targets[i]?.id
+            damage.img = this.targets[i]?.data?.img
+        })
+    }
+
+    setTargetImages() 
+    {
+        for(let i = 0; i < this.damages.length; i++)
+            this.setTargetImage(i)
+    }
+
+    setCritSelections()
+    {
+        for(let i = 0; i < this.damages.length; i++)
+            this.setCritSelection(i)
+    }
+
+
+    setTargetImage(index)
+    {
+        let damage = this.damages[index]
+        let target = this.targets.find(i => i.id == damage.target)
+        let parent = this.element.find(`[data-index='${index}']`)
+        parent.find("target").find("img").attr("src", target.img)
+    }
+
+    setCritSelection(index)
+    {
+        let damage = this.damages[index]
+        let parent = this.element.find(`[data-index='${index}']`)
+        parent.find("select.mult")[0].value = damage.mult
+    }
+
     submit() {
-        this.element.find()
         // this.damages.forEach(async (damage, i) => {
         //     let multiplier = damage.mult
         //     let type = game.pillars.config.damageTypes[damage.type]
@@ -87,7 +134,11 @@ export default class DamageDialog extends Application
         //     //await roll.toMessage({flavor : damage.label ? `${damage.label} Damage - ${type}` : `${this.item.name} Damage ${this.damages.length > 1 ? i + 1 : ""} - ${type}`, speaker : this.item.actor.speakerData()});
         // })
 
-        new DamageRoll(this.damages, this.check, this.item)
+        let damages = duplicate(this.damages)
+        damages.forEach(d => d.target = this.targets.find(i => i.id == d.target))
+        let roll = new DamageRoll(damages, this.check, this.item)
+        roll.rollDice()
+        game.user.updateTokenTargets([])
         this.close();
     }
 
@@ -121,19 +172,15 @@ export default class DamageDialog extends Application
         })
 
         html.find(".target-select").change(ev => {
-            let targetIndex = parseInt(ev.target.value)
-            let target = this.targets[targetIndex]
             let parent = $(ev.currentTarget).parents(".damage")
-            let critSelect = parent.find("select.mult")[0]
+            let damageIndex = parent.attr("data-index")
             if (target)
             {
-                let img = target.data.img
-                $(ev.currentTarget).parents(".target").find("img").attr("src", img)
-                let damageIndex = parent.attr("data-index")
-                this.damages[damageIndex].target = target
+                this.damages[damageIndex].target = ev.target.value
+                this.damage[damageIndex].img = this.targets.find(i => i.id == ev.target.value)?.data?.img
                 this.calculateCritDice()
-                let mult = this.damages[damageIndex].mult || 0
-                critSelect.value = mult
+                this.setTargetImages(damageIndex)
+                this.setCritSelections(damageIndex)
             }
             else {
                 $(ev.currentTarget).parents(".target").find("img").attr("src", "")
@@ -144,4 +191,6 @@ export default class DamageDialog extends Application
 
         $(document).on('keydown.damage', this._onKeyDown.bind(this))
     }
+
+
 }

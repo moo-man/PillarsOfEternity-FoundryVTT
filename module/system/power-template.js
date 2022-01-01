@@ -2,7 +2,7 @@
 export default class PowerTemplate extends MeasuredTemplate {
 
   static fromItem(item, groupId, index=0) {
-    let target = item.groups[groupId].target[index]
+    let target = item.groups[groupId].target
     let type
     let subtype
     if (!target)
