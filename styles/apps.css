@@ -144,14 +144,18 @@
 }
 
 #roll-dialog .dialog-fields {
-    flex: 1
+    flex: 0 0 214px
 }
 
 #roll-dialog .effects {
-    flex: 0.5;
-    width: 100%;
+    flex: 1;
     padding: 10px
 }
+
+#roll-dialog .effects option{
+    white-space: normal;
+}
+
 
 #roll-dialog .effects .effect-select {
     width: 100%;
