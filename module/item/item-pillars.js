@@ -345,6 +345,14 @@ export class PillarsItem extends Item {
 
     // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
 
+
+    get Category() {
+        if (this.type == "weapon")
+            return game.pillars.config.weaponTypes[this.category.value]
+        if (this.type == "skill")
+            return game.pillars.config.skillTypes[this.category.value]
+    }
+
     get Type() {return game.i18n.localize(CONFIG.Item.typeLabels[this.type])}
 
     get Range() {return game.pillars.config.powerRanges[this.range.find(i => i.group == this.displayGroupKey("range"))?.value]}

@@ -11,7 +11,7 @@
                     <span class="part-formula">{{this.formula}}</span>
                     <span class="part-targets">
                     {{#each this.options.targets as |target t|}}
-                    <img class="target-img" src="{{target.token.img}}" data-token-id="{{target.token._id}}" title = "{{target.token.name}}">
+                        <img class="target-img highlight-token" src="{{target.token.img}}" data-token-id="{{target.token._id}}" title = "{{target.token.name}}">
                     {{/each}}
                     </span>
                     {{#if this.flavor}}<span class="part-flavor">{{this.flavor}}</span>{{/if}}

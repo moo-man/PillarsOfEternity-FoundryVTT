@@ -38,9 +38,49 @@
   word-break: break-all;
 }
 
-.message .pillars-of-eternity.check .check-title{
-  text-align: center;
+.message .pillars-of-eternity.check header {
+  margin-bottom: 5px;
 }
+
+
+.message .pillars-of-eternity.check header .check-title{
+  display: flex;
+  align-items: center;
+}
+
+
+.message .pillars-of-eternity.check header .check-title h3{
+  margin: 0px;
+}
+
+
+.message .pillars-of-eternity.check header img{
+  height: 40px;
+  width: 40px;
+  margin: 5px;
+  border: none
+}
+
+.message .pillars-of-eternity.check .tags {
+  display: flex;
+  font-size: 12px;
+  flex-wrap:wrap
+}
+
+.message .pillars-of-eternity.check .tags .tag {
+  border: 1px solid #666;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+  padding: 2px;
+  margin: 2px;
+}
+
+.message .pillars-of-eternity.check .check-title .tags{
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-end;
+}
+
 .message .pillars-of-eternity.check button{
   margin-bottom: 5px;
 }

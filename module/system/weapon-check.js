@@ -17,4 +17,12 @@ export default class WeaponCheck extends SkillCheck
         get weapon() {
             return this.item
         }
+
+        get tags () {
+            return [this.weapon.Category, this.weapon.skill.value]
+        }
+
+        get weaponTags() {
+            return this.weapon.Specials.filter(i => !i.includes("text-decoration"))
+        }
 }

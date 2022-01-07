@@ -427,16 +427,18 @@ export class PillarsActor extends Actor {
 
     //#endregion
 
-    speakerData() {
+    speakerData(token) {
         if (this.isToken) {
             return {
-                token: this.token.id,
-                scene: this.token.parent.id
+                token: token?.document?.id || this.token.id,
+                scene: token?.document?.parent?.id || this.token.parent.id
             }
         }
         else {
             return {
-                actor: this.id
+                actor: this.id,
+                token : token?.document?.id,
+                scene: token?.document?.parent?.id
             }
         }
     }
@@ -444,7 +446,7 @@ export class PillarsActor extends Actor {
 
     targetSpeakerData() {
         if (game.user.targets.size > 0)
-            return Array.from(game.user.targets).map(i => i.actor.speakerData());
+            return Array.from(game.user.targets).map(i => i.actor.speakerData(i));
     }
 
 

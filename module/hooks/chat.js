@@ -12,9 +12,9 @@ export default function () {
 
         html.on("click", ".apply-effect", PillarsChat._onApplyEffectClick)
 
-        html.on("mouseenter", ".target-img", PillarsChat._onHoverInTargetImage)
-        html.on("mouseleave", ".target-img", PillarsChat._onHoverOutTargetImage)
-        html.on("click", ".target-img", PillarsChat._onClickTargetImage)
+        html.on("mouseenter", ".highlight-token", PillarsChat._onHoverInTargetImage)
+        html.on("mouseleave", ".highlight-token", PillarsChat._onHoverOutTargetImage)
+        html.on("click", ".highlight-token", PillarsChat._onClickTargetImage)
 
     });
 

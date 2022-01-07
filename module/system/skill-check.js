@@ -16,7 +16,7 @@ export default class SkillCheck
                 },
                 context : {
                     speaker : data.speaker,
-                    targetSpeakers : data.targetSpeakers,
+                    targetSpeakers : data.targetSpeakers || [],
                     rollClass : this.constructor.name,
                     rollMode : data.rollMode
                 },
@@ -175,7 +175,11 @@ export default class SkillCheck
         }
 
         get targets() {
-            game.pillars.utility.getSpeaker(this.context.targetSpeakers)
+            return this.context.targetSpeakers.map(speaker => game.pillars.utility.getSpeaker(speaker))
+        }
+
+        get targetTokens() {
+            return this.context.targetSpeakers.map(speaker => game.scenes.get(speaker.scene)?.tokens.get(speaker.token))
         }
 
         get effects () {
@@ -193,8 +197,13 @@ export default class SkillCheck
             return effectObjects
         }
 
-        get skill() {
+        get item() {
             return this.actor.items.get(this.checkData.skillId)
+
+        }
+
+        get skill() {
+            return this.item
         }
 
         get doesDamage() {
@@ -205,4 +214,7 @@ export default class SkillCheck
             return this.effects.length
         }
 
+        get tags() {
+            return [this.skill.Category]
+        }
 }

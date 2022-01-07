@@ -2,6 +2,14 @@
 {{#if check.doesDamage}}
 <button type="button" class="roll-damage">Roll Damage</button>
 {{/if}}
+<div class="tags">
+    {{#each check.targetTokens as |target i|}}
+    <div class="tag highlight-token" data-token-id="{{target.id}}">
+        {{target.name}}
+    </div>
+    {{/each}}
+</div>
+
 
 
 {{#if check.hasEffects}}

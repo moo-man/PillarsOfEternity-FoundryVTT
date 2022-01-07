@@ -1,5 +1,20 @@
 <div class="pillars-of-eternity check">
-    <h2 class="check-title">{{check.checkData.title}}</h2>
+    <header>
+        <div class="check-title">
+            <img src="{{check.item.img}}">
+            <h3>{{check.checkData.title}}</h3>
+            <div class="tags">
+                {{#each check.tags as |tag t|}}
+                <div class="tag">{{tag}}</div>
+                {{/each}}
+            </div>
+        </div>
+        <div class="tags weapon">
+            {{#each check.weaponTags as |tag t|}}
+            <div class="tag">{{tag}}</div>
+            {{/each}}
+        </div>
+    </header>
     <div title="{{check.roll.formula}}" class="check-total">
         {{check.roll.total}}
     </div>
