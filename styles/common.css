@@ -64,8 +64,13 @@
 .message .pillars-of-eternity.check .tags {
   display: flex;
   font-size: 12px;
-  flex-wrap:wrap
+  flex-wrap:wrap;
+  align-items: center;
 }
+.message .pillars-of-eternity.check .tags i{
+  font-size: 14px;
+}
+
 
 .message .pillars-of-eternity.check .tags .tag {
   border: 1px solid #666;

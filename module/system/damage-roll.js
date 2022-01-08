@@ -1,9 +1,14 @@
 export default class DamageRoll {
-    constructor(damages, check, item)
+    constructor(damages, check)
     {
-        this.check = check;
-        this.item = item
-        this.damages = this.consolidateDamages(damages)
+        this.data = {
+            damages,
+            checkId : check?.message?.id,
+            damageData : [],
+            messageIds : []
+        }
+        if (damages)
+            this.damages = this.consolidateDamages(damages)
     }
 
     async rollDice() {
@@ -11,6 +16,14 @@ export default class DamageRoll {
         return this.sendToChat()
     }
 
+
+    static recreate(data)
+    {
+        let roll = new DamageRoll()
+        roll.data = data;
+        roll.damages = roll.consolidateDamages(roll.data.damages)
+        return roll
+    }
 
     /**
      * Combine like damages (damage shouldn't be rerolled for different targets of the same damage source)
@@ -101,6 +114,7 @@ export default class DamageRoll {
 
             damage.roll = roll
         }
+
     }
 
     async sendToChat() 
@@ -112,9 +126,37 @@ export default class DamageRoll {
             let chatData = {
                 flavor : damage.label ? `${damage.label} Damage - ${type}` : `${item.name} Damage ${damages.length > 1 ? i + 1 : ""} - ${type}`, 
                 speaker : this.item.actor.speakerData(),
-                content: html
+                content: html,
+                type : CONST.CHAT_MESSAGE_TYPES.ROLL,
+                roll : damage.roll,
+                flags : {"pillars-of-eternity.damageData" : this.data, "pillars-of-eternity.damageIndex" : i}
             }
-            return ChatMessage.create(chatData)
+            return ChatMessage.create(chatData).then(msg => {
+                this.data.messageId = msg.id
+                msg.update({"flags.pillars-of-eternity.damageData.messageId" : msg.id})
+            })
         })
+    }
+
+    applyDamage(index) {
+      let html = ``
+      let damage = this.damages[index]
+      for(let part of damage.parts)
+      {
+          part.options.targets.forEach(t => {
+              let token = canvas.tokens.get(t.token._id)
+              token.actor.applyDamage(part.options.accumulator)
+              html += `${t.token.name} : ${part.options.accumulator}<br>`
+          })
+      }
+      ChatMessage.create({content : html})
+    }
+
+    get check() {
+        return game.messages.get(this.data.checkId).getCheck()
+    }
+
+    get item () {
+        return this.check.item
     }
 }

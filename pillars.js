@@ -28,6 +28,7 @@ import DamageDialog from "./module/apps/damage-dialog.js";
 import WeaponCheck from "./module/system/weapon-check.js";
 import PowerCheck from "./module/system/power-check.js";
 import PillarsTokenDocument from "./module/system/token.js";
+import DamageRoll from "./module/system/damage-roll.js";
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -56,12 +57,13 @@ Hooks.on("init", () => {
       BookOfSeasons,
       RollDialog,
       ActorConfigure,
-      DamageDialog : DamageDialog
+      DamageDialog
     },
     rollClass : {
       SkillCheck,
       WeaponCheck,
       PowerCheck,
+      DamageRoll
     },
     migration : Migration,
     utility: PILLARS_UTILITY,

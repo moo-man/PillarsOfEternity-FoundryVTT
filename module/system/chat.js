@@ -27,7 +27,7 @@ export class PillarsChat {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
         const message = game.messages.get(messageId);
         let check = message.getCheck();
-        new game.pillars.apps.DamageDialog(check.item, check, Array.from(game.user.targets)).render(true)
+        check.rollDamage();
     }
 
     static async _onApplyEffectClick(ev) 

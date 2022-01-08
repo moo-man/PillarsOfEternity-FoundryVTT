@@ -1,14 +1,13 @@
-import DamageRoll from "../system/damage-roll.js";
+
 
 export default class DamageDialog extends Application
 {
-    constructor(item, check, targets, group)
+    constructor(item, check, targets)
     {
         super();
         this.item = item.clone();
         this.check = check;
-        this.targets = targets.map(i => i.document)
-        this.group = group
+        this.targets = targets//.map(i => i.document)
         this.additionalDamages = 0
         this.damages = this.constructDamages()
         this.assignTargets()
@@ -26,6 +25,13 @@ export default class DamageDialog extends Application
             template : "systems/pillars-of-eternity/templates/apps/damage-dialog.html"
         })
     }
+
+
+    render(force=false, options) {
+        super.render(force, options)
+        this.resolve = options.resolve
+        this.reject = options.reject
+    }
     
     getData() {
         let data = super.getData();
@@ -37,10 +43,7 @@ export default class DamageDialog extends Application
 
     constructDamages() {
         let damages = []
-        if (this.group == undefined)
-            damages = foundry.utils.deepClone(this.item.damage.value)
-        else 
-            damages = this.item.damage.value.filter(i => i.group == this.group)
+        damages = foundry.utils.deepClone(this.item.damage.value)
 
         damages.forEach((damage, i) => {
             damage.mult = 0
@@ -123,23 +126,10 @@ export default class DamageDialog extends Application
     }
 
     submit() {
-        // this.damages.forEach(async (damage, i) => {
-        //     let multiplier = damage.mult
-        //     let type = game.pillars.config.damageTypes[damage.type]
-        //     let rollString = damage.base
-        //     if (damage.crit[0])
-        //         rollString  += `+ ${parseInt(damage.crit[0]) * parseInt(multiplier) + damage.crit.slice(1)}`
-        //     let roll = await new Roll(rollString).evaluate({async : true})
-        //     new DamageRoll(damage, this.check)
-        //     //await roll.toMessage({flavor : damage.label ? `${damage.label} Damage - ${type}` : `${this.item.name} Damage ${this.damages.length > 1 ? i + 1 : ""} - ${type}`, speaker : this.item.actor.speakerData()});
-        // })
-
         let damages = duplicate(this.damages)
         damages.forEach(d => d.target = this.targets.find(i => i.id == d.target))
-        let roll = new DamageRoll(damages, this.check, this.item)
-        roll.rollDice()
-        game.user.updateTokenTargets([])
-        this.close();
+        this.close()
+        return this.resolve(damages)
     }
 
     _onKeyDown(ev)

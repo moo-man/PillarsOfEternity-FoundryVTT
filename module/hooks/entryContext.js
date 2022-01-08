@@ -8,34 +8,22 @@ export default function () {
      const message = game.messages.get(li.data("messageId"));
      return message?.getCheck()
    }
-    let isRoll = li => {
+    let isDamage = li => {
       const message = game.messages.get(li.data("messageId"));
-      return message?.isRoll && !message?.getCheck() && message?.isContentVisible && canvas.tokens?.controlled.length;
+      return message?.isRoll && getProperty(message, "data.flags.pillars-of-eternity.damageData")
     };
     options.push(
       {
-        name: game.i18n.localize("Reduce Health"),
+        name: game.i18n.localize("Apply Damages"),
         icon: '<i class="fas fa-user-minus"></i>',
-        condition: isRoll,
-        callback: li => applyChatCardDamage(li, "health", -1)
-      },
-      {
-        name: game.i18n.localize("Reduce Endurance"),
-        icon: '<i class="fas fa-user-minus"></i>',
-        condition: isRoll,
-        callback: li => applyChatCardDamage(li, "endurance", -1)
-      },
-      {
-        name: game.i18n.localize("Increase Health"),
-        icon: '<i class="fas fa-user-plus"></i>',
-        condition: isRoll,
-        callback: li => applyChatCardDamage(li, "health", 1)
-      },
-      {
-        name: game.i18n.localize("Increase Endurance"),
-        icon: '<i class="fas fa-user-plus"></i>',
-        condition: isRoll,
-        callback: li => applyChatCardDamage(li, "endurance", 1)
+        condition: isDamage,
+        callback: li => {
+          const message = game.messages.get(li.data("messageId"));
+          let roll = message.getCheck()
+          let index = parseInt(message.getFlag("pillars-of-eternity", "damageIndex"))
+          roll.applyDamage(index)
+
+        }
       }
     );
     return options;

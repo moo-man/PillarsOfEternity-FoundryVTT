@@ -1,3 +1,5 @@
+import DamageRoll from "../system/damage-roll.js";
+
 export default class SkillCheck
 {
         constructor(data) {
@@ -18,7 +20,9 @@ export default class SkillCheck
                     speaker : data.speaker,
                     targetSpeakers : data.targetSpeakers || [],
                     rollClass : this.constructor.name,
-                    rollMode : data.rollMode
+                    rollMode : data.rollMode,
+                    messageId : "",
+                    damageMessage : ""
                 },
                 result : {}
             }
@@ -114,10 +118,14 @@ export default class SkillCheck
             let chatData = {
                 content,
                 speaker : this.context.speaker,
-                "flags.pillars-of-eternity.rollData" : this.data
+                "flags.pillars-of-eternity.rollData" : this.data,
+                type : CONST.CHAT_MESSAGE_TYPES.ROLL,
+                roll : this.roll.toJSON()
             }
             ChatMessage.applyRollMode(chatData, this.context.rollMode)
-            return ChatMessage.create(chatData)
+            return ChatMessage.create(chatData).then(message => {
+                message.update({"flags.pillars-of-eternity.rollData.context.messageId" : message.id})
+            })
         }
 
         static rankToDie(skill) {
@@ -150,7 +158,26 @@ export default class SkillCheck
         {            
             return game.dice3d.DiceFactory.getAppearanceForDice(game.dice3d.constructor.APPEARANCE(this.assisterUser), this.assisterDieString())
         }
+
+        async rollDamage() {
+
+            let damages = await new Promise((resolve, reject) => {
+                new game.pillars.apps.DamageDialog(this.item, this, this.targets).render(true, {resolve, reject})
+            })
+
+            let roll = new DamageRoll(damages, this);
+            let message = await roll.rollDice()
+            this.context.damageMessage = message.id
+            this.updateMessageFlags()
+            game.user.updateTokenTargets([])
+        }
         
+        updateMessageFlags()
+        {
+            if (this.message)
+                this.message.update({"flags.pillars-of-eternity.rollData" : this.data})
+        }
+
 
         get checkData() { return this.data.checkData }
         get context() { return this.data.context}
@@ -175,10 +202,6 @@ export default class SkillCheck
         }
 
         get targets() {
-            return this.context.targetSpeakers.map(speaker => game.pillars.utility.getSpeaker(speaker))
-        }
-
-        get targetTokens() {
             return this.context.targetSpeakers.map(speaker => game.scenes.get(speaker.scene)?.tokens.get(speaker.token))
         }
 
@@ -198,12 +221,11 @@ export default class SkillCheck
         }
 
         get item() {
-            return this.actor.items.get(this.checkData.skillId)
-
+            return this.skill
         }
 
         get skill() {
-            return this.item
+            return this.actor.items.get(this.checkData.skillId)
         }
 
         get doesDamage() {
@@ -216,5 +238,9 @@ export default class SkillCheck
 
         get tags() {
             return [this.skill.Category]
+        }
+
+        get message() {
+            return game.messages.get(this.context.messageId)
         }
 }

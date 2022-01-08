@@ -37,6 +37,12 @@ export class PillarsActor extends Actor {
         }
     }
 
+    async _preUpdate(updateData, options, user) {
+        await super._preUpdate(updateData, options, user)
+    
+        this.handleScrollingText(updateData)
+      }
+
     setSpeciesData(data) {
         let speciesItem = this.getItemTypes("species")[0]
         let stockItem = this.getItemTypes("stock")[0]
@@ -510,25 +516,54 @@ export class PillarsActor extends Actor {
         }
     }
 
-    async applyDamage(value, type, multiplier) {
-        // value *= multiplier
-        // let current  = this[type].value
+    handleScrollingText(data)
+    {
+        if (hasProperty(data, "data.health.value"))
+        this._displayScrollingChange(getProperty(data, "data.health.value") - this.health.value);
+      if (hasProperty(data, "data.endurance.value"))
+        this._displayScrollingChange(getProperty(data, "data.endurance.value") - this.endurance.value, {endurance : true});
+    }
 
-        // if (value < 0)
-        //     value += this.combat.soak
 
-        // current += value
+        /**
+         * Display changes to health as scrolling combat text.
+         * Adapt the font size relative to the Actor's HP total to emphasize more significant blows.
+         * @param {number} daamge
+         * @private
+         */
+        _displayScrollingChange(change, options={}) {
+            if ( !change ) return;
+            change = Number(change);
+            const tokens = this.isToken ? [this.token?.object] : this.getActiveTokens(true);
+            for ( let t of tokens ) {
+            if ( !t?.hud?.createScrollingText ) continue;  // This is undefined prior to v9-p2
+            t.hud.createScrollingText(change.signedString(), {
+                anchor: CONST.TEXT_ANCHOR_POINTS.TOP,
+                fontSize: 30,
+                fill: options.endurance ? "0x6666FF" : change > 0 ?  "0xFF0000" : "0x00FF00", // I regret nothing
+                stroke: 0x000000,
+                strokeThickness: 4,
+                jitter: 0.25
+            });
+            }
+        }
 
-        // // if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.severe)
-        // //     await this.addWound("severe")
-        // // else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.heavy)
-        // //     await this.addWound("heavy")
-        // // else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.light)
-        // //     await this.addWound("light")
+    async applyDamage(damage, type) {
+        if (damage < this.toughness.value)
+            return
+    
+        if (damage > this.toughness.value && damage < this.soak.base)
+        {
+            return this.update({"data.endurance.value" : this.endurance.value + 1})
+        }
 
-        // ui.notifications.notify(`${-value} Damage applied to ${this.name}'s ${type.slice(0, 1).toUpperCase() + type.slice(1)}`)
-
-        // return this.update({[`data.${type}.value`] : current})
+        if (damage > this.toughness.value && damage > this.soak.base)
+        {
+            // Any endurance loss?
+            let damageMinusSoak = damage - this.soak.base
+            let pips = Math.floor(damageMinusSoak / this.damageIncrement.value)
+            return this.update({"data.health.value" : this.health.value + pips})
+        }
     }
 
     // addWound(type)
@@ -569,7 +604,7 @@ export class PillarsActor extends Actor {
     get seasons() { return this.data.data.seasons }
     get soak() { return this.data.data.soak }
     get toughness() { return this.data.data.toughness }
-
+    get damageIncrement() {return this.data.data.damageIncrement}
 
     get combat() { return this.data.data.combat }
     //#endregion

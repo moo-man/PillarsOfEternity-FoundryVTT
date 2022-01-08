@@ -6,6 +6,11 @@ export default function () {
             let rollData = this.getFlag("pillars-of-eternity", "rollData")
             if (rollData)
                 return game.pillars.rollClass.SkillCheck.recreate(rollData)
+
+            let damageData = this.getFlag("pillars-of-eternity", "damageData")
+            if (damageData)
+                return game.pillars.rollClass.DamageRoll.recreate(damageData)
+
         }
 
 
