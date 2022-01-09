@@ -552,9 +552,11 @@ export class PillarsActor extends Actor {
         if (damage < this.toughness.value)
             return
     
-        if (damage > this.toughness.value && damage < this.soak.base)
+        let updateObj = {}
+
+        if (damage > this.toughness.value)
         {
-            return this.update({"data.endurance.value" : this.endurance.value + 1})
+            updateObj["data.endurance.value"] = this.endurance.value + 1
         }
 
         if (damage > this.toughness.value && damage > this.soak.base)
@@ -562,8 +564,9 @@ export class PillarsActor extends Actor {
             // Any endurance loss?
             let damageMinusSoak = damage - this.soak.base
             let pips = Math.floor(damageMinusSoak / this.damageIncrement.value)
-            return this.update({"data.health.value" : this.health.value + pips})
+            updateObj["data.health.value"] = this.health.value + pips
         }
+        return this.update(updateObj)
     }
 
     // addWound(type)

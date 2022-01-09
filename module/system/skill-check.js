@@ -47,16 +47,28 @@ export default class SkillCheck
             else 
             {
                 let modifier = ""
-                if (this.checkData.state == "adv") modifier = "kh"
-                else if (this.checkData.state == "dis") modifier = "kl"
+                let flavor = ""
+                if (this.checkData.state == "adv") 
+                {
+                    modifier = "kh"
+                    flavor = "Advantage"
+                }
+                else if (this.checkData.state == "dis") 
+                {
+                    flavor = "Disadvantage"
+                    modifier = "kl"
+                }
 
-                terms.push(new PoolTerm({terms : ["2d10xp", "1d20xp"], modifiers : [modifier] }))
+
+
+                terms.push(new PoolTerm({terms : ["2d10xp", `1d20xp[${flavor}]`], modifiers : [modifier] }))
             }
 
             let assisterDie = this.assisterDie()
             
             if (assisterDie)
             {
+                assisterDie.options = {flavor : this.assister.name}
                 terms.push(new OperatorTerm({operator : "+"}))
                 terms.push(new Die(assisterDie))
             }
@@ -74,7 +86,14 @@ export default class SkillCheck
                 else if (this.checkData.steps < 0)
                     terms.push(new OperatorTerm({operator : "-"}))
 
-                terms.push(new Die(game.pillars.utility.stepsToDice(this.checkData.steps)))
+                let stepsDie = game.pillars.utility.stepsToDice(this.checkData.steps)
+
+                if (this.checkData.steps > 0)
+                    stepsDie.options = {flavor : "Bonus Die"}
+                else if (this.checkData.steps < 0)
+                    stepsDie.options = {flavor : "Penalty Die"}
+
+                terms.push(new Die(stepsDie))
             }
 
             if (!this.checkData.proxy && this.skill)
