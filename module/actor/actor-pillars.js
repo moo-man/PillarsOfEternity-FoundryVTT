@@ -536,12 +536,17 @@ export class PillarsActor extends Actor {
 
     handleScrollingText(data)
     {
-        if (hasProperty(data, "data.health.value"))
-            this._displayScrollingChange(getProperty(data, "data.health.value") - this.health.value);
-        if (hasProperty(data, "data.health.wounds.value"))
-            this._displayScrollingChange(getProperty(data, "data.health.wounds.value") - this.health.wounds.value, {text : "Wound"});
-        if (hasProperty(data, "data.endurance.value"))
-            this._displayScrollingChange(getProperty(data, "data.endurance.value") - this.endurance.value, {endurance : true});
+        try {
+            if (hasProperty(data, "data.health.value"))
+                this._displayScrollingChange(getProperty(data, "data.health.value") - this.health.value);
+            if (hasProperty(data, "data.health.wounds.value"))
+                this._displayScrollingChange(getProperty(data, "data.health.wounds.value") - this.health.wounds.value, {text : "Wound"});
+            if (hasProperty(data, "data.endurance.value"))
+                this._displayScrollingChange(getProperty(data, "data.endurance.value") - this.endurance.value, {endurance : true});
+        }
+        catch (e) {
+            console.error("Error displaying scrolling text for", data, e)
+        }
     }
 
 
