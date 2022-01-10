@@ -19,3 +19,100 @@
 .power-groups .power-group-container label {
   font-weight: bold;
 }
+
+
+.message .pillars-of-eternity.damage .damage-total,
+  .message .pillars-of-eternity.check .check-total{
+  flex: 0;
+  font-size: var(--font-size-20);
+  font-weight: bold;
+  position: relative;
+  margin: 0;
+  margin-bottom: 5px;
+  line-height: 24px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 3px;
+  box-shadow: 0 0 2px #fff inset;
+  word-break: break-all;
+}
+
+.message .pillars-of-eternity.check header {
+  margin-bottom: 5px;
+}
+
+
+.message .pillars-of-eternity.check header .check-title{
+  display: flex;
+  align-items: center;
+  margin: -10px 0px
+}
+
+
+.message .pillars-of-eternity.check header .check-title h3{
+  margin: 0px;
+}
+
+
+.message .pillars-of-eternity.check header img{
+  height: 40px;
+  width: 40px;
+  margin: 5px;
+  border: none
+}
+
+.message .pillars-of-eternity.check .tags {
+  display: flex;
+  font-size: 12px;
+  flex-wrap:wrap;
+  align-items: center;
+}
+.message .pillars-of-eternity.check .tags i{
+  font-size: 14px;
+}
+
+
+.message .pillars-of-eternity.check .tags .tag {
+  border: 1px solid #666;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+  padding: 2px;
+  margin: 2px;
+}
+
+.message .pillars-of-eternity.check .check-title .tags{
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-end;
+}
+
+.message .pillars-of-eternity.check button{
+  margin-bottom: 5px;
+}
+
+.message .pillars-of-eternity.check .apply-effect{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.message .pillars-of-eternity.check .apply-effect img{
+  height: 25px;
+  width: 25px;
+  flex: 0 0 25px;
+  margin-right: 5px;
+}
+
+.message .part-targets {
+  display : flex;
+  justify-content: end;
+}
+
+.message .part-targets img {
+  width: 23px;
+  height: 23px;  
+  margin: 0px 2px;
+  border : none;
+}

@@ -4,45 +4,37 @@ export default function () {
 
 
  function addChatMessageContextOptions (html, options) {
-   let isCheck = li => {
-     const message = game.messages.get(li.data("messageId"));
-     return message?.getCheck()
-   }
-    let isRoll = li => {
+    let isDamage = li => {
       const message = game.messages.get(li.data("messageId"));
-      return message?.isRoll && !message?.getCheck() && message?.isContentVisible && canvas.tokens?.controlled.length;
+      return message?.isRoll && getProperty(message, "data.flags.pillars-of-eternity.damageData")
     };
-    console.log(isRoll)
+
+    let canAddTargets = li => {
+      const message = game.messages.get(li.data("messageId"));
+      return message && game.user.targets.size > 0 && (message.isAuthor || game.user.isGM) && message.getCheck()
+    }
     options.push(
       {
-        name: game.i18n.localize("Reduce Health"),
+        name: "Apply Damages",
         icon: '<i class="fas fa-user-minus"></i>',
-        condition: isRoll,
-        callback: li => applyChatCardDamage(li, "health", -1)
+        condition: isDamage,
+        callback: li => {
+          const message = game.messages.get(li.data("messageId"));
+          let roll = message.getCheck()
+          let index = parseInt(message.getFlag("pillars-of-eternity", "damageIndex"))
+          roll.applyDamage(index)
+
+        }
       },
       {
-        name: game.i18n.localize("Reduce Endurance"),
-        icon: '<i class="fas fa-user-minus"></i>',
-        condition: isRoll,
-        callback: li => applyChatCardDamage(li, "endurance", -1)
-      },
-      {
-        name: game.i18n.localize("Increase Health"),
-        icon: '<i class="fas fa-user-plus"></i>',
-        condition: isRoll,
-        callback: li => applyChatCardDamage(li, "health", 1)
-      },
-      {
-        name: game.i18n.localize("Increase Endurance"),
-        icon: '<i class="fas fa-user-plus"></i>',
-        condition: isRoll,
-        callback: li => applyChatCardDamage(li, "endurance", 1)
-      },
-      {
-        name: game.i18n.localize("Roll Damage"),
-        icon: '<i class="fas fa-user-minus"></i>',
-        condition: isCheck,
-        callback: li => rollCheckDamage(li)
+        name : "Add Targets",
+        icon : '<i class="fas fa-crosshairs"></i>',
+        condition: canAddTargets,
+        callback : li => {
+          const message = game.messages.get(li.data("messageId"));
+          let roll = message.getCheck()
+          roll.addTargets(Array.from(game.user.targets))
+        }
       }
     );
     return options;
@@ -65,11 +57,4 @@ export default function () {
       const a = t.actor;
       return a.applyDamage(roll.total, type, multiplier);
     }));
-  }
-
-  function rollCheckDamage(li)
-  {
-    const message = game.messages.get(li.data("messageId"));
-    let check = message.getCheck();
-    new game.pillars.apps.DamageDialog(check.item, check, Array.from(game.user.targets)).render(true)
   }

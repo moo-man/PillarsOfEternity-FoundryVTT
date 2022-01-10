@@ -6,6 +6,36 @@ export default class PillarsActiveEffect extends ActiveEffect {
             this.data.disabled = !this.item.equipped.value
     }
 
+    getDialogChanges({target = false, condense = false, indexOffset = 0}={}) {
+        let allChanges = this.data.changes.map(c => c.toObject())
+        allChanges.forEach((c, i) => {
+            c.conditional = this.changeConditionals[i] || {}
+            c.document = this
+        })
+        let dialogChanges = allChanges.filter((c) => c.mode == (target ? 7 : 6)) // Targeter dialog is 7, self dialog is 6
+        dialogChanges.forEach((c, i) => {
+            c.target = !!target
+            c.index = [i + indexOffset]
+        })
+        // changes with the same description as under the same condition (use the first ones' script)
+        if (condense)
+        {
+            let uniqueChanges = []
+            dialogChanges.forEach(c => {
+                let existing = uniqueChanges.find(unique => unique.conditional.description == c.conditional.description)
+                if (existing)
+                    existing.index = existing.index.concat(c.index)
+                else
+                    uniqueChanges.push(c)
+            })
+            dialogChanges = uniqueChanges
+        }
+        return dialogChanges
+    }
+    get changeConditionals() {
+        return (getProperty(this.data, "flags.pillars-of-eternity.changeCondition") || {})
+    }
+
 
     get label() {
         return this.data.label

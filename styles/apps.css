@@ -144,14 +144,18 @@
 }
 
 #roll-dialog .dialog-fields {
-    flex: 1
+    flex: 0 0 214px
 }
 
 #roll-dialog .effects {
-    flex: 0.5;
-    width: 100%;
+    flex: 1;
     padding: 10px
 }
+
+#roll-dialog .effects option{
+    white-space: normal;
+}
+
 
 #roll-dialog .effects .effect-select {
     width: 100%;
@@ -258,3 +262,18 @@
     height: 100px;
     width: 100px;
 }
+
+.active-effect-sheet .change-flags {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .active-effect-sheet .change-flags .conditional-code {
+    flex: 0 0 20px;
+    margin: 5px;
+  }
+  #effect-script-config textarea {
+    width: 100%;
+    height: calc(100% - 100px);
+    resize: none;
+  } 

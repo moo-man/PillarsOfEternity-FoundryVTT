@@ -1,0 +1,22 @@
+<hr>
+{{#if check.doesDamage}}
+<button type="button" class="roll-damage">Roll Damage</button>
+{{/if}}
+{{#if check.targets.length}}
+<div class="tags">
+    <i class="fas fa-crosshairs"></i>
+    {{#each check.targets as |target i|}}
+    <div class="tag highlight-token" data-token-id="{{target.id}}">
+        {{target.name}}
+    </div>
+    {{/each}}
+</div>
+{{/if}}
+
+
+
+{{#if check.hasEffects}}
+{{#each check.effects as |effect e|}}
+<button type="button" data-effect="{{effect.id}}" class="apply-effect"><img src="{{effect.data.icon}}">Apply {{effect.data.label}}</button>
+{{/each}}
+{{/if}}

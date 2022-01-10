@@ -416,7 +416,7 @@ POE.actorSizes = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
 POE.sizeAttributes = {
     "-5": {
         novice: { damageIncrement: 1, toughness: 0 },
-        apprentice: { damageIncrement: 2, toughness: 0 }, 
+        apprentice: { damageIncrement: 2, toughness: 0 },
         master: { damageIncrement: 3, toughness: 0 },
         expert: { damageIncrement: 4, toughness: 1 },
         paragon: { damageIncrement: 5, toughness: 2 }
@@ -430,21 +430,21 @@ POE.sizeAttributes = {
     },
     "-3": {
         novice: { damageIncrement: 3, toughness: 0 },
-        apprentice: { damageIncrement: 4, toughness: 1 }, 
+        apprentice: { damageIncrement: 4, toughness: 1 },
         master: { damageIncrement: 5, toughness: 2 },
         expert: { damageIncrement: 6, toughness: 3 },
         paragon: { damageIncrement: 7, toughness: 4 }
     },
     "-2": {
         novice: { damageIncrement: 4, toughness: 1 },
-        apprentice: { damageIncrement: 5, toughness: 2 }, 
+        apprentice: { damageIncrement: 5, toughness: 2 },
         master: { damageIncrement: 6, toughness: 3 },
         expert: { damageIncrement: 7, toughness: 4 },
         paragon: { damageIncrement: 8, toughness: 5 }
     },
     "-1": {
         novice: { damageIncrement: 5, toughness: 2 },
-        apprentice: { damageIncrement: 6, toughness: 3 }, 
+        apprentice: { damageIncrement: 6, toughness: 3 },
         master: { damageIncrement: 7, toughness: 4 },
         expert: { damageIncrement: 8, toughness: 5 },
         paragon: { damageIncrement: 9, toughness: 6 }
@@ -453,33 +453,33 @@ POE.sizeAttributes = {
         novice: { damageIncrement: 6, toughness: 3 },
         apprentice: { damageIncrement: 7, toughness: 4 },
         master: { damageIncrement: 8, toughness: 5 },
-        expert: { damageIncrement: 9,toughness: 6 },
+        expert: { damageIncrement: 9, toughness: 6 },
         paragon: { damageIncrement: 10, toughness: 7 }
     },
     "1": {
         novice: { damageIncrement: 7, toughness: 4 },
-        apprentice: { damageIncrement: 8, toughness: 5 }, 
+        apprentice: { damageIncrement: 8, toughness: 5 },
         master: { damageIncrement: 9, toughness: 6 },
         expert: { damageIncrement: 10, toughness: 7 },
         paragon: { damageIncrement: 11, toughness: 8 }
     },
     "2": {
         novice: { damageIncrement: 9, toughness: 6 },
-        apprentice: { damageIncrement: 12, toughness: 8 }, 
+        apprentice: { damageIncrement: 12, toughness: 8 },
         master: { damageIncrement: 15, toughness: 10 },
         expert: { damageIncrement: 20, toughness: 12 },
         paragon: { damageIncrement: 25, toughness: 14 }
     },
     "3": {
         novice: { damageIncrement: 12, toughness: 9 },
-        apprentice: { damageIncrement: 15, toughness: 12 }, 
+        apprentice: { damageIncrement: 15, toughness: 12 },
         master: { damageIncrement: 20, toughness: 15 },
         expert: { damageIncrement: 25, toughness: 18 },
         paragon: { damageIncrement: 30, toughness: 21 }
     },
     "4": {
         novice: { damageIncrement: 15, toughness: 12 },
-        apprentice: { damageIncrement: 25, toughness: 16 }, 
+        apprentice: { damageIncrement: 25, toughness: 16 },
         master: { damageIncrement: 35, toughness: 20 },
         expert: { damageIncrement: 45, toughness: 24 },
         paragon: { damageIncrement: 50, toughness: 28 }
@@ -657,199 +657,401 @@ CONFIG.statusEffects = [
         label: "Bloodied",
         icon: "systems/pillars-of-eternity/assets/conditions/bloodied.png",
         changes: [
-            { key: "steps", mode: 0, value: -2 },
+            { key: "steps", mode: 6, value: -2 },
             { key: "data.defenses.deflection.value", mode: 2, value: -3 },
             { key: "data.defenses.fortitude.value", mode: 2, value: -3 },
             { key: "data.defenses.reflex.value", mode: 2, value: -3 },
             { key: "data.defenses.will.value", mode: 2, value: -3 }],
-        flags: { "pillars-of-eternity.description": "All Rolls", "pillars-of-eternity.manual": true }
+            flags: {
+                "pillars-of-eternity": {
+                    changeCondition : {
+                        0: { description: "Penalty to all Checks", script: "return true" }
+                    }
+                }
+            }
     },
     {
         id: "winded",
         label: "Winded",
         icon: "systems/pillars-of-eternity/assets/conditions/winded.png",
         changes: [
-            { key: "steps", mode: 0, value: -1 },
+            { key: "steps", mode: 6, value: -1 },
             { key: "data.defenses.deflection.value", mode: 2, value: -2 },
             { key: "data.defenses.fortitude.value", mode: 2, value: -2 },
             { key: "data.defenses.reflex.value", mode: 2, value: -2 },
             { key: "data.defenses.will.value", mode: 2, value: -2 }],
-        flags: { "pillars-of-eternity.description": "All Rolls", "pillars-of-eternity.manual": true }
+        flags: {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0: { description: "Penalty to all Checks", script: "return true" }
+                }
+            }
+        }
     },
     {
         id: "weakened",
         label: "Weakened",
         icon: "systems/pillars-of-eternity/assets/conditions/weakened.png",
-        changes: [{ key: "state", mode: 0, value: "dis" }, { key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.description": "Disadvantage if involves physical activity", "pillars-of-eternity.targetDescription": "Attacks against Fortitude have Advantage" }
+        changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
+        flags: {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Disadvantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    1 : {description : "Attacks against Fortitude have Advantage", script : ""}
+                }
+            }
+        }
     },
     {
         id: "sickened",
         label: "Sickened",
         icon: "systems/pillars-of-eternity/assets/conditions/sickened.png",
-        changes: [{ key: "state", mode: 0, value: "dis" }, { key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.description": "Disadvantage if involves physical activity", "pillars-of-eternity.targetDescription": "Attacks against Fortitude have Advantage" }
+        changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Disadvantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    1 : {description : "Attacks against Fortitude have Advantage", script : ""}
+                }
+            }
+        }
     },
     {
         id: "enfeebled",
         label: "Enfeebled",
         icon: "systems/pillars-of-eternity/assets/conditions/enfeebled.png",
-        changes: [{ key: "state", mode: 0, value: "dis" }, { key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.description": "Disadvantage if involves physical activity", "pillars-of-eternity.targetDescription": "Attacks against Fortitude have Advantage" }
+        changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Disadvantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    1 : {description : "Attacks against Fortitude have Advantage", script : ""}
+                }
+            }
+        }
     },
     {
         id: "fit",
         label: "Fit",
         icon: "systems/pillars-of-eternity/assets/conditions/fit.png",
-        changes: [{ key: "state", mode: 0, value: "adv" }, { key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Advantage if involves physical activity", "pillars-of-eternity.targetDescription": "Attacks against Fortitude have Disadvantage" }
+        changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Advantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    1 : {description : "Attacks against Fortitude have Disadvantage", script : ""}
+                }
+            }
+        }
     },
     {
         id: "hardy",
         label: "Hardy",
         icon: "systems/pillars-of-eternity/assets/conditions/hardy.png",
-        changes: [{ key: "state", mode: 0, value: "adv" }, { key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Advantage if involves physical activity", "pillars-of-eternity.targetDescription": "Attacks against Fortitude have Disadvantage" }
+        changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Advantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    1 : {description : "Attacks against Fortitude have Disadvantage", script : ""}
+                }
+            }
+        }
     },
     {
         id: "robust",
         label: "Robust",
         icon: "systems/pillars-of-eternity/assets/conditions/robust.png",
-        changes: [{ key: "state", mode: 0, value: "adv" }, { key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Advantage if involves physical activity", "pillars-of-eternity.targetDescription": "Attacks against Fortitude have Disadvantage" }
+        changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Advantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    1 : {description : "Attacks against Fortitude have Disadvantage", script : ""}
+                }
+            }
+        }
     },
     {
         id: "prone",
         label: "Prone",
         icon: "systems/pillars-of-eternity/assets/conditions/prone.png",
-        changes: [{ key: "state", mode: 0, value: "dis" }, { key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.description": "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", "pillars-of-eternity.targetDescription": "Attacks against Deflection or Reflex within 3 hexes" }
+        changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.weapon.skill.value != 'gun' && data.weapon.skill.value != 'crossbow') return true" },
+                    1 : {description : "Attacks against Deflection or Reflex within 3 hexes have Advantage", script : ""}
+                }
+            }
+        }
     },
     {
         id: "knocked-down",
         label: "Knocked Down",
         icon: "systems/pillars-of-eternity/assets/conditions/knocked-down.png",
-        changes: [{ key: "state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", "pillars-of-eternity.targetDescription": "Attacks against Deflection or Reflex within 3 hexes" }
+        changes: [{ key: "state", mode: 6, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.weapon.skill.value != 'gun' && data.weapon.skill.value != 'crossbow') return true" },
+                    1 : {description : "Attacks against Deflection or Reflex within 3 hexes have Advantage", script : ""}
+                }
+            }
+        }
     },
     {
         id: "down-n-out",
         label: "Down and Out",
         icon: "systems/pillars-of-eternity/assets/conditions/down-n-out.png",
-        changes: [{ key: "state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", "pillars-of-eternity.targetDescription": "Attacks against Deflection or Reflex within 3 hexes" }
+        changes: [{ key: "state", mode: 6, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.weapon.skill.value != 'gun' && data.weapon.skill.value != 'crossbow') return true" },
+                    1 : {description : "Attacks against Deflection or Reflex within 3 hexes have Advantage", script : ""}
+                }
+            }
+        }
     },
     {
         id: "hampered",
         label: "Hampered",
         icon: "systems/pillars-of-eternity/assets/conditions/hampered.png",
-        changes: [{ key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.targetDescription": "Attacks against Reflex have Advantage" }
+        changes: [{ key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Attacks against Reflex have Advantage", script: "return data.item.isVsReflex" },
+                }
+            }
+        }
     },
     {
         id: "immobilized",
         label: "Immobilized",
         icon: "systems/pillars-of-eternity/assets/conditions/immobilized.png",
-        changes: [{ key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.targetDescription": "Attacks against Reflex have Advantage" }
+        changes: [{ key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Attacks against Reflex have Advantage", script: "return data.item.isVsReflex" },
+                }
+            }
+        }
     },
     {
         id: "paralyzed",
         label: "Paralyzed",
         icon: "systems/pillars-of-eternity/assets/conditions/paralyzed.png",
-        changes: [{ key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.targetDescription": "Attacks against Deflection or Reflex have Advantage" }
+        changes: [{ key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Attacks against Deflection or Reflex have Advantage", script: "return (data.item.isVsReflex || data.item.isVsDeflection)" },
+                }
+            }
+        }
     },
     {
         id: "nimble",
         label: "Nimble",
         icon: "systems/pillars-of-eternity/assets/conditions/nimble.png",
-        changes: [{ key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.targetDescription": "Attacks against Reflex or Disengagement have Disadvantage" }
+        changes: [{ key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Attacks against Reflex or Disengagement have Disadvantage", script: "return data.item.isVsReflex" },
+                }
+            }
+        }
     },
     {
         id: "quickened",
         label: "Quickened",
         icon: "systems/pillars-of-eternity/assets/conditions/quickened.png",
-        changes: [{ key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.targetDescription": "Attacks against Reflex or Disengagement have Disadvantage" }
+        changes: [{ key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Attacks against Reflex or Disengagement have Disadvantage", script: "return data.item.isVsReflex" },
+                }
+            }
+        }
     },
     {
         id: "swift",
         label: "Swift",
         icon: "systems/pillars-of-eternity/assets/conditions/swift.png",
-        changes: [{ key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.targetDescription": "Attacks against Reflex or Disengagement have Disadvantage" }
+        changes: [{ key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Attacks against Reflex or Disengagement have Disadvantage", script: "return data.item.isVsReflex" },
+                }
+            }
+        }
     },
     {
         id: "distracted",
         label: "Distracted",
         icon: "systems/pillars-of-eternity/assets/conditions/distracted.png",
-        changes: [{ key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.targetDescription": "Attacks against Deflection have Advantage" }
+        changes: [{ key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Attacks against Deflection have Advantage", script: "return data.item.isVsDeflection" },
+                }
+            }
+        }
     },
     {
         id: "deafened",
         label: "Deafened",
         icon: "icons/svg/deaf.svg",
-        changes: [{ key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.targetDescription": "Attacks against Deflection have Advantage" }
+        changes: [{ key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Attacks against Deflection have Advantage", script: "return data.item.isVsDeflection" },
+                }
+            }
+        }
     },
     {
         id: "dazzled",
         label: "Dazzled",
         icon: "systems/pillars-of-eternity/assets/conditions/dazzled.png",
-        changes: [{ key: "state", mode: 0, value: "dis" }, { key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Disadvantage on Weapon Attacks or Skill checks that require sight", "pillars-of-eternity.targetDescription": "Attacks against Deflection have Advantage" }
+        changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Disadvantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type == 'weapon'" },
+                    1 : { description: "Attacks against Deflection have Advantage", script: "return data.item.isVsDeflection" },
+                }
+            }
+        }
     },
     {
         id: "blinded",
         label: "Blinded",
         icon: "systems/pillars-of-eternity/assets/conditions/blinded.png",
-        changes: [{ key: "steps", mode: 0, value: -3 }, { key: "state", mode: 0, value: "dis" }, { key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Disadvantage on Weapon Attacks or Skill checks that require sight, Deflection Attacks gain 3 Penalty Steps", "pillars-of-eternity.targetDescription": "Attacks against Deflection have Advantage" }
+        changes: [{ key: "steps", mode: 6, value: -3 }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Disadvantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type == 'weapon'" },
+                    1 : { description: "Attacks against Deflection have Advantage", script: "return data.item.isVsDeflection" },
+                }
+            }
+        }
     },
     {
         id: "aware",
         label: "Aware",
         icon: "systems/pillars-of-eternity/assets/conditions/aware.png",
-        changes: [{ key: "state", mode: 0, value: "adv" }, { key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Advantage on Disengagement Attacks", "pillars-of-eternity.targetDescription": "Attacks against Deflection have Disadvantage" }
+        changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Advantage on Disengagement Attacks", script: "" },
+                    1 : { description: "Attacks against Deflection have Disadvantage", script: "return data.item.isVsDeflection" },
+                }
+            }
+        }
     },
     {
         id: "insightful",
         label: "Insightful",
         icon: "systems/pillars-of-eternity/assets/conditions/insightful.png",
-        changes: [{ key: "state", mode: 0, value: "adv" }, { key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Attack rolls and skill checks that require sight", "pillars-of-eternity.targetDescription": "Attacks against Deflection have Disadvantage" }
+        changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Advantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type == 'weapon'" },
+                    1 : { description: "Attacks against Deflection have Disadvantage", script: "return data.item.isVsDeflection" },
+                }
+            }
+        }
     },
     {
         id: "all-seeing",
         label: "All-Seeing",
         icon: "systems/pillars-of-eternity/assets/conditions/all-seeing.png",
-        changes: [{ key: "state", mode: 0, value: "adv" }, { key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Attack rolls and skill checks that require sight", "pillars-of-eternity.targetDescription": "Attacks against Deflection have Disadvantage" }
+        changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Advantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type == 'weapon'" },
+                    1 : { description: "Attacks against Deflection have Disadvantage", script: "return data.item.isVsDeflection" },
+                }
+            }
+        }
     },
     {
         id: "demoralized",
         label: "Demoralized",
         icon: "systems/pillars-of-eternity/assets/conditions/demoralized.png",
-        changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.targetDescription": "Attacks against Will have Advantage" }
+        changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    1 : { description: "Attacks against Will have Advantage", script: "return data.item.isVsWill" },
+                }
+            }
+        }
     },
     {
         id: "frightened",
         label: "Frightened",
         icon: "systems/pillars-of-eternity/assets/conditions/frightened.png",
-        changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 0, value: "dis" }, { key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.description": "Attack and skill rolls within line of sight of the source of fear", "pillars-of-eternity.targetDescription": "Attacks against Will have Advantage" }
+        changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    1 : { description: "Attack and skill rolls within line of sight of the source of fear have Disadvantage", script: "" },
+                    2 : { description: "Attacks against Will have Advantage", script: "return data.item.isVsWill" },
+                }
+            }
+        }
     },
     {
         id: "terrified",
         label: "Terrified",
         icon: "systems/pillars-of-eternity/assets/conditions/terrified.png",
-        changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 0, value: "dis" }, { key: "targeter.state", mode: 0, value: "adv" }],
-        flags: { "pillars-of-eternity.description": "Attack and skill rolls within line of sight of the source of fear", "pillars-of-eternity.targetDescription": "Attacks against Will have Advantage" }
+        changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    1 : { description: "Attack and skill rolls within line of sight of the source of fear have Disadvantage", script: "" },
+                    2 : { description: "Attacks against Will have Advantage", script: "return data.item.isVsWill" },
+                }
+            }
+        }
     },
     {
         id: "charmed",
@@ -865,8 +1067,16 @@ CONFIG.statusEffects = [
         id: "determined",
         label: "Determined",
         icon: "systems/pillars-of-eternity/assets/conditions/determined.png",
-        changes: [{ key: "steps", mode: 0, value: 1 }, { key: "targeter.state", mode: 0, value: "dis" }],
-        flags: { "pillars-of-eternity.description": "Bonus step to one roll per round", "pillars-of-eternity.targetDescription": "Attacks against Will have Disadvantage" }
+        changes: [{ key: "steps", mode: 6, value: 1 }, { key: "state", mode: 7, value: "dis" }],
+        flags:             
+        {
+            "pillars-of-eternity": {
+                changeCondition : {
+                    0 : { description: "Bonus step to one roll per round", script: "" },
+                    1 : { description: "Attacks against Will have Disadvantage", script: "return data.item.isVsWill" },
+                }
+            }
+        }
     },
     {
         id: "resolute",

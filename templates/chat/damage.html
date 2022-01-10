@@ -1,0 +1,28 @@
+<div class="pillars-of-eternity damage">
+    <div title="{{roll.formula}}" class="damage-total">
+        {{roll.total}}
+    </div>
+    <div class="dice-tooltip">
+        {{#each parts}}
+        <section class="tooltip-part">
+            <div class="dice">
+                <header class="part-header flexrow">
+                    <span class="part-formula">{{this.formula}}</span>
+                    <span class="part-targets">
+                    {{#each this.options.targets as |target t|}}
+                        <img class="target-img highlight-token" src="{{target.token.img}}" data-token-id="{{target.token._id}}" title = "{{target.token.name}}">
+                    {{/each}}
+                    </span>
+                    {{#if this.flavor}}<span class="part-flavor">{{this.flavor}}</span>{{/if}}
+                    <span class="part-total">{{this.options.accumulator}}</span>
+                </header>
+                <ol class="dice-rolls">
+                {{#each this.rolls}}
+                    <li class="roll {{this.classes}}">{{{this.result}}}</li>
+                {{/each}}
+                </ol>
+            </div>
+        </section>
+        {{/each}}
+    </div>
+</div>

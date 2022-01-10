@@ -16,7 +16,8 @@ export default class PowerCheck extends SkillCheck
             
             let terms = this.getTerms()
             this.roll = Roll.fromTerms(terms)
-            await this.roll.evaluate({async:true})  
+            if (this.requiresRoll)
+                await this.roll.evaluate({async:true})  
             this.powerSource.update({"data.used.value" : true, "data.pool.current" : this.powerSource.pool.current - this.power.level.cost})
             this.data.result = this.roll.toJSON()
             game.user.updateTokenTargets([])
@@ -29,6 +30,14 @@ export default class PowerCheck extends SkillCheck
 
         get power() {
             return this.item
+        }
+
+        get tags () {
+            return [game.pillars.config.powerSources[this.item.source.value]]
+        }
+
+        get requiresRoll() {
+            return this.power.roll.value
         }
 
         get powerSource() {

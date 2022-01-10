@@ -1,4 +1,6 @@
 
+import EffectScriptConfig from "./effect-script.js"
+
 
 export default class PillarsEffectConfig extends ActiveEffectConfig {
 
@@ -14,4 +16,12 @@ export default class PillarsEffectConfig extends ActiveEffectConfig {
         data.modes[7] = "Targeter's Roll Dialog"
         return data
     }   
+
+    activateListeners(html) {
+        super.activateListeners(html)
+        html.find(".effect-script-config").click(ev => {
+            let index = parseInt($(ev.currentTarget).parents(".effect-change").attr("data-index"))
+            new EffectScriptConfig({effect : this.object, index}).render(true)
+        })
+    }
 }

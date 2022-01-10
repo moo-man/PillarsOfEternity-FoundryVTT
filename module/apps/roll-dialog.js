@@ -9,13 +9,32 @@ export default class RollDialog extends Dialog {
         })
     }
 
-    static async create({title, assisters, state={normal : true}, modifier, steps, hasRank, effects}) {
-        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/roll-dialog.html", {title, assisters, state, modifier, steps, hasRank, effects})
+    async _render(...args)
+    {
+        await super._render(...args)
+        let automatic = this.runChangeConditionals()
+        let select = this.element.find(".effect-select")[0]
+        let options = Array.from(select.children)
+        options.forEach((opt, i) => {
+            if (automatic[i])
+            {
+                opt.selected = true;
+                select.dispatchEvent(new Event("change"))
+            }
+        })
+        if (automatic.some(i => i))
+            select.focus()
+    }
+
+    static async create(data) {
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/roll-dialog.html", data)
         return new Promise((resolve) => {
             return new this({
-                title: title,
+                title: data.title,
                 content: html,
-                effects,
+                actor : data.actor,
+                targets : data.targets,
+                dialogData : data,
                 buttons : {
                     roll : {
                         label : "Roll",
@@ -26,7 +45,7 @@ export default class RollDialog extends Dialog {
                             data.proxy = html.find("input[name='proxy']").is(":checked")
                             data.assister = html.find("select[name='assistance']").val()
                             data.state = html.find("input:radio[name='state']:checked").val()
-                            console.log(data)
+                            data.rollMode = html.find("select[name='rollMode']").val()
                             resolve(data)
                         }
                     }
@@ -35,6 +54,22 @@ export default class RollDialog extends Dialog {
             }).render(true)
         })
 
+    }
+
+    runChangeConditionals()
+    {
+        let results = this.data.dialogData.changes.map(c => {
+            try {
+                let func = new Function("data", c.conditional.script).bind({actor : this.data.actor, targets : this.data.targets, effect : c.document})
+                return (func(this.data.dialogData) == true) // Only accept true returns
+            }
+            catch (e)
+            {
+                console.error("Something went wrong when processing conditional dialog effect: " + e, c)
+                return false
+            }
+        })
+        return results
     }
 
     activateListeners(html)
@@ -79,7 +114,7 @@ export default class RollDialog extends Dialog {
 
         this.userEntry = {
             modifier : this.dynamicInputs.modifier[0].value ,
-            state : Array.from(this.dynamicInputs["state"]).filter(i => i.checked)[0].value,
+            state : Array.from(this.dynamicInputs["state"]).filter(i => i.checked)[0]?.value,
             steps: this.dynamicInputs.steps[0].value 
         }
     }   
@@ -101,8 +136,13 @@ export default class RollDialog extends Dialog {
 
     _onEffectSelect(ev) 
     {
-        let selectedEffects = $(ev.currentTarget).val().map(i => this.data.effects[parseInt(i)])
-        let changes = selectedEffects.reduce((prev, current) => prev = prev.concat(current.data.changes), []).filter(i => i.mode == 0)
+        let changes = []
+        $(ev.currentTarget).val().map(i => {
+            let indices = i.split(",");
+            indices.forEach(changeIndex => {
+                changes.push(this.data.dialogData.changes[parseInt(changeIndex)])
+            })
+        })
 
         for(let type in this.dynamicInputs)
         {

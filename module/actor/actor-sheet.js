@@ -123,6 +123,7 @@ export class PillarsActorSheet extends ActorSheet {
 
         this._createHealthArray(sheetData.data.health, "health")
         this._createEnduranceArray(sheetData.data.endurance, "endurance")
+        this._createSoakArray(sheetData)
     }   
 
     formatTooltips(data)
@@ -133,8 +134,6 @@ export class PillarsActorSheet extends ActorSheet {
         data.tooltips.health.max = data.tooltips.health.max.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.endurance.max = data.tooltips.endurance.max.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.initiative.value = data.tooltips.initiative.value.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.soak.base = data.tooltips.soak.base.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.soak.shield = data.tooltips.soak.shield.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.stride.value = data.tooltips.stride.value.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.run.value = data.tooltips.run.value.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.toughness.value = data.tooltips.toughness.value.join(" + ").replaceAll("+ -", "- ")
@@ -142,6 +141,9 @@ export class PillarsActorSheet extends ActorSheet {
         data.tooltips.health.threshold.bloodied = data.tooltips.health.threshold.bloodied.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.health.threshold.incap = data.tooltips.health.threshold.incap.join(" + ").replaceAll("+ -", "- ")
         data.tooltips.endurance.threshold.winded = data.tooltips.endurance.threshold.winded.join(" + ").replaceAll("+ -", "- ")
+
+        for (let type in data.tooltips.soak)
+            data.tooltips.soak[type] = data.tooltips.soak[type].join(" + ").replaceAll("+ -", "- ")
     }
 
 
@@ -221,6 +223,39 @@ export class PillarsActorSheet extends ActorSheet {
             let lowestKey = Object.keys(p.groups).filter(i => i).sort((a, b) => {a - b > 0 ? 1 : -1})
             p.display = p.groups[lowestKey]
         })
+    }
+
+    _createSoakArray(sheetData)
+    {
+        let soakValues = sheetData.data.soak
+
+        sheetData.soaks = {
+            physical : {
+                total : soakValues.physical + soakValues.base,
+                show : soakValues.physical > 0,
+                img : "icons/svg/sword.svg"
+            },
+            burn : {
+                total : soakValues.burn + soakValues.base,
+                show : soakValues.burn > 0,
+                img : "icons/svg/fire.svg"
+            },
+            freeze : {
+                total : soakValues.freeze + soakValues.base,
+                show : soakValues.freeze > 0,
+                img : "icons/svg/frozen.svg"
+            },
+            corrode : {
+                total : soakValues.corrode + soakValues.base,
+                show : soakValues.corrode > 0,
+                img : "icons/svg/acid.svg"
+            },
+            shock : {
+                total : soakValues.shock + soakValues.base,
+                show : soakValues.shock > 0,
+                img : "icons/svg/lightning.svg"
+            }
+        }
     }
 
     _enrichKnownConnections(sheetData)
@@ -725,8 +760,7 @@ export class PillarsActorSheet extends ActorSheet {
 
     async _onSkillRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let checkData = await this.actor.setupSkillCheck(this.actor.items.get(itemId))
-        let check = new SkillCheck(checkData)
+        let check = await this.actor.setupSkillCheck(this.actor.items.get(itemId))
         await check.rollCheck();
         check.sendToChat()
     }
@@ -749,8 +783,7 @@ export class PillarsActorSheet extends ActorSheet {
                         let skill = dlg.find("[name='skill']")[0].value
                         if (skill)
                         {
-                            let checkData = await this.actor.setupSkillCheck(skill)
-                            let check = new SkillCheck(checkData)
+                            let check = await this.actor.setupSkillCheck(skill)
                             await check.rollCheck();
                             check.sendToChat()
                         }
@@ -767,16 +800,14 @@ export class PillarsActorSheet extends ActorSheet {
 
     async _onWeaponRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let checkData = await this.actor.setupWeaponCheck(itemId)
-        let check = new WeaponCheck(checkData)
+        let check = await this.actor.setupWeaponCheck(itemId)
         await check.rollCheck();
         check.sendToChat()
     }
 
     async _onPowerRoll(event) {
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let checkData = await this.actor.setupPowerCheck(itemId)
-        let check = new PowerCheck(checkData)
+        let check = await this.actor.setupPowerCheck(itemId)
         await check.rollCheck();
         check.sendToChat()
     }
@@ -787,15 +818,13 @@ export class PillarsActorSheet extends ActorSheet {
         let skill = this.actor.items.getName(item.skill.value)
         if (!skill)
             return ui.notifications.warn(`Could not find skill ${item.skill.value}`)
-        let checkData = await this.actor.setupSkillCheck(skill)
-        let check = new SkillCheck(checkData)
+        let check = await this.actor.setupSkillCheck(skill)
         await check.rollCheck()
         check.sendToChat()
     }
 
     async _onAgeRoll(event) {
-        let checkData = await this.actor.setupAgingRoll()
-        let check = new AgingRoll(checkData)
+        let check = await this.actor.setupAgingRoll()
         await check.rollCheck();
         check.sendToChat()
     }

@@ -345,14 +345,22 @@ export class PillarsItem extends Item {
 
     // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
 
+
+    get Category() {
+        if (this.type == "weapon")
+            return game.pillars.config.weaponTypes[this.category.value]
+        if (this.type == "skill")
+            return game.pillars.config.skillTypes[this.category.value]
+    }
+
     get Type() {return game.i18n.localize(CONFIG.Item.typeLabels[this.type])}
 
-    get Range() {return game.pillars.config.powerRanges[this.range.find(i => i.group == this.displayGroupKey("range"))?.value]}
+    get Range() {return game.pillars.config.powerRanges[this.range.find(i => (i.group || "Default") == this.displayGroupKey("range"))?.value]}
 
     get Target() {
         try {
 
-            let targetObj = this.target.find(i => i.group == this.displayGroupKey("target"))
+            let targetObj = this.target.find(i => (i.group || "Default") == this.displayGroupKey("target"))
             if (!targetObj)    
             return
             let targetSubTypes = game.pillars.config[`power${targetObj.value[0].toUpperCase() + targetObj.value.slice(1)}s`]
@@ -367,9 +375,9 @@ export class PillarsItem extends Item {
             console.error("Error when getting target")
         }
     }
-    get Duration() {return game.pillars.config.powerDurations[this.duration.find(i => i.group == this.displayGroupKey("duration"))?.value]}
+    get Duration() {return game.pillars.config.powerDurations[this.duration.find(i => (i.group || "Default") == this.displayGroupKey("duration"))?.value]}
     get Speed() {return game.pillars.config.powerSpeeds[this.speed.value]}
-    get Exclusion() {return game.pillars.config.powerExclusions[this.target.find(i => i.group == this.displayGroupKey("target"))?.exclusion]}
+    get Exclusion() {return game.pillars.config.powerExclusions[this.target.find(i => (i.group || "Default") == this.displayGroupKey("target"))?.exclusion]}
     get Skill() {return this.actor.getItemTypes("skill").find(i => i.name == this.skill.value)}
 
     get SourceItem() {
@@ -447,6 +455,32 @@ export class PillarsItem extends Item {
         return specials
     }
 
+
+    // @@@@@@@@@@@ EFFECT HELPERS @@@@@@@@@@
+
+    get isVsDeflection() {
+        return this._isVsDefense("deflection")
+    }
+
+    get isVsFortitude() {
+        return this._isVsDefense("fortitude")
+    }
+
+    get isVsReflex() {
+        return this._isVsDefense("reflex")
+    }
+
+    get isVsWill() {
+        return this._isVsDefense("will")
+    }
+
+    _isVsDefense(defense)
+    {
+        if (this.type == "weapon" || this.type == "power")
+            return this.damage.value.some(d => d.defense.toLowerCase() == defense)
+        return false
+    }
+
     // @@@@@@@@ DATA GETTERS @@@@@@@@@@;    
     get category() {return this.data.data.category}
     get target() {return this.data.data.target}
@@ -492,6 +526,7 @@ export class PillarsItem extends Item {
     get stride() {return this.data.data.stride}
     get run() {return this.data.data.run}
     get improvised() {return this.data.data.improvised}
+    get roll() {return this.data.data.roll}
 
     // Processed data getters
     get rank() {return this.xp.rank}

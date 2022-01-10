@@ -1,0 +1,26 @@
+<div class="pillars-of-eternity check">
+    <header>
+        <hr>
+        <div class="check-title">
+            <img src="{{check.item.img}}">
+            <h3>{{check.checkData.title}}</h3>
+        </div>
+        <hr>
+        <div class="tags">
+            {{#each check.tags as |tag t|}}
+            <div class="tag">{{tag}}</div>
+            {{/each}}
+            {{#each check.weaponTags as |tag t|}}
+            <div class="tag">{{tag}}</div>
+            {{/each}}
+        </div>
+    </header>
+    {{#if check.requiresRoll}}
+    <div title="{{check.roll.formula}}" class="check-total">
+        {{check.roll.total}}
+    </div>
+    {{{tooltip}}}
+    {{/if}}
+
+    {{> systems/pillars-of-eternity/templates/chat/check-buttons.html}}
+</div>

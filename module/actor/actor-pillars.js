@@ -2,6 +2,9 @@ import RollDialog from "../apps/roll-dialog.js";
 import SkillCheck from "../system/skill-check.js";
 import PillarsActiveEffect from "../system/pillars-effect.js"
 import AgingDialog from "../apps/aging-dialog.js";
+import WeaponCheck from "../system/weapon-check.js";
+import PowerCheck from "../system/power-check.js";
+import AgingRoll from "../system/aging-roll.js";
 
 /**
  * Extend FVTT Actor class for Pillars functionality
@@ -33,6 +36,12 @@ export class PillarsActor extends Actor {
             this.data.update({ "token.actorLink": true });
         }
     }
+
+    async _preUpdate(updateData, options, user) {
+        await super._preUpdate(updateData, options, user)
+    
+        this.handleScrollingText(updateData)
+      }
 
     setSpeciesData(data) {
         let speciesItem = this.getItemTypes("species")[0]
@@ -113,7 +122,13 @@ export class PillarsActor extends Actor {
             },
             soak: {
                 base: [],
-                shield: []
+                shield: [],
+                physical :  [],
+                burn :  [],
+                freeze :  [],
+                raw :  [],
+                corrode :  [],
+                shock : []
             },
             stride: {
                 value: []
@@ -182,8 +197,8 @@ export class PillarsActor extends Actor {
         this.health.bloodied = this.health.value > this.health.threshold.bloodied
         this.endurance.winded = this.endurance.value > this.endurance.threshold.winded
         this.health.incap = this.health.value > this.health.threshold.incap
-        this.endurance.incap = this.endurance.value >= this.endurance.max
-        this.health.dead = this.health.value >= this.health.max
+        this.endurance.incap = this.endurance.value >= (this.endurance.max + this.endurance.bonus)
+        this.health.dead = this.health.value >= (this.health.max + this.health.death.modifier)
 
         if (this.type == "character") {
             let thresholds = game.pillars.config.agePointsDeathRank
@@ -250,6 +265,14 @@ export class PillarsActor extends Actor {
             this.defenses.deflection.value += equippedShield.deflection.value
             this.data.flags.tooltips.defenses.deflection.push(equippedShield.deflection.value + " (Shield)")
         }
+
+        this.data.flags.tooltips.soak.physical.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.burn.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.freeze.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.raw.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.corrode.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.shock.push(this.soak.base + " (Base)")
+
     }
 
     prepareEffectTooltips() {
@@ -285,8 +308,8 @@ export class PillarsActor extends Actor {
         checkData.title = data.title
         checkData.skillId = skillItem?.id
         checkData.speaker = this.speakerData();
-        checkData.targetSpeaker = this.targetSpeakerData();
-        return checkData
+        checkData.targetSpeakers = this.targetSpeakerData();
+        return new SkillCheck(checkData)
     }
 
     async setupWeaponCheck(weapon) {
@@ -303,8 +326,8 @@ export class PillarsActor extends Actor {
         checkData.skillName = weapon.skill.value
         checkData.itemId = weapon.id
         checkData.speaker = this.speakerData();
-        checkData.targetSpeaker = this.targetSpeakerData();
-        return checkData
+        checkData.targetSpeakers = this.targetSpeakerData();
+        return new WeaponCheck(checkData)
     }
 
     async setupPowerCheck(power) {
@@ -318,13 +341,16 @@ export class PillarsActor extends Actor {
             throw ui.notifications.error("Not enough power!")
 
         let data = this.getPowerDialogData("power", power)
-        let checkData = await RollDialog.create(data)
+        let checkData = {}
+        if (power.roll.value)
+            checkData = await RollDialog.create(data)
+            
         checkData.title = data.title
         checkData.sourceId = power.SourceItem.id
         checkData.itemId = power.id
         checkData.speaker = this.speakerData();
-        checkData.targetSpeaker = this.targetSpeakerData();
-        return checkData
+        checkData.targetSpeakers = this.targetSpeakerData();
+        return new PowerCheck(checkData)
     }
 
     async setupAgingRoll() {
@@ -332,7 +358,7 @@ export class PillarsActor extends Actor {
         let checkData = await AgingDialog.create(dialogData)
         checkData.title = "Aging Roll"
         checkData.speaker = this.speakerData();
-        return checkData
+        return new AgingRoll(checkData)
     }
 
     //#endregion
@@ -347,7 +373,15 @@ export class PillarsActor extends Actor {
         dialogData.title = `${item?.name || options.name} Check`
         dialogData.modifier = ""
         dialogData.steps = 0
-        dialogData.effects = this.getDialogRollEffects()
+        dialogData.changeList = this.getDialogChanges({condense: true}),
+        dialogData.changes = this.getDialogChanges(),
+        dialogData.actor = this,
+        dialogData.targets = Array.from(game.user.targets)
+        dialogData.rollModes = CONFIG.Dice.rollModes
+        dialogData.rollMode = game.settings.get("core", "rollMode")
+        dialogData.item = item
+        dialogData.options = options
+        dialogData.state = {normal : true}
         return dialogData
     }
 
@@ -355,6 +389,7 @@ export class PillarsActor extends Actor {
         let dialogData = this.getDialogData(type, item, options)
         dialogData.assisters = this.constructAssisterList(item?.name || options.name)
         dialogData.hasRank = item ? item.xp.rank : false
+        dialogData.skill = item;
         return dialogData
     }
 
@@ -364,6 +399,7 @@ export class PillarsActor extends Actor {
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0)
         dialogData.hasRank = item.Skill ? item.Skill.rank : false
+        dialogData.skill = item.Skill || {}
         return dialogData
     }
 
@@ -399,57 +435,34 @@ export class PillarsActor extends Actor {
     /**
      * Get effects listed in the dialog
      * Effects are sourced from the rolling actor and targeted actor, if applicable
-     * Effects from the rolling actor are filtered to remove "targeter" effects
-     * Effects from the target are filtered to remove "self" effects
      */
-    getDialogRollEffects() {
-        let effects = this.effects.filter(i => i.hasRollEffect).map(i => i.toObject())
-        let selfEffects = []
-        let targetEffects = []
-
-        // Remove "target" effects from self actor
-        effects.forEach(e => {
-            for (let i = 0; i < e.changes.length; i++) {
-                if (e.changes[i].key.includes("targeter."))
-                    delete e.changes[i]
-            }
-            e.changes = e.changes.filter(i => i)
-        })
-
-        // If the effect only had target effects, remove the effect entirely
-        selfEffects = effects.filter(i => i.changes.length > 0)
-
-        // Get target effects, removing "target" from the keys to get the proper path, and delete effects that don't refer to the targeter
-        let target = Array.from(game.user.targets)[0]
-        if (target) {
-            targetEffects = target.actor.effects.filter(i => i.hasRollEffect).filter(i => i.data.changes.find(i => i.key.includes("targeter."))).map(i => i.toObject())
-            targetEffects.forEach(e => {
-                for (let i = 0; i < e.changes.length; i++) {
-                    if (!e.changes[i].key.includes("targeter."))
-                        delete e.changes[i]
-                    else
-                        e.changes[i].key = e.changes[i].key.replace("targeter.", "")
-                }
-                e.changes = e.changes.filter(i => i)
-                e.label = `Target: ${e.label}`
-            })
+    getDialogChanges({condense = false}={}) {
+        // Aggregate dialog changes from each effect
+        let changes =  this.effects.reduce((prev, current) => prev.concat(current.getDialogChanges({condense})), [])
+        if (game.user.targets.size > 0)
+        {
+            let target = Array.from(game.user.targets)[0].actor
+            let targetChanges = target.effects.reduce((prev, current) => prev.concat(current.getDialogChanges({target, condense, indexOffset : changes.length})), [])
+            changes = changes.concat(targetChanges)
         }
-
-        return targetEffects.concat(selfEffects).map(e => new PillarsActiveEffect(e))
+        return changes
     }
+
 
     //#endregion
 
-    speakerData() {
+    speakerData(token) {
         if (this.isToken) {
             return {
-                token: this.token.id,
-                scene: this.token.parent.id
+                token: token?.document?.id || this.token.id,
+                scene: token?.document?.parent?.id || this.token.parent.id
             }
         }
         else {
             return {
-                actor: this.id
+                actor: this.id,
+                token : token?.document?.id,
+                scene: token?.document?.parent?.id
             }
         }
     }
@@ -457,7 +470,7 @@ export class PillarsActor extends Actor {
 
     targetSpeakerData() {
         if (game.user.targets.size > 0)
-            return Array.from(game.user.targets).map(i => i.actor)[0].speakerData();
+            return Array.from(game.user.targets).map(i => i.actor.speakerData(i));
     }
 
 
@@ -521,25 +534,95 @@ export class PillarsActor extends Actor {
         }
     }
 
-    async applyDamage(value, type, multiplier) {
-        // value *= multiplier
-        // let current  = this[type].value
+    handleScrollingText(data)
+    {
+        try {
+            if (hasProperty(data, "data.health.value"))
+                this._displayScrollingChange(getProperty(data, "data.health.value") - this.health.value);
+            if (hasProperty(data, "data.health.wounds.value"))
+                this._displayScrollingChange(getProperty(data, "data.health.wounds.value") - this.health.wounds.value, {text : "Wound"});
+            if (hasProperty(data, "data.endurance.value"))
+                this._displayScrollingChange(getProperty(data, "data.endurance.value") - this.endurance.value, {endurance : true});
+        }
+        catch (e) {
+            console.error("Error displaying scrolling text for", data, e)
+        }
+    }
 
-        // if (value < 0)
-        //     value += this.combat.soak
 
-        // current += value
+        /**
+         * Display changes to health as scrolling combat text.
+         * Adapt the font size relative to the Actor's HP total to emphasize more significant blows.
+         * @param {number} daamge
+         * @private
+         */
+        _displayScrollingChange(change, {text="", endurance=false}={}) {
+            if ( !change ) return;
+            change = Number(change);
+            const tokens = this.isToken ? [this.token?.object] : this.getActiveTokens(true);
+            for ( let t of tokens ) {
+            if ( !t?.hud?.createScrollingText ) continue;  // This is undefined prior to v9-p2
+            t.hud.createScrollingText(change.signedString() + " " + text, {
+                anchor: CONST.TEXT_ANCHOR_POINTS.TOP,
+                fontSize: 30,
+                fill: endurance ? "0x6666FF" : change > 0 ?  "0xFF0000" : "0x00FF00", // I regret nothing
+                stroke: 0x000000,
+                strokeThickness: 4,
+                jitter: 0.25
+            });
+            }
+        }
 
-        // // if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.severe)
-        // //     await this.addWound("severe")
-        // // else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.heavy)
-        // //     await this.addWound("heavy")
-        // // else if (type == "health" && value < 0 && Math.abs(value) >= this.health.threshold.light)
-        // //     await this.addWound("light")
+    async applyDamage(damage, type) {
+        if (damage < this.toughness.value)
+            return
+    
+        let updateObj = {}
 
-        // ui.notifications.notify(`${-value} Damage applied to ${this.name}'s ${type.slice(0, 1).toUpperCase() + type.slice(1)}`)
+        let soak = this.soak.base
+        switch(type)
+        {
+            case "physical" : soak += this.soak.physical
+            break;
+            case "burn" : soak += this.soak.burn
+            break;
+            case "freeze" : soak += this.soak.freeze
+            break;
+            case "raw" : soak += this.soak.raw
+            break;
+            case "corrode" : soak += this.soak.corrode
+            break;
+            case "shock" : soak += this.soak.shock
+            break;
+            case "raw" : soak = 0
+            break;
+        }
 
-        // return this.update({[`data.${type}.value`] : current})
+        let message = `${damage} Damage - ${soak} Soak`
+
+
+        if (damage > this.toughness.value)
+        {
+            updateObj["data.endurance.value"] = this.endurance.value + 1
+            message += " - 1 Endurance"
+        }
+
+        if (damage > this.toughness.value && damage > this.soak.base)
+        {
+            let damageMinusSoak = damage - this.soak.base
+            let pips = Math.floor(damageMinusSoak / this.damageIncrement.value)
+            updateObj["data.health.value"] = this.health.value + pips
+            message += ` - ${pips} Health`
+
+            if (pips >= 3 && pips <= 4 && this.health.wounds.value < 3)
+            {
+                updateObj["data.health.wounds.value"] = this.health.wounds.value + 1
+                message += ` - 1 Wound`
+            }
+        }
+        this.update(updateObj)
+
+        return message
     }
 
     // addWound(type)
@@ -580,7 +663,7 @@ export class PillarsActor extends Actor {
     get seasons() { return this.data.data.seasons }
     get soak() { return this.data.data.soak }
     get toughness() { return this.data.data.toughness }
-
+    get damageIncrement() {return this.data.data.damageIncrement}
 
     get combat() { return this.data.data.combat }
     //#endregion

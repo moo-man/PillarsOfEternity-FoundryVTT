@@ -6,11 +6,16 @@ export default function () {
             let rollData = this.getFlag("pillars-of-eternity", "rollData")
             if (rollData)
                 return game.pillars.rollClass.SkillCheck.recreate(rollData)
+
+            let damageData = this.getFlag("pillars-of-eternity", "damageData")
+            if (damageData)
+                return game.pillars.rollClass.DamageRoll.recreate(damageData)
+
         }
 
 
 
-            const NEEDS_MIGRATION_VERSION = "0.4.3";
+            const MIGRATION_TARGET = "0.6.0";
             let needMigration
         if (!game.settings.get("pillars-of-eternity", "systemMigrationVersion"))
         {
@@ -20,14 +25,14 @@ export default function () {
 
         try {
             if (!needMigration)
-                needMigration = game.settings.get("pillars-of-eternity", "systemMigrationVersion") && !isNewerVersion(game.settings.get("pillars-of-eternity", "systemMigrationVersion"), NEEDS_MIGRATION_VERSION)
+                needMigration = game.settings.get("pillars-of-eternity", "systemMigrationVersion") && isNewerVersion(MIGRATION_TARGET, game.settings.get("pillars-of-eternity", "systemMigrationVersion"))
         }
         catch
         {
             needMigration = false;
         }
         if (needMigration && game.user.isGM) {
-            //new game.pillars.migration().migrateWorld()
+            new game.pillars.migration().migrateWorld()
         }
         else if (game.user.isGM)
         {
