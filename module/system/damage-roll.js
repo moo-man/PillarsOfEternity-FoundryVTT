@@ -138,16 +138,17 @@ export default class DamageRoll {
         })
     }
 
-    applyDamage(index) {
+    async applyDamage(index) {
       let html = ``
       let damage = this.damages[index]
       for(let part of damage.parts)
       {
-          part.options.targets.forEach(t => {
-              let token = canvas.tokens.get(t.token._id)
-              token.actor.applyDamage(part.options.accumulator)
-              html += `${t.token.name} : ${part.options.accumulator}<br>`
-          })
+        for(let t of part.options.targets)
+        {
+            let token = canvas.tokens.get(t.token._id)
+            let msg = await token.actor.applyDamage(part.options.accumulator, damage.type)
+            html += `<b>${t.token.name}</b> : ${msg}<br><br>`  
+        }
       }
       ChatMessage.create({content : html})
     }

@@ -122,7 +122,13 @@ export class PillarsActor extends Actor {
             },
             soak: {
                 base: [],
-                shield: []
+                shield: [],
+                physical :  [],
+                burn :  [],
+                freeze :  [],
+                raw :  [],
+                corrode :  [],
+                shock : []
             },
             stride: {
                 value: []
@@ -259,6 +265,14 @@ export class PillarsActor extends Actor {
             this.defenses.deflection.value += equippedShield.deflection.value
             this.data.flags.tooltips.defenses.deflection.push(equippedShield.deflection.value + " (Shield)")
         }
+
+        this.data.flags.tooltips.soak.physical.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.burn.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.freeze.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.raw.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.corrode.push(this.soak.base + " (Base)")
+        this.data.flags.tooltips.soak.shock.push(this.soak.base + " (Base)")
+
     }
 
     prepareEffectTooltips() {
@@ -523,9 +537,11 @@ export class PillarsActor extends Actor {
     handleScrollingText(data)
     {
         if (hasProperty(data, "data.health.value"))
-        this._displayScrollingChange(getProperty(data, "data.health.value") - this.health.value);
-      if (hasProperty(data, "data.endurance.value"))
-        this._displayScrollingChange(getProperty(data, "data.endurance.value") - this.endurance.value, {endurance : true});
+            this._displayScrollingChange(getProperty(data, "data.health.value") - this.health.value);
+        if (hasProperty(data, "data.health.wounds.value"))
+            this._displayScrollingChange(getProperty(data, "data.health.wounds.value") - this.health.wounds.value, {text : "Wound"});
+        if (hasProperty(data, "data.endurance.value"))
+            this._displayScrollingChange(getProperty(data, "data.endurance.value") - this.endurance.value, {endurance : true});
     }
 
 
@@ -535,16 +551,16 @@ export class PillarsActor extends Actor {
          * @param {number} daamge
          * @private
          */
-        _displayScrollingChange(change, options={}) {
+        _displayScrollingChange(change, {text="", endurance=false}={}) {
             if ( !change ) return;
             change = Number(change);
             const tokens = this.isToken ? [this.token?.object] : this.getActiveTokens(true);
             for ( let t of tokens ) {
             if ( !t?.hud?.createScrollingText ) continue;  // This is undefined prior to v9-p2
-            t.hud.createScrollingText(change.signedString(), {
+            t.hud.createScrollingText(change.signedString() + " " + text, {
                 anchor: CONST.TEXT_ANCHOR_POINTS.TOP,
                 fontSize: 30,
-                fill: options.endurance ? "0x6666FF" : change > 0 ?  "0xFF0000" : "0x00FF00", // I regret nothing
+                fill: endurance ? "0x6666FF" : change > 0 ?  "0xFF0000" : "0x00FF00", // I regret nothing
                 stroke: 0x000000,
                 strokeThickness: 4,
                 jitter: 0.25
@@ -558,19 +574,50 @@ export class PillarsActor extends Actor {
     
         let updateObj = {}
 
+        let soak = this.soak.base
+        switch(type)
+        {
+            case "physical" : soak += this.soak.physical
+            break;
+            case "burn" : soak += this.soak.burn
+            break;
+            case "freeze" : soak += this.soak.freeze
+            break;
+            case "raw" : soak += this.soak.raw
+            break;
+            case "corrode" : soak += this.soak.corrode
+            break;
+            case "shock" : soak += this.soak.shock
+            break;
+            case "raw" : soak = 0
+            break;
+        }
+
+        let message = `${damage} Damage - ${soak} Soak`
+
+
         if (damage > this.toughness.value)
         {
             updateObj["data.endurance.value"] = this.endurance.value + 1
+            message += " - 1 Endurance"
         }
 
         if (damage > this.toughness.value && damage > this.soak.base)
         {
-            // Any endurance loss?
             let damageMinusSoak = damage - this.soak.base
             let pips = Math.floor(damageMinusSoak / this.damageIncrement.value)
             updateObj["data.health.value"] = this.health.value + pips
+            message += ` - ${pips} Health`
+
+            if (pips >= 3 && pips <= 4 && this.health.wounds.value < 3)
+            {
+                updateObj["data.health.wounds.value"] = this.health.wounds.value + 1
+                message += ` - 1 Wound`
+            }
         }
-        return this.update(updateObj)
+        this.update(updateObj)
+
+        return message
     }
 
     // addWound(type)

@@ -22,7 +22,6 @@ export default class SkillCheck
                     rollClass : this.constructor.name,
                     rollMode : data.rollMode,
                     messageId : "",
-                    damageMessage : ""
                 },
                 result : {}
             }
@@ -193,9 +192,7 @@ export default class SkillCheck
             })
 
             let roll = new DamageRoll(damages, this);
-            let message = await roll.rollDice()
-            this.context.damageMessage = message.id
-            this.updateMessageFlags()
+            await roll.rollDice()
             game.user.updateTokenTargets([])
         }
         

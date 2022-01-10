@@ -18,9 +18,19 @@
             <h3>Soak: </h3>
             <input type="number" disabled class="value" title="{{tooltips.soak.base}}" value="{{data.soak.base}}">
             {{#if items.equipped.shields.length}}
-            <img class="soak-shield" src="icons/svg/shield.svg"/>
-            <input class="soak-shield-num" type="number" disabled class="value" title="{{tooltips.soak.shield}}" value="{{data.soak.shield}}">
+            <div class="soak-group">
+                <img class="soak-img" src="icons/svg/shield.svg"/>
+                <input class="soak-total" type="number" disabled class="value" title="{{tooltips.soak.shield}}" value="{{data.soak.shield}}">
+            </div>
             {{/if}}
+            {{#each soaks as |soak s|}}
+            {{#if soak.show}}
+            <div class="soak-group">
+                <img class="soak-img" src="{{soak.img}}"/>
+                <input class="soak-total" type="number" disabled class="value" title="{{lookup ../tooltips.soak s}} " value="{{soak.total}}">
+            </div>
+            {{/if}}
+            {{/each}}
         </div>
     </div>
 
