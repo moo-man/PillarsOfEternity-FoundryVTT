@@ -74,7 +74,7 @@
 <div class="effects">
     <select tabindex="0" multiple class="effect-select">
         {{#each changeList as |change c|}}
-        <option title="{{change.document.label}}: {{change.conditional.description}}" value="{{change.index}}">{{#if change.target}}Target: {{/if}} {{change.conditional.description}}</option>
+        <option title="{{change.document.label}}: {{change.conditional.description}}" value="{{change.index}}">&#8226; {{#if change.target}}<b>Target</b>: {{/if}} {{change.conditional.description}}</option>
         {{/each}}
     </select>
 </div>

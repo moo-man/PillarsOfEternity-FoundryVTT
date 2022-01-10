@@ -1,15 +1,15 @@
 <div class="pillars-of-eternity check">
     <header>
+        <hr>
         <div class="check-title">
             <img src="{{check.item.img}}">
             <h3>{{check.checkData.title}}</h3>
-            <div class="tags">
-                {{#each check.tags as |tag t|}}
-                <div class="tag">{{tag}}</div>
-                {{/each}}
-            </div>
         </div>
-        <div class="tags weapon">
+        <hr>
+        <div class="tags">
+            {{#each check.tags as |tag t|}}
+            <div class="tag">{{tag}}</div>
+            {{/each}}
             {{#each check.weaponTags as |tag t|}}
             <div class="tag">{{tag}}</div>
             {{/each}}
@@ -21,5 +21,6 @@
     </div>
     {{{tooltip}}}
     {{/if}}
+
     {{> systems/pillars-of-eternity/templates/chat/check-buttons.html}}
 </div>

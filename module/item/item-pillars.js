@@ -455,6 +455,32 @@ export class PillarsItem extends Item {
         return specials
     }
 
+
+    // @@@@@@@@@@@ EFFECT HELPERS @@@@@@@@@@
+
+    get isVsDeflection() {
+        return this._isVsDefense("deflection")
+    }
+
+    get isVsFortitude() {
+        return this._isVsDefense("fortitude")
+    }
+
+    get isVsReflex() {
+        return this._isVsDefense("reflex")
+    }
+
+    get isVsWill() {
+        return this._isVsDefense("will")
+    }
+
+    _isVsDefense(defense)
+    {
+        if (this.type == "weapon" || this.type == "power")
+            return this.damage.value.some(d => d.defense.toLowerCase() == defense)
+        return false
+    }
+
     // @@@@@@@@ DATA GETTERS @@@@@@@@@@;    
     get category() {return this.data.data.category}
     get target() {return this.data.data.target}

@@ -367,6 +367,7 @@ export class PillarsActor extends Actor {
         dialogData.rollMode = game.settings.get("core", "rollMode")
         dialogData.item = item
         dialogData.options = options
+        dialogData.state = {normal : true}
         return dialogData
     }
 

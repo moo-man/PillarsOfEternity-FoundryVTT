@@ -46,6 +46,7 @@
 .message .pillars-of-eternity.check header .check-title{
   display: flex;
   align-items: center;
+  margin: -10px 0px
 }
 
 
