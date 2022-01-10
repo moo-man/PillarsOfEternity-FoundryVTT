@@ -46,7 +46,7 @@ export default class DamageDialog extends Application
         damages = foundry.utils.deepClone(this.item.damage.value)
 
         damages.forEach((damage, i) => {
-            damage.mult = 0
+            damage.mult = undefined
             if (!damage.label) damage.label = this.item.name
         })
         return damages
@@ -115,7 +115,8 @@ export default class DamageDialog extends Application
         let damage = this.damages[index]
         let target = this.targets.find(i => i.id == damage.target)
         let parent = this.element.find(`[data-index='${index}']`)
-        parent.find("target").find("img").attr("src", target.img)
+        let img = target ? target.data.img : ""
+        parent.find(".target").find("img").attr("src", img)
     }
 
     setCritSelection(index)
@@ -164,18 +165,12 @@ export default class DamageDialog extends Application
         html.find(".target-select").change(ev => {
             let parent = $(ev.currentTarget).parents(".damage")
             let damageIndex = parent.attr("data-index")
-            if (target)
-            {
-                this.damages[damageIndex].target = ev.target.value
-                this.damage[damageIndex].img = this.targets.find(i => i.id == ev.target.value)?.data?.img
-                this.calculateCritDice()
-                this.setTargetImages(damageIndex)
-                this.setCritSelections(damageIndex)
-            }
-            else {
-                $(ev.currentTarget).parents(".target").find("img").attr("src", "")
-                critSelect.value = 0
-            }
+ 
+            this.damages[damageIndex].target = ev.target.value
+            this.damages[damageIndex].img = this.targets.find(i => i.id == ev.target.value)?.data?.img
+            this.calculateCritDice()
+            this.setTargetImages(damageIndex)
+            this.setCritSelections(damageIndex)
         })
 
 

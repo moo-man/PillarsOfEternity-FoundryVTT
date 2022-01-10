@@ -500,6 +500,7 @@ export class PillarsItem extends Item {
     get stride() {return this.data.data.stride}
     get run() {return this.data.data.run}
     get improvised() {return this.data.data.improvised}
+    get roll() {return this.data.data.roll}
 
     // Processed data getters
     get rank() {return this.xp.rank}

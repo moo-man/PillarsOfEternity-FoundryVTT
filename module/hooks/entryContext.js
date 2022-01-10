@@ -4,17 +4,18 @@ export default function () {
 
 
  function addChatMessageContextOptions (html, options) {
-   let isCheck = li => {
-     const message = game.messages.get(li.data("messageId"));
-     return message?.getCheck()
-   }
     let isDamage = li => {
       const message = game.messages.get(li.data("messageId"));
       return message?.isRoll && getProperty(message, "data.flags.pillars-of-eternity.damageData")
     };
+
+    let canAddTargets = li => {
+      const message = game.messages.get(li.data("messageId"));
+      return message && game.user.targets.size > 0 && (message.isAuthor || game.user.isGM) && message.getCheck()
+    }
     options.push(
       {
-        name: game.i18n.localize("Apply Damages"),
+        name: "Apply Damages",
         icon: '<i class="fas fa-user-minus"></i>',
         condition: isDamage,
         callback: li => {
@@ -23,6 +24,16 @@ export default function () {
           let index = parseInt(message.getFlag("pillars-of-eternity", "damageIndex"))
           roll.applyDamage(index)
 
+        }
+      },
+      {
+        name : "Add Targets",
+        icon : '<i class="fas fa-crosshairs"></i>',
+        condition: canAddTargets,
+        callback : li => {
+          const message = game.messages.get(li.data("messageId"));
+          let roll = message.getCheck()
+          roll.addTargets(Array.from(game.user.targets))
         }
       }
     );

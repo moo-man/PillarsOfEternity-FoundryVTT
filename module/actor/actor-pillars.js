@@ -191,8 +191,8 @@ export class PillarsActor extends Actor {
         this.health.bloodied = this.health.value > this.health.threshold.bloodied
         this.endurance.winded = this.endurance.value > this.endurance.threshold.winded
         this.health.incap = this.health.value > this.health.threshold.incap
-        this.endurance.incap = this.endurance.value >= this.endurance.max
-        this.health.dead = this.health.value >= this.health.max
+        this.endurance.incap = this.endurance.value >= (this.endurance.max + this.endurance.bonus)
+        this.health.dead = this.health.value >= (this.health.max + this.health.death.modifier)
 
         if (this.type == "character") {
             let thresholds = game.pillars.config.agePointsDeathRank
@@ -327,7 +327,10 @@ export class PillarsActor extends Actor {
             throw ui.notifications.error("Not enough power!")
 
         let data = this.getPowerDialogData("power", power)
-        let checkData = await RollDialog.create(data)
+        let checkData = {}
+        if (power.roll.value)
+            checkData = await RollDialog.create(data)
+            
         checkData.title = data.title
         checkData.sourceId = power.SourceItem.id
         checkData.itemId = power.id

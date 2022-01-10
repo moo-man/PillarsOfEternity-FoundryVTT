@@ -142,9 +142,17 @@ export default class SkillCheck
                 roll : this.roll.toJSON()
             }
             ChatMessage.applyRollMode(chatData, this.context.rollMode)
-            return ChatMessage.create(chatData).then(message => {
-                message.update({"flags.pillars-of-eternity.rollData.context.messageId" : message.id})
-            })
+            if (!this.message)
+            {
+                return ChatMessage.create(chatData).then(message => {
+                    message.update({"flags.pillars-of-eternity.rollData.context.messageId" : message.id})
+                })
+            }
+            else 
+            {
+                return this.message.update(chatData)
+            }
+            
         }
 
         static rankToDie(skill) {
@@ -195,6 +203,12 @@ export default class SkillCheck
         {
             if (this.message)
                 this.message.update({"flags.pillars-of-eternity.rollData" : this.data})
+        }
+
+        addTargets(targets) {
+            this.context.targetSpeakers = this.context.targetSpeakers.concat(targets.map(t => t.actor.speakerData(t)))
+            game.user.updateTokenTargets([])
+            this.sendToChat()
         }
 
 
@@ -261,5 +275,9 @@ export default class SkillCheck
 
         get message() {
             return game.messages.get(this.context.messageId)
+        }
+
+        get requiresRoll() {
+            return true
         }
 }

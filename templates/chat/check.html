@@ -15,9 +15,11 @@
             {{/each}}
         </div>
     </header>
+    {{#if check.requiresRoll}}
     <div title="{{check.roll.formula}}" class="check-total">
         {{check.roll.total}}
     </div>
     {{{tooltip}}}
+    {{/if}}
     {{> systems/pillars-of-eternity/templates/chat/check-buttons.html}}
 </div>
