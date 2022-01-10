@@ -355,12 +355,12 @@ export class PillarsItem extends Item {
 
     get Type() {return game.i18n.localize(CONFIG.Item.typeLabels[this.type])}
 
-    get Range() {return game.pillars.config.powerRanges[this.range.find(i => i.group == this.displayGroupKey("range"))?.value]}
+    get Range() {return game.pillars.config.powerRanges[this.range.find(i => (i.group || "Default") == this.displayGroupKey("range"))?.value]}
 
     get Target() {
         try {
 
-            let targetObj = this.target.find(i => i.group == this.displayGroupKey("target"))
+            let targetObj = this.target.find(i => (i.group || "Default") == this.displayGroupKey("target"))
             if (!targetObj)    
             return
             let targetSubTypes = game.pillars.config[`power${targetObj.value[0].toUpperCase() + targetObj.value.slice(1)}s`]
@@ -375,9 +375,9 @@ export class PillarsItem extends Item {
             console.error("Error when getting target")
         }
     }
-    get Duration() {return game.pillars.config.powerDurations[this.duration.find(i => i.group == this.displayGroupKey("duration"))?.value]}
+    get Duration() {return game.pillars.config.powerDurations[this.duration.find(i => (i.group || "Default") == this.displayGroupKey("duration"))?.value]}
     get Speed() {return game.pillars.config.powerSpeeds[this.speed.value]}
-    get Exclusion() {return game.pillars.config.powerExclusions[this.target.find(i => i.group == this.displayGroupKey("target"))?.exclusion]}
+    get Exclusion() {return game.pillars.config.powerExclusions[this.target.find(i => (i.group || "Default") == this.displayGroupKey("target"))?.exclusion]}
     get Skill() {return this.actor.getItemTypes("skill").find(i => i.name == this.skill.value)}
 
     get SourceItem() {
