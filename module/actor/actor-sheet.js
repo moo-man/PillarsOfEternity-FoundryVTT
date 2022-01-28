@@ -3,6 +3,7 @@ import SkillCheck from "../system/skill-check.js";
 import WeaponCheck from "../system/weapon-check.js";
 import PowerCheck from "../system/power-check.js";
 import AgingRoll from "../system/aging-roll.js";
+import { PillarsItem } from "../item/item-pillars.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -156,7 +157,8 @@ export class PillarsActorSheet extends ActorSheet {
 
         items.skills = sheetData.actor.getItemTypes("skill")
         items.traits = sheetData.actor.getItemTypes("trait")
-        items.powers = sheetData.actor.getItemTypes("power")
+        items.powers = sheetData.actor.getItemTypes("power").filter(i => !i.embedded.item) 
+        items.embeddedPowers = sheetData.actor.getItemTypes("power").filter(i => i.embedded.item) 
         items.powerSources = sheetData.actor.getItemTypes("powerSource")
 
         items.injuries = sheetData.actor.getItemTypes("injury")  
@@ -839,7 +841,7 @@ export class PillarsActorSheet extends ActorSheet {
         else 
           groupIndex++
         if (groupIndex >= Object.keys(item.groups).length)
-          groupIndex = 0;
+          groupIndex = "Default"
 
         return item.setFlag("pillars-of-eternity", "displayGroup", groupIndex)
     }

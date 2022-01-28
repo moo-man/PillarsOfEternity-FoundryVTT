@@ -14,7 +14,8 @@ export class PillarsItemSheet extends ItemSheet {
 			width: 550,
 			height: 534,
       tabs: [{navSelector: ".sheet-tabs", contentSelector: ".content", initial: "details"}],
-      scrollY: [".content"]
+        dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }],
+        scrollY: [".content"]
 		});
   }
 
@@ -57,8 +58,24 @@ export class PillarsItemSheet extends ItemSheet {
       if (this.item.isOwned)
         data.martialSkills = data.martialSkills.concat(this.item.actor.getItemTypes("skill").filter(i => i.category.value == "martial"));
     }
+
+    if (game.pillars.config.allowEmbeddedPowers.includes(this.type))
+      data.allowEmbeddedPowers = true;
     return data;
   }
+
+  _onDrop(ev) {
+    let dragData = JSON.parse(ev.dataTransfer.getData("text/plain"));
+    let dropItem = game.items.get(dragData.id)
+
+    if (dropItem && dropItem.type === "power" && game.pillars.config.allowEmbeddedPowers.includes(this.item.type))
+    {
+      let powers = duplicate(this.item.powers);
+      powers.push(dropItem.toObject())
+      return this.item.update({"data.powers" : powers})
+    }
+  }
+
   /** @override */
 	activateListeners(html) {
     super.activateListeners(html);
@@ -192,6 +209,27 @@ export class PillarsItemSheet extends ItemSheet {
 
       return this.item.update({[`data.${property}`] : data})
 
+    })
+
+    html.find(".power-edit").click(ev => {
+      let index = Number($(ev.currentTarget).parents(".item").attr("data-index"))
+      let power = this.item.powers[index]
+      new PillarsItemSheet(new PillarsItem(power, {embedded: { object : this.item,  index} })).render(true, {editable : false})
+    })
+
+    html.find(".power-delete").click(ev => {
+      let index = Number($(ev.currentTarget).parents(".item").attr("data-index"))
+      let powers = duplicate(this.item.powers)
+      powers = powers.splice(index, 1)
+      return this.item.update({"data.powers" : powers})
+    })
+
+    html.find(".embedded-power-edit").change(ev => {
+      let index = Number($(ev.currentTarget).parents(".item").attr("data-index"))
+      let path = ev.currentTarget.dataset.path;
+      let powers = duplicate(this.item.powers);
+      setProperty(powers[index].data, path, ev.currentTarget.value);
+      return this.item.update({"data.powers" : powers})
     })
   }
 }

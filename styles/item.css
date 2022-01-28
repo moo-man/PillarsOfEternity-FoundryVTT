@@ -40,6 +40,10 @@
     }
 
   
+  /* .pillars-of-eternity.item.sheet .items-list .row-content > *, 
+    .pillars-of-eternity.item.sheet .items-list .item-header > * {
+      flex: 1
+  } */
 
 
   .pillars-of-eternity.item.sheet .item-header .detail-row input {
@@ -71,17 +75,12 @@
 }
 
 
+.pillars-of-eternity.item.sheet .details.active,
 .pillars-of-eternity.item.sheet .description.active {
   display: flex;
   flex-direction: column;
-  height: 100%
-}
-
-.pillars-of-eternity.item.sheet .details.active {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
+  height: calc(100% - 5px);
+  overflow-x: hidden;
 }
 
 .pillars-of-eternity.item.sheet .editor{
@@ -94,10 +93,24 @@
   text-align: center;
 }
 
+.pillars-of-eternity.item.sheet .details .form-fields label{
+  flex: unset;
+}
+
 .pillars-of-eternity.item.sheet .details .xp-rank .form-fields{
   justify-content: flex-start;
 }
 
+.pillars-of-eternity.item.sheet .charges {
+  display: flex;
+  width : 100%;
+}
+.pillars-of-eternity.item.sheet .charges > * {
+  margin: 3px;
+}
+.pillars-of-eternity.item.sheet .charges input {
+  flex: 0 0 50px;
+}
   .pillars-of-eternity.item.sheet .details input.rank {
   background: none;
   flex: 0 0 50px;
@@ -112,6 +125,10 @@
 }
 
 
+  .pillars-of-eternity.item.sheet .details .form-group input.small {
+  flex: 0.3;
+  text-align: center
+}
 .pillars-of-eternity.item.sheet .details .base-effect-cost {
   flex: 0 0 70px;
   text-align: center;
@@ -166,4 +183,10 @@ form .form-group.power-group h3 {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+
+.pillars-of-eternity.item.sheet .item-property-column input.embedded-power-edit{
+  width: 30px;
+  margin: 0px 5px;
 }

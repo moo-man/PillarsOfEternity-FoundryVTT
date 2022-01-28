@@ -115,3 +115,65 @@
         {{/each}}
     </ol>
 </ol>
+<ol class="items-list powers-list">
+    <li class="items-header flexrow">
+        <h3 class="item-name flexrow">Item Powers</h3>
+        <span class="item-property-column"></span>
+        <span class="displayGroup"></span>
+        <span class="item-property-column small">Level</span>
+        <!-- <span class="item-property-column">Dmg</span> -->
+        <span class="item-property-column small">Range</span>
+        <span class="item-property-column small">Target</span>
+        <span class="item-property-column small">Duration</span>
+        <span class="item-property-column small">Speed</span>
+        <span class="item-property-column small">Exclusion</span>
+        <div class="item-controls">
+           
+        </div>
+    </li>
+
+    <ol class="items">
+        {{#each items.embeddedPowers as |item i|}}
+        <li class="item" draggable="true" data-item-id="{{item.id}}">
+            <div class="row-content">
+            <div class="item-name flexrow power-roll item-dropdown-alt">
+                <div class="item-image" style="background-image: url('{{item.img}}')"></div>
+                <a>
+                    <h4>{{item.name}}</h4>
+                </a>
+            </div>
+
+            <span class="item-property-column" style="opacity: 0.5">{{item.EmbeddedDisplay}}</span>
+
+            {{#if item.currentDisplayGroup}}
+            <a class="displayGroup" style="flex:0; opacity: 0.5; margin-top: 12px;">({{item.currentDisplayGroup}})</a>
+            {{else}}
+            <a class="displayGroup" style="flex:0; opacity: 0.5; margin-top: 12px;">(Default)</a>
+            {{/if}}
+
+            <!--<span class="item-property-column flex">Base Effects</span>-->
+            <span class="item-property-column small" {{item.level.value}} {{#if item.improvised.value}} title="Improvised Cost" {{/if}}>{{item.level.value}} {{#if item.improvised.value}} ({{item.level.cost}}) {{/if}}</span>
+        <!-- {{#if item.damage.value.length}}
+        <button type = "button" class="item-property-column damage-roll">Roll</button>
+        {{else}}
+        <div class="item-property-column">None</div>
+        {{/if}} -->
+            <span class="item-property-column small">{{item.Range}}</span>
+            <a class="item-property-column small power-target">{{item.Target}}</a>
+            <span class="item-property-column small">{{item.Duration}}</span>
+            <span class="item-property-column small">{{item.Speed}}</span>
+            <span class="item-property-column small">{{item.Exclusion}}</span>
+
+            <div class="item-controls flexrow">
+                {{#if ../owner}}
+                <a class="item-control item-post" title="Post Item"><i class="fas fa-comment"></i></a>
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-dropdown" title="Dropdown"><i class="fas fa-chevron-down"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                {{/if}}
+            </div>
+            </div>
+        </li>
+        {{/each}}
+    </ol>
+</ol>

@@ -5,8 +5,19 @@ import PILLARS_UTILITY  from "../system/utility.js"
  */
 export class PillarsItem extends Item {
 
+    // constructor(data, context)
+    // {
+    //     super(data, context)
+    //     if (context && context.embedded) // Embedded Power
+    //     {
+    //         this.embeddedPowerData = context.embedded
+    //     }
+    // }
+
     async _preUpdate(updateData, options, user)
     {
+        
+
         await super._preUpdate(updateData, options, user)
         if (this.type == "shield" && hasProperty(updateData, "data.health.current"))
             updateData.data.health.current = Math.clamped(updateData.data.health.current, 0, this.health.max)
@@ -24,9 +35,47 @@ export class PillarsItem extends Item {
             if (item)
                 await item.delete()
             
-            this.actor.update({[`data.details.${this.type}`] : this.name})
+            await this.actor.update({[`data.details.${this.type}`] : this.name})
+        }
+
+
+    }
+
+    async _preDelete(options, user) {
+        if (this.isOwned && this.powers?.length)
+        {
+            let embeddedPowers = this.actor.getItemTypes("power").filter(i => i.embedded.item == this.id)
+            await this.actor.deleteEmbeddedDocuments("Item", embeddedPowers.map(i => i.id))
         }
     }
+
+    
+    _onCreate(data, options, user)
+    {
+        if (this.isOwned && this.powers?.length)
+        {
+            this.actor.createEmbeddedDocuments("Item", this.powers.map(p => {
+                p.data.embedded.item = this.id
+                return p
+            }));
+        }
+    }
+
+    // async update(data)
+    // {
+        
+    //     if (this.embeddedPowerData)
+    //     {
+    //         await this.embeddedPowerData.object.updateEmbeddedPower(this.embeddedPowerData.index, data)
+    //         for (let app of Object.values(this.apps)) {
+    //             app.object = new PillarsItem(this.embeddedPowerData.object.powers[this.embeddedPowerData.index], {embedded : this.embeddedPowerData})
+    //             console.log(app.object)
+    //             app.render(true)
+    //         }
+    //     }
+    //     else
+    //         return super.update(data)
+    // }
 
     //#region Data Preparation 
     prepareData() {
@@ -314,7 +363,12 @@ export class PillarsItem extends Item {
         
     }
 
-
+    updateEmbeddedPower(index, updateData)
+    {
+        let powers = duplicate(this.powers);
+        mergeObject(powers[index], updateData, {overwrite : true});
+        return this.update({"data.powers" : powers});
+    }
 
     //#endregion
 
@@ -387,6 +441,11 @@ export class PillarsItem extends Item {
         return this.actor.items.find(i => i.type == "powerSource" && i.source.value == this.source.value)
     }
 
+    get EmbeddedPowerParent() {
+        if (this.isOwned)
+            return this.actor.items.get(this.embedded.item)
+    }
+
     get Specials() {
         let specials = this.specialList
         let notSkilledEnough = this.special.value.filter(i => this.isOwned && specials[i.name]?.skilled && ( !this.Skill || this.Skill?.rank < 5))
@@ -399,6 +458,23 @@ export class PillarsItem extends Item {
                 display = `<p style="text-decoration: line-through">${display}</p>`
             return display
         })
+    }
+
+    get EmbeddedDisplay() {
+        let string = ""
+        if (["encounter", "longRest"].includes(this.embedded.spendType))
+            string += `${this.embedded.uses.value}/${this.embedded.uses.max} ${this.embedded.spendType == "encounter" ? "E" : "LR"}`
+        else if (this.embedded.spendType == "charges")
+            string += `${this.EmbeddedPowerParent.powerCharges.value}/${this.EmbeddedPowerParent.powerCharges.max}`
+        else if (this.embedded.spendType == "source")
+        {
+            if (this.SourceItem)
+                string += this.level.cost + " " + this.SourceItem.name
+            else 
+                return "No Source"
+
+        }
+        return string
     }
 
     displayGroupKey(type) {
@@ -455,6 +531,18 @@ export class PillarsItem extends Item {
         return specials
     }
 
+    get isEmbeddedPower()
+    {
+        if (this.embedded?.item && this.isOwned)
+        {
+            return this.actor.items.get(this.embedded.item)
+        }
+        else if (this.embedded?.item)
+        {
+            //???
+        }
+    }
+
 
     // @@@@@@@@@@@ EFFECT HELPERS @@@@@@@@@@
 
@@ -489,7 +577,6 @@ export class PillarsItem extends Item {
     get equipped() {return this.data.data.equipped}
     get wearable() {return this.data.data.wearable}
     get weight() {return this.data.data.weight}
-    get cost() {return this.data.data.cost}
     get quantity() {return this.data.data.quantity}
     get cost() {return this.data.data.cost}
     get range() {return this.data.data.range}
@@ -527,6 +614,10 @@ export class PillarsItem extends Item {
     get run() {return this.data.data.run}
     get improvised() {return this.data.data.improvised}
     get roll() {return this.data.data.roll}
+    get powers() {return this.data.data.powers}
+    get embedded() {return this.data.data.embedded}
+    get powerCharges() {return this.data.data.powerCharges}
+    get powerRecharge() {return this.data.data.powerRecharge}
 
     // Processed data getters
     get rank() {return this.xp.rank}

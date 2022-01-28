@@ -413,6 +413,20 @@ POE.suitabilities = {
 
 POE.actorSizes = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
 
+POE.allowEmbeddedPowers = ["attribute", "weapon", "armor", "shield", "equipment", "species", "stock", "godlike"]
+
+
+POE.embeddedPowerSpendTypes = {
+    "encounter" : "Per Encounter",
+    "longRest" : "Per Long Rest",
+    "charges" : "Charges",
+    "source" : "Power Source"
+}
+
+POE.rechargeTypes = {
+    "encounter" : "Per Encounter",
+    "longRest" : "Per Long Rest"
+}
 POE.sizeAttributes = {
     "-5": {
         novice: { damageIncrement: 1, toughness: 0 },
@@ -786,7 +800,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.weapon.skill.value != 'gun' && data.weapon.skill.value != 'crossbow') return true" },
+                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.item.skill.value != 'gun' && data.item.skill.value != 'crossbow') return true" },
                     1 : {description : "Attacks against Deflection or Reflex within 3 hexes have Advantage", script : ""}
                 }
             }
@@ -801,7 +815,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.weapon.skill.value != 'gun' && data.weapon.skill.value != 'crossbow') return true" },
+                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.item.skill.value != 'gun' && data.item.skill.value != 'crossbow') return true" },
                     1 : {description : "Attacks against Deflection or Reflex within 3 hexes have Advantage", script : ""}
                 }
             }
@@ -816,7 +830,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.weapon.skill.value != 'gun' && data.weapon.skill.value != 'crossbow') return true" },
+                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.item.skill.value != 'gun' && data.item.skill.value != 'crossbow') return true" },
                     1 : {description : "Attacks against Deflection or Reflex within 3 hexes have Advantage", script : ""}
                 }
             }
