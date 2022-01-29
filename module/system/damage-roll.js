@@ -78,7 +78,7 @@ export default class DamageRoll {
         }
         catch (e)
         {
-            console.error("Something went wrong when calculating damage crit on target", target, damage)
+            console.error("Something went wrong when calculating damage crit on target", token, damage)
             return {token : null, crit : 0}
         }
     }

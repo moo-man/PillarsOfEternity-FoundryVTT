@@ -334,11 +334,7 @@ export class PillarsActor extends Actor {
         if (typeof power == "string")
             power = this.items.get(power)
 
-        if (!power.SourceItem)
-            throw ui.notifications.error("Could not find Power Source")
-
-        if (power.SourceItem.pool.current < power.level.value)
-            throw ui.notifications.error("Not enough power!")
+        this._powerUsageValidation(power);
 
         let data = this.getPowerDialogData("power", power)
         let checkData = {}
@@ -359,6 +355,37 @@ export class PillarsActor extends Actor {
         checkData.title = "Aging Roll"
         checkData.speaker = this.speakerData();
         return new AgingRoll(checkData)
+    }
+
+
+    /**
+     * Validates whether the power can be used, checking if the power source has enough power left, or the item parent has enough uses/charges left.
+     * Throws an error if not, otherwise returns nothing
+     * 
+     * @param {Object} power  Power being used in a check
+     */
+    _powerUsageValidation(power) 
+    {
+        if (!power.SourceItem)
+            throw ui.notifications.error("Could not find Power Source")
+
+        let embeddedParent = power.EmbeddedPowerParent;
+        if (embeddedParent && embeddedParent.category.value != "grimoire")
+        {
+            if (["longRest", "encounter"].includes(power.embedded.spendType))
+            {
+                if (power.embedded.uses.value <= 0)
+                    throw ui.notifications.error("No more uses!")
+
+            }
+            else if (power.embedded.spendType == "charges")
+            {
+                if (power.embedded.chargeCost > embeddedParent.powerCharges.value)
+                    throw ui.notifications.error("Not enough charges!")
+            }
+        }
+        else if (power.SourceItem.pool.current < power.level.value)
+            throw ui.notifications.error("Not enough power!")
     }
 
     //#endregion
@@ -550,7 +577,6 @@ export class PillarsActor extends Actor {
         }
     }
 
-
         /**
          * Display changes to health as scrolling combat text.
          * Adapt the font size relative to the Actor's HP total to emphasize more significant blows.
@@ -572,6 +598,20 @@ export class PillarsActor extends Actor {
                 jitter: 0.25
             });
             }
+        }
+
+        getActiveEmbeddedPowers() {
+
+            // Filter embedded powers by whether their parent item is equipped. If the parent cannot be equipped, include it anyway. If the parent is not found, do not include it (should never happen)
+            return this.getItemTypes("power").filter(p => {
+                let parent = p.EmbeddedPowerParent
+                if (!parent)
+                    return false
+                else if (parent.canEquip)
+                    return parent.equipped.value
+                else 
+                    return true
+            })
         }
 
     async applyDamage(damage, type) {

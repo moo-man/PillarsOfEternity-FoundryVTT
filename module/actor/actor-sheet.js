@@ -158,7 +158,7 @@ export class PillarsActorSheet extends ActorSheet {
         items.skills = sheetData.actor.getItemTypes("skill")
         items.traits = sheetData.actor.getItemTypes("trait")
         items.powers = sheetData.actor.getItemTypes("power").filter(i => !i.embedded.item) 
-        items.embeddedPowers = sheetData.actor.getItemTypes("power").filter(i => i.embedded.item) 
+        items.embeddedPowers = sheetData.actor.getActiveEmbeddedPowers()
         items.powerSources = sheetData.actor.getItemTypes("powerSource")
 
         items.injuries = sheetData.actor.getItemTypes("injury")  
@@ -179,11 +179,6 @@ export class PillarsActorSheet extends ActorSheet {
 
     constructInventory(sheetData) {
         let inventory = {
-            tools : {
-                label: "Tools",
-                type : "equipment",
-                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "tool")
-            },
             weapons : {
                 label: "Weapons",
                 type : "weapon",
@@ -199,10 +194,20 @@ export class PillarsActorSheet extends ActorSheet {
                 type : "shield",
                 items : sheetData.actor.getItemTypes("shield")
             },
+            tools : {
+                label: "Tools",
+                type : "equipment",
+                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "tool")
+            },
             gear : {
                 label: "Gear",
                 type : "equipment",
                 items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "gear")
+            },
+            grimoires  : {
+                label: "Grimoires",
+                type : "equipment",
+                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "grimoire")
             }
         }
         return inventory

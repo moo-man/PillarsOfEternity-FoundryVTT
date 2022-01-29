@@ -67,20 +67,39 @@ export class PillarsItemSheet extends ItemSheet {
   _onDrop(ev) {
     let dragData = JSON.parse(ev.dataTransfer.getData("text/plain"));
     let dropItem = game.items.get(dragData.id)
+    let powerData = dropItem.toObject()
 
     if (dropItem && dropItem.type === "power" && game.pillars.config.allowEmbeddedPowers.includes(this.item.type))
     {
+      if (this.item.type == "equipment" && this.item.category.value == "grimoire" && dropItem.source.value != "arcana")
+        return ui.notifications.error("Only Arcana Powers can be placed inside Grimoires")
+      if (this.item.type == "equipment" && this.item.category.value == "grimoire")
+        powerData.data.embedded.spendType = "source"
+      
       let powers = duplicate(this.item.powers);
-      powers.push(dropItem.toObject())
-      return this.item.update({"data.powers" : powers})
+      powers.push(powerData);
+      this.item.update({"data.powers" : powers})
+
+      if (this.item.isOwned)
+      {
+
+      }
     }
   }
 
   /** @override */
 	activateListeners(html) {
     super.activateListeners(html);
-
     if (!this.options.editable) return;
+
+    $("input[type=text]").focusin(function () {
+      $(this).select();
+  });
+
+    $("input[type=number]").focusin(function () {
+        $(this).select()
+    });
+
 
 
     html.find(".item-specials").click(ev => {
@@ -214,13 +233,16 @@ export class PillarsItemSheet extends ItemSheet {
     html.find(".power-edit").click(ev => {
       let index = Number($(ev.currentTarget).parents(".item").attr("data-index"))
       let power = this.item.powers[index]
-      new PillarsItemSheet(new PillarsItem(power, {embedded: { object : this.item,  index} })).render(true, {editable : false})
+      if (power.ownedId)
+        this.actor.items.get(power.ownedId).sheet.render(true)
+      else 
+        new PillarsItemSheet(new PillarsItem(power, {embedded: { object : this.item,  index} })).render(true, {editable : false})
     })
 
     html.find(".power-delete").click(ev => {
       let index = Number($(ev.currentTarget).parents(".item").attr("data-index"))
       let powers = duplicate(this.item.powers)
-      powers = powers.splice(index, 1)
+      powers.splice(index, 1)
       return this.item.update({"data.powers" : powers})
     })
 
@@ -228,7 +250,20 @@ export class PillarsItemSheet extends ItemSheet {
       let index = Number($(ev.currentTarget).parents(".item").attr("data-index"))
       let path = ev.currentTarget.dataset.path;
       let powers = duplicate(this.item.powers);
+
+      
       setProperty(powers[index].data, path, ev.currentTarget.value);
+      if (path == "embedded.uses.max")
+        setProperty(powers[index].data, "embedded.uses.value", ev.currentTarget.value )
+
+      // Update owned power if it exists
+      if (powers[index].ownedId)
+      {
+        let ownedItem = this.actor.items.get(powers[index].ownedId)
+        if (ownedItem) 
+          ownedItem.update(powers[index])
+      }
+
       return this.item.update({"data.powers" : powers})
     })
   }

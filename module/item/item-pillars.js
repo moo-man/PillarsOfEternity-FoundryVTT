@@ -19,16 +19,28 @@ export class PillarsItem extends Item {
         
 
         await super._preUpdate(updateData, options, user)
+
+        // Clamp the shield health to between max and 0
         if (this.type == "shield" && hasProperty(updateData, "data.health.current"))
             updateData.data.health.current = Math.clamped(updateData.data.health.current, 0, this.health.max)
 
+        // Convenience feature to set the power source name to the same as the newly selected source
         if (this.type=="powerSource" && hasProperty(updateData, "data.source.value"))
             updateData.name = game.pillars.config.powerSources[updateData.data.source.value]
+
+        if (getProperty(updateData, "data.category.value") == "grimoire")
+        {
+            // Check for non-arcana powers before switiching to Grimoire type
+            if (!(await this._checkGrimoirePowers()))
+                return setProperty(updateData, "data.category.value", this.category.value)
+        }
     }
 
     async _preCreate(data, options, user)
     {
         await super._preCreate(data, options, user)
+
+        // Adding singleton items, if item of that type already exists, delete it
         if ((this.type == "species" || this.type == "culture" || this.type == "stock" || this.type == "godlike") && this.isOwned)
         {
             let item = this.actor.items.find(i => i.type == this.type && i.id != this.id)
@@ -41,6 +53,7 @@ export class PillarsItem extends Item {
 
     }
 
+    // Powers embedded in an item are created on the actor when the item is added, when the item is deleted, delete the embedded powers that were added.
     async _preDelete(options, user) {
         if (this.isOwned && this.powers?.length)
         {
@@ -52,12 +65,36 @@ export class PillarsItem extends Item {
     
     _onCreate(data, options, user)
     {
+        super._onCreate(data, options, user);
+        // If the new item has embedded powers, add them to the actor
         if (this.isOwned && this.powers?.length)
         {
             this.actor.createEmbeddedDocuments("Item", this.powers.map(p => {
                 p.data.embedded.item = this.id
                 return p
-            }));
+            })).then(items => {
+                this.update({"data.powers" : this.powers.map((p, i) => {
+                        p.ownedId = items[i].id
+                        return p
+                })})
+            });
+        }
+    }
+
+    _onUpdate(data, options, user)
+    {
+        super._onUpdate(data, options, user);
+
+        let embeddedParent = this.EmbeddedPowerParent;
+
+        if (embeddedParent)
+        {
+            let parentPowers = duplicate(embeddedParent.powers);
+            let index= parentPowers.findIndex(i => i.ownedId == this.id)
+            let powerData = this.toObject();
+            powerData.ownedId = this.id;
+            parentPowers[index] = powerData;
+            embeddedParent.update({"data.powers" : parentPowers})
         }
     }
 
@@ -197,6 +234,7 @@ export class PillarsItem extends Item {
 
     //#region Power Functions
 
+    // This is a nightmare please ignore
     preparePowerGroups() {
         try {
             let config = game.pillars.config
@@ -370,6 +408,39 @@ export class PillarsItem extends Item {
         return this.update({"data.powers" : powers});
     }
 
+    async _checkGrimoirePowers()
+    {
+        let powers = duplicate(this.powers);
+        let nonArcanaPowers = powers.filter(i => i.data.source.value != "arcana")
+
+        if (nonArcanaPowers.length)
+            return new Promise(resolve => {
+                new Dialog({
+                    title : "Remove Non-Arcana Powers",
+                    content: `Grimoires must only include Arcana powers. The following must be removed. <br> <ul>${nonArcanaPowers.map(i => `<li>${i.name}</li>`).join("")}</ul>`,
+                    buttons : {
+                        remove : {
+                            label : "Remove",
+                            callback : () => {
+                                let arcanaPowers = powers.filter(i => i.data.source.value == "arcana")
+                                arcanaPowers.forEach(p => {p.data.embedded.spendType == "source"})
+                                this.update({"data.powers" : arcanaPowers})
+                                resolve(true)
+                            }
+                        },
+                        cancel : {
+                            label : "Cancel",
+                            callback : () => {
+                                resolve(false)
+                            }
+                        }
+                    }
+                }).render(true)
+            })
+        else 
+            return true
+    }
+
     //#endregion
 
     //#region Getters
@@ -394,7 +465,7 @@ export class PillarsItem extends Item {
     }
 
     get canEquip() {
-        return (this.type == "equipment" && this.wearable.value) || this.type == "weapon" || this.type == "armor" || this.type == "shield"
+        return (this.type == "equipment" && (this.wearable.value || this.category.value == "grimoire")) || this.type == "weapon" || this.type == "armor" || this.type == "shield"
     }
 
     // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
@@ -436,13 +507,18 @@ export class PillarsItem extends Item {
 
     get SourceItem() {
         if (!this.isOwned)
-            return
+            return 
+        if (this.EmbeddedPowerParent && this.EmbeddedPowerParent.category != "grimoire")
+        {
+            // If embedded and not in grimoire, get highest power source attack value
+            return this.actor.getItemTypes("powerSource").sort((a, b) => b.attack - a.attack)[0];
+        }
 
         return this.actor.items.find(i => i.type == "powerSource" && i.source.value == this.source.value)
     }
 
     get EmbeddedPowerParent() {
-        if (this.isOwned)
+        if (this.isOwned && this.type == "power") 
             return this.actor.items.get(this.embedded.item)
     }
 
@@ -468,11 +544,7 @@ export class PillarsItem extends Item {
             string += `${this.EmbeddedPowerParent.powerCharges.value}/${this.EmbeddedPowerParent.powerCharges.max}`
         else if (this.embedded.spendType == "source")
         {
-            if (this.SourceItem)
-                string += this.level.cost + " " + this.SourceItem.name
-            else 
-                return "No Source"
-
+            string += game.pillars.config.powerSources[this.source.value]
         }
         return string
     }

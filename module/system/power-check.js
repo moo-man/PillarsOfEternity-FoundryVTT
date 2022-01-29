@@ -18,7 +18,21 @@ export default class PowerCheck extends SkillCheck
             this.roll = Roll.fromTerms(terms)
             if (this.requiresRoll)
                 await this.roll.evaluate({async:true})  
-            this.powerSource.update({"data.used.value" : true, "data.pool.current" : this.powerSource.pool.current - this.power.level.cost})
+                
+                
+            // If embedded item, use up charges instead of power source
+            let embeddedParent = this.power.EmbeddedPowerParent;
+            if (embeddedParent && embeddedParent.category.value != "grimoire")
+            {
+                let spendType = this.power.embedded.spendType;
+                if (spendType == "encounter" || spendType == "longRest")
+                    this.power.update({"data.embedded.uses.value" : this.power.embedded.uses.value - 1});
+                else if (spendType == "charges") 
+                    embeddedParent.update({"data.powerCharges.value" : embeddedParent.powerCharges.value - this.power.embedded.chargeCost})
+            }
+            else // Not embedded item or is grimoire item
+                this.powerSource.update({"data.used.value" : true, "data.pool.current" : this.powerSource.pool.current - this.power.level.cost})
+
             this.data.result = this.roll.toJSON()
             game.user.updateTokenTargets([])
         }

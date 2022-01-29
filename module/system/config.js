@@ -401,7 +401,8 @@ POE.armorTypes = {
 
 POE.equipmentTypes = {
     "gear": "Gear",
-    "tool": "Tool"
+    "tool": "Tool",
+    "grimoire" : "Grimoire"
 }
 
 POE.suitabilities = {
@@ -420,7 +421,6 @@ POE.embeddedPowerSpendTypes = {
     "encounter" : "Per Encounter",
     "longRest" : "Per Long Rest",
     "charges" : "Charges",
-    "source" : "Power Source"
 }
 
 POE.rechargeTypes = {

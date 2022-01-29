@@ -104,6 +104,7 @@
 .pillars-of-eternity.item.sheet .charges {
   display: flex;
   width : 100%;
+  align-items: center;
 }
 .pillars-of-eternity.item.sheet .charges > * {
   margin: 3px;

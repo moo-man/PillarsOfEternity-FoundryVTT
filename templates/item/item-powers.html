@@ -1,62 +1,70 @@
-
 <div class="tab powers active" data-tab="powers">
- <div class="charges">
+  {{#unless (eq data.category.value "grimoire")}}
+  <div class="charges">
     <label>Item Charges</label>
-    <input class="small" type="text" name="data.powerCharges.value" value="{{data.powerCharges.value}}" data-dtype="Number">
+    <input class="small" type="text" name="data.powerCharges.value" value="{{data.powerCharges.value}}"
+      data-dtype="Number">
     <input class="small" type="text" name="data.powerCharges.max" value="{{data.powerCharges.max}}" data-dtype="Number">
     <select name="data.powerRecharge">
       {{#select data.powerRecharge}}
       <option value=""></option>
       {{#each (config "rechargeTypes") as |type t|}}
-        <option value="{{t}}">{{type}}</option>
+      <option value="{{t}}">{{type}}</option>
       {{/each}}
       {{/select}}
     </select>
-  </div> 
+  </div>
+  {{/unless}}
   <ol class="items-list">
-  <li class="items-header flexrow">
-    <h3 class="item-name flexrow">Powers</h3>
-    <span class="item-property-column flex">Type</span>
-    <div class="item-controls">
+    <li class="items-header flexrow">
+      <h3 class="item-name flexrow">Powers</h3>
+      {{#unless (eq data.category.value "grimoire")}}
+      <span class="item-property-column flex">Type</span>
+      {{/unless}}
+      <div class="item-controls">
 
-    </div>
-  </li>
-
-  <ol class="items">
-    {{#each item.powers as |power p|}}
-    <li class="item" draggable="true" data-index="{{p}}">
-      <div class="row-content">
-        <div class="item-name flexrow power-edit">
-          <div class="item-image" style="background-image: url('{{power.img}}')"></div>
-          <a>
-            <h4>{{power.name}}</h4>
-          </a>
-        </div>
-        <div class="item-property-column flex">
-          {{#unless (eq power.data.embedded.spendType "source")}}
-            {{#if (eq power.data.embedded.spendType "charges")}}
-            <input class = "embedded-power-edit" data-path="embedded.chargeCost" type="number" value = "{{power.data.embedded.chargeCost}}">
-            {{else}}
-            <input class = "embedded-power-edit" data-path="embedded.uses.max" type="number" value = "{{power.data.embedded.uses.max}}">
-            {{/if}}
-          {{/unless}}
-          <select data-path="embedded.spendType" class="embedded-power-edit">
-            {{#select power.data.embedded.spendType}}
-          <option value=""></option>
-          {{#each (config "embeddedPowerSpendTypes") as |type t|}}
-              <option value="{{t}}">{{type}}</option>
-            {{/each}}
-            {{/select}}
-          </select>
-        </div>
-        <div class="item-controls flexrow">
-          {{#if ../document.isOwner}}
-          <a class="item-control power-delete" title="Delete"><i class="fas fa-trash"></i></a>
-          {{/if}}
-        </div>
       </div>
     </li>
-    {{/each}}
-  </ol>
+
+    <ol class="items">
+      {{#each item.powers as |power p|}}
+      <li class="item" draggable="true" data-index="{{p}}">
+        <div class="row-content">
+          <div class="item-name flexrow power-edit">
+            <div class="item-image" style="background-image: url('{{power.img}}')"></div>
+            <a>
+              <h4>{{power.name}}</h4>
+            </a>
+          </div>
+          {{#unless (eq ../data.category.value "grimoire")}}
+          <div class="item-property-column flex">
+            {{#unless (eq power.data.embedded.spendType "source")}}
+            {{#if (eq power.data.embedded.spendType "charges")}}
+            <input class="embedded-power-edit" data-path="embedded.chargeCost" type="number"
+              value="{{power.data.embedded.chargeCost}}">
+            {{else}}
+            <input class="embedded-power-edit" data-path="embedded.uses.max" type="number"
+              value="{{power.data.embedded.uses.max}}">
+            {{/if}}
+            {{/unless}}
+            <select data-path="embedded.spendType" class="embedded-power-edit">
+              {{#select power.data.embedded.spendType}}
+              <option value=""></option>
+              {{#each (config "embeddedPowerSpendTypes") as |type t|}}
+              <option value="{{t}}">{{type}}</option>
+              {{/each}}
+              {{/select}}
+            </select>
+          </div>
+          {{/unless}}
+          <div class="item-controls flexrow">
+            {{#if ../document.isOwner}}
+            <a class="item-control power-delete" title="Delete"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </div>
+      </li>
+      {{/each}}
+    </ol>
   </ol>
 </div>
