@@ -29,16 +29,17 @@ export default function () {
 
         loadTemplates([
             "systems/pillars-of-eternity/templates/actor/actor-main.html",
+            "systems/pillars-of-eternity/templates/actor/actor-npc-main.html",
             "systems/pillars-of-eternity/templates/actor/actor-combat.html",
             "systems/pillars-of-eternity/templates/actor/actor-effects.html",
             "systems/pillars-of-eternity/templates/actor/actor-powers.html",
             "systems/pillars-of-eternity/templates/actor/actor-inventory.html",
             "systems/pillars-of-eternity/templates/actor/actor-details.html",
+            "systems/pillars-of-eternity/templates/actor/actor-npc-details.html",
             "systems/pillars-of-eternity/templates/item/item-effects.html",
             "systems/pillars-of-eternity/templates/item/item-powers.html",
             "systems/pillars-of-eternity/templates/item/item-description.html",
             "systems/pillars-of-eternity/templates/item/item-header.html",
-            "systems/pillars-of-eternity/templates/actor/actor-npc-details.html",
             "systems/pillars-of-eternity/templates/partials/power-group.html",
             "systems/pillars-of-eternity/templates/chat/check-buttons.html"
         ])

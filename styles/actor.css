@@ -22,10 +22,25 @@
   height: 100%
 }
 
+.pillars-of-eternity.actor.sheet .npc .tab.main.active {
+  flex-direction: column;
+  overflow: auto
+}
+
 .pillars-of-eternity.actor.sheet .tab.main > * {
   flex: 1;
   overflow-y: auto;
 }
+
+.pillars-of-eternity.actor.sheet .npc .tab.main > * {
+  overflow-y: unset;
+}
+
+
+.pillars-of-eternity.actor.sheet .npc .tab.main > * {
+  flex: unset;
+}
+
 
 .pillars-of-eternity.actor.sheet .tab.main .attributes > * {
   height: unset;
@@ -181,7 +196,7 @@
 }
 
 .pillars-of-eternity.actor.sheet .roll-initiative,
-  .pillars-of-eternity.actor.sheet .skills .roll-untrained {
+  .pillars-of-eternity.actor.sheet  .roll-untrained {
   opacity: 0.5;
   flex: 0 0 30px;
   cursor: pointer;
@@ -191,7 +206,7 @@
 }
 
 .pillars-of-eternity.actor.sheet .roll-initiative img,
-.pillars-of-eternity.actor.sheet .skills .roll-untrained img{
+.pillars-of-eternity.actor.sheet  .roll-untrained img{
   border: none
 }
 
@@ -349,6 +364,11 @@
     scrollbar-width: thin;
     height: 102%
   }
+
+.pillars-of-eternity .npc .main .items-list 
+{
+  height: unset
+}
 
   .pillars-of-eternity.sheet .items {
     padding: 0px;
@@ -571,19 +591,25 @@
 }
 
 
-  .pillars-of-eternity.actor.sheet .combat-items .combat-fields {
+  .pillars-of-eternity.actor.sheet .combat-fields {
     display: flex;
     justify-content: space-between;
     margin: 10px 10px -10px 10px;
   }
-  .pillars-of-eternity.actor.sheet .combat-items .combat-fields > * {
+
+  .pillars-of-eternity.actor.sheet .npc .combat-fields {
+    flex-direction: column;
+  }
+
+
+  .pillars-of-eternity.actor.sheet .combat-fields > * {
     align-items: center;
   font-size: 20px;
   display: flex;
   position: relative;
 }
 
-.pillars-of-eternity.actor.sheet .combat-items .combat-fields .soak .soak-total{
+.pillars-of-eternity.actor.sheet .combat-fields .soak .soak-total{
   width: 38px;
   text-align: center;
   background: none;
@@ -593,13 +619,13 @@
   bottom: 37px;
 }
 
-.pillars-of-eternity.actor.sheet .combat-items .combat-fields .soak-group{
+.pillars-of-eternity.actor.sheet .combat-fields .soak-group{
   width: 38px;
   height: 38px;
   margin: 0 0 0.5rem;
 }
 
-  .pillars-of-eternity.actor.sheet .combat-items .combat-fields .soak-img {
+  .pillars-of-eternity.actor.sheet .combat-fields .soak-img {
   width: 38px;
   border: none;
   filter: invert(40.4%) sepia(0%) saturate(0%) hue-rotate( 
@@ -608,7 +634,7 @@
   opacity: 0.1;
 }
 
-.pillars-of-eternity.actor.sheet .combat-items .value {
+.pillars-of-eternity.actor.sheet .value {
   text-align: center;
   width: 30px;
   margin: 0px 0px 8px 5px;

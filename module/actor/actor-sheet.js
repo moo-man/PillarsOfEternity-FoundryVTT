@@ -22,6 +22,12 @@ export class PillarsActorSheet extends ActorSheet {
         });
     }
 
+    get template() {
+        if (this.actor.type == "character")
+            return "systems/pillars-of-eternity/templates/actor/actor-sheet.html"
+        else if (this.actor.type == "npc")
+            return "systems/pillars-of-eternity/templates/actor/actor-npc-sheet.html"
+    }
 
       /**
    * Overrides the default ActorSheet.render to add lity.
@@ -83,15 +89,16 @@ export class PillarsActorSheet extends ActorSheet {
    */
   _getHeaderButtons() {
     let buttons = super._getHeaderButtons();
-    // Add "Post to chat" button
-    // We previously restricted this to GM and editable items only. If you ever find this comment because it broke something: eh, sorry!
-    buttons.unshift(
-      {
-        class: "seasons",
-        label : "Seasons",
-        icon: "fas fa-book",
-        onclick: ev => {new game.pillars.apps.BookOfSeasons(this.actor).render(true)}
-      })
+    if (this.type == "character")
+    {
+        buttons.unshift(
+          {
+            class: "seasons",
+            label : "Seasons",
+            icon: "fas fa-book",
+            onclick: ev => {new game.pillars.apps.BookOfSeasons(this.actor).render(true)}
+          })
+    }
     buttons.unshift({
         class: "configure",
         icon: "fas fa-wrench",
