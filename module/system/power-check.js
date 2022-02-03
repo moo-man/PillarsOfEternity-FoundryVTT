@@ -34,7 +34,6 @@ export default class PowerCheck extends SkillCheck
                 this.powerSource.update({"data.used.value" : true, "data.pool.current" : this.powerSource.pool.current - this.power.level.cost})
 
             this.data.result = this.roll.toJSON()
-            game.user.updateTokenTargets([])
         }
 
         get item()

@@ -82,12 +82,12 @@ export default class PowerTemplate extends MeasuredTemplate {
       this.shape.y = snapped.y
       this.refresh();
       moveTime = now;
-      let targets = []
-      canvas.tokens.placeables.forEach(t => {
-        if (this.shape.contains(t.x, t.y))
-          targets.push(t.id)
-      }) 
-      game.user.updateTokenTargets(targets)
+      // let targets = []
+      // canvas.tokens.placeables.forEach(t => {
+      //   if (this.shape.contains(t.x, t.y))
+      //     targets.push(t.id)
+      // }) 
+      // game.user.updateTokenTargets(targets)
     };
 
     // Cancel the workflow (right-click)

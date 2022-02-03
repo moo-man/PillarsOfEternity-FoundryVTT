@@ -119,7 +119,6 @@ export default class SkillCheck
             if (this.actor.type == "character")
                 this.actor.use("skill", this.checkData.skillName)
             this.data.result = this.roll.toJSON()
-            game.user.updateTokenTargets([])
         }
     
     
@@ -193,7 +192,6 @@ export default class SkillCheck
 
             let roll = new DamageRoll(damages, this);
             await roll.rollDice()
-            game.user.updateTokenTargets([])
         }
         
         updateMessageFlags()
@@ -204,7 +202,6 @@ export default class SkillCheck
 
         addTargets(targets) {
             this.context.targetSpeakers = this.context.targetSpeakers.concat(targets.map(t => t.actor.speakerData(t)))
-            game.user.updateTokenTargets([])
             this.sendToChat()
         }
 
