@@ -455,7 +455,7 @@ export class PillarsActor extends Actor {
                 die: `d${SkillCheck.rankToDie(a.items.getName(itemName))}`
             }
         })
-        return assisters.filter(a => a.rank > 5)
+        return assisters.filter(a => a.rank >= 5)
     }
 
 
@@ -616,7 +616,7 @@ export class PillarsActor extends Actor {
 
     async applyDamage(damage, type) {
         if (damage < this.toughness.value)
-            return
+            return "No Damage"
     
         let updateObj = {}
 
@@ -661,7 +661,11 @@ export class PillarsActor extends Actor {
                 message += ` - 1 Wound`
             }
         }
-        this.update(updateObj)
+
+        if (this.isOwner || !game.settings.get("pillars-of-eternity", "playerApplyDamage"))
+            this.update(updateObj)
+        else if (game.settings.get("pillars-of-eternity", "playerApplyDamage"))
+            game.socket.emit("system.pillars-of-eternity", {type : "updateActor", payload: {updateData : updateObj, speaker : this.speakerData()}})
 
         return message
     }

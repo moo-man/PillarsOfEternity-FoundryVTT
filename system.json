@@ -22,6 +22,7 @@
   "gridUnits": "ft",
   "initiative": "2d10[Initiative] + (1d12[Tiebreaker] / 100) + @initiative.value",
   "background" : "",
+  "socket" : true,
   "url": "",
   "manifest": "https://raw.githubusercontent.com/moo-man/PillarsOfEternity-FoundryVTT/master/system.json",
   "download": "https://github.com/moo-man/PillarsOfEternity-FoundryVTT/archive/refs/heads/master.zip",

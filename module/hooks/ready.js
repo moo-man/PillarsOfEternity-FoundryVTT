@@ -40,6 +40,15 @@ export default function () {
         }
 
 
+        game.socket.on("system.pillars-of-eternity", data => {
+            if (data.type == "updateActor")
+            {
+                let actor = game.pillars.utility.getSpeaker(data.payload.speaker);
+                actor.update(data.payload.updateData);
+                ui.notifications.notify(`Applied Damage to ${actor.name}`)
+            }
+        })
+
         // Don't really like this but "ready" is needed for active effect to know if their item has been equipped or not
         game.actors.contents.forEach(a => {
             a.prepareData()

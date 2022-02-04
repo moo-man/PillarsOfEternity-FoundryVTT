@@ -181,7 +181,8 @@ export default class SkillCheck
 
         assistDieAppearance()
         {            
-            return game.dice3d.DiceFactory.getAppearanceForDice(game.dice3d.constructor.APPEARANCE(this.assisterUser), this.assisterDieString())
+            if (game.dice3d)
+                return game.dice3d.DiceFactory.getAppearanceForDice(game.dice3d.constructor.APPEARANCE(this.assisterUser), this.assisterDieString())
         }
 
         async rollDamage() {
