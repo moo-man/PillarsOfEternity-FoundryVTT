@@ -67,23 +67,27 @@ export class PillarsItemSheet extends ItemSheet {
   _onDrop(ev) {
     let dragData = JSON.parse(ev.dataTransfer.getData("text/plain"));
     let dropItem = game.items.get(dragData.id)
-    let powerData = dropItem.toObject()
+    let powerData = dragData.data || dropItem.toObject()
 
-    if (dropItem && dropItem.type === "power" && game.pillars.config.allowEmbeddedPowers.includes(this.item.type))
+    if (powerData && powerData.type === "power" && game.pillars.config.allowEmbeddedPowers.includes(this.item.type))
     {
-      if (this.item.type == "equipment" && this.item.category.value == "grimoire" && dropItem.source.value != "arcana")
+      if (this.item.type == "equipment" && this.item.category.value == "grimoire" && powerData.data.source.value != "arcana")
         return ui.notifications.error("Only Arcana Powers can be placed inside Grimoires")
       if (this.item.type == "equipment" && this.item.category.value == "grimoire")
         powerData.data.embedded.spendType = "source"
       
+      let ownedPower;
+      if (this.item.isOwned && this.actor.items.get(powerData._id))
+      {
+        ownedPower = this.actor.items.get(powerData._id);
+        powerData.ownedId = ownedPower.id
+      }
+
       let powers = duplicate(this.item.powers);
       powers.push(powerData);
-      this.item.update({"data.powers" : powers})
-
-      if (this.item.isOwned)
-      {
-
-      }
+      this.item.update({"data.powers" : powers}).then(item => {
+        if (ownedPower) ownedPower.update({"data.embedded.item" : item.id, "data.embedded.spendType" : "source"})
+      })
     }
   }
 
@@ -242,6 +246,9 @@ export class PillarsItemSheet extends ItemSheet {
     html.find(".power-delete").click(ev => {
       let index = Number($(ev.currentTarget).parents(".item").attr("data-index"))
       let powers = duplicate(this.item.powers)
+      if (powers[index].ownedId && this.item.isOwned)
+        this.actor.updateEmbeddedDocuments("Item", [{_id : powers[index].ownedId, "data.embedded.item" : null}])
+
       powers.splice(index, 1)
       return this.item.update({"data.powers" : powers})
     })

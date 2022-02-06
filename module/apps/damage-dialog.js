@@ -8,6 +8,7 @@ export default class DamageDialog extends Application
         this.item = item.clone();
         this.check = check;
         this.targets = targets//.map(i => i.document)
+        this.disabled = [] // unselectable targets due to not exceeding defense
         this.additionalDamages = 0
         this.damages = this.constructDamages()
         this.assignTargets()
@@ -37,6 +38,7 @@ export default class DamageDialog extends Application
         let data = super.getData();
         data.damages = this.damages;
         data.targets = this.targets
+        data.disabled = this.disabled
         
         return data;
     }
@@ -71,6 +73,17 @@ export default class DamageDialog extends Application
                 let margin = this.check.result.total - target.actor.defenses[defense].value
                 let multiplier = Math.floor(margin / 5)
                 damage.mult = multiplier    
+                if (damage.mult < 0)
+                {
+                    if (!this.disabled.find(t => t.id == target.id))
+                        this.disabled.push(target)
+                    let targetIndex = this.targets.findIndex(i => i.id == damage.target)
+                    if (targetIndex > -1)
+                        this.targets.splice(targetIndex, 1)
+                        
+                    delete damage.img;
+                    delete damage.target;
+                }
             }
         }
         catch(e)

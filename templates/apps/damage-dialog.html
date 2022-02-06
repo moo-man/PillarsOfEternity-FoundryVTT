@@ -8,6 +8,7 @@
             <div class="damage-element target">Target</div>
         </li>
         {{#each damages as |damage d|}}
+
         <li class="damage" data-index={{d}}>
                 <input type="text" class="damage-element label" placeholder="Label" value="{{damage.label}}"/>
                 <select class="damage-element type">
@@ -44,6 +45,9 @@
                     <option value=""> - </option>
                     {{#each ../targets as |target t|}}
                     <option value="{{target.id}}">{{target.name}}</option>
+                    {{/each}}
+                    {{#each ../disabled as |disabledTarget t|}}
+                    <option disabled>{{disabledTarget.name}}</option>
                     {{/each}}
                     {{/select}}
                     </select>

@@ -33,6 +33,19 @@ export class PillarsItem extends Item {
             // Check for non-arcana powers before switiching to Grimoire type
             if (!(await this._checkGrimoirePowers()))
                 return setProperty(updateData, "data.category.value", this.category.value)
+
+            // Change all embedded powers to "source"
+            let powers = duplicate(this.powers);
+            powers.forEach(p => p.data.embedded.spendType = "source");
+            setProperty(updateData, "data.powers", powers)
+            // If this is owned, set all owned powers (given by this item) to "source"
+            if (this.isOwned)
+                this.actor.updateEmbeddedDocuments("Item", powers.map(p => {
+                    return {
+                        _id : p.ownedId,
+                        "data.embedded.spendType" : "source"
+                     }
+            }).filter(p => p))
         }
     }
 
@@ -73,6 +86,7 @@ export class PillarsItem extends Item {
                 p.data.embedded.item = this.id
                 return p
             })).then(items => {
+                // Add id of actual owned power to the parent flags
                 this.update({"data.powers" : this.powers.map((p, i) => {
                         p.ownedId = items[i].id
                         return p
