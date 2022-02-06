@@ -73,7 +73,7 @@ export default class DamageRoll {
         try {
             let defense = damage.defense.toLowerCase() || "deflection"
             let margin = this.check.result.total - token.actor.defenses[defense].value
-            let crit = damage.mult ? damage.mult : Math.floor(margin / 5)
+            let crit = Number.isNumeric(damage.mult) ? damage.mult : Math.floor(margin / 5)
             return {token : token.toObject(), crit}
         }
         catch (e)

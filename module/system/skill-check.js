@@ -206,6 +206,22 @@ export default class SkillCheck
             this.sendToChat()
         }
 
+        // Convert effect data to effect objects (from ids or keys)
+        _toEffectObjects(effects)
+        {
+            let effectObjects = []
+            effects.forEach(e => {
+                let effectObject 
+                if (this.item?.effects)
+                    effectObject = this.item.effects.get(e.value)
+                if (!effectObject)
+                    effectObject = {data : CONFIG.statusEffects.find(i => i.id == e.value), id : e.value}
+                if (effectObject)
+                    effectObjects.push(effectObject)
+            })
+            return effectObjects
+        }
+
 
         get checkData() { return this.data.checkData }
         get context() { return this.data.context}
@@ -235,17 +251,7 @@ export default class SkillCheck
 
         get effects () {
             let effects = this.item?.base?.effects || []
-            let effectObjects = []
-            effects.map(e => {
-                let effectObject 
-                if (this.item?.effects)
-                    effectObject = this.item.effects.get(e.value)
-                if (!effectObject)
-                    effectObject = {data : CONFIG.statusEffects.find(i => i.id == e.value), id : e.value}
-                if (effectObject)
-                    effectObjects.push(effectObject)
-            })
-            return effectObjects
+            return this._toEffectObjects(effects)
         }
 
         get item() {

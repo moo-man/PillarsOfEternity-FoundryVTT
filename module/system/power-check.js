@@ -34,6 +34,53 @@ export default class PowerCheck extends SkillCheck
                 this.powerSource.update({"data.used.value" : true, "data.pool.current" : this.powerSource.pool.current - this.power.level.cost})
 
             this.data.result = this.roll.toJSON()
+
+            this.handleEquippedWeaponRange()
+
+        }
+
+
+        async handleEquippedWeaponRange() {
+            let range = this.power.range.find(r => r.value == "equippedWeapon");
+
+            if (!range)
+                return
+
+            let rangeGroup = range.group;
+
+            let {damage, effects} = (this.power.groups[rangeGroup] || this.power.groups["Default"])
+
+            effects = this._toEffectObjects(effects);
+
+            let weaponId = await this.weaponSelectDialog()
+            this.result.chosenWeapon = weaponId
+            this.updateMessageFlags();
+            this.actor.setupWeaponCheck(weaponId, {add : {damage, effects}}).then(async check => {
+                await check.rollCheck()
+                check.sendToChat();
+            })
+        }
+
+        // Show the dialog to select which equipped weapon to apply this power to
+        async weaponSelectDialog() {
+            let weapons = this.actor.getItemTypes("weapon").filter(w => w.equipped.value);
+            let html = `<select>`
+            weapons.forEach(w => {
+                html += `<option value=${w.id}>${w.name}</option>`
+            })
+            html += `</select>`
+            return new Promise(resolve => {
+                new Dialog({
+                    title : "Select a Weapon",
+                    content : html,
+                    buttons : {
+                        apply : {
+                            label : "Apply",
+                            callback : (dlg) => {resolve(dlg.find("select")[0].value)}
+                        }
+                    }
+                }).render(true)
+            })
         }
 
         get item()

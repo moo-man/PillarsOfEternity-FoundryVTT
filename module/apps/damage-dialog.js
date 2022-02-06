@@ -46,6 +46,8 @@ export default class DamageDialog extends Application
     constructDamages() {
         let damages = []
         damages = foundry.utils.deepClone(this.item.damage.value)
+        if (this.check.addedProperties?.damage?.length)
+            damages = damages.concat(this.check.addedProperties.damage)
 
         damages.forEach((damage, i) => {
             damage.mult = undefined
@@ -72,7 +74,7 @@ export default class DamageDialog extends Application
                 let target = this.targets.find(i => i.id == damage.target)
                 let margin = this.check.result.total - target.actor.defenses[defense].value
                 let multiplier = Math.floor(margin / 5)
-                damage.mult = multiplier    
+                damage.mult = this.check.requiresRoll ? multiplier : 0;
                 if (damage.mult < 0)
                 {
                     if (!this.disabled.find(t => t.id == target.id))

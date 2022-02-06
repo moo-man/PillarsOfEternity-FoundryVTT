@@ -293,7 +293,7 @@ export class PillarsActor extends Actor {
 
     //#region Roll Setup
 
-    async setupSkillCheck(skill) {
+    async setupSkillCheck(skill, options = {}) {
         let skillItem
         if (typeof skill == "string")
             skillItem = this.items.getName(skill)
@@ -312,7 +312,7 @@ export class PillarsActor extends Actor {
         return new SkillCheck(checkData)
     }
 
-    async setupWeaponCheck(weapon) {
+    async setupWeaponCheck(weapon, options = {}) {
         if (typeof weapon == "string")
             weapon = this.items.get(weapon)
 
@@ -321,6 +321,7 @@ export class PillarsActor extends Actor {
 
         let data = this.getWeaponDialogData("weapon", weapon)
         let checkData = await RollDialog.create(data)
+        checkData.add = options.add // Properties added via options (right now only from equipped weapon powers)
         checkData.title = data.title
         checkData.skillId = weapon.Skill?.id
         checkData.skillName = weapon.skill.value
@@ -330,7 +331,7 @@ export class PillarsActor extends Actor {
         return new WeaponCheck(checkData)
     }
 
-    async setupPowerCheck(power) {
+    async setupPowerCheck(power, options = {}) {
         if (typeof power == "string")
             power = this.items.get(power)
 
@@ -395,7 +396,7 @@ export class PillarsActor extends Actor {
         return (this.itemCategories || this.itemTypes)[type]
     }
 
-    getDialogData(type, item, options) {
+    getDialogData(type, item, options={}) {
         let dialogData = {}
         dialogData.title = `${item?.name || options.name} Check`
         dialogData.modifier = ""
@@ -412,7 +413,7 @@ export class PillarsActor extends Actor {
         return dialogData
     }
 
-    getSkillDialogData(type, item, options) {
+    getSkillDialogData(type, item, options={}) {
         let dialogData = this.getDialogData(type, item, options)
         dialogData.assisters = this.constructAssisterList(item?.name || options.name)
         dialogData.hasRank = item ? item.xp.rank : false
@@ -420,8 +421,8 @@ export class PillarsActor extends Actor {
         return dialogData
     }
 
-    getWeaponDialogData(type, item, options) {
-        let dialogData = this.getDialogData(type, item)
+    getWeaponDialogData(type, item, options={}) {
+        let dialogData = this.getDialogData(type, item, options)
         dialogData.title = `${item?.name || options.name} Attack`
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0)
@@ -430,8 +431,8 @@ export class PillarsActor extends Actor {
         return dialogData
     }
 
-    getPowerDialogData(type, item, options) {
-        let dialogData = this.getDialogData(type, item)
+    getPowerDialogData(type, item, options={}) {
+        let dialogData = this.getDialogData(type, item, options)
         if (item.damage.value.length)
             dialogData.title = `${item?.name || options.name} Attack`
         else

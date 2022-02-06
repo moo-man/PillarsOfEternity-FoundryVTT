@@ -6,6 +6,8 @@ export default class WeaponCheck extends SkillCheck
             super(data)
             if (!data)
                 return 
+
+            this.data.checkData.add = data.add
             this.data.checkData.itemId = data.itemId
         }   
 
@@ -24,5 +26,17 @@ export default class WeaponCheck extends SkillCheck
 
         get weaponTags() {
             return this.weapon.Specials.filter(i => !i.includes("text-decoration"))
+        }
+
+        get addedProperties()
+        {
+            return this.data.checkData.add
+        }
+
+        get effects () {
+            let effects = super.effects;
+            if (this.addedProperties?.effects?.length)
+                effects = effects.concat(this.addedProperties?.effects || [])
+            return effects
         }
 }
