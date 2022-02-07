@@ -11,24 +11,28 @@
                 "defenses": {
                     "deflection": {
                         "value": 10,
+                        "base" : 10,
                         "bonus": 0,
                         "penalty": 0,
                         "checked": false
                     },
                     "fortitude": {
                         "value": 10,
+                        "base" : 15,
                         "bonus": 0,
                         "penalty": 0,
                         "checked": false
                     },
                     "reflex": {
                         "value": 10,
+                        "base" : 15,
                         "bonus": 0,
                         "penalty": 0,
                         "checked": false
                     },
                     "will": {
                         "value": 10,
+                        "base" : 15,
                         "bonus": 0,
                         "penalty": 0,
                         "checked": false

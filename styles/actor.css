@@ -601,6 +601,15 @@
     flex-direction: column;
   }
 
+  .pillars-of-eternity.actor.sheet .npc .combat-fields > * {
+    justify-content: space-between;
+  }
+
+  .pillars-of-eternity.actor.sheet .npc .combat-fields .initiative h3 {
+    display: flex;
+  }
+
+
 
   .pillars-of-eternity.actor.sheet .combat-fields > * {
     align-items: center;

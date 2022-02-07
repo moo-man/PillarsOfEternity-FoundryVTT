@@ -809,7 +809,7 @@ export class PillarsActorSheet extends ActorSheet {
             default: "roll"
         })
         await dialog._render(true)
-        dialog.element.find("input")[0].focus()
+        dialog.element.find("select")[0].focus()
     }
 
     async _onWeaponRoll(event) {

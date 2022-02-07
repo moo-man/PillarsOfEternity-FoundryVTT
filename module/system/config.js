@@ -54,7 +54,7 @@ POE.tierBonus = {
         bonus: 0.5,
     },
     "paragon": {
-        def: 2,
+        def: 12,
         bonus: 1,
     }
 }

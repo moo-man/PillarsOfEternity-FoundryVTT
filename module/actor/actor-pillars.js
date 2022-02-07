@@ -77,19 +77,19 @@ export class PillarsActor extends Actor {
         this.data.flags.tooltips.toughness.value.push(data.toughness.value + " (Base)")
         this.data.flags.tooltips.damageIncrement.value.push(data.damageIncrement.value + " (Base)")
 
-        data.defenses.deflection.value = 10 - (data.size.value * 2)
-        data.defenses.reflex.value = 15 - (data.size.value * 2)
-        data.defenses.fortitude.value = 15 + (data.size.value * 2)
-        data.defenses.will.value = 15
+        data.defenses.deflection.value =  (data.defenses.deflection.base || 10) - (data.size.value * 2)
+        data.defenses.reflex.value =  (data.defenses.reflex.base || 15) - (data.size.value * 2)
+        data.defenses.fortitude.value =  (data.defenses.fortitude.base || 15) + (data.size.value * 2)
+        data.defenses.will.value =  (data.defenses.will.base || 15)
 
         this.data.flags.tooltips.endurance.threshold.winded.push(this.endurance.threshold.winded + " (Base)")
         this.data.flags.tooltips.health.threshold.bloodied.push(this.health.threshold.bloodied + " (Base)")
         this.data.flags.tooltips.health.threshold.incap.push(this.health.threshold.incap + " (Base)")
 
-        this.data.flags.tooltips.defenses.deflection.push("10" + " (Base)")
-        this.data.flags.tooltips.defenses.reflex.push("15" + " (Base)")
-        this.data.flags.tooltips.defenses.fortitude.push("15" + " (Base)")
-        this.data.flags.tooltips.defenses.will.push("15" + " (Base)")
+        this.data.flags.tooltips.defenses.deflection.push(data.defenses.deflection.base + " (Base)")
+        this.data.flags.tooltips.defenses.reflex.push(data.defenses.reflex.base + " (Base)")
+        this.data.flags.tooltips.defenses.fortitude.push(data.defenses.fortitude.base + " (Base)")
+        this.data.flags.tooltips.defenses.will.push(data.defenses.will.base + " (Base)")
 
         this.data.flags.tooltips.defenses.deflection.push(-data.size.value * 2 + " (Size)")
         this.data.flags.tooltips.defenses.reflex.push(-data.size.value * 2 + " (Size)")
@@ -296,8 +296,13 @@ export class PillarsActor extends Actor {
     async setupSkillCheck(skill, options = {}) {
         let skillItem
         if (typeof skill == "string")
+        {
             skillItem = this.items.getName(skill)
-        else {
+            if (!skillItem)
+                skillItem = game.items.getName(skill)
+        }
+        else 
+        {
             skillItem = skill;
             skill = skillItem.name
         }

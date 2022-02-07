@@ -29,6 +29,7 @@ import WeaponCheck from "./module/system/weapon-check.js";
 import PowerCheck from "./module/system/power-check.js";
 import PillarsTokenDocument from "./module/system/token.js";
 import DamageRoll from "./module/system/damage-roll.js";
+import { PillarsNPCSheet } from "./module/actor/npc-sheet.js";
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -37,6 +38,7 @@ Hooks.on("init", () => {
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("pillars-of-eternity", PillarsActorSheet, { makeDefault: true });
+  Actors.registerSheet("pillars-of-eternity", PillarsNPCSheet, {types: ["npc"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("pillars-of-eternity", PillarsItemSheet, { makeDefault: true });
 

@@ -92,7 +92,7 @@ export default class PowerTemplate extends MeasuredTemplate {
 
     // Cancel the workflow (right-click)
     handlers.rc = event => {
-      this.layer.preview.removeChildren();
+      this.layer._onDragLeftCancel(event);
       canvas.stage.off("mousemove", handlers.mm);
       canvas.stage.off("mousedown", handlers.lc);
       canvas.app.view.oncontextmenu = null;

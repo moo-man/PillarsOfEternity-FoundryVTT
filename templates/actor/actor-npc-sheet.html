@@ -15,7 +15,7 @@
             <div class="property-group">
                 <label>Def</label>
                 <div class="property-value">
-                    <input type="number" disabled title="{{tooltips.defenses.deflection}}" value="{{data.defenses.deflection.value}}" />
+                    <input type="number" title="{{tooltips.defenses.deflection}}" class="defense-input" data-defense="deflection" value="{{data.defenses.deflection.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if data.defenses.deflection.checked}}
@@ -29,7 +29,7 @@
             <div class="property-group">
                 <label>Fort</label>
                 <div class="property-value">
-                    <input type="number" disabled title="{{tooltips.defenses.fortitude}}" value="{{data.defenses.fortitude.value}}" />
+                    <input type="number" title="{{tooltips.defenses.fortitude}}" class="defense-input" data-defense="fortitude" value="{{data.defenses.fortitude.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if data.defenses.fortitude.checked}}
@@ -43,7 +43,7 @@
             <div class="property-group">
                 <label>Ref</label>
                 <div class="property-value">
-                    <input type="number" disabled title="{{tooltips.defenses.reflex}}" value="{{data.defenses.reflex.value}}" />
+                    <input type="number" title="{{tooltips.defenses.reflex}}" class="defense-input" data-defense="reflex" value="{{data.defenses.reflex.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if data.defenses.reflex.checked}}
@@ -57,7 +57,7 @@
             <div class="property-group">
                 <label>Will</label>
                 <div class="property-value">
-                    <input type="number" disabled title="{{tooltips.defenses.will}}" value="{{data.defenses.will.value}}" />
+                    <input type="number" title="{{tooltips.defenses.will}}" class="defense-input" data-defense="will" value="{{data.defenses.will.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if data.defenses.will.checked}}
@@ -118,13 +118,13 @@
                     <div class="property-group small">
                         <label>Tough.</label>
                         <div class="property-value">
-                            <input type="number" title="{{tooltips.toughness.value}}" disabled value="{{data.toughness.value}}" />
+                            <input type="number" title="{{tooltips.toughness.value}}" name="data.toughness.value" value="{{data.toughness.value}}" />
                         </div>
                     </div>
                     <div class="property-group small">
                         <label>D.I.</label>
                         <div class="property-value">
-                            <input type="number" title="{{tooltips.damageIncrement.value}}" disabled value="{{data.damageIncrement.value}}" />
+                            <input type="number" title="{{tooltips.damageIncrement.value}}" name="data.damageIncrement.value" value="{{data.damageIncrement.value}}" />
                         </div>
                     </div>
             </div>
@@ -165,40 +165,40 @@
                 </div>
             </div>
             <div class="thresholds">
-                <div>Bloodied</div> <input type="number" disabled value="{{data.health.bloodiedThreshold}}"/>
-                <div>Winded</div> <input type="number" disabled value="{{data.endurance.windedThreshold}}"/>
+                <div>Bloodied</div> <input type="number" value="{{data.health.bloodiedThreshold}}"/>
+                <div>Winded</div> <input type="number" value="{{data.endurance.windedThreshold}}"/>
             </div> -->
         </section>
         <section>
             <div class="combat-fields">
 
                 <div class="initiative">
-                    <h3>Initiative</h3><a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a>
-                    <input type="number" class="value" title="{{tooltips.initiative.value}}" disabled value="{{data.initiative.value}}" />
+                    <h3>Initiative <a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a></h3>
+                    <input type="number" class="value" title="{{tooltips.initiative.value}}" name="data.initiative.value" value="{{data.initiative.value}}" />
                 </div>
                 <div class="stride">
                     <h3>Stride: </h3>
-                    <input type="number" disabled class="value" title="{{tooltips.stride.value}}" value="{{data.stride.value}}">
+                    <input type="number" class="value" title="{{tooltips.stride.value}}" name="data.stride.value" value="{{data.stride.value}}">
                 </div>
                 <div class="run">
                     <h3>Run: </h3>
-                    <input type="number" disabled class="value"  title="{{tooltips.run.value}}" value="{{data.run.value}}">
+                    <input type="number" class="value"  title="{{tooltips.run.value}}" name="data.run.value" value="{{data.run.value}}">
                 </div>
         
                 <div class="soak">
                     <h3>Soak: </h3>
-                    <input type="number" disabled class="value" title="{{tooltips.soak.base}}" value="{{data.soak.base}}">
+                    <input type="number" class="value" title="{{tooltips.soak.base}}" name="data.soak.base" value="{{data.soak.base}}">
                     {{#if items.equipped.shields.length}}
                     <div class="soak-group">
                         <img class="soak-img" src="icons/svg/shield.svg"/>
-                        <input class="soak-total" type="number" disabled class="value" title="{{tooltips.soak.shield}}" value="{{data.soak.shield}}">
+                        <input class="soak-total" type="number" class="value" title="{{tooltips.soak.shield}}" value="{{data.soak.shield}}">
                     </div>
                     {{/if}}
                     {{#each soaks as |soak s|}}
                     {{#if soak.show}}
                     <div class="soak-group">
                         <img class="soak-img" src="{{soak.img}}"/>
-                        <input class="soak-total" type="number" disabled class="value" title="{{lookup ../tooltips.soak s}} " value="{{soak.total}}">
+                        <input class="soak-total" type="number" class="value" title="{{lookup ../tooltips.soak s}} " value="{{soak.total}}">
                     </div>
                     {{/if}}
                     {{/each}}
@@ -233,11 +233,11 @@
             </div>
             <div class="info-group">
                 <label>Size</label>
-                <input type="text" disabled value="{{data.size.value}}">
+                <input type="text" value="{{data.size.value}}">
             </div>
             <div class="info-group age">
                 <label>Apparent Age</label>
-                <input type="text" disabled value="{{data.life.apparentAge}}">
+                <input type="text" value="{{data.life.apparentAge}}">
             </div>
         </div> -->
         <section class="tab-section">

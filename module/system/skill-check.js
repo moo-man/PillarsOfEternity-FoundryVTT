@@ -259,7 +259,7 @@ export default class SkillCheck
         }
 
         get skill() {
-            return this.actor.items.get(this.checkData.skillId)
+            return this.actor.items.get(this.checkData.skillId) || game.items.get(this.checkData.skillId);
         }
 
         get doesDamage() {

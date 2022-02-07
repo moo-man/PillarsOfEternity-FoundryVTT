@@ -10,11 +10,6 @@
         {{#each items.attributes.benefits as |item i|}}
         <li class="item" draggable="true" data-item-id="{{item.id}}">
             <div class="row-content">
-                {{#if item.used.value}}
-                <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-check-circle"></i></a>
-                {{else}}
-                <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-circle"></i></a>
-                {{/if}}
 
                 <div class="item-name flexrow item-dropdown">
                     <div class="item-image" style="background-image: url('{{item.img}}')"></div>
@@ -49,11 +44,6 @@
             <li class="item" draggable="true" data-item-id="{{item.id}}">
             <div class="row-content">
 
-            {{#if item.used.value}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-check-circle"></i></a>
-            {{else}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-circle"></i></a>
-            {{/if}}
             <div class="item-name flexrow item-dropdown">
                 <div class="item-image" style="background-image: url('{{item.img}}')"></div>
                 <a>
@@ -87,12 +77,6 @@
         <li class="item" draggable="true" data-item-id="{{item.id}}">
             <div class="row-content">
 
-            {{#if item.used.value}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-check-circle"></i></a>
-            {{else}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-circle"></i></a>
-            {{/if}}
-
             <div class="item-name flexrow item-dropdown">
                 <div class="item-image" style="background-image: url('{{item.img}}')"></div>
                 <a>
@@ -117,9 +101,7 @@
 <ol class="items-list">
     <li class="items-header flexrow">
         <h3 class="item-name flexrow">Skills <a title="Roll Untrained Skill" class="roll-untrained"><img src="icons/dice/d10black.svg" height="20" width="20"/></a></h3>
-        <span class="item-property-column">XP</span>
         <span class="item-property-column">Rank</span>
-        <span class="item-property-column">Mod</span>
         <div class="item-controls">
             <a class="item-control item-create" title="Create" data-type="skill"><i class="fas fa-plus"></i></a>
         </div>
@@ -130,20 +112,12 @@
         <li class="item" draggable="true" data-item-id="{{item.id}}">
             <div class="row-content">
 
-            {{#if item.used.value}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-check-circle"></i></a>
-            {{else}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-circle"></i></a>
-            {{/if}}
-
             <div class="item-name skill-roll flexrow item-dropdown-alt">
                 <a>
                     <h4>{{item.name}}</h4>
                 </a>
             </div>
 
-            <span class="item-property-column"><input class="item-property" type="number" data-target="data.xp.value" value="{{item.xp.value}}"></span>
-            <span class="item-property-column"><input class="item-property" type="number" disabled value="{{item.xp.rank}}"></span>
             <span class="item-property-column"><input class="item-property" type="number" data-target="data.modifier.value" value="{{item.modifier.value}}"></span>
 
             <div class="item-controls flexrow">
@@ -160,6 +134,7 @@
     </ol>
 </ol>
 
+{{#if items.equipped.armor.length}}
 <ol class="items-list armor">
     <li class="items-header flexrow">
         <h3 class="item-name flexrow">Armor</h3>
@@ -197,7 +172,9 @@
         {{/each}}
     </ol>
 </ol>
+{{/if}}
 
+{{#if items.equipped.shields.length}}
 <ol class="items-list shield">
     <li class="items-header flexrow">
         <h3 class="item-name flexrow">Shield</h3>
@@ -212,13 +189,6 @@
         {{#each items.equipped.shields as |item i|}}
         <li class="item" draggable="true" data-item-id="{{item.id}}">
             <div class="row-content">
-
-            {{#if item.used.value}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-check-circle"></i></a>
-            {{else}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-circle"></i></a>
-            {{/if}}
-
             <div class="item-name flexrow item-dropdown">
                 <div class="item-image" style="background-image: url('{{item.img}}')"></div>
                 <a>
@@ -244,6 +214,7 @@
         {{/each}}
     </ol>
 </ol>
+{{/if}}
 
 {{#if items.equipped.meleeWeapons.length}}
     <ol class="items-list">
@@ -252,7 +223,6 @@
             <span class="item-property-column">Skill</span>
             <span class="item-property-column">Misc</span>
             <span class="item-property-column">Accuracy</span>
-            <span class="item-property-column">Dmg</span>
             <span class="item-property-column flex">Special</span>
             <div class="item-controls"></div>
         </li>
@@ -272,7 +242,6 @@
                 <span class="item-property-column">{{item.Skill.rank}}</span>
                 <span class="item-property-column"><input class="item-property" type="number" data-target="item.misc.value" value="{{item.misc.value}}"></span>
                 <span class="item-property-column"><input class="item-property" type="number" data-target="item.accuracy.value" value="{{item.accuracy.value}}"></span>
-                <button type = "button" class="item-property-column damage-roll">Roll</button>
                 <span class="item-property-column flex item-specials">{{{array item.Specials "item-special"}}}</span>
 
                 <div class="item-controls flexrow">
@@ -297,7 +266,6 @@
             <span class="item-property-column">Skill</span>
             <span class="item-property-column">Misc</span>
             <span class="item-property-column">Accuracy</span>
-            <span class="item-property-column">Dmg</span>
             <span class="item-property-column">Range</span>
             <span class="item-property-column flex">Special</span>
             <div class="item-controls"></div>
@@ -318,7 +286,6 @@
                 <span class="item-property-column">{{item.Skill.xp.rank}}</span>
                 <span class="item-property-column">{{item.misc.value}}</span>
                 <span class="item-property-column">{{item.accuracy.value}}</span>
-                <button type = "button" class="item-property-column damage-roll">Roll</button>
                 <span class="item-property-column">{{item.range.value}}</span>
                 <span class="item-property-column flex">{{{array item.Specials "item-special"}}}</span>
 
