@@ -655,6 +655,12 @@ export class PillarsItem extends Item {
         return false
     }
 
+    get name() {
+        if (this.type == "skill" && this.specialization.has)
+            return super.name + ` (${this.specialization.value})`
+        else return super.name
+    }
+
     // @@@@@@@@ DATA GETTERS @@@@@@@@@@;    
     get category() {return this.data.data.category}
     get target() {return this.data.data.target}
@@ -704,6 +710,7 @@ export class PillarsItem extends Item {
     get embedded() {return this.data.data.embedded}
     get powerCharges() {return this.data.data.powerCharges}
     get powerRecharge() {return this.data.data.powerRecharge}
+    get specialization() {return this.data.data.specialization}
 
     // Processed data getters
     get rank() {return this.xp.rank}

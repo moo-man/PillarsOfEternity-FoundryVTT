@@ -415,7 +415,7 @@ export class PillarsActor extends Actor {
 
     getSkillDialogData(type, item, options={}) {
         let dialogData = this.getDialogData(type, item, options)
-        dialogData.assisters = this.constructAssisterList(item?.name || options.name)
+        dialogData.assisters = this.constructAssisterList(item.data.name || options.name)
         dialogData.hasRank = item ? item.xp.rank : false
         dialogData.skill = item;
         return dialogData
@@ -447,13 +447,13 @@ export class PillarsActor extends Actor {
 
     constructAssisterList(itemName) {
         let assisters = game.actors.contents.filter(i => (i.hasPlayerOwner || i.data.token.disposition > 0) && i.id != this.id)
-        assisters = assisters.filter(a => a.items.getName(itemName))
+        assisters = assisters.filter(a => a.items.contents.find(i => i.data.name == itemName)) // data.name because we want to account for specializations have the same base name
         assisters = assisters.map(a => {
             return {
                 name: a.name,
                 id: a.id,
-                rank: a.items.getName(itemName).rank,
-                die: `d${SkillCheck.rankToDie(a.items.getName(itemName))}`
+                rank: a.items.contents.find(i => i.data.name == itemName).rank,
+                die: `d${SkillCheck.rankToDie(a.items.contents.find(i => i.data.name == itemName))}`
             }
         })
         return assisters.filter(a => a.rank >= 5)

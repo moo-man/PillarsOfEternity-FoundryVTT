@@ -28,7 +28,8 @@
                 <label>Specialization</label>
                 <div class="form-fields">
                     <input type="checkbox" name="data.specialization.has" data-dtype="Number" {{checked data.specialization.has}}>
-                    <input type="text" name="data.specialization.value" value="{{data.specialization.value}}" data-dtype="String">
+
+                    <input type="text" name="data.specialization.value" value="{{data.specialization.value}}" data-dtype="String" {{#unless data.specialization.has}}disabled{{/unless}}>
                 </div>
             </div>
 
