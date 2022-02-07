@@ -115,7 +115,8 @@
         {{/each}}
     </ol>
 </ol>
-<ol class="items-list powers-list">
+    {{#if items.embeddedPowers.length}}
+    <ol class="items-list powers-list">
     <li class="items-header flexrow">
         <h3 class="item-name flexrow">Item Powers</h3>
         <span class="item-property-column"></span>
@@ -177,3 +178,4 @@
         {{/each}}
     </ol>
 </ol>
+{{/if}}
