@@ -75,6 +75,10 @@ export default class DamageDialog extends Application
                 let margin = this.check.result.total - target.actor.defenses[defense].value
                 let multiplier = Math.floor(margin / 5)
                 damage.mult = this.check.requiresRoll ? multiplier : 0;
+                if (!damage.crit || damage.crit == 0) // == is important here
+                {
+                    damage.mult = 0
+                }
                 if (damage.mult < 0)
                 {
                     if (!this.disabled.find(t => t.id == target.id))
@@ -106,9 +110,11 @@ export default class DamageDialog extends Application
             this.additionalDamages++;
         }
 
+
+
         this.damages.forEach((damage, i) => {
-            damage.target = this.targets[i]?.id
-            damage.img = this.targets[i]?.data?.img
+            damage.target = this.targets[Math.min(i, this.targets.length-1)]?.id
+            damage.img = this.targets[Math.min(i, this.targets.length-1)]?.data?.img
         })
     }
 
