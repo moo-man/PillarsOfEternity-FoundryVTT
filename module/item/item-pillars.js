@@ -435,10 +435,10 @@ export class PillarsItem extends Item {
                     buttons : {
                         remove : {
                             label : "Remove",
-                            callback : () => {
+                            callback : async () => {
                                 let arcanaPowers = powers.filter(i => i.data.source.value == "arcana")
                                 arcanaPowers.forEach(p => {p.data.embedded.spendType == "source"})
-                                this.update({"data.powers" : arcanaPowers})
+                                await this.update({"data.powers" : arcanaPowers})
                                 resolve(true)
                             }
                         },
