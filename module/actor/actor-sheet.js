@@ -89,7 +89,7 @@ export class PillarsActorSheet extends ActorSheet {
    */
   _getHeaderButtons() {
     let buttons = super._getHeaderButtons();
-    if (this.type == "character")
+    if (this.actor.type == "character")
     {
         buttons.unshift(
           {
