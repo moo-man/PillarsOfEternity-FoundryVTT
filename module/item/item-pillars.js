@@ -112,22 +112,6 @@ export class PillarsItem extends Item {
         }
     }
 
-    // async update(data)
-    // {
-        
-    //     if (this.embeddedPowerData)
-    //     {
-    //         await this.embeddedPowerData.object.updateEmbeddedPower(this.embeddedPowerData.index, data)
-    //         for (let app of Object.values(this.apps)) {
-    //             app.object = new PillarsItem(this.embeddedPowerData.object.powers[this.embeddedPowerData.index], {embedded : this.embeddedPowerData})
-    //             console.log(app.object)
-    //             app.render(true)
-    //         }
-    //     }
-    //     else
-    //         return super.update(data)
-    // }
-
     //#region Data Preparation 
     prepareData() {
         super.prepareData();
@@ -174,7 +158,11 @@ export class PillarsItem extends Item {
     }
 
     prepareOwnedPowerSource() {
-        this.xp.level = PILLARS_UTILITY.getPowerSourceLevel(this.xp.value)
+
+        // NPCs don't use xp, so use level directly
+        if (this.actor.type == "character")
+            this.xp.level = PILLARS_UTILITY.getPowerSourceLevel(this.xp.value)
+
         this.data.data.attack = PILLARS_UTILITY.getPowerSourceAttackBonus(this.xp.level)
         this.pool.max = PILLARS_UTILITY.getPowerSourcePool(this.xp.level)
     }

@@ -75,6 +75,7 @@ export default class DamageDialog extends Application
                 let margin = this.check.result.total - target.actor.defenses[defense].value
                 let multiplier = Math.floor(margin / 5)
                 damage.mult = this.check.requiresRoll ? multiplier : 0;
+                
                 if (!damage.crit || damage.crit == 0) // == is important here
                 {
                     damage.mult = 0
@@ -150,6 +151,7 @@ export default class DamageDialog extends Application
     submit() {
         let damages = duplicate(this.damages)
         damages.forEach(d => d.target = this.targets.find(i => i.id == d.target))
+        damages.forEach(d => d.misses = this.disabled.map(i => i.toObject()))
         this.close()
         return this.resolve(damages)
     }

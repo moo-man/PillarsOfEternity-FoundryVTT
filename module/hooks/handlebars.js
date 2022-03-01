@@ -36,6 +36,7 @@ export default function () {
             "systems/pillars-of-eternity/templates/actor/actor-inventory.html",
             "systems/pillars-of-eternity/templates/actor/actor-details.html",
             "systems/pillars-of-eternity/templates/actor/actor-npc-details.html",
+            "systems/pillars-of-eternity/templates/actor/actor-npc-powers.html",
             "systems/pillars-of-eternity/templates/item/item-effects.html",
             "systems/pillars-of-eternity/templates/item/item-powers.html",
             "systems/pillars-of-eternity/templates/item/item-description.html",

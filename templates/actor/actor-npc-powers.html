@@ -1,10 +1,9 @@
 <ol class="items-list power-sources">
     <li class="items-header flexrow">
         <h3 class="item-name flexrow">Power Sources</h3>
-        <span class="item-property-column flex"></span>
+        <!-- <span class="item-property-column flex"></span> -->
         <span class="item-property-column large">Pool</span>
         <span class="item-property-column">Attack</span>
-        <span class="item-property-column">XP</span>
         <span class="item-property-column">Level</span>
         <div class="item-controls">
             <a class="item-control item-create" title="Create" data-type="powerSource"><i class="fas fa-plus"></i></a>
@@ -15,31 +14,15 @@
         {{#each items.powerSources as |item i|}}
         <li class="item" draggable="true" data-item-id="{{item.id}}">
             <div class="row-content">
-
-            {{#if item.used.value}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-check-circle"></i></a>
-            {{else}}
-            <a class="item-toggle item-used sheet-checkbox" data-target="item" data-item-target="data.used.value"><i class="far fa-circle"></i></a>
-            {{/if}}
-
             <div class="item-name flexrow item-dropdown">
                 <a>
                     <h4>{{item.name}}</h4>
                 </a>
             </div>
 
-            <span class="item-property-column flex">
-                <div class="progress-bar">
-                    <div class="progress-bar-container">
-                        <div class="progress" style="width: {{item.pool.pct}}%"></div>
-                    </div>
-                </div>
-                <a title="Restore Pool" class="restore-pool"><i class="fas fa-redo"></i></a>
-            </span>
-            <span class="item-property-column large pool-inputs"><input class="item-property" data-target="data.pool.current" type="number" value="{{item.pool.current}}"  > / <input class="item-property" data-target="data.pool.max" type="number" disabled value="{{item.pool.max}}" ></span>
+            <span class="item-property-column large pool-inputs"><input class="item-property" data-target="data.pool.current" type="number" value="{{item.pool.current}}"  > / <input class="item-property" data-target="data.pool.max" type="number" disabled value="{{item.pool.max}}" ><a title="Restore Pool" class="restore-pool"><i class="fas fa-redo"></i></a></span>
             <span class="item-property-column">+{{item.data.data.attack}}</span>
-            <span class="item-property-column"><input type="number" class="item-property" data-target="data.xp.value" value="{{item.xp.value}}"></span>
-            <span class="item-property-column"><input type="number" class="item-property" disabled value="{{item.xp.level}}"></span>
+            <span class="item-property-column"><input type="number" class="item-property" data-target="data.xp.level" value="{{item.xp.level}}"></span>
 
             <div class="item-controls flexrow">
                 {{#if ../owner}}
@@ -60,12 +43,9 @@
         <h3 class="item-name flexrow">Powers</h3>
         <span class="displayGroup"></span>
         <span class="item-property-column small">Level</span>
-        <!-- <span class="item-property-column">Dmg</span> -->
         <span class="item-property-column small">Range</span>
         <span class="item-property-column small">Target</span>
-        <span class="item-property-column small">Duration</span>
         <span class="item-property-column small">Speed</span>
-        <span class="item-property-column small">Exclusion</span>
         <div class="item-controls">
             <a class="item-control item-create" title="Create" data-type="power"><i class="fas fa-plus"></i></a>
         </div>
@@ -89,18 +69,10 @@
             <a class="displayGroup" style="flex:0; opacity: 0.5; margin-top: 12px;">(Default)</a>
             {{/if}}
 
-            <!--<span class="item-property-column flex">Base Effects</span>-->
             <span class="item-property-column small" {{item.level.value}} {{#if item.improvised.value}} title="Improvised Cost" {{/if}}>{{item.level.value}} {{#if item.improvised.value}} ({{item.level.cost}}) {{/if}}</span>
-        <!-- {{#if item.damage.value.length}}
-        <button type = "button" class="item-property-column damage-roll">Roll</button>
-        {{else}}
-        <div class="item-property-column">None</div>
-        {{/if}} -->
             <span class="item-property-column small">{{item.Range}}</span>
             <a class="item-property-column small power-target">{{item.Target}}</a>
-            <span class="item-property-column small">{{item.Duration}}</span>
             <span class="item-property-column small">{{item.Speed}}</span>
-            <span class="item-property-column small">{{item.Exclusion}}</span>
 
             <div class="item-controls flexrow">
                 {{#if ../owner}}

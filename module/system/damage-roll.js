@@ -2,7 +2,7 @@ export default class DamageRoll {
     constructor(damages, check)
     {
         this.data = {
-            damages,
+            damages : damages,
             checkId : check?.message?.id,
             damageData : [],
             messageIds : []
@@ -71,6 +71,8 @@ export default class DamageRoll {
     calculateCrit(token, damage)
     {
         try {
+            if (!token)
+                return {token, crit: 0}
             let defense = damage.defense.toLowerCase() || "deflection"
             let margin = this.check.result.total - token.actor.defenses[defense].value
             let crit = Number.isNumeric(damage.mult) ? damage.mult : Math.floor(margin / 5)
@@ -89,7 +91,7 @@ export default class DamageRoll {
         for(let i = 0; i < this.damages.length; i++){
             let damage = this.damages[i]
             let multiplier = damage.mult
-            let baseDice = [new Die({number : parseInt(damage.base.split("d")[0]), faces : parseInt(damage.base.split("d")[1]), options : {flavor: "Base", crit : "base", targets : damage.target.filter(t => t.crit == 0)}})]
+            let baseDice = [new Die({number : parseInt(damage.base.split("d")[0]), faces : parseInt(damage.base.split("d")[1]), options : {flavor: "Hit", crit : "base", targets : damage.target.filter(t => t.crit == 0)}})]
             let critDice = []
             for(let i = 0 ; i < multiplier; i++)
             {

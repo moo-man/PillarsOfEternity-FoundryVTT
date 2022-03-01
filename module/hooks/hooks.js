@@ -8,6 +8,7 @@ import effects from "./effects.js";
 import entryContextHooks from "./entryContext.js";
 import scene from "./scene.js";
 import initHooks from "./init.js"
+import combat from "./combat.js"
 
 export default function () {
     initHooks()
@@ -18,6 +19,7 @@ export default function () {
     diceSoNiceHooks();
     readyHooks();
     effects();
+    combat();
     entryContextHooks();
     scene();
 }

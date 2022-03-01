@@ -15,7 +15,7 @@ export class PillarsItemSheet extends ItemSheet {
 			height: 534,
       tabs: [{navSelector: ".sheet-tabs", contentSelector: ".content", initial: "details"}],
         dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }],
-        scrollY: [".content"]
+        scrollY: [".content", ".details"]
 		});
   }
 
@@ -64,7 +64,7 @@ export class PillarsItemSheet extends ItemSheet {
     return data;
   }
 
-  _onDrop(ev) {
+  async _onDrop(ev) {
     let dragData = JSON.parse(ev.dataTransfer.getData("text/plain"));
     let dropItem = game.items.get(dragData.id)
     let powerData = dragData.data || dropItem.toObject()
@@ -76,10 +76,17 @@ export class PillarsItemSheet extends ItemSheet {
       if (this.item.type == "equipment" && this.item.category.value == "grimoire")
         powerData.data.embedded.spendType = "source"
       
+
+      // If drag item was an owned power already, add embedded data to it 
       let ownedPower;
       if (this.item.isOwned && this.actor.items.get(powerData._id))
       {
         ownedPower = this.actor.items.get(powerData._id);
+        powerData.ownedId = ownedPower.id
+      }
+      else if (this.item.isOwned) // If drag item was not owned, but the drop item is, add the drag item to the actor
+      {
+        ownedPower = (await this.actor.createEmbeddedDocuments("Item", [powerData]))[0]
         powerData.ownedId = ownedPower.id
       }
 
@@ -257,11 +264,11 @@ export class PillarsItemSheet extends ItemSheet {
       let index = Number($(ev.currentTarget).parents(".item").attr("data-index"))
       let path = ev.currentTarget.dataset.path;
       let powers = duplicate(this.item.powers);
-
+      let value = Number.isNumeric(ev.currentTarget.value) ? Number(ev.currentTarget.value) : ev.currentTarget.value
       
-      setProperty(powers[index].data, path, ev.currentTarget.value);
+      setProperty(powers[index].data, path, value);
       if (path == "embedded.uses.max")
-        setProperty(powers[index].data, "embedded.uses.value", ev.currentTarget.value )
+        setProperty(powers[index].data, "embedded.uses.value", value)
 
       // Update owned power if it exists
       if (powers[index].ownedId)

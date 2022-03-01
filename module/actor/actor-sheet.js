@@ -114,7 +114,7 @@ export class PillarsActorSheet extends ActorSheet {
         data.data = data.data.data
         this.prepareSheetData(data);
         this.formatTooltips(data)
-        console.log(data)
+        
         return data
     }
 
@@ -475,6 +475,8 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".setting").click(this._onSettingClick.bind(this))
         html.find(".displayGroup").click(this._onDisplayGroupClick.bind(this))
         html.find(".box-click").click(this._onBoxClick.bind(this))
+        html.find(".long-rest").click(this._onLongRestClick.bind(this))
+        html.find(".embedded-value").mouseup(this._onEmbeddedValueClick.bind(this))
         html.find('.item:not(".tab-select")').each((i, li) => {
             li.setAttribute("draggable", true);
             li.addEventListener("dragstart", this._onDragStart.bind(this), false);
@@ -844,7 +846,7 @@ export class PillarsActorSheet extends ActorSheet {
     }
 
     
-    _onDisplayGroupClick(ev){
+    _onDisplayGroupClick(event){
         let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
         let item = this.actor.items.get(itemId)
         let groupIndex = item.getFlag("pillars-of-eternity", "displayGroup")
@@ -869,5 +871,38 @@ export class PillarsActorSheet extends ActorSheet {
             data.value = Number(index) + 1;
 
         this.actor.update({[`${target}.value`] : data.value})
+    }
+
+    _onLongRestClick(ev) {
+
+        new Dialog({
+            title : "Long Rest",
+            content :  "<p>Replenish power uses and pools?</p>",
+            buttons : {
+                yes : {
+                    label : "Yes",
+                    callback: () => this.actor.longRest()
+                },
+                no : {
+                    label: "No",
+                    callback: () => {}
+                }
+            }
+        }).render(true);
+    }
+
+    _onEmbeddedValueClick(event) {
+        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId);
+        let embedded = duplicate(item.embedded);
+
+        if (event.button == 0)    
+            embedded.uses.value++
+        else
+            embedded.uses.value--
+
+        embedded.uses.value = Math.clamped(embedded.uses.value, 0, embedded.uses.max)
+
+        item.update({"data.embedded" : embedded})
     }
 }

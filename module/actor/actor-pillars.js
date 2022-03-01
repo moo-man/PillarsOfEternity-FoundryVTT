@@ -373,7 +373,7 @@ export class PillarsActor extends Actor {
     _powerUsageValidation(power) 
     {
         if (!power.SourceItem)
-            throw ui.notifications.error("Could not find Power Source")
+            throw ui.notifications.error("Could not find Power Source: " + power.data.data.source.value)
 
         let embeddedParent = power.EmbeddedPowerParent;
         if (embeddedParent && embeddedParent.category.value != "grimoire")
@@ -522,6 +522,36 @@ export class PillarsActor extends Actor {
         // If no owned item and no world item, just make the item
         return this.createEmbeddedDocuments("Item", [{ name, type, sort: 0, data: { used: { value: true } } }])
 
+    }
+
+    longRest() {
+        let updates = []
+        this.getItemTypes("powerSource").forEach(p => {
+            updates.push({_id : p.id, "data.pool.current" : p.pool.max})
+        })
+
+        this.items.filter(i => ["longRest", "encounter"].includes(i.powerRecharge)).forEach(i => {
+            updates.push({_id: i.id, "data.powerCharges.value" : i.powerCharges.max})
+        })
+
+        this.items.filter(i => i.type == "power" && ["longRest", "encounter"].includes(i.embedded.spendType)).forEach(i => {
+            updates.push({_id: i.id, "data.embedded.uses.value" : i.embedded.uses.max})
+        })
+
+        return this.updateEmbeddedDocuments("Item", updates)
+    }
+
+    encounterEnd() {
+        let updates = []
+        this.items.filter(i => ["encounter"].includes(i.powerRecharge)).forEach(i => {
+            updates.push({_id: i.id, "data.powerCharges.value" : i.powerCharges.max})
+        })
+
+        this.items.filter(i => i.type == "power" && ["encounter"].includes(i.embedded.spendType)).forEach(i => {
+            updates.push({_id: i.id, "data.embedded.uses.value" : i.embedded.uses.max})
+        })
+
+        return this.updateEmbeddedDocuments("Item", updates)
     }
 
 

@@ -40,11 +40,9 @@
           <div class="item-property-column flex">
             {{#unless (eq power.data.embedded.spendType "source")}}
             {{#if (eq power.data.embedded.spendType "charges")}}
-            <input class="embedded-power-edit" data-path="embedded.chargeCost" type="number"
-              value="{{power.data.embedded.chargeCost}}">
+            <input class="embedded-power-edit" data-path="embedded.chargeCost" type="number" value="{{power.data.embedded.chargeCost}}" data-dtype="Number">
             {{else}}
-            <input class="embedded-power-edit" data-path="embedded.uses.max" type="number"
-              value="{{power.data.embedded.uses.max}}">
+            <input class="embedded-power-edit" data-path="embedded.uses.max" type="number" value="{{power.data.embedded.uses.max}}" data-dtype="Number">
             {{/if}}
             {{/unless}}
             <select data-path="embedded.spendType" class="embedded-power-edit">

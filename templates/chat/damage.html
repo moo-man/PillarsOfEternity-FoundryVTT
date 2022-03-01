@@ -3,6 +3,14 @@
         {{roll.total}}
     </div>
     <div class="dice-tooltip">
+        {{#if misses.length}}
+        <div class="misses part-header" >
+                {{#each misses as |target t|}}
+                <img class="target-img highlight-token" src="{{target.img}}" data-token-id="{{target._id}}" title = "{{target.name}}">
+                {{/each}}
+                <span class="part-flavor">Miss</span>
+            </div>
+        {{/if}}
         {{#each parts}}
         <section class="tooltip-part">
             <div class="dice">

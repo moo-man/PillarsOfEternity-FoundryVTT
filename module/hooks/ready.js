@@ -47,6 +47,11 @@ export default function () {
                 actor.update(data.payload.updateData);
                 ui.notifications.notify(`Applied Damage to ${actor.name}`)
             }
+            else if (data.type == "applyEffect")
+            {
+                let actor = game.pillars.utility.getSpeaker(data.payload.speaker);
+                actor.createEmbeddedDocuments("ActiveEffect", data.payload.effects)
+            }
         })
 
         // Don't really like this but "ready" is needed for active effect to know if their item has been equipped or not

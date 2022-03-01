@@ -27,6 +27,8 @@ export class PillarsChat {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
         const message = game.messages.get(messageId);
         let check = message.getCheck();
+        if (!message.getCheck().actor.isOwner)
+            return ui.notifications.error("You don't have permission to interact with this check")
         check.rollDamage();
     }
 
@@ -35,6 +37,8 @@ export class PillarsChat {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
         const message = game.messages.get(messageId);
         let check = message.getCheck();
+        if (!message.getCheck().actor.isOwner)
+            return ui.notifications.error("You don't have permission to interact with this check")
         let item = check.item;
         let effectId = ev.currentTarget.dataset.effect;
         let effect = item.effects.get(effectId)
@@ -50,37 +54,43 @@ export class PillarsChat {
             delete effect.id
         }
 
-        canvas.tokens.controlled.forEach(t => {
-            t.actor.createEmbeddedDocuments("ActiveEffect", [effect])
+        let tokens = game.user.targets.size ?  Array.from(game.user.targets) :  canvas.tokens.controlled
+
+
+        tokens.forEach(t => {
+            if (!t.document.isOwner)
+                game.socket.emit("system.pillars-of-eternity", {type: "applyEffect" , payload : {effects : [effect], speaker : t.document.actor.speakerData(t)}})
+            else 
+                t.actor.createEmbeddedDocuments("ActiveEffect", [effect])
         })
     }
 
     static _onHoverInTargetImage(ev)
     {
-        event.preventDefault();
+        ev.preventDefault();
         if ( !canvas.ready ) return;
-        const li = event.target;
+        const li = ev.target;
         let tokenId = li.dataset.tokenId
         const token = canvas.tokens.get(tokenId);
         if ( token?.isVisible ) {
-          if ( !token._controlled ) token._onHoverIn(event);
+          if ( !token._controlled ) token._onHoverIn(ev);
           this._highlighted = token;
         }
     }
 
     static _onHoverOutTargetImage(ev)
     {
-        event.preventDefault();
-        if ( this._highlighted ) this._highlighted._onHoverOut(event);
+        ev.preventDefault();
+        if ( this._highlighted ) this._highlighted._onHoverOut(ev);
         this._highlighted = null;
     }
 
     
     static _onClickTargetImage(ev)
     {
-        event.preventDefault();
+        ev.preventDefault();
         if ( !canvas.ready ) return;
-        const li = event.target;
+        const li = ev.target;
         let tokenId = li.dataset.tokenId
         const token = canvas.tokens.get(tokenId);
         canvas.animatePan({x: token.center.x, y: token.center.y, duration: 250});

@@ -22,7 +22,7 @@ export default class PowerTemplate extends MeasuredTemplate {
 
     // Prepare template data
     templateData.direction = 0;
-    templateData.user = game.user._id,
+    templateData.user = game.user.id,
     templateData.x = 0,
     templateData.y = 0,
     templateData.fillColor = game.user.color

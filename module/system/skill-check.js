@@ -222,7 +222,6 @@ export default class SkillCheck
             return effectObjects
         }
 
-
         get checkData() { return this.data.checkData }
         get context() { return this.data.context}
         get result() { return this.data.result}

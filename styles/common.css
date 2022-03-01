@@ -105,6 +105,23 @@
   margin-right: 5px;
 }
 
+.message .misses {
+  display: flex;
+  justify-content: end;
+  padding-right: 25px;
+  margin: 10px 0px;
+  align-items: center;
+  padding-bottom: 2px;
+}
+
+.message .misses img {
+  opacity: 0.5;
+  width: 23px;
+  height: 23px;
+  margin: 0px 2px;
+  border: none
+}
+
 .message .part-targets {
   display : flex;
   justify-content: end;
