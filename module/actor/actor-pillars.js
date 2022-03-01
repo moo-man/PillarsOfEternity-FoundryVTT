@@ -524,34 +524,55 @@ export class PillarsActor extends Actor {
 
     }
 
-    longRest() {
-        let updates = []
+    _baseRest() {
+        let updates = { items : []}
+
+        // Short/Long rest both refill pools
         this.getItemTypes("powerSource").forEach(p => {
-            updates.push({_id : p.id, "data.pool.current" : p.pool.max})
+            updates.items.push({_id : p.id, "data.pool.current" : p.pool.max})
         })
 
-        this.items.filter(i => ["longRest", "encounter"].includes(i.powerRecharge)).forEach(i => {
-            updates.push({_id: i.id, "data.powerCharges.value" : i.powerCharges.max})
+
+        // Both rests reset encounter items
+        this.items.filter(i => i.powerRecharge == "encounter" ).forEach(i => {
+            updates.items.push({_id: i.id, "data.powerCharges.value" : i.powerCharges.max})
         })
 
-        this.items.filter(i => i.type == "power" && ["longRest", "encounter"].includes(i.embedded.spendType)).forEach(i => {
-            updates.push({_id: i.id, "data.embedded.uses.value" : i.embedded.uses.max})
+        this.items.filter(i => i.type == "power" && i.embedded.spendType == "encounter").forEach(i => {
+            updates.items.push({_id: i.id, "data.embedded.uses.value" : i.embedded.uses.max})
         })
 
-        return this.updateEmbeddedDocuments("Item", updates)
+        return updates
+
     }
 
-    encounterEnd() {
-        let updates = []
-        this.items.filter(i => ["encounter"].includes(i.powerRecharge)).forEach(i => {
-            updates.push({_id: i.id, "data.powerCharges.value" : i.powerCharges.max})
+    longRest() {
+        let updates = this._baseRest()
+
+        updates["data.health.value"] = 0;
+        updates["data.endurance.value"] = 0
+
+        this.items.filter(i => i.powerRecharge == "longRest").forEach(i => {
+            updates.items.push({_id: i.id, "data.powerCharges.value" : i.powerCharges.max})
         })
 
-        this.items.filter(i => i.type == "power" && ["encounter"].includes(i.embedded.spendType)).forEach(i => {
-            updates.push({_id: i.id, "data.embedded.uses.value" : i.embedded.uses.max})
+        this.items.filter(i => i.type == "power" && i.embedded.spendType == "longRest").forEach(i => {
+            updates.items.push({_id: i.id, "data.embedded.uses.value" : i.embedded.uses.max})
         })
+        
+        return this.update(updates)
+    }
 
-        return this.updateEmbeddedDocuments("Item", updates)
+    shortRest() {
+        let updates = this._baseRest()
+
+        if (!this.health.incap && !this.endurance.incap)
+        {
+            updates["data.health.value"] = 0;
+            updates["data.endurance.value"] = 0
+        }
+
+        return this.update(updates)
     }
 
 

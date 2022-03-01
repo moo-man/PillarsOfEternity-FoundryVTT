@@ -876,16 +876,16 @@ export class PillarsActorSheet extends ActorSheet {
     _onLongRestClick(ev) {
 
         new Dialog({
-            title : "Long Rest",
-            content :  "<p>Replenish power uses and pools?</p>",
+            title : "Rest",
+            content :  "<p>Short or Long Rest?</p>",
             buttons : {
-                yes : {
-                    label : "Yes",
-                    callback: () => this.actor.longRest()
+                long : {
+                    label : "Short Rest",
+                    callback: () => this.actor.shortRest()
                 },
-                no : {
-                    label: "No",
-                    callback: () => {}
+                short : {
+                    label: "Long Rest",
+                    callback: () => this.actor.longRest()
                 }
             }
         }).render(true);

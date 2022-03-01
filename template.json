@@ -491,8 +491,7 @@
             "modifier": {
                 "value": 0
             }
-        }
-    },
+        },
     "culture": {
         "templates": [
             "description"
@@ -588,4 +587,5 @@
             "description"
         ]
     }
+}
 }
