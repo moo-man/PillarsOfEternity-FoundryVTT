@@ -25,6 +25,19 @@ export class PillarsCombat extends Combat {
             this.turns.reverse()
     }
 
+    _sortCombatants(...args) {
+        if (args[0].combat.round == 0) // this function isn't bound so can't access `this`
+            return 0
+        else return super._sortCombatants(...args)
+    }
+
+    async startCombat() {
+        await super.startCombat();
+        this.setupTurns(); // Now that combat has started, sort combatants
+        ui.sidebar.tabs.combat.render(true) // Rerender to show sort
+
+    }
+
     get template() {
         return "systems/pillars-of-eternity/templates/apps/combat-tracker.html"
     }

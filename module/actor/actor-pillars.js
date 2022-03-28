@@ -23,8 +23,6 @@ export class PillarsActor extends Actor {
                     "token.name": data.name,                                      // Set token name to actor name
                     "token.bar1": { "attribute": "health" },                 // Default Bar 1 to Wounds
                     "token.bar2": { "attribute": "endurance" },               // Default Bar 2 to Advantage
-                    "token.displayName": CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,    // Default display name to be on owner hover
-                    "token.displayBars": CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,    // Default display bars to be on owner hover
                     "token.dimSight": 12,
                     "token.brightSight": 6,
                 })
