@@ -31,4 +31,49 @@ export default function() {
     bar.position.set(0, posY);
   }
 
+
+
+  TokenLayer.prototype.storeHistory = function(type, data) {
+    data = data.map(token => {
+      let obj = {}
+      obj.token = token
+      if (game.combat)
+      {
+        obj.combatant = game.combat.combatants.find(i => i.data.tokenId == token._id).toObject()
+      }
+      return obj
+    })
+    if ( this.history.length >= 10 ) this.history.shift();
+    this.history.push({type, data});
+  }
+
+  TokenLayer.prototype.undoHistory = function()
+  {
+    if ( !this.history.length ) return Promise.reject("No more tracked history to undo!");
+    let event = this.history.pop();
+    const type = this.constructor.documentName;
+
+    // Undo creation with deletion
+    if ( event.type === "create" ) {
+      const ids = event.data.map(d => d._id);
+      return canvas.scene.deleteEmbeddedDocuments(type, ids, {isUndo: true});
+    }
+
+    // Undo updates with update
+    else if ( event.type === "update" ) {
+      return canvas.scene.updateEmbeddedDocuments(type, event.data, {isUndo: true});
+    }
+
+    // Undo deletion with creation OVERRIDE - adds the combatant back to the tracker
+    else if ( event.type === "delete" ) {
+      let promise = canvas.scene.createEmbeddedDocuments(type, event.data.map(i => i.token), {isUndo: true, keepId: true});
+
+      if (game.combat)
+        game.combat.createEmbeddedDocuments("Combatant", event.data.map(i => i.combatant).filter(i => i), {isUndo: true, keepId: true});
+        
+      return promise
+    }
+  }
+
+
 }
