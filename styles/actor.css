@@ -858,3 +858,9 @@ height: calc(100% - 15px);
   width: 150px;
   margin: 10px;
 }
+
+
+.pillars-of-eternity.actor.sheet .endurance-action {
+  font-size: 14px;
+  margin: 3px;
+}

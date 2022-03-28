@@ -477,6 +477,7 @@ export class PillarsActorSheet extends ActorSheet {
         html.find(".box-click").click(this._onBoxClick.bind(this))
         html.find(".long-rest").click(this._onLongRestClick.bind(this))
         html.find(".embedded-value").mouseup(this._onEmbeddedValueClick.bind(this))
+        html.find(".endurance-action").click(this._onEnduranceActionClick.bind(this))
         html.find('.item:not(".tab-select")').each((i, li) => {
             li.setAttribute("draggable", true);
             li.addEventListener("dragstart", this._onDragStart.bind(this), false);
@@ -904,5 +905,10 @@ export class PillarsActorSheet extends ActorSheet {
         embedded.uses.value = Math.clamped(embedded.uses.value, 0, embedded.uses.max)
 
         item.update({"data.embedded" : embedded})
+    }
+
+    _onEnduranceActionClick(ev)
+    {
+        this.actor.enduranceAction(ev.currentTarget.dataset.type)
     }
 }

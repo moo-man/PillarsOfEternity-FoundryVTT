@@ -95,7 +95,7 @@
                     </div>
                 </div>
                 <div class="property-group {{#if actor.endurance.winded}}winded{{/if}}">
-                    <label>Endurance</label>
+                    <label>Endurance <a class="endurance-action" data-type="exert" title="Exert"><i class="fas fa-arrow-down"></i></a><a class="endurance-action" data-type="breath" title="Catch Breath"><i class="fas fa-arrow-up"></i></a></label>
                     <div class="status-array">
                         {{#each data.endurance.array as | value key| }}
                         {{#if (eq key ../data.endurance.threshold.winded)}}

@@ -573,6 +573,24 @@ export class PillarsActor extends Actor {
         return this.update(updates)
     }
 
+    enduranceAction(action)
+    {
+        let actionName
+        if (action == "exert")
+        {
+            this.update({"data.endurance.value" : Math.min(this.endurance.max, this.endurance.value + 2)} )
+            actionName = "Exert"
+        }
+        else if (action == "breath")
+        {
+            this.update({"data.endurance.value" : Math.max(0, this.endurance.value - 2)} )
+            actionName = "Catch Breath"
+        }
+
+        let content = `${this.name} used ${actionName}!`
+
+        ChatMessage.create({content, speaker : {alias: this.name}})
+    }
 
     hasCondition(condition) {
         return this.effects.find(i => i.conditionId == condition)
