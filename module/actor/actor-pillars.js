@@ -388,6 +388,9 @@ export class PillarsActor extends Actor {
                     throw ui.notifications.error("Not enough charges!")
             }
         }
+        else if (power.source.value == "spirits" && power.category.value == "phrase")
+            return // Phrases add 1 to power
+            
         else if (power.SourceItem.pool.current < power.level.value)
             throw ui.notifications.error("Not enough power!")
     }

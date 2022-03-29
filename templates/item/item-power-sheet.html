@@ -36,6 +36,21 @@
 
             </div>
 
+            {{#if (eq data.source.value "spirits") }}
+            <div class="form-group">
+                <label>Type</label>
+                <div class="form-fields">
+                    <select name="data.category.value">
+                        {{#select data.category.value}}
+                        <option value=""></option>
+                        <option value="phrase">Phrase</option>
+                        <option value="invocation">Invocation</option>
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+            {{/if}}
+
 
             <div class="form-group">
                 <label>Improvised</label>

@@ -31,7 +31,20 @@ export default class PowerCheck extends SkillCheck
                     embeddedParent.update({"data.powerCharges.value" : embeddedParent.powerCharges.value - this.power.embedded.chargeCost})
             }
             else // Not embedded item or is grimoire item
-                this.powerSource.update({"data.used.value" : true, "data.pool.current" : this.powerSource.pool.current - this.power.level.cost})
+            {
+                let update = {"data.used.value" : true}
+
+                if (this.power.source.value == "spirits" && this.power.category.value == "phrase") // If spirits and phrase, add 1 to pool
+                {
+                    update["data.pool.current"] = Math.min(this.powerSource.pool.current + 1, this.powerSource.pool.max)
+                }
+                else // if normal power just subtract cost as normal
+                {
+                    update["data.pool.current"] = this.powerSource.pool.current - this.power.level.cost
+                }
+
+                this.powerSource.update(update)
+            }
 
             this.data.result = this.roll.toJSON()
 
