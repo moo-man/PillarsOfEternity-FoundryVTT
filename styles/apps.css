@@ -162,14 +162,17 @@
     height: 100%;
 }
 
+#healing-dialog h3,
 #damage-dialog h3 {
     text-align: center;
     width: 100%
 }
+#healing-dialog li,
 #damage-dialog li {
     list-style: decimal;
 }
 
+#healing-dialog li .damage-element,
 #damage-dialog li .damage-element {
     flex: 1;
     justify-content: center;
@@ -177,50 +180,61 @@
     text-align:center;
 }
 
+#healing-dialog li .damage-element.control,
 #damage-dialog li .damage-element.control {
     flex: 0 0 20px;
 }
 
+#healing-dialog li .damage-element.target,
 #damage-dialog li .damage-element.target {
     display:flex;
     flex: 2
 }
 
+#healing-dialog li .damage-element.target img,
 #damage-dialog li .damage-element.target img {
     border: none;
     margin: 3px;
 }
 
 
+#healing-dialog li .damage-element.mult-crit,
 #damage-dialog li .damage-element.mult-crit {
     flex: 2
 }
 
+#healing-dialog li.damage-header,
 #damage-dialog li.damage-header {
     flex: 1
 }
 
+#healing-dialog ol,
 #damage-dialog ol {
     padding: 0px
 }
 
+#healing-dialog .damage,
 #damage-dialog .damage {
     display: flex;
     align-items: center;
     padding: 5px 0px 5px 0px
 }
 
+#healing-dialog .damage input,
+    #healing-dialog .damage select,
 #damage-dialog .damage input,
     #damage-dialog .damage select {
     margin: 0px 5px 0px 5px;
     height: 25px;
 }
 
+#healing-dialog .damage .target select,
 #damage-dialog .damage .target select {
     width: 100%
 }
 
 
+#healing-dialog .damage-control,
 #damage-dialog .damage-control {
     display: flex;
     justify-content: center;

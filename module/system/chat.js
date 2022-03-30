@@ -32,6 +32,17 @@ export class PillarsChat {
         check.rollDamage();
     }
 
+    static async _onHealingButtonClick(ev)
+    {
+        let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
+        const message = game.messages.get(messageId);
+        let check = message.getCheck();
+        if (!message.getCheck().actor.isOwner)
+            return ui.notifications.error("You don't have permission to interact with this check")
+        check.rollHealing();
+    }
+
+
     static async _onApplyEffectClick(ev) 
     {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")

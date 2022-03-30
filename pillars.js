@@ -30,6 +30,7 @@ import PowerCheck from "./module/system/power-check.js";
 import PillarsTokenDocument from "./module/system/token.js";
 import DamageRoll from "./module/system/damage-roll.js";
 import { PillarsNPCSheet } from "./module/actor/npc-sheet.js";
+import HealingDialog from "./module/apps/healing-dialog.js";
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -59,7 +60,8 @@ Hooks.on("init", () => {
       BookOfSeasons,
       RollDialog,
       ActorConfigure,
-      DamageDialog
+      DamageDialog,
+      HealingDialog
     },
     rollClass : {
       SkillCheck,

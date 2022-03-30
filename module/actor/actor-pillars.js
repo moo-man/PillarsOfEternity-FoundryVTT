@@ -198,6 +198,8 @@ export class PillarsActor extends Actor {
         this.endurance.incap = this.endurance.value >= (this.endurance.max + this.endurance.bonus)
         this.health.dead = this.health.value >= (this.health.max + this.health.death.modifier)
 
+        this.health.value = Math.max(this.health.value, this.health.wounds.value)
+
         if (this.type == "character") {
             let thresholds = game.pillars.config.agePointsDeathRank
             for (let pointThreshold in thresholds) {
@@ -746,6 +748,56 @@ export class PillarsActor extends Actor {
         return message
     }
 
+    async applyHealing(healing, type) {
+        let updateObj = {}
+        let message = "";
+
+        let healthPips = 0;
+        let endurancePips = 0;
+        let newHealth = this.health.value
+        
+        if (type == "health") {
+            healthPips = Math.floor(healing / this.damageIncrement.value)
+            let remainder = healing % this.damageIncrement.value
+
+            newHealth = this.health.value - healthPips - this.health.wounds.value // Offset health wounds value so endurance remainder is accurate
+            if (newHealth < 0) {
+
+                // Remainder of health pips go to endurance
+                endurancePips = Math.abs(newHealth);
+                newHealth = 0;
+            }
+
+            if (remainder > 0) 
+                endurancePips += 1;
+        }
+        if (type == "endurance") {
+            endurancePips = healing
+        }
+
+        let newEndurance = Math.max(0, this.endurance.value - endurancePips);
+
+        if (healthPips > 0) {
+            updateObj["data.health.value"] = newHealth
+            message += ` + ${healthPips} Health`
+        }
+
+        if (endurancePips > 0) {
+            updateObj["data.endurance.value"] = newEndurance
+            message += ` + ${endurancePips} Endurance`
+        }
+
+
+        if (this.isOwner || !game.settings.get("pillars-of-eternity", "playerApplyDamage"))
+            this.update(updateObj)
+
+        else if (game.settings.get("pillars-of-eternity", "playerApplyDamage"))
+            game.socket.emit("system.pillars-of-eternity", { type: "updateActor", payload: { updateData: updateObj, speaker: this.speakerData() } })
+
+        return message
+    }
+
+
     // addWound(type)
     // {
     //     return this.update({[`data.health.wounds.${type}`] : this.health.wounds[type] + 1 })
@@ -787,5 +839,5 @@ export class PillarsActor extends Actor {
     get damageIncrement() {return this.data.data.damageIncrement}
 
     get combat() { return this.data.data.combat }
-    //#endregion
 }
+    //#endregion

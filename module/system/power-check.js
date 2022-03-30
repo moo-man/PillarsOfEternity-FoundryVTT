@@ -49,9 +49,7 @@ export default class PowerCheck extends SkillCheck
             this.data.result = this.roll.toJSON()
 
             this.handleEquippedWeaponRange()
-
         }
-
 
         async handleEquippedWeaponRange() {
             let range = this.power.range.find(r => r.value == "equippedWeapon");

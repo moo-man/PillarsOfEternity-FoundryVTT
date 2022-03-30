@@ -194,6 +194,16 @@ export default class SkillCheck
             let roll = new DamageRoll(damages, this);
             await roll.rollDice()
         }
+
+        async rollHealing() {
+
+            let healing = await new Promise((resolve, reject) => {
+                new game.pillars.apps.HealingDialog(this.item, this, this.targets).render(true, {resolve, reject})
+            })
+
+            let roll = new DamageRoll(healing, this);
+            await roll.rollDice()
+        }
         
         updateMessageFlags()
         {
@@ -263,6 +273,10 @@ export default class SkillCheck
 
         get doesDamage() {
             return this.item?.damage?.value?.length  > 0
+        }
+
+        get doesHealing() {
+            return this.item?.healing?.length  > 0
         }
 
         get hasEffects() {

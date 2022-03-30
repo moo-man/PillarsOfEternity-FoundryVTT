@@ -5,7 +5,8 @@ export default class DamageRoll {
             damages : damages,
             checkId : check?.message?.id,
             damageData : [],
-            messageIds : []
+            messageIds : [],
+            healing : damages?.some(d => d.healing)
         }
         if (damages)
             this.damages = this.consolidateDamages(damages)
@@ -43,7 +44,12 @@ export default class DamageRoll {
                 damage.target = [this.calculateCrit(damage.target, damage)]
             }
 
-            let existing = consolidated.find(d => d.base == damage.base && d.crit == damage.crit && d.label == damage.label)
+            let existing
+            if (damage.healing)
+                existing = consolidated.find(d => d.value == damage.value && d.type == damage.type)
+            else 
+                existing = consolidated.find(d => d.base == damage.base && d.crit == damage.crit && d.label == damage.label)
+
             if (existing)
             {
                 // Consolidated damage should have the highest multiplier
@@ -71,8 +77,8 @@ export default class DamageRoll {
     calculateCrit(token, damage)
     {
         try {
-            if (!token)
-                return {token, crit: 0}
+            if (!token || damage.healing)
+                return {token : token?.toObject(), crit: 0}
             let defense = damage.defense.toLowerCase() || "deflection"
             let margin = this.check.result.total - token.actor.defenses[defense].value
             let crit = Number.isNumeric(damage.mult) ? damage.mult : Math.floor(margin / 5)
@@ -90,14 +96,26 @@ export default class DamageRoll {
     {
         for(let i = 0; i < this.damages.length; i++){
             let damage = this.damages[i]
-            let multiplier = damage.mult
-            let baseDice = [new Die({number : parseInt(damage.base.split("d")[0]), faces : parseInt(damage.base.split("d")[1]), options : {flavor: "Hit", crit : "base", targets : damage.target.filter(t => t.crit == 0)}})]
+            let baseDice = []
             let critDice = []
-            for(let i = 0 ; i < multiplier; i++)
+            if (!damage.healing)
             {
-                critDice.push(new OperatorTerm({operator : "+"}))
-                critDice.push(new Die({number : parseInt(damage.crit.split("d")[0]), faces : parseInt(damage.crit.split("d")[1]), options :  {flavor : `${i + 1}x Crit`, crit : i + 1, targets : damage.target.filter(t => t.crit == (i + 1))}}))
+                let multiplier = damage.mult
+                baseDice = [new Die({number : parseInt(damage.base.split("d")[0]), faces : parseInt(damage.base.split("d")[1]), options : {flavor: "Hit", crit : "base", targets : damage.target.filter(t => t.crit == 0)}})]
+                for(let i = 0 ; i < multiplier; i++)
+                {
+                    critDice.push(new OperatorTerm({operator : "+"}))
+                    critDice.push(new Die({number : parseInt(damage.crit.split("d")[0]), faces : parseInt(damage.crit.split("d")[1]), options :  {flavor : `${i + 1}x Crit`, crit : i + 1, targets : damage.target.filter(t => t.crit == (i + 1))}}))
+                }
             }
+            else  // If healing
+            {
+                if (!Number.isNumeric(damage.value)) // Is die roll
+                    baseDice = [new Die({number : parseInt(damage.value.split("d")[0]), faces : parseInt(damage.value.split("d")[1]), options : {flavor: "Heal", crit : "base", targets : damage.target.filter(t => t.crit == 0)}})]
+                else 
+                    baseDice = [new NumericTerm({number : parseInt(damage.value), options : {flavor: "Heal", crit : "base", targets : damage.target.filter(t => t.crit == 0)}})]
+            }
+
             let dice = baseDice.concat(critDice)
             let roll = Roll.fromTerms(dice)
             await roll.evaluate({async: true})
@@ -119,14 +137,22 @@ export default class DamageRoll {
 
     }
 
+
     async sendToChat() 
     {
         this.damages.forEach(async (damage, i) => {
             let type = game.pillars.config.damageTypes[damage.type]
+            let label = "Damage"
+            if (damage.healing)
+            {
+                type = damage.type[0].toUpperCase() + damage.type.substr(1);
+                label = "Healing"
+            }
+
             let html = await renderTemplate("systems/pillars-of-eternity/templates/chat/damage.html", damage)
 
             let chatData = {
-                flavor : damage.label ? `${damage.label} Damage - ${type}` : `${item.name} Damage ${damages.length > 1 ? i + 1 : ""} - ${type}`, 
+                flavor : damage.label ? `${damage.label} ${label} - ${type}` : `${item.name} ${label} ${damages.length > 1 ? i + 1 : ""} - ${type}`, 
                 speaker : this.item.actor.speakerData(),
                 content: html,
                 type : CONST.CHAT_MESSAGE_TYPES.ROLL,
@@ -154,6 +180,18 @@ export default class DamageRoll {
       }
       ChatMessage.create({content : html})
     }
+    
+    async applyHealing(index) {
+        let html = ``
+        let damage = this.damages[index]
+        for (let target of damage.target)
+        {
+            let token = canvas.tokens.get(target.token._id)
+            let msg = await token.actor.applyHealing(damage.roll.total, damage.type)
+            html += `<b>${token.name}</b> : ${msg}<br><br>`  
+        }
+        ChatMessage.create({content : html})
+      }
 
     get check() {
         return game.messages.get(this.data.checkId).getCheck()

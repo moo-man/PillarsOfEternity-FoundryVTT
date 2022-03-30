@@ -2,6 +2,9 @@
 {{#if check.doesDamage}}
 <button type="button" class="roll-damage">Roll Damage</button>
 {{/if}}
+{{#if check.doesHealing}}
+<button type="button" class="roll-healing">Roll Healing</button>
+{{/if}}
 {{#if check.targets.length}}
 <div class="tags">
     <i class="fas fa-crosshairs"></i>

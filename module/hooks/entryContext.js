@@ -6,8 +6,14 @@ export default function () {
  function addChatMessageContextOptions (html, options) {
     let isDamage = li => {
       const message = game.messages.get(li.data("messageId"));
-      return message?.isRoll && getProperty(message, "data.flags.pillars-of-eternity.damageData")
+      return message?.isRoll && getProperty(message, "data.flags.pillars-of-eternity.damageData") && !isHealing(li)
     };
+
+    let isHealing = li => {
+      const message = game.messages.get(li.data("messageId"));
+      return message?.isRoll && getProperty(message, "data.flags.pillars-of-eternity.damageData.healing")
+    };
+
 
     let canAddTargets = li => {
       const message = game.messages.get(li.data("messageId"));
@@ -23,6 +29,18 @@ export default function () {
           let roll = message.getCheck()
           let index = parseInt(message.getFlag("pillars-of-eternity", "damageIndex"))
           roll.applyDamage(index)
+
+        }
+      },
+      {
+        name: "Apply Healing",
+        icon: '<i class="fas fa-user-plus"></i>',
+        condition: isHealing,
+        callback: li => {
+          const message = game.messages.get(li.data("messageId"));
+          let roll = message.getCheck()
+          let index = parseInt(message.getFlag("pillars-of-eternity", "damageIndex"))
+          roll.applyHealing(index)
 
         }
       },
