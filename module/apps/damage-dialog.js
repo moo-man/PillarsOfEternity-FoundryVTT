@@ -48,7 +48,8 @@ export default class DamageDialog extends Application
         damages = foundry.utils.deepClone(this.item.damage.value)
         if (this.check.addedProperties?.damage?.length)
             damages = damages.concat(this.check.addedProperties.damage)
-
+        
+        damages = damages.filter(d => d.crit || d.base)
         damages.forEach((damage, i) => {
             damage.mult = undefined
             if (!damage.label) damage.label = this.item.name

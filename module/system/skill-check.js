@@ -272,7 +272,7 @@ export default class SkillCheck
         }
 
         get doesDamage() {
-            return this.item?.damage?.value?.length  > 0
+            return this.item?.damage?.value?.filter(d => d.base || d.crit)?.length  > 0
         }
 
         get doesHealing() {
