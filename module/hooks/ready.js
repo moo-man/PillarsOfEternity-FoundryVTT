@@ -43,19 +43,28 @@ export default function () {
         game.socket.on("system.pillars-of-eternity", data => {
             if (data.type == "updateActor")
             {
-                let actor = game.pillars.utility.getSpeaker(data.payload.speaker);
-                actor.update(data.payload.updateData);
-                ui.notifications.notify(`Applied Damage to ${actor.name}`)
+                if (game.user.isGM)
+                {
+                    let actor = game.pillars.utility.getSpeaker(data.payload.speaker);
+                    actor.update(data.payload.updateData);
+                    ui.notifications.notify(`Applied Damage to ${actor.name}`)
+                }
             }
             else if (data.type == "applyEffect")
             {
-                let actor = game.pillars.utility.getSpeaker(data.payload.speaker);
-                actor.createEmbeddedDocuments("ActiveEffect", data.payload.effects)
+                if (game.user.isGM)
+                {
+                    let actor = game.pillars.utility.getSpeaker(data.payload.speaker);
+                    actor.createEmbeddedDocuments("ActiveEffect", data.payload.effects)
+                }
             }
             else if (data.type == "updateMessage")
             {
-                let message = game.messages.get(data.payload.id);
-                message.update(data.payload.update)
+                if (game.user.isGM)
+                {
+                    let message = game.messages.get(data.payload.id);
+                    message.update(data.payload.update)
+                }
             }
         })
 
