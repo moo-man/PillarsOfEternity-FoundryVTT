@@ -6,7 +6,8 @@ export default class DamageRoll {
             checkId : check?.message?.id,
             damageData : [],
             messageIds : [],
-            healing : damages?.some(d => d.healing)
+            healing : damages?.some(d => d.healing),
+            usingShield : [] // index of target using shields
         }
         if (damages)
             this.damages = this.consolidateDamages(damages)
@@ -82,7 +83,7 @@ export default class DamageRoll {
             let defense = damage.defense.toLowerCase() || "deflection"
             let margin = this.check.result.total - token.actor.defenses[defense].value
             let crit = Number.isNumeric(damage.mult) ? damage.mult : Math.floor(margin / 5)
-            return {token : token.toObject(), crit}
+            return {token : token.toObject(), crit, shield: !!token.actor.equippedShield}
         }
         catch (e)
         {
@@ -137,8 +138,35 @@ export default class DamageRoll {
 
     }
 
+    toggleShield(id)
+    {
+        if (!canvas.tokens.get(id)?.actor?.isOwner)
+            return 
 
-    async sendToChat() 
+        let html = $(this.message.data.content)
+        let shield = html.find(`.shield[data-id="${id}"]`)[0]
+        
+        if (shield.classList.contains("active"))
+        {
+            this.data.usingShield = this.data.usingShield.filter(_id => _id != id)
+            shield.classList.remove("active")
+        }
+        else 
+        {
+            this.data.usingShield.push(id)
+            shield.classList.add("active")
+        }
+
+        let update = {content : html[0].outerHTML, "flags.pillars-of-eternity.damageData" : this.data}
+        
+        if (game.user.isGM)
+            return this.message.update(update)
+        else
+            game.socket.emit("system.pillars-of-eternity", {type : "updateMessage", payload : {id: this.message.id, update}})
+    }
+
+
+    async sendToChat(newMessage = false) 
     {
         this.damages.forEach(async (damage, i) => {
             let type = game.pillars.config.damageTypes[damage.type]
@@ -174,7 +202,7 @@ export default class DamageRoll {
         for(let t of part.options.targets)
         {
             let token = canvas.tokens.get(t.token._id)
-            let msg = await token.actor.applyDamage(part.options.accumulator, damage.type)
+            let msg = await token.actor.applyDamage(part.options.accumulator, damage.type, {shield : this.data.usingShield.includes(t.token._id)})
             html += `<b>${t.token.name}</b> : ${msg}<br><br>`  
         }
       }
@@ -195,6 +223,10 @@ export default class DamageRoll {
 
     get check() {
         return game.messages.get(this.data.checkId).getCheck()
+    }
+
+    get message() {
+        return game.messages.get(this.data.messageId);
     }
 
     get item () {

@@ -108,4 +108,13 @@ export class PillarsChat {
     }
 
 
+    static _onShieldClick(ev){
+        let id = ev.currentTarget.dataset.id
+        let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
+        const message = game.messages.get(messageId);
+        let check = message.getCheck();
+        check.toggleShield(id)
+        
+    }
+
 }   

@@ -175,8 +175,8 @@ export class PillarsActor extends Actor {
 
     prepareDerivedData() {
 
-        let equippedArmor = this.getItemTypes("armor").filter(i => i.equipped.value)[0]
-        let equippedShield = this.getItemTypes("shield").filter(i => i.equipped.value)[0]
+        let equippedArmor = this.equippedArmor
+        let equippedShield = this.equippedShield
 
         this.run.value += this.stride.value * 2
 
@@ -242,8 +242,8 @@ export class PillarsActor extends Actor {
 
 
     prepareCombat() {
-        let equippedArmor = this.getItemTypes("armor").filter(i => i.equipped.value)[0]
-        let equippedShield = this.getItemTypes("shield").filter(i => i.equipped.value)[0]
+        let equippedArmor = this.equippedArmor
+        let equippedShield = this.equippedShield
 
         if (equippedArmor) {
             this.soak.base += equippedArmor.soak.value || 0
@@ -692,7 +692,7 @@ export class PillarsActor extends Actor {
             })
         }
 
-    async applyDamage(damage, type) {
+    async applyDamage(damage, type, options) {
         if (damage < this.toughness.value)
             return "No Damage"
     
@@ -717,7 +717,18 @@ export class PillarsActor extends Actor {
             break;
         }
 
+        if (options.shield)
+            soak += this.equippedShield.Soak
+        
         let message = `${damage} Damage - ${soak} Soak`
+
+        if (options.shield)
+        {
+            message += ` (${this.equippedShield.Soak} Shield)`
+            updateObj.items = [this.calculateShieldDamage(this.equippedShield, damage)]
+        }
+
+
 
 
         if (damage > this.toughness.value)
@@ -726,9 +737,9 @@ export class PillarsActor extends Actor {
             message += " - 1 Endurance"
         }
 
-        if (damage > this.toughness.value && damage > this.soak.base)
+        if (damage > this.toughness.value && damage > soak)
         {
-            let damageMinusSoak = damage - this.soak.base
+            let damageMinusSoak = damage - soak
             let pips = Math.floor(damageMinusSoak / this.damageIncrement.value)
             updateObj["data.health.value"] = this.health.value + pips
             message += ` - ${pips} Health`
@@ -742,6 +753,7 @@ export class PillarsActor extends Actor {
 
         if (this.isOwner || !game.settings.get("pillars-of-eternity", "playerApplyDamage"))
             this.update(updateObj)
+        
         else if (game.settings.get("pillars-of-eternity", "playerApplyDamage"))
             game.socket.emit("system.pillars-of-eternity", {type : "updateActor", payload: {updateData : updateObj, speaker : this.speakerData()}})
 
@@ -797,6 +809,15 @@ export class PillarsActor extends Actor {
         return message
     }
 
+    calculateShieldDamage(shield, damage)
+    {
+        let damageToShield = Math.min(shield.Soak, damage)
+
+        let shieldObj = shield.toObject();
+        shieldObj.data.health.current -= damageToShield
+        return shieldObj // Return data instead of updating it to send it with the rest of the update
+    }
+
 
     // addWound(type)
     // {
@@ -818,6 +839,13 @@ export class PillarsActor extends Actor {
 
     // @@@@@@@ ITEM GETTERS @@@@@@@@@
 
+    get equippedShield() {
+        return this.getItemTypes("shield").filter(i => i.equipped.value)[0]
+    }
+
+    get equippedArmor() {
+        return this.getItemTypes("armor").filter(i => i.equipped.value)[0]
+    }
 
     // @@@@@@@@ DATA GETTERS @@@@@@@@@@
 

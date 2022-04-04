@@ -133,3 +133,29 @@
   margin: 0px 2px;
   border : none;
 }
+
+.message .part-targets .shield img  {
+  filter: invert(40.4%) sepia(0%) saturate(0%) hue-rotate( 
+    0deg ) brightness(0%) contrast(119%);
+    margin-bottom: -8px;
+  }
+
+  .message .part-targets .shield {
+    opacity: 0.1;
+  }
+    .message .part-targets .shield.active {
+    opacity: 0.4
+  }
+
+  .message .part-targets .target-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+.dice-tooltip .part-header .part-total, 
+.dice-tooltip .part-header .part-flavor, 
+.dice-tooltip .part-header .part-formula {
+  display: flex;
+  align-items: center;
+}

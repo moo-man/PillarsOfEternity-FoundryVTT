@@ -551,6 +551,10 @@ export class PillarsItem extends Item {
         return string
     }
 
+    get Soak() {
+        return Math.min(this.soak.value, this.health.current)
+    }
+
     displayGroupKey(type) {
         try {
             let groupIndex = this.getFlag("pillars-of-eternity", "displayGroup")
