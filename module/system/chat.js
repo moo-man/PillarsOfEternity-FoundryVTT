@@ -117,4 +117,28 @@ export class PillarsChat {
         
     }
 
+    static _onAddSummonClick(ev) 
+    {
+        let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
+        const message = game.messages.get(messageId);
+        let check = message.getCheck();
+        if (!message.getCheck().actor.isOwner)
+            return ui.notifications.error("You don't have permission to interact with this check")
+        let item = check.item;
+        let index= ev.currentTarget.dataset.index;
+        let itemData = duplicate(item.summons[index].data);
+
+        itemData.data.equipped.value = true;
+
+        let tokens = game.user.targets.size ?  Array.from(game.user.targets) :  canvas.tokens.controlled
+
+        tokens.forEach(t => {
+            if (!t.document.isOwner)
+                game.socket.emit("system.pillars-of-eternity", {type: "addItems" , payload : {items : [itemData], speaker : t.document.actor.speakerData(t)}})
+            else 
+                t.actor.createEmbeddedDocuments("Item", [itemData])
+
+            ui.notifications.notify(`${itemData.name} created on ${t.document.name}`)
+        })
+    }
 }   

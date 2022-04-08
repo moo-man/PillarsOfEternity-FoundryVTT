@@ -5,6 +5,14 @@
 {{#if check.doesHealing}}
 <button type="button" class="roll-healing">Roll Healing</button>
 {{/if}}
+
+{{log check.power}}
+{{#if check.power.summons.length}}
+    {{#each check.power.summons as |summon s|}}
+    <button type="button" data-index="{{s}}" class="add-summon"><img src="{{summon.data.img}}">Add {{summon.data.name}}</button>
+    {{/each}}
+{{/if}}
+
 {{#if check.targets.length}}
 <div class="tags">
     <i class="fas fa-crosshairs"></i>

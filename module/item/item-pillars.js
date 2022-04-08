@@ -384,6 +384,8 @@ export class PillarsItem extends Item {
             }
             for (let duration of this.duration)
                 pl += values.powerDurations[duration.value]
+            for (let summon of this.summons)
+                pl += summon.modifier || 0
 
 
             for (let misc of this.misc)
@@ -694,6 +696,7 @@ export class PillarsItem extends Item {
     get level() {return this.data.data.level}
     get healing() {return this.data.data.healing}
     get toughness() {return this.data.data.toughness}
+    get summons() {return this.data.data.summons}
     get stride() {return this.data.data.stride}
     get run() {return this.data.data.run}
     get improvised() {return this.data.data.improvised}

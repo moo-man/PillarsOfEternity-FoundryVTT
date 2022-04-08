@@ -293,6 +293,25 @@
                 </div>
             </div>
 
+
+            <div class="form-group power-group" data-property="summons">
+                <h3>Summons<a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each  item.summons as |summon i|}}
+                    <div class="property-inputs" data-index="{{i}}">
+                        <input type="text" data-path="group" class="power-property group" title="Group" value="{{summon.group}}">
+                        <div class="power-property summon">
+                            <img src="{{summon.data.img}}"/>
+                            <a>{{summon.data.name}}</a>
+                        </div>
+                        <input type="number" data-path="modifier" class="power-property group" title="Abstract Modifier" value="{{summon.modifier}}">
+                        <div class="property-control">
+                            <a class="remove-property"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
             
             <div class="form-group power-group" data-property="misc">
                 <h3>Misc. <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>

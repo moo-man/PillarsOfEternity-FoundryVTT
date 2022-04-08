@@ -180,6 +180,19 @@ form .form-group.power-group h3 {
   flex: 0 0 20px;
 }
 
+.pillars-of-eternity.item.sheet .property-list .property-inputs .power-property img {
+  border: none;
+  height: 25px;
+  width: 25px;
+}
+
+.pillars-of-eternity.item.sheet .property-list .property-inputs .power-property.summon {
+  align-items: center;
+  display: flex;
+}
+
+
+
 .pillars-of-eternity.item.sheet .property-button{
   width: 100%;
   display: flex;

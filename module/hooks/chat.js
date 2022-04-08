@@ -15,6 +15,7 @@ export default function () {
         html.on("mouseleave", ".highlight-token", PillarsChat._onHoverOutTargetImage)
         html.on("click", ".highlight-token", PillarsChat._onClickTargetImage)
         html.on("click", ".shield", PillarsChat._onShieldClick)
+        html.on("click", ".add-summon", PillarsChat._onAddSummonClick)
     });
 
 

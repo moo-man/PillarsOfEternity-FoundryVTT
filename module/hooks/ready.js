@@ -66,6 +66,14 @@ export default function () {
                     message.update(data.payload.update)
                 }
             }
+            else if (data.type == "addItems")
+            {
+                if (game.user.isGM)
+                {
+                    let actor = game.pillars.utility.getSpeaker(data.payload.speaker);
+                    actor.createEmbeddedDocuments("Item", data.payload.items)
+                }
+            }
         })
 
         // Don't really like this but "ready" is needed for active effect to know if their item has been equipped or not
