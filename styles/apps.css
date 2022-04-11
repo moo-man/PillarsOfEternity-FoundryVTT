@@ -291,3 +291,25 @@
     height: calc(100% - 100px);
     resize: none;
   } 
+
+  
+#combat li.combatant .token-resource {
+    display: flex;
+    align-items: center;
+    
+}
+
+#combat li.combatant .token-resource > *{
+    padding: 0px 3px;
+}
+
+#combat li.combatant .token-resource .token-move {
+    opacity: 0.5
+
+}
+
+
+#combat li.combatant .token-resource .token-move.running {
+    opacity: 1;
+    color: red
+}

@@ -75,11 +75,20 @@
                 </div>
             </div>
 
-            {{#if this.hasResource}}
+            {{#unless ../combat.phase}}
             <div class="token-resource">
-                <span class="resource">{{this.resource}}</span>
+                {{#if this.owner}}
+                <span class="resource">{{this.move.counter}}/{{this.move.stride}}</span>
+                {{/if}}
+                <a title="Stride Counter - Left/Right click to manually increase/decrease" class="token-move {{#if this.move.running}}running{{/if}}"><i class="fas fa-running"></i></a>
+            </div>
+            {{else}}
+            {{#if this.move.running}}
+            <div class="token-resource">
+                <a class="token-move {{#if this.move.running}}running{{/if}}"><i class="fas fa-running"></i></a>
             </div>
             {{/if}}
+            {{/unless}}
 
             <div class="token-initiative">
                 {{#if this.hasRolled}}

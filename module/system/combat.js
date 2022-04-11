@@ -16,7 +16,10 @@ export class PillarsCombat extends Combat {
             data["flags.pillars-of-eternity.phase"] = 1
         }
         else if (data.turn == 0 && data.round > 1 && this.phase == 1)
+        {
             data["flags.pillars-of-eternity.phase"] = 0
+            data.combatants = this.combatants.map(c => c.resetMoveCounter())
+        }
     }
 
     setupTurns() {

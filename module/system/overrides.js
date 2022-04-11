@@ -34,17 +34,22 @@ export default function() {
 
 
   TokenLayer.prototype.storeHistory = function(type, data) {
-    data = data.map(token => {
-      let obj = {}
-      obj.token = token
-      if (game.combat)
-      {
-        obj.combatant = game.combat.combatants.find(i => i.data.tokenId == token._id).toObject()
-      }
-      return obj
-    })
+    if (type == "delete")
+    {
+      data = data.map(token => {
+        let obj = {}
+        obj.token = token
+        if (game.combat)
+        {
+          obj.combatant = game.combat.combatants.find(i => i.data.tokenId == token._id)?.toObject()
+        }
+        return obj
+      })
+    }
+    
     if ( this.history.length >= 10 ) this.history.shift();
     this.history.push({type, data});
+
   }
 
   TokenLayer.prototype.undoHistory = function()
