@@ -719,7 +719,7 @@ export class PillarsItem extends Item {
         duration : {group: "", value : "momentary"},
         healing : {group: "", value : "", type:"health"},
         misc : {group : "", value : "", modifier : 0},
-        "damage.value" : {text : "", group: "",base : "",crit : "",defense : "deflection",type : "physical", damages: "health"},
+        "damage.value" : {text : "", group: "",base : "",crit : "",defense : "deflection",type : "physical", defaultCrit : 0},
         "base.effects" : {text: "", group: "", value : "", defense : ""}
       }
 }

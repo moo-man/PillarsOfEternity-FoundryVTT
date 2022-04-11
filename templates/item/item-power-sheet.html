@@ -152,6 +152,7 @@
                     <input type="text" data-path="group" class="power-property group" title="Group" value="{{damage.group}}">
                     <input type="text" data-path="base" class="power-property" placeholder="Base" value="{{damage.base}}">
                     <input type="text" data-path="crit" class="power-property" placeholder="Crit" value="{{damage.crit}}">
+                    <input type="number" data-path="defaultCrit" class="power-property group" title="Default Critical: Crit dice start at this amount" value="{{damage.defaultCrit}}">
                     <select data-path="type" class="power-property type">
                         {{#select damage.type}}
                         {{#each (config "damageTypes") as |type t|}}
@@ -167,12 +168,7 @@
                         {{/each}}
                         {{/select}}
                     </select>
-                    <select data-path="damages" class="power-property">
-                        {{#select damage.damages}}
-                        <option value="health">Health</option>
-                        <option value="endurance">Endurance</option>
-                        {{/select}}
-                    </select>
+   
                     <input type="text" data-path="text" class="power-property" placeholder="Text" value="{{damage.text}}">
                     <div class="property-control">
                         <a class="remove-property"><i class="fas fa-times"></i></a>
