@@ -384,6 +384,8 @@ export class PillarsItem extends Item {
             }
             for (let duration of this.duration)
                 pl += values.powerDurations[duration.value]
+            for (let summon of this.summons)
+                pl += summon.modifier || 0
 
 
             for (let misc of this.misc)
@@ -551,6 +553,10 @@ export class PillarsItem extends Item {
         return string
     }
 
+    get Soak() {
+        return Math.min(this.soak.value, this.health.current)
+    }
+
     displayGroupKey(type) {
         try {
             let groupIndex = this.getFlag("pillars-of-eternity", "displayGroup")
@@ -690,6 +696,7 @@ export class PillarsItem extends Item {
     get level() {return this.data.data.level}
     get healing() {return this.data.data.healing}
     get toughness() {return this.data.data.toughness}
+    get summons() {return this.data.data.summons}
     get stride() {return this.data.data.stride}
     get run() {return this.data.data.run}
     get improvised() {return this.data.data.improvised}
@@ -712,7 +719,7 @@ export class PillarsItem extends Item {
         duration : {group: "", value : "momentary"},
         healing : {group: "", value : "", type:"health"},
         misc : {group : "", value : "", modifier : 0},
-        "damage.value" : {text : "", group: "",base : "",crit : "",defense : "deflection",type : "physical", damages: "health"},
+        "damage.value" : {text : "", group: "",base : "",crit : "",defense : "deflection",type : "physical", defaultCrit : 0},
         "base.effects" : {text: "", group: "", value : "", defense : ""}
       }
 }

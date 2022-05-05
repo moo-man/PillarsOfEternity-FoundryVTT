@@ -16,13 +16,29 @@ export class PillarsCombat extends Combat {
             data["flags.pillars-of-eternity.phase"] = 1
         }
         else if (data.turn == 0 && data.round > 1 && this.phase == 1)
+        {
             data["flags.pillars-of-eternity.phase"] = 0
+            data.combatants = this.combatants.map(c => c.resetMoveCounter())
+        }
     }
 
     setupTurns() {
         super.setupTurns()
         if (this.phase == 0)
             this.turns.reverse()
+    }
+
+    _sortCombatants(...args) {
+        if (args[0].combat.round == 0) // this function isn't bound so can't access `this`
+            return 0
+        else return super._sortCombatants(...args)
+    }
+
+    async startCombat() {
+        await super.startCombat();
+        this.setupTurns(); // Now that combat has started, sort combatants
+        ui.sidebar.tabs.combat.render(true) // Rerender to show sort
+
     }
 
     get template() {

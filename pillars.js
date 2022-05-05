@@ -30,6 +30,8 @@ import PowerCheck from "./module/system/power-check.js";
 import PillarsTokenDocument from "./module/system/token.js";
 import DamageRoll from "./module/system/damage-roll.js";
 import { PillarsNPCSheet } from "./module/actor/npc-sheet.js";
+import HealingDialog from "./module/apps/healing-dialog.js";
+import { PillarsCombatant } from "./module/system/combatant.js";
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -46,6 +48,7 @@ Hooks.on("init", () => {
   CONFIG.Actor.documentClass = PillarsActor;
   CONFIG.Item.documentClass = PillarsItem;
   CONFIG.Combat.documentClass = PillarsCombat;
+  CONFIG.Combatant.documentClass = PillarsCombatant;
   CONFIG.ActiveEffect.documentClass = PillarsActiveEffect;
   CONFIG.ActiveEffect.sheetClass = PillarsEffectConfig;
   CONFIG.Token.documentClass = PillarsTokenDocument
@@ -59,7 +62,8 @@ Hooks.on("init", () => {
       BookOfSeasons,
       RollDialog,
       ActorConfigure,
-      DamageDialog
+      DamageDialog,
+      HealingDialog
     },
     rollClass : {
       SkillCheck,

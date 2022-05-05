@@ -10,6 +10,7 @@ export default class DamageDialog extends Application
         this.targets = targets//.map(i => i.document)
         this.disabled = [] // unselectable targets due to not exceeding defense
         this.additionalDamages = 0
+        this.addedCrits = 0;
         this.damages = this.constructDamages()
         this.assignTargets()
         this.calculateCritDice()
@@ -47,8 +48,13 @@ export default class DamageDialog extends Application
         let damages = []
         damages = foundry.utils.deepClone(this.item.damage.value)
         if (this.check.addedProperties?.damage?.length)
+        {
+            // Separate 
+            this.addedCrits = this.check.addedProperties.damage.filter(d => !d.base && !d.crit && d.defaultCrit).reduce((prev, current) => prev += current.defaultCrit, 0)
             damages = damages.concat(this.check.addedProperties.damage)
-
+        }
+        
+        damages = damages.filter(d => d.crit || d.base)
         damages.forEach((damage, i) => {
             damage.mult = undefined
             if (!damage.label) damage.label = this.item.name
@@ -68,18 +74,31 @@ export default class DamageDialog extends Application
             return false
 
         try {
-            for (let damage of this.damages.filter(d => d.target))
+            for (let damage of this.damages)
             {
+                if (!damage.target)
+                    damage.mult = this.addedCrits;
+
                 let defense = damage.defense.toLowerCase() || "deflection"
                 let target = this.targets.find(i => i.id == damage.target)
                 let margin = this.check.result.total - target.actor.defenses[defense].value
                 let multiplier = Math.floor(margin / 5)
                 damage.mult = this.check.requiresRoll ? multiplier : 0;
-                
+
+                // don't add default crits unless the attack hit
+                if (damage.mult >= 0)
+                {
+                    damage.mult += this.addedCrits
+                    damage.mult += damage.defaultCrit
+                }
+
+                // Don't try to use a multiplier if no crit dice
                 if (!damage.crit || damage.crit == 0) // == is important here
                 {
                     damage.mult = 0
                 }
+
+                // If the attack didn't hit, disable the target
                 if (damage.mult < 0)
                 {
                     if (!this.disabled.find(t => t.id == target.id))

@@ -91,14 +91,14 @@
   margin-bottom: 5px;
 }
 
-.message .pillars-of-eternity.check .apply-effect{
+.message .pillars-of-eternity.check button{
   display: flex;
   text-align: center;
   justify-content: center;
   align-items: center;
 }
 
-.message .pillars-of-eternity.check .apply-effect img{
+.message .pillars-of-eternity.check button img{
   height: 25px;
   width: 25px;
   flex: 0 0 25px;
@@ -132,4 +132,30 @@
   height: 23px;  
   margin: 0px 2px;
   border : none;
+}
+
+.message .part-targets .shield img  {
+  filter: invert(40.4%) sepia(0%) saturate(0%) hue-rotate( 
+    0deg ) brightness(0%) contrast(119%);
+    margin-bottom: -8px;
+  }
+
+  .message .part-targets .shield {
+    opacity: 0.1;
+  }
+    .message .part-targets .shield.active {
+    opacity: 0.4
+  }
+
+  .message .part-targets .target-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+.dice-tooltip .part-header .part-total, 
+.dice-tooltip .part-header .part-flavor, 
+.dice-tooltip .part-header .part-formula {
+  display: flex;
+  align-items: center;
 }

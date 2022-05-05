@@ -36,6 +36,21 @@
 
             </div>
 
+            {{#if (eq data.source.value "spirits") }}
+            <div class="form-group">
+                <label>Type</label>
+                <div class="form-fields">
+                    <select name="data.category.value">
+                        {{#select data.category.value}}
+                        <option value=""></option>
+                        <option value="phrase">Phrase</option>
+                        <option value="invocation">Invocation</option>
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+            {{/if}}
+
 
             <div class="form-group">
                 <label>Improvised</label>
@@ -137,6 +152,7 @@
                     <input type="text" data-path="group" class="power-property group" title="Group" value="{{damage.group}}">
                     <input type="text" data-path="base" class="power-property" placeholder="Base" value="{{damage.base}}">
                     <input type="text" data-path="crit" class="power-property" placeholder="Crit" value="{{damage.crit}}">
+                    <input type="number" data-path="defaultCrit" class="power-property group" title="Default Critical: Crit dice start at this amount" value="{{damage.defaultCrit}}">
                     <select data-path="type" class="power-property type">
                         {{#select damage.type}}
                         {{#each (config "damageTypes") as |type t|}}
@@ -152,12 +168,7 @@
                         {{/each}}
                         {{/select}}
                     </select>
-                    <select data-path="damages" class="power-property">
-                        {{#select damage.damages}}
-                        <option value="health">Health</option>
-                        <option value="endurance">Endurance</option>
-                        {{/select}}
-                    </select>
+   
                     <input type="text" data-path="text" class="power-property" placeholder="Text" value="{{damage.text}}">
                     <div class="property-control">
                         <a class="remove-property"><i class="fas fa-times"></i></a>
@@ -278,6 +289,25 @@
                 </div>
             </div>
 
+
+            <div class="form-group power-group" data-property="summons">
+                <h3>Summons<a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each  item.summons as |summon i|}}
+                    <div class="property-inputs" data-index="{{i}}">
+                        <input type="text" data-path="group" class="power-property group" title="Group" value="{{summon.group}}">
+                        <div class="power-property summon">
+                            <img src="{{summon.data.img}}"/>
+                            <a>{{summon.data.name}}</a>
+                        </div>
+                        <input type="number" data-path="modifier" class="power-property group" title="Abstract Modifier" value="{{summon.modifier}}">
+                        <div class="property-control">
+                            <a class="remove-property"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
             
             <div class="form-group power-group" data-property="misc">
                 <h3>Misc. <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
