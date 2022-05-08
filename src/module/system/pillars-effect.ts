@@ -1,3 +1,11 @@
+import { PillarsActor } from "../actor/actor-pillars"
+
+declare global {
+    interface DocumentClassConfig {
+      ActiveEffect: typeof PillarsActiveEffect;
+    }
+  }
+
 export default class PillarsActiveEffect extends ActiveEffect {
     
 
@@ -6,7 +14,7 @@ export default class PillarsActiveEffect extends ActiveEffect {
             this.data.disabled = !this.item.equipped.value
     }
 
-    getDialogChanges({target = false, condense = false, indexOffset = 0}={}) {
+    getDialogChanges({target = undefined, condense = false, indexOffset = 0} : {target? : PillarsActor | null, condense? : boolean, indexOffset? : number} ={}) {
         let allChanges = this.data.changes.map(c => c.toObject())
         allChanges.forEach((c, i) => {
             c.conditional = this.changeConditionals[i] || {}
@@ -79,6 +87,7 @@ export default class PillarsActiveEffect extends ActiveEffect {
             else
                 return super.sourceName;
         }
+        this.data.changes
     }
 
     get conditionId() {

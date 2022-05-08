@@ -1,3 +1,4 @@
+import { CheckData, WeaponCheckData } from "../../types/checks"
 
 
 export default class RollDialog extends Dialog {
@@ -26,7 +27,7 @@ export default class RollDialog extends Dialog {
             select.focus()
     }
 
-    static async create(data) {
+    static async create(data) : CheckData {
         let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/roll-dialog.html", data)
         return new Promise((resolve) => {
             return new this({
@@ -38,8 +39,8 @@ export default class RollDialog extends Dialog {
                 buttons : {
                     roll : {
                         label : "Roll",
-                        callback : (html, check) => {
-                            let data = {}
+                        callback : (html, check) : void=> {
+                            let data : CheckData = <CheckData>{}
                             data.modifier = html.find("input[name='modifier']").val()
                             data.steps = parseInt(html.find("select[name='steps']").val())
                             data.proxy = html.find("input[name='proxy']").is(":checked")

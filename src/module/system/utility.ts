@@ -1,3 +1,5 @@
+import { Useable } from "../../types/common"
+
 export default class PILLARS_UTILITY {
   
     static getSkillRank(xp)
@@ -58,6 +60,12 @@ export default class PILLARS_UTILITY {
 
     static weaponSpecials() {
         return mergeObject(foundry.utils.deepClone(game.pillars.config.meleeSpecials), game.pillars.config.rangedSpecials)
+    }
+
+    static isUsable(item : any): item is Useable {
+    
+            return true
+
     }
 
 }

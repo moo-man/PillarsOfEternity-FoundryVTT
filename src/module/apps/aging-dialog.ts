@@ -1,3 +1,4 @@
+import { AgingCheckData, AgingDialogData } from "../../types/checks"
 
 
 export default class AgingDialog extends Dialog {
@@ -9,7 +10,7 @@ export default class AgingDialog extends Dialog {
         })
     }
 
-    static async create({modifier, effects}) {
+    static async create({modifier, changeList, changes} : AgingDialogData) {
         let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/aging-dialog.html", {modifier, effects})
         return new Promise((resolve) => {
             return new this({
@@ -19,8 +20,8 @@ export default class AgingDialog extends Dialog {
                 buttons : {
                     roll : {
                         label : "Roll",
-                        callback : (html, check) => {
-                            let data = {}
+                        callback : (html, check) : void => {
+                            let data : AgingCheckData = <AgingCheckData>{}
                             data.modifier = html.find("input[name='modifier']").val()
                             data.lifestyle = html.find("select[name='lifestyle']").val()
                             resolve(data)

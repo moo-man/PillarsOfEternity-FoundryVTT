@@ -1,15 +1,102 @@
-import PowerTemplate from "../system/power-template.js";
-import SkillCheck from "../system/skill-check.js";
-import WeaponCheck from "../system/weapon-check.js";
-import PowerCheck from "../system/power-check.js";
-import AgingRoll from "../system/aging-roll.js";
-import { PillarsItem } from "../item/item-pillars.js";
+import PowerTemplate from "../system/power-template";
+import BookOfSeasons from "../apps/book-of-seasons";
+import ActorConfigure from "../apps/actor-configure";
+import { PillarsActorDataSource, BasePreparedPillarsActorData, PreparedPillarsActorData } from "../../global";
+import { PillarsItem } from "../item/item-pillars";
+import PillarsActiveEffect from "../system/pillars-effect";
+
+
+
+// Overwrite default ActorSheet.Data data property and replace it with system data
+interface PillarsSheetData extends Omit<ActorSheet.Data, "data"> {
+    data : BasePreparedPillarsActorData,
+    items : SheetItemData,
+    effects : SheetEffectData,
+    soaks : SoakData
+} 
+
+interface SheetItemData {
+    attributes : {
+        benefits : PillarsItem[], 
+        hindrances: PillarsItem[]
+    },
+    skills : PillarsItem[]
+    traits : PillarsItem[]
+    powers : PillarsItem[]
+    embeddedPowers : PillarsItem[]
+    powerSources : PillarsItem[]
+
+    injuries : PillarsItem[]
+    backgrounds : PillarsItem[]
+    settings : PillarsItem[]
+    connections : PillarsItem[]
+    reputations : PillarsItem[]
+
+    inventory : InventorySheetData
+
+    equipped : {
+        meleeWeapons : PillarsItem[]
+        rangedWeapons : PillarsItem[]
+        armor : PillarsItem[]
+        shields : PillarsItem[]
+    }
+}
+
+interface InventorySheetData {
+    weapons : {
+        label: string,
+        type : string,
+        items : PillarsItem[]
+    },
+    armor : {
+        label: string,
+        type : string,
+        items : PillarsItem[]
+    },
+    shields : {
+        label: string,
+        type : string,
+        items : PillarsItem[]
+    },
+    tools : {
+        label: string,
+        type : string,
+        items : PillarsItem[]
+    },
+    gear : {
+        label: string,
+        type : string,
+        items : PillarsItem[]
+    },
+    grimoires  : {
+        label: string,
+        type : string,
+        items : PillarsItem[]
+    }
+}
+
+interface SoakData {
+    [key : "physical" | "burn" | "freeze" | "corrode" | "shock"] : {
+        total : number,
+        show: boolean
+        img : string
+    }
+}
+
+interface SheetEffectData {
+    temporary : PillarsActiveEffect[]
+    disabled : PillarsActiveEffect[]
+    passive : PillarsActiveEffect[]
+}
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PillarsActorSheet extends ActorSheet {
+export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsSheetData> {
+
+    scrollPos : (number | undefined)[] = []
+
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -22,11 +109,12 @@ export class PillarsActorSheet extends ActorSheet {
         });
     }
 
-    get template() {
+    get template() : string {
         if (this.actor.type == "character")
             return "systems/pillars-of-eternity/templates/actor/actor-sheet.html"
         else if (this.actor.type == "npc")
             return "systems/pillars-of-eternity/templates/actor/actor-npc-sheet.html"
+        else return ""
     }
 
       /**
@@ -38,7 +126,7 @@ export class PillarsActorSheet extends ActorSheet {
    * @param {bool} force      used upstream.
    * @param {Object} options  used upstream.
    */
-  async _render(force = false, options = {}) {
+  async _render(force = false, options = {}) : Promise<void> {
     this._saveScrollPos(); // Save scroll positions
     await super._render(force, options);
     this._setScrollPos();  // Set scroll positions
@@ -54,7 +142,7 @@ export class PillarsActorSheet extends ActorSheet {
    * this.scrollPos array, which is used when rendering (rendering a sheet resets all 
    * scroll positions by default).
    */
-  _saveScrollPos() {
+  _saveScrollPos() : void {
     if (this.form === null)
       return;
 
@@ -72,12 +160,21 @@ export class PillarsActorSheet extends ActorSheet {
    * All elements in the sheet that use ".save-scroll" class has their position set to what was
    * saved by saveScrollPos before rendering. 
    */
-  _setScrollPos() {
-    if (this.scrollPos) {
-      const html = $(this.form).parent();
+  _setScrollPos() : void {
+    
+    if (!this.form)
+        return;
+
+      if (this.scrollPos) {
+        const html = $(this.form).parent();
       let lists = $(html.find(".items"));
       for (let i = 0; i < lists.length; i++) {
-        $(lists[i]).scrollTop(this.scrollPos[i]);
+          let el = lists[i]
+          let pos = this.scrollPos[i]
+          if (el && pos)
+          {
+              $(el).scrollTop(pos);
+          }
       }
     }
   }
@@ -96,33 +193,44 @@ export class PillarsActorSheet extends ActorSheet {
             class: "seasons",
             label : "Seasons",
             icon: "fas fa-book",
-            onclick: ev => {new game.pillars.apps.BookOfSeasons(this.actor).render(true)}
+            onclick: ev => {new BookOfSeasons(this.actor).render(true)}
           })
     }
     buttons.unshift({
         class: "configure",
+        label : "",
         icon: "fas fa-wrench",
-        onclick: async (ev) => new game.pillars.apps.ActorConfigure(this.actor).render(true)
+        onclick: async (ev) => new ActorConfigure(this.actor).render(true)
     })
     return buttons
   }
 
 
     /** @override */
-    getData() {
-        const data = super.getData();
-        data.data = data.data.data
+    async getData() :  Promise<PillarsSheetData> {
+        const data = await super.getData();
+
+        data.data = (data as unknown as ActorSheet.Data).data.data
+
+        if (game instanceof Game)
+        {
+            let test = game.actors?.get("test")
+            if (test!.data.type == "character")
+            {
+                test?.data.data.
+            }
+        }
         this.prepareSheetData(data);
         this.formatTooltips(data)
         
         return data
     }
 
-    prepareSheetData(sheetData) {
+    prepareSheetData(sheetData : PillarsSheetData) {
         sheetData.items = this.constructItemLists(sheetData)
         sheetData.effects = this.constructEffectLists(sheetData) 
         this._setPowerSourcePercentage(sheetData)
-        //this._createWoundsArrays(sheetData)
+        //this._createWoundsArrays(sheetData : PillarsSheetData)
         if (this.actor.type == "character")
         {
             this._enrichKnownConnections(sheetData)
@@ -155,8 +263,8 @@ export class PillarsActorSheet extends ActorSheet {
     }
 
 
-    constructItemLists(sheetData) {
-        let items = {}
+    constructItemLists(sheetData : PillarsSheetData ) : SheetItemData {
+        let items : SheetItemData = <SheetItemData>{}
         
         items.attributes = {benefits : [], hindrances: []}
         items.attributes.benefits = sheetData.actor.getItemTypes("attribute").filter(i => i.category.value == "benefit");
@@ -176,15 +284,16 @@ export class PillarsActorSheet extends ActorSheet {
 
         items.inventory = this.constructInventory(sheetData)
 
-        items.equipped = {}
-        items.equipped.meleeWeapons = items.inventory.weapons.items.filter(i => i.equipped.value && i.isMelee)
-        items.equipped.rangedWeapons = items.inventory.weapons.items.filter(i => i.equipped.value && i.isRanged)
-        items.equipped.armor = items.inventory.armor.items.filter(i => i.equipped.value)
-        items.equipped.shields = items.inventory.shields.items.filter(i => i.equipped.value)
+        items.equipped = {
+            meleeWeapons : items.inventory.weapons.items.filter(i => i.equipped.value && i.isMelee),
+            rangedWeapons : items.inventory.weapons.items.filter(i => i.equipped.value && i.isRanged),
+            armor : items.inventory.armor.items.filter(i => i.equipped.value),
+            shields : items.inventory.shields.items.filter(i => i.equipped.value)
+        }
         return items
     }
 
-    constructInventory(sheetData) {
+    constructInventory(sheetData : PillarsSheetData) : InventorySheetData  {
         let inventory = {
             weapons : {
                 label: "Weapons",
@@ -220,9 +329,9 @@ export class PillarsActorSheet extends ActorSheet {
         return inventory
     }
 
-    constructEffectLists(sheetData) 
+    constructEffectLists(sheetData : PillarsSheetData) : SheetEffectData
     {
-        let effects = {}
+        let effects : SheetEffectData = <SheetEffectData>{}
 
         effects.temporary = sheetData.actor.effects.filter(i => i.isTemporary && !i.data.disabled)
         effects.disabled = sheetData.actor.effects.filter(i => i.data.disabled)
@@ -231,7 +340,7 @@ export class PillarsActorSheet extends ActorSheet {
         return effects;
     }
 
-    constructPowerDisplay(sheetData)
+    constructPowerDisplay(sheetData : PillarsSheetData)
     {
         sheetData.items.powers.forEach(p => {
             let lowestKey = Object.keys(p.groups).filter(i => i).sort((a, b) => {a - b > 0 ? 1 : -1})
@@ -239,7 +348,7 @@ export class PillarsActorSheet extends ActorSheet {
         })
     }
 
-    _createSoakArray(sheetData)
+    _createSoakArray(sheetData : PillarsSheetData)
     {
         let soakValues = sheetData.data.soak
 
@@ -272,7 +381,7 @@ export class PillarsActorSheet extends ActorSheet {
         }
     }
 
-    _enrichKnownConnections(sheetData)
+    _enrichKnownConnections(sheetData : PillarsSheetData)
     {
         let connections = sheetData.actor.knownConnections.value
         sheetData.KnownConnections = connections.map(i => {
@@ -352,7 +461,7 @@ export class PillarsActorSheet extends ActorSheet {
         })
     }
 
-    _createDeathMarchArray(sheetData)
+    _createDeathMarchArray(sheetData : PillarsSheetData)
     {
         let marchVal = sheetData.data.life.march
         sheetData.data.life.march = []
@@ -372,7 +481,7 @@ export class PillarsActorSheet extends ActorSheet {
 
     }
 
-    _setPowerSourcePercentage(sheetData)
+    _setPowerSourcePercentage(sheetData : PillarsSheetData)
     {
         let sources = sheetData.items.powerSources
         sources.forEach(s => {

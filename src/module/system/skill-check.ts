@@ -1,8 +1,31 @@
+import { PillarsItem } from "../item/item-pillars.js";
 import DamageRoll from "../system/damage-roll.js";
 
 export default class SkillCheck
 {
-        constructor(data) {
+    data = {
+        checkData : {
+            title : "string",
+            modifier : "string",
+            steps : "string",
+            proxy : "string",
+            assister : "string",
+            state : "string",
+            skillId : "string",
+            skillName : "string",
+        },
+        context : {
+            speaker : data.speaker,
+            targetSpeakers : data.targetSpeakers || [],
+            rollClass : this.constructor.name,
+            rollMode : data.rollMode,
+            messageId : "",
+        },
+        result : {}
+    }
+
+
+        constructor(data : CheckData) {
             if (!data)
                 return 
             this.data = {
@@ -153,13 +176,16 @@ export default class SkillCheck
             
         }
 
-        static rankToDie(skill) {
+        static rankToDie(skill : PillarsItem | undefined) : 8 | 6 | 4 | string {
+            if (!skill) return ""
+
             if (skill.rank >= 15)
                 return 8
             if (skill.rank >= 10)
                 return 6
             if (skill.rank >= 5)
                 return 4
+                
             return ""
         }
 

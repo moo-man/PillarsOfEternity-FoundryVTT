@@ -3,6 +3,15 @@ import PILLARS_UTILITY  from "../system/utility.js"
  * Extend the FVTT Item class for Pillars functionality
  * @extends {ItemSheet}
  */
+
+
+ declare global {
+    interface DocumentClassConfig {
+      Item: typeof PillarsItem;
+    }
+  }
+
+
 export class PillarsItem extends Item {
 
     // constructor(data, context)

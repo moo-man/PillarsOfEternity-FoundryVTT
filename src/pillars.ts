@@ -2,8 +2,8 @@
  * A Foundry implementation of the Pillars of Eternity TTRPG
  * Author: Moo Man
  */
-
 // Import Modules
+
 import FoundryOverrides from "./module/system/overrides.js"
 import { PillarsItemSheet } from "./module/item/item-sheet.js";
 import { PillarsItem } from "./module/item/item-pillars.js";
@@ -36,15 +36,17 @@ import { PillarsCombatant } from "./module/system/combatant.js";
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
 
+
+
 Hooks.on("init", () => {
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("pillars-of-eternity", PillarsActorSheet, { makeDefault: true });
-  Actors.registerSheet("pillars-of-eternity", PillarsNPCSheet, {types: ["npc"], makeDefault: true });
-  Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("pillars-of-eternity", PillarsItemSheet, { makeDefault: true });
+//   Actors.registerSheet("pillars-of-eternity", PillarsNPCSheet, {types: ["npc"], makeDefault: true });
+//   Items.unregisterSheet("core", ItemSheet);
+//   Items.registerSheet("pillars-of-eternity", PillarsItemSheet, { makeDefault: true });
 
-  // Assign the actor class to the CONFIG
+//   // Assign the actor class to the CONFIG
   CONFIG.Actor.documentClass = PillarsActor;
   CONFIG.Item.documentClass = PillarsItem;
   CONFIG.Combat.documentClass = PillarsCombat;
@@ -53,41 +55,49 @@ Hooks.on("init", () => {
   CONFIG.ActiveEffect.sheetClass = PillarsEffectConfig;
   CONFIG.Token.documentClass = PillarsTokenDocument
   CONFIG.Combat.defeatedStatusId = "incapacitated"
-  PillarsExplode()
+//   PillarsExplode()
 
-  game.pillars = {
-    apps : {
-      PillarsActorSheet,
-      PillarsItemSheet,
-      BookOfSeasons,
-      RollDialog,
-      ActorConfigure,
-      DamageDialog,
-      HealingDialog
-    },
-    rollClass : {
-      SkillCheck,
-      WeaponCheck,
-      PowerCheck,
-      DamageRoll
-    },
-    migration : Migration,
-    utility: PILLARS_UTILITY,
-    config : POE,
-    chat : PillarsChat,
-    templates : PowerTemplate,
+
+//   game.pillars = {
+//     apps : {
+//       PillarsActorSheet,
+//       PillarsItemSheet,
+//       BookOfSeasons,
+//       RollDialog,
+//       ActorConfigure,
+//       DamageDialog,
+//       HealingDialog
+//     },
+//     rollClass : {
+//       SkillCheck,
+//       WeaponCheck,
+//       PowerCheck,
+//       DamageRoll
+//     },
+//     migration : Migration,
+//     utility: PILLARS_UTILITY,
+//     config : POE,
+//     chat : PillarsChat,
+//     templates : PowerTemplate,
+//   }
+})
+
+//   CONFIG.ui.combat = PillarsCombatTracker
+//   Hooks.on("setup", () => {
+//     for (let group in POE) {
+//       for (let key in POE[group])
+//         if (typeof POE[group][key] == "string")
+//           POE[group][key] = game.i18n.localize(POE[group][key])
+//     }
+//     FoundryOverrides()
+// })
+
+//   // Register all other hooks
+//   hooks();
+
+export function getGame(): Game {
+  if(!(game instanceof Game)) {
+    throw new Error('game is not initialized yet!');
   }
-})
-
-  CONFIG.ui.combat = PillarsCombatTracker
-  Hooks.on("setup", () => {
-    for (let group in POE) {
-      for (let key in POE[group])
-        if (typeof POE[group][key] == "string")
-          POE[group][key] = game.i18n.localize(POE[group][key])
-    }
-    FoundryOverrides()
-})
-
-  // Register all other hooks
-  hooks();
+  return game;
+}

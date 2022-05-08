@@ -1,19 +1,18 @@
-export const POE = {};
-
-POE.defenses = {
+export const PILLARS = {
+defenses = {
     deflection: "Deflection",
     fortitude: "Fortitude",
     reflex: "Reflex",
     will: "Will"
-}
+},
 
-POE.attributeTypes = {
+attributeTypes = {
     "benefit": "Benefit",
     "hindrance": "Hindrance"
-}
+},
 
 
-POE.skillTypes = {
+skillTypes = {
     "academic": "Academic",
     "artistic": "Artistic",
     "language": "Language",
@@ -21,22 +20,22 @@ POE.skillTypes = {
     "physical": "Physical",
     "social": "Social",
     "worldly": "Worldly"
-}
+},
 
-POE.traitTypes = {
+traitTypes = {
     "adventure": "Adventure",
     "experience": "Experience"
-}
+},
 
-POE.tiers = {
+tiers = {
     "novice": "Novice",
     "apprentice": "Apprentice",
     "master": "Master",
     "expert": "Expert",
     "paragon": "Paragon"
-}
+},
 
-POE.tierBonus = {
+tierBonus = {
     "novice": {
         def: 0,
         bonus: 0,
@@ -57,10 +56,10 @@ POE.tierBonus = {
         def: 12,
         bonus: 1,
     }
-}
+},
 
 
-POE.lifePhases = {
+lifePhases = {
     childhood: "Childhood",
     adolescence: "Adolescence",
     youngAdult: "Young Adult",
@@ -68,9 +67,9 @@ POE.lifePhases = {
     middleAge: "Middle Age",
     old: "Old",
     venerable: "Venerable"
-}
+},
 
-POE.lifePhaseModifier = {
+lifePhaseModifier = {
     childhood: 0,
     adolescence: 0,
     youngAdult: 0,
@@ -78,9 +77,9 @@ POE.lifePhaseModifier = {
     middleAge: 2,
     old: 5,
     venerable: 8
-}
+},
 
-POE.agePointsDeathRank = {
+agePointsDeathRank = {
     6: 1,
     10: 2,
     15: 3,
@@ -89,27 +88,27 @@ POE.agePointsDeathRank = {
     36: 6,
     45: 7,
     999: 8
-}
+},
 
-POE.lifeStyles = {
+lifeStyles = {
     impoverished: "Impoverished",
     poor: "Poor",
     comfortable: "Comfortable",
     prosperous: "Prosperous",
     rich: "Rich",
     extravagant: "Extravagant",
-}
+},
 
-POE.lifestyleModifier = {
+lifestyleModifier = {
     impoverished: 3,
     poor: 1,
     comfortable: 0,
     prosperous: -1,
     rich: -2,
     extravagant: -3,
-}
+},
 
-POE.powerRanges = {
+powerRanges = {
     "none": "None",
     "adjacent": "Adjacent",
     "meleeWeapon": "Melee Weapon",
@@ -118,9 +117,9 @@ POE.powerRanges = {
     "mid": "Mid",
     "far": "Far",
     "extreme": "Extreme"
-}
+},
 
-POE.powerTargetTypes = {
+powerTargetTypes = {
     "target": "Target",
     "circle": "Circle",
     "aura": "Aura",
@@ -128,56 +127,56 @@ POE.powerTargetTypes = {
     "ray": "Ray",
     "line": "Line",
     "boundary": "Boundary"
-}
+},
 
-POE.powerTargets = {
+powerTargets = {
     "self": "Self",
     "individualEU": "Individual EU",
     "individual": "Individual",
     "space": "Space"
-}
+},
 
 
-POE.powerCircles = {
+powerCircles = {
     "small": "Small Circle",
     "medium": "Medium Circle",
     "large": "Large Circle"
-}
+},
 
 
-POE.powerAuras = {
+powerAuras = {
     "small": "Small Aura",
     "large": "Large Aura"
-}
+},
 
 
-POE.powerCones = {
+powerCones = {
     "small": "Small Cone",
     "medium": "Medium Cone",
     "large": "Large Cone"
-}
+},
 
 
-POE.powerRays = {
+powerRays = {
     "narrow": "Narrow Ray",
     "wide": "Wide Ray"
-}
+},
 
-POE.powerLines = {
+powerLines = {
     "short": "Short Line",
     "long": "Long Line"
-}
+},
 
 
-POE.powerBoundarys = {
+powerBoundarys = {
     "adjacent": "Adjacent Boundary",
     "small": "Small Boundary",
     "large": "Large Boundary",
     "huge": "Huge Boundary"
-}
+},
 
 
-POE.powerDurations = {
+powerDurations = {
     "momentary": "Momentary",
     "momentary2R": "Momentary 2R",
     "round": "Round",
@@ -190,10 +189,10 @@ POE.powerDurations = {
     "month": "Month",
     "season": "Season",
     "year": "Year"
-}
+},
 
 
-POE.powerSpeeds = {
+powerSpeeds = {
     "slow": "Slow",
     "move": "Move",
     "action": "Action",
@@ -201,24 +200,24 @@ POE.powerSpeeds = {
     "reaction": "Reaction",
     "triggered1rest": "Triggered 1/Rest",
     "triggered1encounter": "Triggered 1/Encounter"
-}
+},
 
 
-POE.powerExclusions = {
+powerExclusions = {
     "none": "None",
     "target": "Target",
     "single": "Single",
     "selective": "Selective"
-}
+},
 
-POE.powerJumps = {
+powerJumps = {
     "jump3": "3 Hexes",
     "jump6": "6 Hexes",
     "jump9": "9 Hexes"
-}
+},
 
 
-POE.powerLevelValues = {
+powerLevelValues = {
     powerRanges: {
         "none": 0,
         "adjacent": 1,
@@ -300,9 +299,9 @@ POE.powerLevelValues = {
     },
     bounce: 1,
     attacksDecreaseDefense: -1.5
-}
+},
 
-POE.powerSources = {
+powerSources = {
     "arcana": "Arcana",
     "discipline": "Discipline",
     "faith": "Faith",
@@ -313,17 +312,17 @@ POE.powerSources = {
     "rage": "Rage",
     "spirits": "Spirits",
     "zeal": "Zeal"
-}
+},
 
-POE.areaTargetTypes = {
+areaTargetTypes = {
     "circle": "circle",
     "aura": "circle",
     "cone": "cone",
     "ray": "ray",
     "line": "ray"
-}
+},
 
-POE.areaTargetDistances = {
+areaTargetDistances = {
     circle: {
         "small": { distance: 1.2 },
         "medium": { distance: 2.8 },
@@ -350,84 +349,84 @@ POE.areaTargetDistances = {
         "short": { distance: 2 },
         "long": { distance: 6 }
     }
-}
+},
 
 
-POE.powerSourceTypes = {
+powerSourceTypes = {
     "external": "External",
     "personal": "Personal",
     "trained": "Trained"
-}
+},
 
-POE.powerEffectType = {
+powerEffectType = {
     "damage": "Damage",
     "condition": "Condition",
     "other": "Other"
-}
+},
 
-POE.powerEffectResistTypes = {
+powerEffectResistTypes = {
     "always": "Always",
     "reflex": "Reflex",
     "fortitude": "Fortitude",
     "will": "Will"
-}
+},
 
 
-POE.damageTypes = {
+damageTypes = {
     "physical": "Physical",
     "burn": "Burn",
     "freeze": "Freeze",
     "raw": "Raw",
     "corrode": "Corrode",
     "shock": "Shock"
-}
+},
 
-POE.weaponTypes = {
+weaponTypes = {
     "smallMelee": "Small Melee",
     "mediumMelee": "Medium Melee",
     "largeMelee": "Large Melee",
     "mediumRanged": "Medium Ranged",
     "largeRanged": "Large Ranged",
     "grenade": "Grenade"
-}
+},
 
-POE.armorTypes = {
+armorTypes = {
     "physical": "Physical",
     "light": "Light Armor",
     "medium": "Medium Armor",
     "heavy": "Heavy Armor"
-}
+},
 
 
-POE.equipmentTypes = {
+equipmentTypes = {
     "gear": "Gear",
     "tool": "Tool",
     "grimoire" : "Grimoire"
-}
+},
 
-POE.suitabilities = {
+suitabilities = {
     "none": "No Penalty",
     "good": "Good (-2)",
     "fair": "Fair (-4)",
     "poor": "Poor (-8)"
-}
+},
 
-POE.actorSizes = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
+actorSizes = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
 
-POE.allowEmbeddedPowers = ["attribute", "weapon", "armor", "shield", "equipment", "species", "stock", "godlike"]
+allowEmbeddedPowers = ["attribute", "weapon", "armor", "shield", "equipment", "species", "stock", "godlike"],
 
 
-POE.embeddedPowerSpendTypes = {
+embeddedPowerSpendTypes = {
     "encounter" : "Per Encounter",
     "longRest" : "Per Long Rest",
     "charges" : "Charges",
-}
+},
 
-POE.rechargeTypes = {
+rechargeTypes = {
     "encounter" : "Per Encounter",
     "longRest" : "Per Long Rest"
-}
-POE.sizeAttributes = {
+},
+sizeAttributes = {
     "-5": {
         novice: { damageIncrement: 1, toughness: 0 },
         apprentice: { damageIncrement: 2, toughness: 0 },
@@ -505,10 +504,10 @@ POE.sizeAttributes = {
         expert: { damageIncrement: 80, toughness: 30 },
         paragon: { damageIncrement: 100, toughness: 35 }
     }
-}
+},
 
 
-POE.meleeSpecials = {
+meleeSpecials = {
 
     battering: {
         label: "Battering",
@@ -588,9 +587,9 @@ POE.meleeSpecials = {
         hasValue: false,
         skilled: true
     }
-}
+},
 
-POE.rangedSpecials = {
+rangedSpecials = {
     "destructiveChanneling": {
         label: "Destructive Channeling",
         description: "Take a Crit Die of Raw damage to raise the Damage dice to 2d8.",
@@ -664,12 +663,13 @@ POE.rangedSpecials = {
         skilled: false
     }
 }
+}
 
 CONFIG.statusEffects = [
     {
         id: "bloodied",
         label: "Bloodied",
-        icon: "systems/pillars-of-eternity/assets/conditions/bloodied.png",
+        icon: "systems/of-eternity/assets/conditions/bloodied.png",
         changes: [
             { key: "steps", mode: 6, value: -2 },
             { key: "data.defenses.deflection.value", mode: 2, value: -3 },
@@ -687,7 +687,7 @@ CONFIG.statusEffects = [
     {
         id: "winded",
         label: "Winded",
-        icon: "systems/pillars-of-eternity/assets/conditions/winded.png",
+        icon: "systems/of-eternity/assets/conditions/winded.png",
         changes: [
             { key: "steps", mode: 6, value: -1 },
             { key: "data.defenses.deflection.value", mode: 2, value: -2 },
@@ -705,7 +705,7 @@ CONFIG.statusEffects = [
     {
         id: "weakened",
         label: "Weakened",
-        icon: "systems/pillars-of-eternity/assets/conditions/weakened.png",
+        icon: "systems/of-eternity/assets/conditions/weakened.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags: {
             "pillars-of-eternity": {
@@ -719,7 +719,7 @@ CONFIG.statusEffects = [
     {
         id: "sickened",
         label: "Sickened",
-        icon: "systems/pillars-of-eternity/assets/conditions/sickened.png",
+        icon: "systems/of-eternity/assets/conditions/sickened.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -734,7 +734,7 @@ CONFIG.statusEffects = [
     {
         id: "enfeebled",
         label: "Enfeebled",
-        icon: "systems/pillars-of-eternity/assets/conditions/enfeebled.png",
+        icon: "systems/of-eternity/assets/conditions/enfeebled.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -749,7 +749,7 @@ CONFIG.statusEffects = [
     {
         id: "fit",
         label: "Fit",
-        icon: "systems/pillars-of-eternity/assets/conditions/fit.png",
+        icon: "systems/of-eternity/assets/conditions/fit.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -764,7 +764,7 @@ CONFIG.statusEffects = [
     {
         id: "hardy",
         label: "Hardy",
-        icon: "systems/pillars-of-eternity/assets/conditions/hardy.png",
+        icon: "systems/of-eternity/assets/conditions/hardy.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -779,7 +779,7 @@ CONFIG.statusEffects = [
     {
         id: "robust",
         label: "Robust",
-        icon: "systems/pillars-of-eternity/assets/conditions/robust.png",
+        icon: "systems/of-eternity/assets/conditions/robust.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -794,7 +794,7 @@ CONFIG.statusEffects = [
     {
         id: "prone",
         label: "Prone",
-        icon: "systems/pillars-of-eternity/assets/conditions/prone.png",
+        icon: "systems/of-eternity/assets/conditions/prone.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -809,7 +809,7 @@ CONFIG.statusEffects = [
     {
         id: "knocked-down",
         label: "Knocked Down",
-        icon: "systems/pillars-of-eternity/assets/conditions/knocked-down.png",
+        icon: "systems/of-eternity/assets/conditions/knocked-down.png",
         changes: [{ key: "state", mode: 6, value: "dis" }],
         flags:             
         {
@@ -824,7 +824,7 @@ CONFIG.statusEffects = [
     {
         id: "down-n-out",
         label: "Down and Out",
-        icon: "systems/pillars-of-eternity/assets/conditions/down-n-out.png",
+        icon: "systems/of-eternity/assets/conditions/down-n-out.png",
         changes: [{ key: "state", mode: 6, value: "dis" }],
         flags:             
         {
@@ -839,7 +839,7 @@ CONFIG.statusEffects = [
     {
         id: "hampered",
         label: "Hampered",
-        icon: "systems/pillars-of-eternity/assets/conditions/hampered.png",
+        icon: "systems/of-eternity/assets/conditions/hampered.png",
         changes: [{ key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -853,7 +853,7 @@ CONFIG.statusEffects = [
     {
         id: "immobilized",
         label: "Immobilized",
-        icon: "systems/pillars-of-eternity/assets/conditions/immobilized.png",
+        icon: "systems/of-eternity/assets/conditions/immobilized.png",
         changes: [{ key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -867,7 +867,7 @@ CONFIG.statusEffects = [
     {
         id: "paralyzed",
         label: "Paralyzed",
-        icon: "systems/pillars-of-eternity/assets/conditions/paralyzed.png",
+        icon: "systems/of-eternity/assets/conditions/paralyzed.png",
         changes: [{ key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -881,7 +881,7 @@ CONFIG.statusEffects = [
     {
         id: "nimble",
         label: "Nimble",
-        icon: "systems/pillars-of-eternity/assets/conditions/nimble.png",
+        icon: "systems/of-eternity/assets/conditions/nimble.png",
         changes: [{ key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -895,7 +895,7 @@ CONFIG.statusEffects = [
     {
         id: "quickened",
         label: "Quickened",
-        icon: "systems/pillars-of-eternity/assets/conditions/quickened.png",
+        icon: "systems/of-eternity/assets/conditions/quickened.png",
         changes: [{ key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -909,7 +909,7 @@ CONFIG.statusEffects = [
     {
         id: "swift",
         label: "Swift",
-        icon: "systems/pillars-of-eternity/assets/conditions/swift.png",
+        icon: "systems/of-eternity/assets/conditions/swift.png",
         changes: [{ key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -923,7 +923,7 @@ CONFIG.statusEffects = [
     {
         id: "distracted",
         label: "Distracted",
-        icon: "systems/pillars-of-eternity/assets/conditions/distracted.png",
+        icon: "systems/of-eternity/assets/conditions/distracted.png",
         changes: [{ key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -951,7 +951,7 @@ CONFIG.statusEffects = [
     {
         id: "dazzled",
         label: "Dazzled",
-        icon: "systems/pillars-of-eternity/assets/conditions/dazzled.png",
+        icon: "systems/of-eternity/assets/conditions/dazzled.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -966,7 +966,7 @@ CONFIG.statusEffects = [
     {
         id: "blinded",
         label: "Blinded",
-        icon: "systems/pillars-of-eternity/assets/conditions/blinded.png",
+        icon: "systems/of-eternity/assets/conditions/blinded.png",
         changes: [{ key: "steps", mode: 6, value: -3 }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -981,7 +981,7 @@ CONFIG.statusEffects = [
     {
         id: "aware",
         label: "Aware",
-        icon: "systems/pillars-of-eternity/assets/conditions/aware.png",
+        icon: "systems/of-eternity/assets/conditions/aware.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -996,7 +996,7 @@ CONFIG.statusEffects = [
     {
         id: "insightful",
         label: "Insightful",
-        icon: "systems/pillars-of-eternity/assets/conditions/insightful.png",
+        icon: "systems/of-eternity/assets/conditions/insightful.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -1011,7 +1011,7 @@ CONFIG.statusEffects = [
     {
         id: "all-seeing",
         label: "All-Seeing",
-        icon: "systems/pillars-of-eternity/assets/conditions/all-seeing.png",
+        icon: "systems/of-eternity/assets/conditions/all-seeing.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -1026,7 +1026,7 @@ CONFIG.statusEffects = [
     {
         id: "demoralized",
         label: "Demoralized",
-        icon: "systems/pillars-of-eternity/assets/conditions/demoralized.png",
+        icon: "systems/of-eternity/assets/conditions/demoralized.png",
         changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -1040,7 +1040,7 @@ CONFIG.statusEffects = [
     {
         id: "frightened",
         label: "Frightened",
-        icon: "systems/pillars-of-eternity/assets/conditions/frightened.png",
+        icon: "systems/of-eternity/assets/conditions/frightened.png",
         changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -1055,7 +1055,7 @@ CONFIG.statusEffects = [
     {
         id: "terrified",
         label: "Terrified",
-        icon: "systems/pillars-of-eternity/assets/conditions/terrified.png",
+        icon: "systems/of-eternity/assets/conditions/terrified.png",
         changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -1070,17 +1070,17 @@ CONFIG.statusEffects = [
     {
         id: "charmed",
         label: "Charmed",
-        icon: "systems/pillars-of-eternity/assets/conditions/charmed.png"
+        icon: "systems/of-eternity/assets/conditions/charmed.png"
     },
     {
         id: "dominated",
         label: "Dominated",
-        icon: "systems/pillars-of-eternity/assets/conditions/dominated.png"
+        icon: "systems/of-eternity/assets/conditions/dominated.png"
     },
     {
         id: "determined",
         label: "Determined",
-        icon: "systems/pillars-of-eternity/assets/conditions/determined.png",
+        icon: "systems/of-eternity/assets/conditions/determined.png",
         changes: [{ key: "steps", mode: 6, value: 1 }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -1095,12 +1095,12 @@ CONFIG.statusEffects = [
     {
         id: "resolute",
         label: "Resolute",
-        icon: "systems/pillars-of-eternity/assets/conditions/resolute.png"
+        icon: "systems/of-eternity/assets/conditions/resolute.png"
     },
     {
         id: "inspiring",
         label: "Inspiring",
-        icon: "systems/pillars-of-eternity/assets/conditions/inspiring.png"
+        icon: "systems/of-eternity/assets/conditions/inspiring.png"
     },
     {
         id: "incapacitated",
@@ -1110,6 +1110,6 @@ CONFIG.statusEffects = [
     {
         id: "dead",
         label: "Dead",
-        icon: "systems/pillars-of-eternity/assets/conditions/dead.svg"
+        icon: "systems/of-eternity/assets/conditions/dead.svg"
     }
 ]

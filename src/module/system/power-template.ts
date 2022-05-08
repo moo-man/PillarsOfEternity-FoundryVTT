@@ -60,6 +60,43 @@ export default class PowerTemplate extends MeasuredTemplate {
     this.activatePreviewListeners(initialLayer);
   }
 
+
+  containedTokenIds() {
+    const grid = canvas.grid;
+    const d = canvas.dimensions;
+    let ids = [];
+
+    // Get number of rows and columns
+    const [maxr, maxc] = grid.grid.getGridPositionFromPixels(d.width, d.height);
+    let nr = Math.ceil(((this.data.distance * 1.5) / d.distance) / (d.size / grid.h));
+    let nc = Math.ceil(((this.data.distance * 1.5) / d.distance) / (d.size / grid.w));
+    nr = Math.min(nr, maxr);
+    nc = Math.min(nc, maxc);
+
+    // Get the offset of the template origin relative to the top-left grid space
+    const [tx, ty] = canvas.grid.getTopLeft(this.data.x, this.data.y);
+    const [row0, col0] = grid.grid.getGridPositionFromPixels(tx, ty);
+    const hx = Math.ceil(canvas.grid.w / 2);
+    const hy = Math.ceil(canvas.grid.h / 2);
+    const isCenter = (this.data.x - tx === hx) && (this.data.y - ty === hy);
+
+    // Identify grid coordinates covered by the template Graphics
+    // for (let r = -nr; r < nr; r++) {
+    //   for (let c = -nc; c < nc; c++) {
+
+    for (let token of canvas.tokens.placeables)
+    {
+      //let [gx, gy] = canvas.grid.grid.getPixelsFromGridPosition(row0 + r, col0 + c);
+      const testX = token.center.x - this.data.x;
+      const testY = token.center.y - this.data.y;
+      let contains = this.shape.contains(testX, testY);
+      if ( !contains ) continue;
+      ids.push(token.document.id)
+    }
+    //   }
+    // }
+    return ids
+  }
   /* -------------------------------------------- */
 
   /**
@@ -82,12 +119,9 @@ export default class PowerTemplate extends MeasuredTemplate {
       this.shape.y = snapped.y
       this.refresh();
       moveTime = now;
-      // let targets = []
-      // canvas.tokens.placeables.forEach(t => {
-      //   if (this.shape.contains(t.x, t.y))
-      //     targets.push(t.id)
-      // }) 
-      // game.user.updateTokenTargets(targets)
+      let targets = []
+      targets = this.containedTokenIds();
+      game.user.updateTokenTargets(targets)
     };
 
     // Cancel the workflow (right-click)
