@@ -80,7 +80,7 @@ export class PillarsItem extends Item {
     {
         super._onCreate(data, options, user);
         // If the new item has embedded powers, add them to the actor
-        if (this.isOwned && this.powers?.length)
+        if (this.isOwned && this.powers?.length && user == game.user.id)
         {
             this.actor.createEmbeddedDocuments("Item", this.powers.map(p => {
                 p.data.embedded.item = this.id

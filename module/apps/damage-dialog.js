@@ -47,7 +47,7 @@ export default class DamageDialog extends Application
     constructDamages() {
         let damages = []
         damages = foundry.utils.deepClone(this.item.damage.value)
-        if (this.check.addedProperties?.damage?.length)
+        if (this.check && this.check.addedProperties?.damage?.length)
         {
             // Separate 
             this.addedCrits = this.check.addedProperties.damage.filter(d => !d.base && !d.crit && d.defaultCrit).reduce((prev, current) => prev += current.defaultCrit, 0)
@@ -89,7 +89,7 @@ export default class DamageDialog extends Application
                 if (damage.mult >= 0)
                 {
                     damage.mult += this.addedCrits
-                    damage.mult += damage.defaultCrit
+                    damage.mult += damage.defaultCrit || 0
                 }
 
                 // Don't try to use a multiplier if no crit dice
