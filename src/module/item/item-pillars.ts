@@ -566,7 +566,7 @@ export class PillarsItem extends Item {
         return Math.min(this.soak.value, this.health.current)
     }
 
-    displayGroupKey(type) {
+    displayGroupKey(type? : string) {
         try {
             let groupIndex = this.getFlag("pillars-of-eternity", "displayGroup")
             let group = Object.keys(this.groups)[groupIndex]

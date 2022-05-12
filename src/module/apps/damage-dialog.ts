@@ -29,7 +29,7 @@ export default class DamageDialog extends Application
     }
 
 
-    render(force=false, options) {
+    render(force=false, options={}) {
         super.render(force, options)
         this.resolve = options.resolve
         this.reject = options.reject

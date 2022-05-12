@@ -44,6 +44,17 @@ export enum Defense {
     VENERABLE = "venerable"
   }
 
+  export enum SoakType {
+    BASE = "base",
+    SHIELD = "shield",
+    PHYSICAL = "physical",
+    BURN = "burn",
+    FREEZE = "freeze",
+    RAW = "raw",
+    CORRODE = "corrode",
+    SHOCK = "shock"
+  }
+
   // export type UpdateValue = string | number | UpdateObject[]
 
   // export type UpdateObject = {

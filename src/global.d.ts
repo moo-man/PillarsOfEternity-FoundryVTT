@@ -20,30 +20,8 @@ export interface PillarsActorSourceSystemData {
       checked: boolean;
     };
   };
-  health: {
-    max: number;
-    value: number;
-    modifier: number;
-    death: {
-      modifier: number;
-    };
-    threshold: {
-      bloodied: number;
-      incap: number;
-    };
-    wounds: {
-      value: number;
-    };
-  };
-  endurance: {
-    max: number;
-    value: number;
-    bonus: number;
-    penalty: number;
-    threshold: {
-      winded: number;
-    };
-  };
+  health: ActorHealthSourceData
+  endurance: ActorEnduranceSourceData
   soak: {
     base: number;
     shield: number;
@@ -107,7 +85,7 @@ export interface PillarsCharacterSourceSystemData
     godlike: string;
   };
   knownConnections: {
-    value: [];
+    value: {name : string}[];
   };
   childhood: {
     value: string;
@@ -129,35 +107,8 @@ export type PillarsActorSourceData = CharacterDataSource | NPCDataSource;
 
 export interface BasePreparedPillarsActorData
   extends PillarsActorSourceSystemData {
-  health: {
-    max: number;
-    value: number;
-    modifier: number;
-    death: {
-      modifier: number;
-    };
-    threshold: {
-      bloodied: number;
-      incap: number;
-    };
-    bloodied: boolean; // Added
-    incap: boolean; // Added
-    dead: boolean; // Added
-    wounds: {
-      value: number;
-    };
-  };
-  endurance: {
-    max: number;
-    value: number;
-    bonus: number;
-    penalty: number;
-    winded: boolean; // Added
-    incap: boolean; // Added
-    threshold: {
-      winded: number;
-    };
-  };
+  health: ActorHealthPreparedData
+  endurance: ActorEndurancePreparedData;
   weight: number;
 }
 
@@ -181,7 +132,7 @@ export interface PreparedPillarsCharacterData
     godlike: string;
   };
   knownConnections: {
-    value: [];
+    value: {name : string}[];
   };
   childhood: {
     value: string;

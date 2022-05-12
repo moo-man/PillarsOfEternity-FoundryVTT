@@ -1,18 +1,70 @@
 import PowerTemplate from "../system/power-template";
 import BookOfSeasons from "../apps/book-of-seasons";
 import ActorConfigure from "../apps/actor-configure";
-import { PillarsActorDataSource, BasePreparedPillarsActorData, PreparedPillarsActorData } from "../../global";
 import { PillarsItem } from "../item/item-pillars";
 import PillarsActiveEffect from "../system/pillars-effect";
+import { BasePreparedPillarsActorData, PillarsActorTooltips, PreparedPillarsCharacterData } from "../../global";
+import { Defense, ItemType, SoakType } from "../../types/common";
+import { getGame } from "../../pillars";
+import PILLARS_UTILITY from "../system/utility";
+import DamageDialog from "../apps/damage-dialog";
 
 
 
 // Overwrite default ActorSheet.Data data property and replace it with system data
-interface PillarsSheetData extends Omit<ActorSheet.Data, "data"> {
+interface PillarsSheetData extends Omit<ActorSheet.Data, "data" | "effects" | "items"> {
     data : BasePreparedPillarsActorData,
     items : SheetItemData,
     effects : SheetEffectData,
     soaks : SoakData
+    KnownConnections : {name : string, img : string, id: string}[]
+    deathMarch : string[]
+    tooltips :  {
+    defenses: {
+        deflection: string;
+        reflex: string;
+        fortitude: string;
+        will: string;
+      };
+      health: {
+        max: string;
+        threshold: {
+          bloodied: string;
+          incap: string;
+        };
+      };
+      endurance: {
+        max: string;
+        threshold: {
+          winded: string;
+        };
+      };
+      initiative: {
+        value: string;
+      };
+      soak: {
+        base: string;
+        shield: string;
+        physical: string;
+        burn: string;
+        freeze: string;
+        raw: string;
+        corrode: string;
+        shock: string;
+      };
+      stride: {
+        value: string;
+      };
+      run: {
+        value: string;
+      };
+      toughness: {
+        value: string;
+      };
+      damageIncrement: {
+        value: string;
+      };
+    }
 } 
 
 interface SheetItemData {
@@ -75,12 +127,8 @@ interface InventorySheetData {
     }
 }
 
-interface SoakData {
-    [key : "physical" | "burn" | "freeze" | "corrode" | "shock"] : {
-        total : number,
-        show: boolean
-        img : string
-    }
+interface SoakData extends Partial<Record<SoakType, {total : number,show: boolean,img : string}>> {
+
 }
 
 interface SheetEffectData {
@@ -200,7 +248,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
         class: "configure",
         label : "",
         icon: "fas fa-wrench",
-        onclick: async (ev) => new ActorConfigure(this.actor).render(true)
+        onclick: async (ev: JQuery.ClickEvent) => new ActorConfigure(this.actor).render(true)
     })
     return buttons
   }
@@ -209,17 +257,6 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     /** @override */
     async getData() :  Promise<PillarsSheetData> {
         const data = await super.getData();
-
-        data.data = (data as unknown as ActorSheet.Data).data.data
-
-        if (game instanceof Game)
-        {
-            let test = game.actors?.get("test")
-            if (test!.data.type == "character")
-            {
-                test?.data.data.
-            }
-        }
         this.prepareSheetData(data);
         this.formatTooltips(data)
         
@@ -237,29 +274,30 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
             this._createDeathMarchArray(sheetData)
         }
 
-        this._createHealthArray(sheetData.data.health, "health")
-        this._createEnduranceArray(sheetData.data.endurance, "endurance")
+        this._createHealthArray(<ActorHealthSheetData>sheetData.data.health)
+        this._createEnduranceArray(<ActorEnduranceSheetData>sheetData.data.endurance)
         this._createSoakArray(sheetData)
     }   
 
-    formatTooltips(data)
+    formatTooltips(data : PillarsSheetData)
     {
-        data.tooltips = foundry.utils.deepClone(this.actor.data.flags.tooltips)
+        let tooltips = foundry.utils.deepClone(this.actor.data.flags.tooltips)
+        data.tooltips = foundry.utils.deepClone(this.actor.data.flags.tooltips) as unknown as typeof data.tooltips
         for (let def in data.tooltips.defenses)
-            data.tooltips.defenses[def] = data.tooltips.defenses[def].join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.health.max = data.tooltips.health.max.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.endurance.max = data.tooltips.endurance.max.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.initiative.value = data.tooltips.initiative.value.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.stride.value = data.tooltips.stride.value.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.run.value = data.tooltips.run.value.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.toughness.value = data.tooltips.toughness.value.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.damageIncrement.value = data.tooltips.damageIncrement.value.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.health.threshold.bloodied = data.tooltips.health.threshold.bloodied.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.health.threshold.incap = data.tooltips.health.threshold.incap.join(" + ").replaceAll("+ -", "- ")
-        data.tooltips.endurance.threshold.winded = data.tooltips.endurance.threshold.winded.join(" + ").replaceAll("+ -", "- ")
+            data.tooltips.defenses[<Defense>def] = tooltips.defenses[<Defense>def].join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.health.max = tooltips.health.max.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.endurance.max = tooltips.endurance.max.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.initiative.value = tooltips.initiative.value.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.stride.value = tooltips.stride.value.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.run.value = tooltips.run.value.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.toughness.value = tooltips.toughness.value.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.damageIncrement.value = tooltips.damageIncrement.value.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.health.threshold.bloodied = tooltips.health.threshold.bloodied.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.health.threshold.incap = tooltips.health.threshold.incap.join(" + ").replaceAll("+ -", "- ")
+        data.tooltips.endurance.threshold.winded = tooltips.endurance.threshold.winded.join(" + ").replaceAll("+ -", "- ")
 
         for (let type in data.tooltips.soak)
-            data.tooltips.soak[type] = data.tooltips.soak[type].join(" + ").replaceAll("+ -", "- ")
+            data.tooltips.soak[<SoakType>type] = tooltips.soak[<SoakType>type].join(" + ").replaceAll("+ -", "- ")
     }
 
 
@@ -267,20 +305,20 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
         let items : SheetItemData = <SheetItemData>{}
         
         items.attributes = {benefits : [], hindrances: []}
-        items.attributes.benefits = sheetData.actor.getItemTypes("attribute").filter(i => i.category.value == "benefit");
-        items.attributes.hindrances = sheetData.actor.getItemTypes("attribute").filter(i => i.category.value == "hindrance");
+        items.attributes.benefits = sheetData.actor.getItemTypes(ItemType.attribute).filter(i => i.category.value == "benefit");
+        items.attributes.hindrances = sheetData.actor.getItemTypes(ItemType.attribute).filter(i => i.category.value == "hindrance");
 
-        items.skills = sheetData.actor.getItemTypes("skill")
-        items.traits = sheetData.actor.getItemTypes("trait")
-        items.powers = sheetData.actor.getItemTypes("power").filter(i => !i.embedded.item) 
+        items.skills = sheetData.actor.getItemTypes(ItemType.skill)
+        items.traits = sheetData.actor.getItemTypes(ItemType.trait)
+        items.powers = sheetData.actor.getItemTypes(ItemType.power).filter(i => !i.embedded.item) 
         items.embeddedPowers = sheetData.actor.getActiveEmbeddedPowers()
-        items.powerSources = sheetData.actor.getItemTypes("powerSource")
+        items.powerSources = sheetData.actor.getItemTypes(ItemType.powerSource)
 
-        items.injuries = sheetData.actor.getItemTypes("injury")  
-        items.backgrounds = sheetData.actor.getItemTypes("background")  
-        items.settings = sheetData.actor.getItemTypes("setting")  
-        items.connections = sheetData.actor.getItemTypes("connection")  
-        items.reputations = sheetData.actor.getItemTypes("reputation")  
+        items.injuries = sheetData.actor.getItemTypes(ItemType.injury)  
+        items.backgrounds = sheetData.actor.getItemTypes(ItemType.background)  
+        items.settings = sheetData.actor.getItemTypes(ItemType.setting)  
+        items.connections = sheetData.actor.getItemTypes(ItemType.connection)  
+        items.reputations = sheetData.actor.getItemTypes(ItemType.reputation)  
 
         items.inventory = this.constructInventory(sheetData)
 
@@ -298,32 +336,32 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
             weapons : {
                 label: "Weapons",
                 type : "weapon",
-                items : sheetData.actor.getItemTypes("weapon")
+                items : sheetData.actor.getItemTypes(ItemType.weapon)
             },
             armor : {
                 label: "Armor",
                 type : "armor",
-                items : sheetData.actor.getItemTypes("armor")
+                items : sheetData.actor.getItemTypes(ItemType.armor)
             },
             shields : {
                 label: "Shields",
                 type : "shield",
-                items : sheetData.actor.getItemTypes("shield")
+                items : sheetData.actor.getItemTypes(ItemType.shield)
             },
             tools : {
                 label: "Tools",
                 type : "equipment",
-                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "tool")
+                items : sheetData.actor.getItemTypes(ItemType.equipment).filter(i => i.category.value == "tool")
             },
             gear : {
                 label: "Gear",
                 type : "equipment",
-                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "gear")
+                items : sheetData.actor.getItemTypes(ItemType.equipment).filter(i => i.category.value == "gear")
             },
             grimoires  : {
                 label: "Grimoires",
                 type : "equipment",
-                items : sheetData.actor.getItemTypes("equipment").filter(i => i.category.value == "grimoire")
+                items : sheetData.actor.getItemTypes(ItemType.equipment).filter(i => i.category.value == "grimoire")
             }
         }
         return inventory
@@ -383,18 +421,21 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
 
     _enrichKnownConnections(sheetData : PillarsSheetData)
     {
-        let connections = sheetData.actor.knownConnections.value
-        sheetData.KnownConnections = connections.map(i => {
-            let actor = game.actors.getName(i.name)
-            return {
-                name : i.name,
-                img : actor ? actor.data.token.img : "",
-                id : actor ? actor.id : ""
-            }
-        })
+        if (sheetData.actor.data.type == "character")
+        {
+            let connections = sheetData.actor.knownConnections!.value
+            sheetData.KnownConnections = connections.map(i => {
+                let actor = getGame().actors!.getName(i.name)
+                return {
+                    name : i.name,
+                    img : actor ? actor.data.token.img || "" : "",
+                    id : actor ? actor.id : ""
+                }
+            })
+        }
     }
 
-    _createHealthArray(data)
+    _createHealthArray(data : ActorHealthSheetData): void
     {
         let healthBonus, healthPenalty
         if (data.modifier > 0)
@@ -402,7 +443,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
         else 
             healthPenalty = Math.abs(data.modifier)
         
-        data.array = new Array(data.max).fill().map(i => {return {state: 0}})
+        data.array = new Array(data.max).fill({state : 0})
         if (healthBonus)
             data.array = new Array(healthBonus).fill({bonus: true, state : 0}).concat(data.array)
         else if (healthPenalty)
@@ -415,13 +456,13 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
             deathPenalty = Math.abs(data.death.modifier)
 
         if (deathBonus)
-            data.array = data.array.concat(new Array(data.death.modifier).fill().map(i => {return {state : 0, bonus: true}}))
+            data.array = data.array.concat(new Array(data.death.modifier).fill({state : 0, bonus: true}))
         else if (deathPenalty)
         {
             let counter = 0;
             for (let i = data.array.length - 1; i >= 0 && counter < deathPenalty; i--)
             {
-                data.array[i].state = -1;
+                data.array[i]!.state = -1;
                 counter++;
             }
         }
@@ -440,9 +481,9 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
         }
     }
 
-    _createEnduranceArray(data)
+    _createEnduranceArray(data : ActorEnduranceSheetData) : void
     {
-        data.array = new Array(data.max).fill().map(i => {return {state: 0}})
+        data.array = new Array(data.max).fill({state: 0})
         if (data.bonus)
             data.array = new Array(data.bonus).fill({bonus: true, state : 0}).concat(data.array)
         if (data.penalty)
@@ -450,7 +491,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
             let penaltyCounter = 0
             for (let i = data.array.length - 1; i >= 0 && penaltyCounter < data.penalty; i--)
             {
-                data.array[i].state = -1;
+                data.array[i]!.state = -1;
                 penaltyCounter++;
             }
         }
@@ -461,24 +502,26 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
         })
     }
 
-    _createDeathMarchArray(sheetData : PillarsSheetData)
+    _createDeathMarchArray(sheetData : PillarsSheetData) : void
     {
-        let marchVal = sheetData.data.life.march
-        sheetData.data.life.march = []
-
-        for(let i = 0; i < 7 ; i++)
+        if (this.actor.type == "character")
         {
-            if (i + 1 <= marchVal)
-                sheetData.data.life.march.push(`<i class="far fa-check-square"></i>`)
-            else 
-                sheetData.data.life.march.push(`<i class="far fa-square"></i>`)
+            let marchVal = (<PreparedPillarsCharacterData>sheetData.data).life.march
+            sheetData.deathMarch = []
+    
+            for(let i = 0; i < 7 ; i++)
+            {
+                if (i + 1 <= marchVal)
+                    sheetData.deathMarch.push(`<i class="far fa-check-square"></i>`)
+                else 
+                    sheetData.deathMarch.push(`<i class="far fa-square"></i>`)
+            }
+    
+            if (marchVal != 7)
+                sheetData.deathMarch[6] = `<i style="opacity:0.2" class="fas fa-skull"></i>`
+            else
+                sheetData.deathMarch[6] = `<i class="fas fa-skull"></i>`
         }
-
-        if (marchVal != 7)
-            sheetData.data.life.march[6] = `<i style="opacity:0.2" class="fas fa-skull"></i>`
-        else
-            sheetData.data.life.march[6] = `<i class="fas fa-skull"></i>`
-
     }
 
     _setPowerSourcePercentage(sheetData : PillarsSheetData)
@@ -489,10 +532,10 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
         })
     }
 
-     async _dropdown(event, dropdownData) {
+     async _dropdown(event: JQuery.MouseUpEvent, dropdownData) {
         let dropdownHTML = ""
         event.preventDefault()
-        let li = $(event.currentTarget).parents(".item")
+        let li = $(event.currentTarget!).parents(".item")
         // Toggle expansion for an item
         if (li.hasClass("expanded")) // If expansion already shown - remove
         {
@@ -533,7 +576,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
 
     /* -------------------------------------------- */
     /** @override */
-    activateListeners(html) {
+    activateListeners(html: JQuery<HTMLElement>) : void {
         super.activateListeners(html);
         
         // Everything below here is only needed if the sheet is editable
@@ -547,55 +590,54 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
             $(this).select()
         });
 
-        html.find(".item-edit").click(this._onItemEdit.bind(this))
-        html.find(".item-delete").click(this._onItemDelete.bind(this))
-        html.find(".item-create").click(this._onItemCreate.bind(this))
-        html.find(".item-post").click(this._onPostItem.bind(this))
-        html.find(".effect-create").click(this._onEffectCreate.bind(this));  
-        html.find(".effect-edit").click(this._onEffectEdit.bind(this));  
-        html.find(".effect-delete").click(this._onEffectDelete.bind(this));  
-        html.find(".effect-toggle").click(this._onEffectToggle.bind(this));  
-        html.find(".sheet-checkbox").click(this._onCheckboxClick.bind(this))
-        html.find(".open-info").click(this._onInfoClick.bind(this))
-        //html.find(".wound-square").click(this._onWoundClick.bind(this))
-        html.find(".add-wound").click(this._onWoundClick.bind(this))
-        html.find(".subtract-wound").click(this._onWoundClick.bind(this))
-        html.find(".item-dropdown.item-control").mousedown(this._onDropdown.bind(this))
-        html.find(".item-dropdown h4").mousedown(this._onDropdown.bind(this))
-        html.find(".item-dropdown-alt h4").mousedown(this._onDropdownAlt.bind(this))
-        html.find(".item-special").mousedown(this._onSpecialClicked.bind(this))
-        html.find(".item-property").change(this._onEditItemProperty.bind(this))
-        html.find(".skill-roll").click(this._onSkillRoll.bind(this))
-        html.find(".roll-untrained").click(this._onUntrainedSkillClick.bind(this))
-        html.find(".weapon-roll").click(this._onWeaponRoll.bind(this))
-        html.find(".power-roll").click(this._onPowerRoll.bind(this))
-        html.find(".property-counter").mousedown(this._onCounterClick.bind(this))
-        html.find(".create-connection").click(this._onCreateConnection.bind(this))
-        html.find(".edit-connection").click(this._onEditConnection.bind(this))
-        html.find(".delete-connection").click(this._onDeleteConnection.bind(this))
-        html.find(".connection-name").click(this._onConnectionClick.bind(this))
-        html.on("click", ".power-target", this._onPowerTargetClick.bind(this))
-        html.find(".restore-pool").click(this._onRestorePoolClick.bind(this))
-        html.find(".sheet-roll").click(this._onSheetRollClick.bind(this))
+        html.find(".item-edit").on("click", this._onItemEdit.bind(this))
+        html.find(".item-delete").on("click", this._onItemDelete.bind(this))
+        html.find(".item-create").on("click", this._onItemCreate.bind(this))
+        html.find(".item-post").on("click", this._onPostItem.bind(this))
+        html.find(".effect-create").on("click", this._onEffectCreate.bind(this));  
+        html.find(".effect-edit").on("click", this._onEffectEdit.bind(this));  
+        html.find(".effect-delete").on("click", this._onEffectDelete.bind(this));  
+        html.find(".effect-toggle").on("click", this._onEffectToggle.bind(this));  
+        html.find(".sheet-checkbox").on("click", this._onCheckboxClick.bind(this))
+        html.find(".open-info").on("click", this._onInfoClick.bind(this))
+        html.find(".add-wound").on("click", this._onWoundClick.bind(this))
+        html.find(".subtract-wound").on("click", this._onWoundClick.bind(this))
+        html.find(".item-dropdown.item-control").on("mouseup", this._onDropdown.bind(this))
+        html.find(".item-dropdown h4").on("mouseup", this._onDropdown.bind(this))
+        html.find(".item-dropdown-alt h4").on("mouseup", this._onDropdownAlt.bind(this))
+        html.find(".item-special").on("mouseup", this._onSpecialClicked.bind(this))
+        html.find(".item-property").on("change", this._onEditItemProperty.bind(this))
+        html.find(".skill-roll").on("click", this._onSkillRoll.bind(this))
+        html.find(".roll-untrained").on("click", this._onUntrainedSkillClick.bind(this))
+        html.find(".weapon-roll").on("click", this._onWeaponRoll.bind(this))
+        html.find(".power-roll").on("click", this._onPowerRoll.bind(this))
+        html.find(".property-counter").on("mouseup", this._onCounterClick.bind(this))
+        html.find(".create-connection").on("click", this._onCreateConnection.bind(this))
+        html.find(".edit-connection").on("click", this._onEditConnection.bind(this))
+        html.find(".delete-connection").on("click", this._onDeleteConnection.bind(this))
+        html.find(".connection-name").on("click", this._onConnectionClick.bind(this))
+        html.on("click", ".power-roll", this._onPowerTargetClick.bind(this))
+        html.find(".restore-pool").on("click", this._onRestorePoolClick.bind(this))
+        html.find(".sheet-roll").on("click", this._onSheetRollClick.bind(this))
         html.on("click", ".damage-roll", this._onDamageRollClick.bind(this))
-        html.find(".roll-item-skill").click(this._onItemSkillClick.bind(this))
-        html.find(".age-roll").click(this._onAgeRoll.bind(this))
-        html.find(".roll-initiative").click(this._onInitiativeClick.bind(this))
-        html.find(".setting").click(this._onSettingClick.bind(this))
-        html.find(".displayGroup").click(this._onDisplayGroupClick.bind(this))
-        html.find(".box-click").click(this._onBoxClick.bind(this))
-        html.find(".long-rest").click(this._onLongRestClick.bind(this))
-        html.find(".embedded-value").mouseup(this._onEmbeddedValueClick.bind(this))
-        html.find(".endurance-action").click(this._onEnduranceActionClick.bind(this))
+        html.find(".roll-item-skill").on("click", this._onItemSkillClick.bind(this))
+        html.find(".age-roll").on("click", this._onAgeRoll.bind(this))
+        html.find(".roll-initiative").on("click", this._onInitiativeClick.bind(this))
+        html.find(".setting").on("click", this._onSettingClick.bind(this))
+        html.find(".displayGroup").on("click", this._onDisplayGroupClick.bind(this))
+        html.find(".box-click").on("click", this._onBoxClick.bind(this))
+        html.find(".long-rest").on("click", this._onLongRestClick.bind(this))
+        html.find(".embedded-value").on("mouseup", this._onEmbeddedValueClick.bind(this))
+        html.find(".endurance-action").on("click", this._onEnduranceActionClick.bind(this))
         html.find('.item:not(".tab-select")').each((i, li) => {
-            li.setAttribute("draggable", true);
+            li.setAttribute("draggable", "true");
             li.addEventListener("dragstart", this._onDragStart.bind(this), false);
         });
     }
 
-    _onDrop(event) {
+    _onDrop(event : DragEvent) {
             try {
-            let dragData = JSON.parse(event.dataTransfer.getData("text/plain"))
+            let dragData = JSON.parse(event.dataTransfer?.getData("text/plain") || "")
             if (dragData.type == "item")
                 this.actor.createEmbeddedDocuments("Item", [dragData.payload])
             else 
@@ -607,19 +649,23 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
             }
     }
 
-    _onItemEdit(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        return this.actor.items.get(itemId).sheet.render(true)
+    _onItemEdit(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        if (itemId)
+            return this.actor.items.get(itemId)?.sheet?.render(true)
     }
-    _onItemDelete(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
+    _onItemDelete(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        if (!itemId)
+            return
+
         new Dialog({
             title : "Delete Item",
             content : `<p>Are you sure you want to delete this item?`,
             buttons : {
                 yes : {
                     label : "Yes",
-                    callback : () => {this.actor.deleteEmbeddedDocuments("Item", [itemId]) }
+                    callback : () => {this.actor.deleteEmbeddedDocuments("Item", [itemId!]) }
                 },
                 no : {
                     label : "No",
@@ -629,10 +675,10 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
             default: "yes"
         }).render(true)
     }
-    _onItemCreate(event) {
-        let type = $(event.currentTarget).attr("data-type");
-        let category = $(event.currentTarget).attr("data-category");
-        let createData = { name: `New ${game.i18n.localize(CONFIG.Item.typeLabels[type])}`, type}
+    _onItemCreate(event : JQuery.ClickEvent) {
+        let type = $(event.currentTarget!).attr("data-type");
+        let category = $(event.currentTarget!).attr("data-category");
+        let createData : Record<string, unknown> = { name: `New ${getGame().i18n.localize(CONFIG.Item.typeLabels[type!]!)}`, type}
         if (type == "power")
             createData["data.improvised.value"] = true
             
@@ -641,14 +687,15 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
         return this.actor.createEmbeddedDocuments("Item", [createData])
     }
 
-    _onPostItem(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        return this.actor.items.get(itemId).postToChat()
+    _onPostItem(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        if (itemId)
+            return this.actor.items.get(itemId)?.postToChat()
     }
     
-    async _onEffectCreate(ev) {
-        let type = ev.currentTarget.attributes["data-type"].value
-        let effectData = { label: "New Effect" , icon: "icons/svg/aura.svg"}
+    async _onEffectCreate(ev : JQuery.ClickEvent) {
+        let type = (<HTMLElement>ev.currentTarget).dataset["type"]
+        let effectData : Record<string, unknown> = { label: "New Effect" , icon: "icons/svg/aura.svg"}
         if (type == "temporary") {
             effectData["duration.rounds"] = 1;
           }
@@ -661,10 +708,11 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
                 "create" : {
                     label : "Create",
                     callback : html => {
+                        html = $(html)
                         let mode = 2
                         let label = html.find(".label").val()
                         let key = html.find(".key").val()
-                        let value = parseInt(html.find(".modifier").val())
+                        let value = parseInt(html.find(".modifier").val()?.toString() || "")
                         effectData.label = label
                         effectData.changes = [{key, mode, value}]
                         this.actor.createEmbeddedDocuments("ActiveEffect", [effectData])
@@ -674,125 +722,139 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
                     label : "Skip",
                     callback : () => this.actor.createEmbeddedDocuments("ActiveEffect", [effectData])
                 }
-            }
+            },
+            default: "",
+            render: (dlg => {
+                $(dlg).find(".label").select()
+            })
         })
-        await dialog._render(true)
-        dialog._element.find(".label").select()
+
       }
 
-    _onEffectEdit(ev)
+    _onEffectEdit(ev : JQuery.ClickEvent)
     {
-        let id = $(ev.currentTarget).parents(".item").attr("data-item-id")
-        this.object.effects.get(id).sheet.render(true)
+        let id = $(ev.currentTarget!).parents(".item").attr("data-item-id")
+        this.object.effects.get(id!)?.sheet?.render(true)
     }
 
-    _onEffectDelete(ev)
+    _onEffectDelete(ev : JQuery.ClickEvent)
     {
-        let id = $(ev.currentTarget).parents(".item").attr("data-item-id")
-        this.object.deleteEmbeddedDocuments("ActiveEffect", [id])
+        let id = $(ev.currentTarget!).parents(".item").attr("data-item-id")
+        if (id)
+            this.object.deleteEmbeddedDocuments("ActiveEffect", [id])
     }
 
-    _onEffectToggle(ev)
+    _onEffectToggle(ev : JQuery.ClickEvent)
     {
-        let id = $(ev.currentTarget).parents(".item").attr("data-item-id")
-        let effect = this.object.effects.get(id)
+        let id = $(ev.currentTarget!).parents(".item").attr("data-item-id")
+        let effect = this.object.effects.get(id!)
 
-        effect.update({"disabled" : !effect.data.disabled})
+        if (effect)
+            effect.update({"disabled" : !effect.data.disabled})
     }
 
-    _onCheckboxClick(event) {
-        let target = $(event.currentTarget).attr("data-target")
+    _onCheckboxClick(event : JQuery.ClickEvent) {
+        let target = $(event.currentTarget!).attr("data-target")
         if (target == "item") {
-            target = $(event.currentTarget).attr("data-item-target")
-            let item = this.actor.items.get($(event.currentTarget).parents(".item").attr("data-item-id"))
-            return item.update({ [`${target}`]: !getProperty(item.data, target) })
+            target = $(event.currentTarget!).attr("data-item-target")
+            let item = this.actor.items.get($(event.currentTarget!).parents(".item").attr("data-item-id") || "")
+            if (item && target)
+                return item.update({ [`${target}`]: !getProperty(item.data, target) })
         }
         if (target)
             return this.actor.update({[`${target}`] : !getProperty(this.actor.data, target)});
     }
 
-    _onInfoClick(event) {
-        let type = $(event.currentTarget).attr("data-type")
-        let item = this.actor.getItemTypes(type)[0]
+    _onInfoClick(event : JQuery.ClickEvent) {
+        let type = $(event.currentTarget!).attr("data-type")
+        let item = this.actor.getItemTypes(<ItemType>type!)[0]
         if (!item)
-            return ui.notifications.error(`No owned item of type ${type}`)
-       item.sheet.render(true)
+            return ui.notifications!.error(`No owned item of type ${type}`)
+        else if (item)
+            item.sheet!.render(true)
     }
 
-    _onEditItemProperty(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let target = $(event.currentTarget).attr("data-target")
-        let value = event.target.value
-        let item = this.actor.items.get(itemId)
+    _onEditItemProperty(event : JQuery.ChangeEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let target = $(event.currentTarget!).attr("data-target")
+        let value : string | number = (<HTMLInputElement>event.currentTarget!).value
+        let item = this.actor.items.get(itemId!)
 
         if (Number.isNumeric(value))
             value = parseInt(value)
 
-        return item.update({[target] : value})
+        if (item && target)
+            return item.update({[target] : value})
     }
 
-    _onDropdown(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let item = this.actor.items.get(itemId)
-        this._dropdown(event, item.dropdownData())
+    _onDropdown(event : JQuery.MouseUpEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId!)
+        if (item)
+            this._dropdown(event, item.dropdownData())
     }
-    _onDropdownAlt(event) {
+    _onDropdownAlt(event : JQuery.MouseUpEvent) {
         if (event.button == 2)
         {
-            let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-            let item = this.actor.items.get(itemId)
-            this._dropdown(event, item.dropdownData())
+            let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+            let item = this.actor.items.get(itemId!)
+            if (item)
+                this._dropdown(event, item.dropdownData())
         }
     }
 
-    _onCounterClick(event) {
+    _onCounterClick(event : JQuery.MouseUpEvent) {
         let multiplier = event.button == 0 ? 1 : -1;
         multiplier = event.ctrlKey ? multiplier * 10 : multiplier
 
 
-        let target = $(event.currentTarget).attr("data-target")
+        let target = $(event.currentTarget!).attr("data-target")
         if (target == "item") {
-            target = $(event.currentTarget).attr("data-item-target")
-            let item = this.actor.items.get($(event.currentTarget).parents(".item").attr("data-item-id"))
-            return item.update({ [`${target}`]: getProperty(item.data, target) + multiplier })
+            target = $(event.currentTarget!).attr("data-item-target")
+            let item = this.actor.items.get($(event.currentTarget!).parents(".item").attr("data-item-id")!)
+            if (item && target)
+                return item.update({ [`${target}`]: getProperty(item.data, target) + multiplier })
         }
         if (target)
             return this.actor.update({[`${target}`] : getProperty(this.actor.data, target) + multiplier});
     }
 
-    _onSpecialClicked(event) {
-        let text = event.target.text.split("(")[0].trim()
-        for (let special in game.pillars.utility.weaponSpecials())
+    _onSpecialClicked(event : JQuery.MouseUpEvent) {
+        let text = (<HTMLAnchorElement>event.currentTarget).text?.split("(")[0]?.trim()
+        for (let special in PILLARS_UTILITY.weaponSpecials())
         {
-            if (game.pillars.utility.weaponSpecials()[special].label == text)
-                return this._dropdown(event, {text : game.pillars.utility.weaponSpecials()[special].description})
+            if (PILLARS_UTILITY.weaponSpecials()[special].label == text)
+                return this._dropdown(event, {text : PILLARS_UTILITY.weaponSpecials()[special].description})
         }
         
     }
 
-    _onCreateConnection(event) {
-        let connections = duplicate(this.actor.knownConnections.value);
-        connections.push({name : "New Connection"})
-        this.actor.update({"data.knownConnections.value" : connections})
+    _onCreateConnection(event : JQuery.ClickEvent) {
+        let connections = duplicate(this.actor.knownConnections?.value || []);
+        if (connections)
+        {
+            connections.push({name : "New Connection"})
+            this.actor.update({"data.knownConnections.value" : connections})
+        }
     }
 
-    _onEditConnection(event) {
-        let index = $(event.currentTarget).parents(".item").attr("data-index")
-        let connections = duplicate(this.actor.knownConnections.value);
+    _onEditConnection(event : JQuery.ClickEvent) {
+        let index : number = parseInt($(event.currentTarget!).parents(".item").attr("data-index") || "")
+        let connections = duplicate(this.actor.knownConnections?.value || []);
         new Dialog({
             title : "Change Connection",
             content : `
             <p>Enter the name of the connection</p>
             <div class="form-group">
-            <input type="text" name="connection" value=${connections[index].name}>
+            <input type="text" name="connection" value=${connections[index]!.name}>
             </div>
             `,
             buttons : {
                 submit : {
                     label : "Submit",
                     callback : (dlg) => {
-                        let newName = dlg.find("[name='connection']")[0].value
-                        connections[index].name = newName;
+                        let newName = ($(dlg).find("[name='connection']")[0] as HTMLInputElement).value || ""
+                        connections[index]!.name = newName;
                         this.actor.update({"data.knownConnections.value" : connections})
                     }
                 },
@@ -802,56 +864,57 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
 
     }
 
-    _onDeleteConnection(event) {
-        let index = parseInt($(event.currentTarget).parents(".item").attr("data-index"))
-        let connections = duplicate(this.actor.knownConnections.value);
+    _onDeleteConnection(event : JQuery.ClickEvent) {
+        let index = parseInt($(event.currentTarget!).parents(".item").attr("data-index") || "")
+        let connections = duplicate(this.actor.knownConnections?.value || []);
         connections.splice(index, 1);
         this.actor.update({"data.knownConnections.value" : connections})
     }
     
-    _onConnectionClick(event) {
-        let id = $(event.currentTarget).parents(".item").attr("data-actor-id")
+    _onConnectionClick(event : JQuery.ClickEvent) {
+        let id = $(event.currentTarget!).parents(".item").attr("data-actor-id")
         if (id)
-            game.actors.get(id).sheet.render(true)
+            getGame().actors!.get(id)?.sheet?.render(true)
     }
 
-    _onPowerTargetClick(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let index = $(event.currentTarget).attr("data-index")
-        let item = this.actor.items.get(itemId)
-        let groupId = item.displayGroupKey()//$(event.currentTarget).attr("data-group")
+    _onPowerTargetClick(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let index = $(event.currentTarget!).attr("data-index")
+        let item = this.actor.items.get(itemId!)
+        let groupId = item?.displayGroupKey()//$(event.currentTarget!).attr("data-group")
         PowerTemplate.fromItem(item, groupId, index).drawPreview()
     }
 
-    _onRestorePoolClick(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let item = this.actor.items.get(itemId)
-        return item.update({"data.pool.current" : item.pool.max})
+    _onRestorePoolClick(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId!)
+        if (item)
+            return item.update({"data.pool.current" : item.pool.max})
     }
 
 
 
-    _onWoundClick(event) {
-        let multiplier = event.currentTarget.classList.contains("add-wound") ? 1 : -1
+    _onWoundClick(event : JQuery.ClickEvent) {
+        let multiplier = (<HTMLAnchorElement>event.currentTarget).classList.contains("add-wound") ? 1 : -1
         return this.actor.update({"data.health.wounds.value" : this.actor.health.wounds.value + 1 * multiplier })
     }
 
     /* -------------------------------------------- */
 
 
-    _onSheetRollClick(event) {
-        new Roll(event.target.text).roll().toMessage({speaker : this.actor.speakerData()})
+    _onSheetRollClick(event : JQuery.ClickEvent) {
+        new Roll((<HTMLAnchorElement>event.target).text).roll().toMessage({speaker : this.actor.speakerData()})
     }
 
-    _onDamageRollClick(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let group = $(event.currentTarget).attr("data-group")
-        let item = this.actor.items.get(itemId)
-        new game.pillars.apps.DamageDialog(item, undefined, Array.from(game.user.targets), group).render(true)
+    _onDamageRollClick(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let group = $(event.currentTarget!).attr("data-group")
+        let item = this.actor.items.get(itemId!)
+        new DamageDialog(item, undefined, Array.from(getGame().user!.targets)).render(true)
     }
 
 
-    _onInitiativeClick(event) {
+    _onInitiativeClick(event : JQuery.ClickEvent) {
 
         new Dialog({
             title : "Roll Initiative",
@@ -875,24 +938,28 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
 
       }
 
-      _onSettingClick(ev) 
+      _onSettingClick(ev : JQuery.ClickEvent) 
       {
-        let itemId = $(event.currentTarget).attr("data-item-id")
-        let item = this.actor.items.get(itemId)
+        let itemId = $(ev.currentTarget!).attr("data-item-id")
+        let item = this.actor.items.get(itemId!)
         if (item)
-            item.sheet.render(true)
+            item.sheet!.render(true)
       }
     
 
-    async _onSkillRoll(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let check = await this.actor.setupSkillCheck(this.actor.items.get(itemId))
-        await check.rollCheck();
-        check.sendToChat()
+    async _onSkillRoll(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId!)
+        if (item)
+        {
+            let check = await this.actor.setupSkillCheck(item)
+            await check.rollCheck();
+            check.sendToChat()
+        }
     }
 
-    async _onUntrainedSkillClick(event) {
-        let allSkills = game.items.contents.filter(i => i.type == "skill").sort((a, b) => a.name > b.name ? 1 : -1)
+    async _onUntrainedSkillClick(event : JQuery.ClickEvent) {
+        let allSkills = getGame().items!.contents.filter(i => i.type == "skill").sort((a, b) => a.name! > b.name! ? 1 : -1)
         let selectElement = `<select name="skill">`
         for(let s of allSkills)
             selectElement += `<option name=${s.name}>${s.name}</option>`
@@ -914,76 +981,81 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
                             check.sendToChat()
                         }
                         else
-                            ui.notifications.error("Please enter a skill name")
+                            ui.notifications!.error("Please enter a skill name")
                     }
                 }
             },
-            default: "roll"
+            default: "roll",
+            render: (dlg => {
+
+                $(dlg).find("select")[0]?.focus()
+            })
         })
-        await dialog._render(true)
-        dialog.element.find("select")[0].focus()
     }
 
-    async _onWeaponRoll(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let check = await this.actor.setupWeaponCheck(itemId)
+    async _onWeaponRoll(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let check = await this.actor.setupWeaponCheck(itemId!)
         await check.rollCheck();
         check.sendToChat()
     }
 
-    async _onPowerRoll(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let check = await this.actor.setupPowerCheck(itemId)
+    async _onPowerRoll(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let check = await this.actor.setupPowerCheck(itemId!)
         await check.rollCheck();
         check.sendToChat()
     }
 
-    async _onItemSkillClick(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let item = this.actor.items.get(itemId);
-        let skill = this.actor.items.getName(item.skill.value)
+    async _onItemSkillClick(event : JQuery.ClickEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId!);
+        let skill = this.actor.items.getName(item?.skill.value)
         if (!skill)
-            return ui.notifications.warn(`Could not find skill ${item.skill.value}`)
+            return ui.notifications!.warn(`Could not find skill ${item?.skill.value}`)
         let check = await this.actor.setupSkillCheck(skill)
         await check.rollCheck()
         check.sendToChat()
     }
 
-    async _onAgeRoll(event) {
+    async _onAgeRoll(event : JQuery.ClickEvent) {
         let check = await this.actor.setupAgingRoll()
-        await check.rollCheck();
-        check.sendToChat()
+        await check?.rollCheck();
+        check?.sendToChat()
     }
 
     
-    _onDisplayGroupClick(event){
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let item = this.actor.items.get(itemId)
-        let groupIndex = item.getFlag("pillars-of-eternity", "displayGroup")
+    _onDisplayGroupClick(event : JQuery.ClickEvent){
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId!)
+        let groupIndex : number | string = <number | string>item?.getFlag("pillars-of-eternity", "displayGroup")
         if (!Number.isNumeric(groupIndex))
           groupIndex = 0
-        else 
+        else if (typeof groupIndex ==  "number")
           groupIndex++
         if (groupIndex >= Object.keys(item.groups).length)
           groupIndex = "Default"
 
-        return item.setFlag("pillars-of-eternity", "displayGroup", groupIndex)
+        return item?.setFlag("pillars-of-eternity", "displayGroup", groupIndex)
     }
 
-    _onBoxClick(ev) {
-        let index = parseInt($(event.currentTarget).attr("data-index"))
-        let target = $(event.currentTarget).attr("data-target")
+    _onBoxClick(ev : JQuery.ClickEvent) {
+        let index = parseInt($(ev.currentTarget!).attr("data-index") || "")
+        let target = $(ev.currentTarget!).attr("data-target")
 
-        let data = foundry.utils.deepClone(getProperty(this.actor.data, target));
-        if (index + 1 == data.value )
-            data.value = data.value -1
-        else
-            data.value = Number(index) + 1;
-
-        this.actor.update({[`${target}.value`] : data.value})
+        if (target)
+        {
+            let data = foundry.utils.deepClone(getProperty(this.actor.data, target));
+            if (index + 1 == data.value )
+                data.value = data.value -1
+            else
+                data.value = Number(index) + 1;
+    
+            this.actor.update({[`${target}.value`] : data.value})
+        }
     }
 
-    _onLongRestClick(ev) {
+    _onLongRestClick(ev : JQuery.ClickEvent) {
 
         new Dialog({
             title : "Rest",
@@ -997,27 +1069,32 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
                     label: "Long Rest",
                     callback: () => this.actor.longRest()
                 }
-            }
+            },
+            default : ""
         }).render(true);
     }
 
-    _onEmbeddedValueClick(event) {
-        let itemId = $(event.currentTarget).parents(".item").attr("data-item-id")
-        let item = this.actor.items.get(itemId);
-        let embedded = duplicate(item.embedded);
+    _onEmbeddedValueClick(event : JQuery.MouseUpEvent) {
+        let itemId = $(event.currentTarget!).parents(".item").attr("data-item-id")
+        let item = this.actor.items.get(itemId!);
+        if (item)
+        {
 
-        if (event.button == 0)    
+            let embedded = duplicate(item.embedded);
+            
+            if (event.button == 0)    
             embedded.uses.value++
-        else
+            else
             embedded.uses.value--
-
-        embedded.uses.value = Math.clamped(embedded.uses.value, 0, embedded.uses.max)
-
-        item.update({"data.embedded" : embedded})
+            
+            embedded.uses.value = Math.clamped(embedded.uses.value, 0, embedded.uses.max)
+            
+            item.update({"data.embedded" : embedded})
+        }
     }
 
-    _onEnduranceActionClick(ev)
+    _onEnduranceActionClick(ev : JQuery.ClickEvent)
     {
-        this.actor.enduranceAction(ev.currentTarget.dataset.type)
+        this.actor.enduranceAction(<"exert" | "breath">(<HTMLAnchorElement>ev.currentTarget).dataset.type)
     }
 }
