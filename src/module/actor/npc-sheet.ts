@@ -23,14 +23,14 @@ export class PillarsNPCSheet extends PillarsActorSheet {
     }
 
 
-    activateListeners(html)
+    activateListeners(html : JQuery<HTMLElement>)
     {
         super.activateListeners(html)
 
 
         if (!this.isEditable) return
 
-        html.find(".defense-input").change(ev => {
+        html.find(".defense-input").change((ev : JQuery.ChangeEvent) => {
             let defense = ev.currentTarget.dataset.defense
             let value = Number(ev.currentTarget.value)
 

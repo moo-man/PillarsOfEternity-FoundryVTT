@@ -1,18 +1,18 @@
-export const PILLARS = {
-defenses = {
+export const PILLARS : {
+defenses : {
     deflection: "Deflection",
     fortitude: "Fortitude",
     reflex: "Reflex",
     will: "Will"
 },
 
-attributeTypes = {
+attributeTypes : {
     "benefit": "Benefit",
     "hindrance": "Hindrance"
 },
 
 
-skillTypes = {
+skillTypes : {
     "academic": "Academic",
     "artistic": "Artistic",
     "language": "Language",
@@ -22,12 +22,12 @@ skillTypes = {
     "worldly": "Worldly"
 },
 
-traitTypes = {
+traitTypes : {
     "adventure": "Adventure",
     "experience": "Experience"
 },
 
-tiers = {
+tiers : {
     "novice": "Novice",
     "apprentice": "Apprentice",
     "master": "Master",
@@ -35,7 +35,7 @@ tiers = {
     "paragon": "Paragon"
 },
 
-tierBonus = {
+tierBonus : {
     "novice": {
         def: 0,
         bonus: 0,
@@ -59,7 +59,7 @@ tierBonus = {
 },
 
 
-lifePhases = {
+lifePhases : {
     childhood: "Childhood",
     adolescence: "Adolescence",
     youngAdult: "Young Adult",
@@ -69,7 +69,7 @@ lifePhases = {
     venerable: "Venerable"
 },
 
-lifePhaseModifier = {
+lifePhaseModifier : {
     childhood: 0,
     adolescence: 0,
     youngAdult: 0,
@@ -79,7 +79,7 @@ lifePhaseModifier = {
     venerable: 8
 },
 
-agePointsDeathRank = {
+agePointsDeathRank : {
     6: 1,
     10: 2,
     15: 3,
@@ -90,7 +90,7 @@ agePointsDeathRank = {
     999: 8
 },
 
-lifeStyles = {
+lifeStyles : {
     impoverished: "Impoverished",
     poor: "Poor",
     comfortable: "Comfortable",
@@ -99,7 +99,7 @@ lifeStyles = {
     extravagant: "Extravagant",
 },
 
-lifestyleModifier = {
+lifestyleModifier : {
     impoverished: 3,
     poor: 1,
     comfortable: 0,
@@ -108,7 +108,7 @@ lifestyleModifier = {
     extravagant: -3,
 },
 
-powerRanges = {
+powerRanges : {
     "none": "None",
     "adjacent": "Adjacent",
     "meleeWeapon": "Melee Weapon",
@@ -119,7 +119,7 @@ powerRanges = {
     "extreme": "Extreme"
 },
 
-powerTargetTypes = {
+powerTargetTypes : {
     "target": "Target",
     "circle": "Circle",
     "aura": "Aura",
@@ -129,7 +129,7 @@ powerTargetTypes = {
     "boundary": "Boundary"
 },
 
-powerTargets = {
+powerTargets : {
     "self": "Self",
     "individualEU": "Individual EU",
     "individual": "Individual",
@@ -137,38 +137,38 @@ powerTargets = {
 },
 
 
-powerCircles = {
+powerCircles : {
     "small": "Small Circle",
     "medium": "Medium Circle",
     "large": "Large Circle"
 },
 
 
-powerAuras = {
+powerAuras : {
     "small": "Small Aura",
     "large": "Large Aura"
 },
 
 
-powerCones = {
+powerCones : {
     "small": "Small Cone",
     "medium": "Medium Cone",
     "large": "Large Cone"
 },
 
 
-powerRays = {
+powerRays : {
     "narrow": "Narrow Ray",
     "wide": "Wide Ray"
 },
 
-powerLines = {
+powerLines : {
     "short": "Short Line",
     "long": "Long Line"
 },
 
 
-powerBoundarys = {
+powerBoundarys : {
     "adjacent": "Adjacent Boundary",
     "small": "Small Boundary",
     "large": "Large Boundary",
@@ -176,7 +176,7 @@ powerBoundarys = {
 },
 
 
-powerDurations = {
+powerDurations : {
     "momentary": "Momentary",
     "momentary2R": "Momentary 2R",
     "round": "Round",
@@ -192,7 +192,7 @@ powerDurations = {
 },
 
 
-powerSpeeds = {
+powerSpeeds : {
     "slow": "Slow",
     "move": "Move",
     "action": "Action",
@@ -203,21 +203,21 @@ powerSpeeds = {
 },
 
 
-powerExclusions = {
+powerExclusions : {
     "none": "None",
     "target": "Target",
     "single": "Single",
     "selective": "Selective"
 },
 
-powerJumps = {
+powerJumps : {
     "jump3": "3 Hexes",
     "jump6": "6 Hexes",
     "jump9": "9 Hexes"
 },
 
 
-powerLevelValues = {
+powerLevelValues : {
     powerRanges: {
         "none": 0,
         "adjacent": 1,
@@ -301,7 +301,7 @@ powerLevelValues = {
     attacksDecreaseDefense: -1.5
 },
 
-powerSources = {
+powerSources : {
     "arcana": "Arcana",
     "discipline": "Discipline",
     "faith": "Faith",
@@ -314,7 +314,7 @@ powerSources = {
     "zeal": "Zeal"
 },
 
-areaTargetTypes = {
+areaTargetTypes : {
     "circle": "circle",
     "aura": "circle",
     "cone": "cone",
@@ -322,7 +322,7 @@ areaTargetTypes = {
     "line": "ray"
 },
 
-areaTargetDistances = {
+areaTargetDistances : {
     circle: {
         "small": { distance: 1.2 },
         "medium": { distance: 2.8 },
@@ -352,19 +352,19 @@ areaTargetDistances = {
 },
 
 
-powerSourceTypes = {
+powerSourceTypes : {
     "external": "External",
     "personal": "Personal",
     "trained": "Trained"
 },
 
-powerEffectType = {
+powerEffectType : {
     "damage": "Damage",
     "condition": "Condition",
     "other": "Other"
 },
 
-powerEffectResistTypes = {
+powerEffectResistTypes : {
     "always": "Always",
     "reflex": "Reflex",
     "fortitude": "Fortitude",
@@ -372,7 +372,7 @@ powerEffectResistTypes = {
 },
 
 
-damageTypes = {
+damageTypes : {
     "physical": "Physical",
     "burn": "Burn",
     "freeze": "Freeze",
@@ -381,7 +381,7 @@ damageTypes = {
     "shock": "Shock"
 },
 
-weaponTypes = {
+weaponTypes : {
     "smallMelee": "Small Melee",
     "mediumMelee": "Medium Melee",
     "largeMelee": "Large Melee",
@@ -390,7 +390,7 @@ weaponTypes = {
     "grenade": "Grenade"
 },
 
-armorTypes = {
+armorTypes : {
     "physical": "Physical",
     "light": "Light Armor",
     "medium": "Medium Armor",
@@ -398,35 +398,35 @@ armorTypes = {
 },
 
 
-equipmentTypes = {
+equipmentTypes : {
     "gear": "Gear",
     "tool": "Tool",
     "grimoire" : "Grimoire"
 },
 
-suitabilities = {
+suitabilities : {
     "none": "No Penalty",
     "good": "Good (-2)",
     "fair": "Fair (-4)",
     "poor": "Poor (-8)"
 },
 
-actorSizes = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+actorSizes : [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
 
-allowEmbeddedPowers = ["attribute", "weapon", "armor", "shield", "equipment", "species", "stock", "godlike"],
+allowEmbeddedPowers : ["attribute", "weapon", "armor", "shield", "equipment", "species", "stock", "godlike"],
 
 
-embeddedPowerSpendTypes = {
+embeddedPowerSpendTypes : {
     "encounter" : "Per Encounter",
     "longRest" : "Per Long Rest",
     "charges" : "Charges",
 },
 
-rechargeTypes = {
+rechargeTypes : {
     "encounter" : "Per Encounter",
     "longRest" : "Per Long Rest"
 },
-sizeAttributes = {
+sizeAttributes : {
     "-5": {
         novice: { damageIncrement: 1, toughness: 0 },
         apprentice: { damageIncrement: 2, toughness: 0 },
@@ -507,7 +507,7 @@ sizeAttributes = {
 },
 
 
-meleeSpecials = {
+meleeSpecials : {
 
     battering: {
         label: "Battering",
@@ -589,7 +589,7 @@ meleeSpecials = {
     }
 },
 
-rangedSpecials = {
+rangedSpecials : {
     "destructiveChanneling": {
         label: "Destructive Channeling",
         description: "Take a Crit Die of Raw damage to raise the Damage dice to 2d8.",
@@ -665,7 +665,7 @@ rangedSpecials = {
 }
 }
 
-CONFIG.statusEffects = [
+CONFIG.statusEffects : [
     {
         id: "bloodied",
         label: "Bloodied",
@@ -710,7 +710,7 @@ CONFIG.statusEffects = [
         flags: {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    0 : { description: "Disadvantage if involves physical activity", script: "if (data.skill && (data.skill.category.value :: 'physical' || data.skill.category.value :: 'martial')) return true" },
                     1 : {description : "Attacks against Fortitude have Advantage", script : ""}
                 }
             }
@@ -725,7 +725,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    0 : { description: "Disadvantage if involves physical activity", script: "if (data.skill && (data.skill.category.value :: 'physical' || data.skill.category.value :: 'martial')) return true" },
                     1 : {description : "Attacks against Fortitude have Advantage", script : ""}
                 }
             }
@@ -740,7 +740,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    0 : { description: "Disadvantage if involves physical activity", script: "if (data.skill && (data.skill.category.value :: 'physical' || data.skill.category.value :: 'martial')) return true" },
                     1 : {description : "Attacks against Fortitude have Advantage", script : ""}
                 }
             }
@@ -755,7 +755,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Advantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    0 : { description: "Advantage if involves physical activity", script: "if (data.skill && (data.skill.category.value :: 'physical' || data.skill.category.value :: 'martial')) return true" },
                     1 : {description : "Attacks against Fortitude have Disadvantage", script : ""}
                 }
             }
@@ -770,7 +770,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Advantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    0 : { description: "Advantage if involves physical activity", script: "if (data.skill && (data.skill.category.value :: 'physical' || data.skill.category.value :: 'martial')) return true" },
                     1 : {description : "Attacks against Fortitude have Disadvantage", script : ""}
                 }
             }
@@ -785,7 +785,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Advantage if involves physical activity", script: "if (data.skill && (data.skill.category.value == 'physical' || data.skill.category.value == 'martial')) return true" },
+                    0 : { description: "Advantage if involves physical activity", script: "if (data.skill && (data.skill.category.value :: 'physical' || data.skill.category.value :: 'martial')) return true" },
                     1 : {description : "Attacks against Fortitude have Disadvantage", script : ""}
                 }
             }
@@ -800,7 +800,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.item.skill.value != 'gun' && data.item.skill.value != 'crossbow') return true" },
+                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type :: 'weapon' && data.item.skill.value !: 'gun' && data.item.skill.value !: 'crossbow') return true" },
                     1 : {description : "Attacks against Deflection or Reflex within 3 hexes have Advantage", script : ""}
                 }
             }
@@ -815,7 +815,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.item.skill.value != 'gun' && data.item.skill.value != 'crossbow') return true" },
+                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type :: 'weapon' && data.item.skill.value !: 'gun' && data.item.skill.value !: 'crossbow') return true" },
                     1 : {description : "Attacks against Deflection or Reflex within 3 hexes have Advantage", script : ""}
                 }
             }
@@ -830,7 +830,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type == 'weapon' && data.item.skill.value != 'gun' && data.item.skill.value != 'crossbow') return true" },
+                    0 : { description: "Disadvantage on Weapon attacks (besides firearms, crossbows, or arbalests)", script: "if (data.item.type :: 'weapon' && data.item.skill.value !: 'gun' && data.item.skill.value !: 'crossbow') return true" },
                     1 : {description : "Attacks against Deflection or Reflex within 3 hexes have Advantage", script : ""}
                 }
             }
@@ -957,7 +957,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type == 'weapon'" },
+                    0 : { description: "Disadvantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type :: 'weapon'" },
                     1 : { description: "Attacks against Deflection have Advantage", script: "return data.item.isVsDeflection" },
                 }
             }
@@ -972,7 +972,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Disadvantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type == 'weapon'" },
+                    0 : { description: "Disadvantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type :: 'weapon'" },
                     1 : { description: "Attacks against Deflection have Advantage", script: "return data.item.isVsDeflection" },
                 }
             }
@@ -1002,7 +1002,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Advantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type == 'weapon'" },
+                    0 : { description: "Advantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type :: 'weapon'" },
                     1 : { description: "Attacks against Deflection have Disadvantage", script: "return data.item.isVsDeflection" },
                 }
             }
@@ -1017,7 +1017,7 @@ CONFIG.statusEffects = [
         {
             "pillars-of-eternity": {
                 changeCondition : {
-                    0 : { description: "Advantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type == 'weapon'" },
+                    0 : { description: "Advantage on Weapon Attacks or Skill checks that require sight", script: "return data.item.type :: 'weapon'" },
                     1 : { description: "Attacks against Deflection have Disadvantage", script: "return data.item.isVsDeflection" },
                 }
             }

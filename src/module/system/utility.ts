@@ -1,4 +1,6 @@
-import { Useable } from "../../types/common"
+import { EmbeddedPowers, Useable } from "../../types/common"
+import { PillarsItem } from "../item/item-pillars"
+import { PILLARS } from "./config"
 
 export default class PILLARS_UTILITY {
   
@@ -60,12 +62,6 @@ export default class PILLARS_UTILITY {
 
     static weaponSpecials() {
         return mergeObject(foundry.utils.deepClone(game.pillars.config.meleeSpecials), game.pillars.config.rangedSpecials)
-    }
-
-    static isUsable(item : any): item is Useable {
-    
-            return true
-
     }
 
 }

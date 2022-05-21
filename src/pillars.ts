@@ -10,7 +10,7 @@ import { PillarsItem } from "./module/item/item-pillars.js";
 import { PillarsActorSheet } from "./module/actor/actor-sheet.js";
 import { PillarsActor } from "./module/actor/actor-pillars.js";
 import { PillarsCombat } from "./module/system/combat.js";
-import { POE } from "./module/system/config.js";
+import { PILLARS } from "./module/system/config.js";
 import PILLARS_UTILITY from "./module/system/utility.js";
 import { PillarsChat } from "./module/system/chat.js";
 import hooks from "./module/hooks/hooks.js"
@@ -58,28 +58,29 @@ Hooks.on("init", () => {
 //   PillarsExplode()
 
 
-//   game.pillars = {
-//     apps : {
-//       PillarsActorSheet,
-//       PillarsItemSheet,
-//       BookOfSeasons,
-//       RollDialog,
-//       ActorConfigure,
-//       DamageDialog,
-//       HealingDialog
-//     },
-//     rollClass : {
-//       SkillCheck,
-//       WeaponCheck,
-//       PowerCheck,
-//       DamageRoll
-//     },
-//     migration : Migration,
-//     utility: PILLARS_UTILITY,
-//     config : POE,
-//     chat : PillarsChat,
-//     templates : PowerTemplate,
-//   }
+  let game = getGame()
+  game.pillars = {
+    apps : {
+    //   PillarsActorSheet,
+    //   PillarsItemSheet,
+    //   BookOfSeasons,
+    //   RollDialog,
+    //   ActorConfigure,
+    //   DamageDialog,
+    //   HealingDialog
+    },
+    rollClass : {
+    //   SkillCheck,
+    //   WeaponCheck,
+    //   PowerCheck,
+    //   DamageRoll
+    },
+    // migration : Migration,
+    //utility: PILLARS_UTILITY,
+    config : PILLARS,
+    //chat : PillarsChat,
+    //templates : PowerTemplate,
+  }
 })
 
 //   CONFIG.ui.combat = PillarsCombatTracker

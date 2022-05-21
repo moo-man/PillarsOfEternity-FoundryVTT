@@ -1,12 +1,20 @@
 import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
 import { Defense, LifePhase, Season } from './types/common';
 import {
-  PowerDurations,
-  PowerExclusions,
-  PowerRanges,
-  PowerSpeeds,
-  PowerTargets,
+  EmbeddedPower,
+  PowerBaseEffect,
+  PowerDamage,
+  PowerDuration,
+  PowerGroups,
+  PowerHealing,
+  PowerMisc,
+  PowerRange,
+  PowerSummon,
+  PowerTarget,
 } from './types/powers';
+import { WeaponSpecial } from './types/items';
+import { PILLARS } from "./module/system/config.js";
+
 
 //#region Actor
 
@@ -212,7 +220,7 @@ export type PreparedPillarsActorData =
 //#region Items
 
 //#region Templates
-interface Category {
+export interface Category {
   category: {
     value: string;
   };
@@ -223,18 +231,19 @@ interface Description {
     gm: string;
   };
 }
-interface Rank {
+export interface Rank {
   rank: {
     value: number;
   };
 }
-interface XP {
+export interface XP {
   xp: {
     value: number;
-    rank: number;
+    rank?: number;
+    level?: number;
   };
 }
-interface Physical {
+export interface Physical {
   cost: {
     value: number;
   };
@@ -245,19 +254,19 @@ interface Physical {
     value: number;
   };
 }
-interface Used {
+export interface Used {
   used: {
     value: boolean;
   };
 }
-interface Equipped {
+export interface Equipped {
   equipped: {
     value: boolean;
   };
 }
 
 interface Powers {
-  powers: [];
+  powers: EmbeddedPower[];
   powerRecharge: string;
   powerCharges: {
     value: number;
@@ -310,13 +319,16 @@ export interface TraitSourceData extends Description, Category, Used, Powers {
 export interface PowerSource {
   type: 'power';
   data: PowerSourceData;
+  ownedId?: string
+  groups : PowerGroups
 }
 
 export interface PowerSourceData extends Description, Category {
   level: {
     value: number;
     modifier: number;
-  };
+    cost : number // NOTE: Does not exist on source, actually exists only on prepared data
+};
   source: {
     value: string;
   };
@@ -324,7 +336,7 @@ export interface PowerSourceData extends Description, Category {
     value: boolean;
   };
   base: {
-    effects: [];
+    effects: PowerBaseEffect[];
     cost: number;
   };
   embedded: {
@@ -337,35 +349,17 @@ export interface PowerSourceData extends Description, Category {
     chargeCost: number;
   };
   damage: {
-    value: [];
+    value: PowerDamage[];
   };
-  healing: [];
-  range: [
-    {
-      group: number;
-      value: PowerRanges;
-    }
-  ];
-  target: [
-    {
-      group: string;
-      value: string;
-      subtype: string;
-      targeted: false;
-      exclusion: PowerExclusions;
-    }
-  ];
-  duration: [
-    {
-      group: string;
-      value: PowerDurations;
-    }
-  ];
-  summons: [];
-  misc: [];
+  healing: PowerHealing[];
+  range: PowerRange[];
+  target: PowerTarget[];
+  duration: PowerDuration[];
+  summons: PowerSummon[];
+  misc: PowerMisc[];
 
   speed: {
-    value: PowerSpeeds;
+    value: string//PowerSpeeds;
     text: string;
   };
   limitations: {
@@ -375,6 +369,7 @@ export interface PowerSourceData extends Description, Category {
   improvised: {
     value: boolean;
   };
+  pl : number // NOTE: Does not exist on source, actually exists only on prepared data
 }
 
 export interface PowerSourceSource {
@@ -382,21 +377,18 @@ export interface PowerSourceSource {
   data: PowerSourceSourceData;
 }
 
-export interface PowerSourceSourceData extends Description, Category {
+export interface PowerSourceSourceData extends Description, Category, XP {
   category: {
     value: string;
   };
   source: {
     value: string;
   };
-  xp: {
-    value: number;
-    level: number;
-  };
   pool: {
     max: number;
     current: number;
   };
+  attack : number // NOTE: Does not exist on source, actually exists only on prepared data
 }
 
 export interface WeaponSource {
@@ -423,7 +415,7 @@ export interface WeaponSourceData
     value: [];
   };
   special: {
-    value: [];
+    value: WeaponSpecial[];
   };
   range: {
     value: string;
@@ -471,6 +463,7 @@ export interface ShieldSourceData
     Category,
     Physical,
     Equipped,
+    Used,
     Powers {
   soak: {
     value: number;
@@ -654,6 +647,7 @@ declare global {
     pillars: {
       apps: {};
       rollClass: {};
+      config : typeof PILLARS
     };
   }
   interface SourceConfig {
