@@ -5,6 +5,7 @@ import {
   PowerBaseEffect,
   PowerDamage,
   PowerDuration,
+  PowerGroup,
   PowerGroups,
   PowerHealing,
   PowerMisc,
@@ -321,6 +322,7 @@ export interface PowerSource {
   data: PowerSourceData;
   ownedId?: string
   groups : PowerGroups
+  display? : PowerGroup
 }
 
 export interface PowerSourceData extends Description, Category {
@@ -387,6 +389,7 @@ export interface PowerSourceSourceData extends Description, Category, XP {
   pool: {
     max: number;
     current: number;
+    pct : number // NOTE: Does not exist on source, actually exists only on sheet data
   };
   attack : number // NOTE: Does not exist on source, actually exists only on prepared data
 }
@@ -640,6 +643,26 @@ type PillarsItemDataSource =
  | ReputationSource
  | InjurySource
 
+export type PillarsItemSystemData  =
+AttributeSourceData |
+SkillSourceData |
+TraitSourceData |
+PowerSourceData |
+PowerSourceSourceData |
+WeaponSourceData |
+ArmorSourceData |
+ShieldSourceData |
+EquipmentSourceData |
+ConnectionSourceData |
+CultureSourceData |
+BackgroundSourceData |
+SettingSourceData |
+SpeciesSourceData |
+StockSourceData |
+GodlikeSourceData |
+ReputationSourceData |
+InjurySourceData
+
 //#endregion
 
 declare global {
@@ -661,14 +684,6 @@ declare global {
 
   interface CONFIG {
     statusEffects : Partial<ActiveEffectDataConstructorData & { id: string }>[];
-  }
-
-  interface EffectChangeDataProperties {
-    mode? : number
-  }
-
-  interface EffectChangeDataConstructorData {
-    mode? : number
   }
 
   interface EffectChangeData {

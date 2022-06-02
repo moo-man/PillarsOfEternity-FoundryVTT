@@ -24,7 +24,6 @@ interface ActorEnduranceSourceData {
   };
 }
 
-
 interface ActorHealthPreparedData extends ActorHealthSourceData {
     bloodied: boolean;
     incap: boolean;
@@ -35,8 +34,6 @@ interface ActorEndurancePreparedData extends ActorEnduranceSourceData {
     winded: boolean;
     incap: boolean;
 }
-
-
 
 interface ActorHealthSheetData extends ActorHealthPreparedData {
     array : {state : number}[]

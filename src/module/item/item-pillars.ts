@@ -1,11 +1,12 @@
-import { DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
+import { Context, DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
 import { ChatMessageDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatMessageData';
 import { ItemDataConstructorData, ItemDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
-import { PowerSource} from '../../global.js';
+import { PowerSource } from '../../global.js';
 import { getGame } from '../../pillars.js';
 import { DamageType, Defense, hasCategory, hasEmbeddedPowers, isEquippable, isPhysical, ItemType } from '../../types/common.js';
-import { ItemChatData, WeaponSpecial, WeaponSpecialData } from '../../types/items.js';
-import { PowerDisplay, PowerGroup, PowerGroups, PowerMisc, PowerTarget } from '../../types/powers.js';
+import { ItemChatData,  WeaponSpecialData } from '../../types/items.js';
+import { PowerBaseEffect, PowerDamage, PowerDisplay, PowerDuration, PowerGroup, PowerGroups, PowerHealing, PowerMisc, PowerRange, PowersConstructorContext, PowerTarget } from '../../types/powers.js';
+import { PillarsActor } from '../actor/actor-pillars.js';
 import { PILLARS } from '../system/config.js';
 import PILLARS_UTILITY from '../system/utility.js';
 /**
@@ -20,6 +21,13 @@ declare global {
 }
 
 export class PillarsItem extends Item {
+
+
+  constructor(data?: ItemDataConstructorData | undefined, context?: PowersConstructorContext | undefined){
+    super(data, context);
+  }
+
+
   async _preUpdate(updateData: ItemDataConstructorData, options: DocumentModificationOptions, user: foundry.documents.BaseUser): Promise<void> {
     await super._preUpdate(updateData, options, user);
 
@@ -191,8 +199,7 @@ export class PillarsItem extends Item {
   preparePower() {
     if (this.data.type == 'power') this.data.groups = this.preparePowerGroups();
 
-    if (this.level)
-    {
+    if (this.level) {
       this.level.value = this.calculatePowerLevel();
       this.level.cost = this.improvised?.value ? this.level.value * 2 : this.level.value;
     }
@@ -323,7 +330,7 @@ export class PillarsItem extends Item {
 
         groups[g]!.display.damage = groups[g]!.damage.reduce((prev: string[], current) => {
           let text = `${current.base} ${config.damageTypes[<DamageType>current.type]} @DAMAGES vs. ${config.defenses[<Defense>current.defense]}` + ' ';
-          if (current.text) text += ' ' + current.text;
+          if (current.label) text += ' ' + current.label;
 
           if (current.type == 'endurance') text = text.replace('@DAMAGES', '(Endurance)');
           else text = text.replace('@DAMAGES', '');
@@ -383,8 +390,8 @@ export class PillarsItem extends Item {
   }
 
   getTargetDisplay(target: PowerTarget) {
-    let targetSubTypes = getGame().pillars.config[`power${target.value[0].toUpperCase() + target.value.slice(1)}s`];
-    let targetDisplay = targetSubTypes[target.subtype];
+    let targetSubTypes = getGame().pillars.config[`power${target.value[0]?.toUpperCase() + target.value.slice(1)}s` as keyof typeof PILLARS];
+    let targetDisplay = targetSubTypes[target.subtype as keyof typeof targetSubTypes] as string;
     if (!targetDisplay) targetDisplay = getGame().pillars.config.powerTargetTypes[target.value as keyof typeof PILLARS.powerTargetTypes];
     return targetDisplay;
   }
@@ -399,8 +406,8 @@ export class PillarsItem extends Item {
         for (let range of this.range!) pl += values.powerRanges[range.value as keyof typeof PILLARS.powerRanges] || 0;
 
         for (let target of this.target!) {
-          let targetSubTypes = values[`power${target.value[0].toUpperCase() + target.value.slice(1)}s`];
-          pl += targetSubTypes[target.subtype] || 0;
+          let targetSubTypes = values[`power${target.value[0]?.toUpperCase() + target.value.slice(1)}s` as keyof typeof values];
+          pl += targetSubTypes[target.subtype as keyof typeof targetSubTypes] || 0;
           pl += values.powerExclusions[target.exclusion as keyof typeof PILLARS.powerExclusions];
         }
         for (let duration of this.duration!) pl += values.powerDurations[duration.value as keyof typeof PILLARS.powerDurations];
@@ -465,7 +472,7 @@ export class PillarsItem extends Item {
 
   //#region Getters
   // @@@@@@@@ CALCULATION GETTERS @@@@@@@
-  get isMelee()  {
+  get isMelee() {
     return this.category?.value == 'smallMelee' || this.category?.value == 'mediumMelee' || this.category?.value == 'largeMelee';
   }
 
@@ -473,10 +480,10 @@ export class PillarsItem extends Item {
     return this.category?.value == 'mediumRanged' || this.category?.value == 'largeRanged' || this.category?.value == 'grenade';
   }
 
-  get specialList() : Record<string, WeaponSpecialData>  {
+  get specialList(): Record<string, WeaponSpecialData> {
     if (this.isMelee) return getGame().pillars.config.meleeSpecials;
     else if (this.isRanged) return getGame().pillars.config.rangedSpecials;
-    else return {}
+    else return {};
   }
 
   get canEquip() {
@@ -502,8 +509,8 @@ export class PillarsItem extends Item {
     try {
       let targetObj = this.target?.find((i) => (i.group || 'Default') == this.displayGroupKey('target'));
       if (!targetObj) return;
-      let targetSubTypes = getGame().pillars.config[`power${targetObj!.value[0]!.toUpperCase() + targetObj.value.slice(1)}s`];
-      let target = targetSubTypes[targetObj.subtype];
+      let targetSubTypes = getGame().pillars.config[`power${targetObj!.value[0]!.toUpperCase() + targetObj.value.slice(1)}s` as keyof typeof PILLARS];
+      let target = targetSubTypes[targetObj.subtype as keyof typeof targetSubTypes] as string;
       if (!target) target = getGame().pillars.config.powerTargetTypes[targetObj.value! as keyof typeof PILLARS.powerTargetTypes];
 
       return target;
@@ -524,11 +531,11 @@ export class PillarsItem extends Item {
     return this.actor?.getItemTypes(ItemType.skill).find((i) => i.name == this.skill?.value);
   }
 
-  get SourceItem() : PillarsItem | undefined {
+  get SourceItem(): PillarsItem | undefined {
     if (!this.isOwned) return;
     if (this.EmbeddedPowerParent && this.EmbeddedPowerParent.category?.value != 'grimoire') {
       // If embedded and not in grimoire, get highest power source attack value
-      return this.actor?.getItemTypes(ItemType.powerSource).sort((a, b) => (b.attack || 0) - (a.attack || 0) )[0];
+      return this.actor?.getItemTypes(ItemType.powerSource).sort((a, b) => (b.attack || 0) - (a.attack || 0))[0];
     }
 
     return this.actor?.items.find((i) => (i.type == 'powerSource' && i.source && i.source.value == this.source?.value) || false);
@@ -771,7 +778,7 @@ export class PillarsItem extends Item {
   get roll() {
     if (this.data.type == 'power') return this.data.data.roll;
   }
-  get  powers() {
+  get powers() {
     if (hasEmbeddedPowers(this)) return this.data.data.powers;
   }
   get embedded() {
@@ -797,7 +804,7 @@ export class PillarsItem extends Item {
 
   //#endregion
 
-  static baseData = {
+  static baseData: { target: PowerTarget; range: PowerRange; duration: PowerDuration; healing: PowerHealing; misc: PowerMisc; 'damage.value': PowerDamage; 'base.effects': PowerBaseEffect } = {
     target: {
       group: '',
       value: 'target',
@@ -810,7 +817,7 @@ export class PillarsItem extends Item {
     healing: { group: '', value: '', type: 'health' },
     misc: { group: '', value: '', modifier: 0 },
     'damage.value': {
-      text: '',
+      label: '',
       group: '',
       base: '',
       crit: '',

@@ -8,9 +8,10 @@ import { Defense, ItemType, SoakType } from '../../types/common';
 import { getGame } from '../../pillars';
 import PILLARS_UTILITY from '../system/utility';
 import DamageDialog from '../apps/damage-dialog';
+import { PowerGroups } from '../../types/powers';
 
 // Overwrite default ActorSheet.Data data property and replace it with system data
-interface PillarsSheetData extends Omit<ActorSheet.Data, 'data' | 'effects' | 'items'> {
+interface PillarsActorSheetData extends Omit<ActorSheet.Data, 'data' | 'effects' | 'items'> {
   data: BasePreparedPillarsActorData;
   items: SheetItemData;
   effects: SheetEffectData;
@@ -137,7 +138,7 @@ interface SheetEffectData {
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsSheetData> {
+export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsActorSheetData> {
   scrollPos: (number | undefined)[] = [];
 
   /** @override */
@@ -240,15 +241,18 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
   }
 
   /** @override */
-  async getData(): Promise<PillarsSheetData> {
+  async getData(): Promise<PillarsActorSheetData> {
     const data = await super.getData();
+
+    data.data = (data as unknown as ActorSheet.Data).data.data
+
     this.prepareSheetData(data);
     this.formatTooltips(data);
 
     return data;
   }
 
-  prepareSheetData(sheetData: PillarsSheetData) {
+  prepareSheetData(sheetData: PillarsActorSheetData) {
     sheetData.items = this.constructItemLists(sheetData);
     sheetData.effects = this.constructEffectLists(sheetData);
     this._setPowerSourcePercentage(sheetData);
@@ -263,7 +267,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     this._createSoakArray(sheetData);
   }
 
-  formatTooltips(data: PillarsSheetData) {
+  formatTooltips(data: PillarsActorSheetData) {
     let tooltips = foundry.utils.deepClone(this.actor.data.flags.tooltips);
     data.tooltips = foundry.utils.deepClone(this.actor.data.flags.tooltips) as unknown as typeof data.tooltips;
     for (let def in data.tooltips.defenses) data.tooltips.defenses[<Defense>def] = tooltips.defenses[<Defense>def].join(' + ').replaceAll('+ -', '- ');
@@ -281,7 +285,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     for (let type in data.tooltips.soak) data.tooltips.soak[<SoakType>type] = tooltips.soak[<SoakType>type].join(' + ').replaceAll('+ -', '- ');
   }
 
-  constructItemLists(sheetData: PillarsSheetData): SheetItemData {
+  constructItemLists(sheetData: PillarsActorSheetData): SheetItemData {
     let items: SheetItemData = <SheetItemData>{};
 
     items.attributes = { benefits: [], hindrances: [] };
@@ -311,7 +315,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     return items;
   }
 
-  constructInventory(sheetData: PillarsSheetData): InventorySheetData {
+  constructInventory(sheetData: PillarsActorSheetData): InventorySheetData {
     let inventory = {
       weapons: {
         label: 'Weapons',
@@ -347,7 +351,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     return inventory;
   }
 
-  constructEffectLists(sheetData: PillarsSheetData): SheetEffectData {
+  constructEffectLists(sheetData: PillarsActorSheetData): SheetEffectData {
     let effects: SheetEffectData = <SheetEffectData>{};
 
     effects.temporary = sheetData.actor.effects.filter((i) => i.isTemporary && !i.data.disabled);
@@ -357,18 +361,21 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     return effects;
   }
 
-  constructPowerDisplay(sheetData: PillarsSheetData) {
+  constructPowerDisplay(sheetData: PillarsActorSheetData) {
     sheetData.items.powers.forEach((p) => {
-      let lowestKey = Object.keys(p.groups)
-        .filter((i) => i)
-        .sort((a, b) => {
-          a - b > 0 ? 1 : -1;
-        });
-      p.display = p.groups[lowestKey];
-    });
+      if (p.data.type == "power")
+      {
+        let lowestKey = Object.keys(p.data.groups)
+          .filter((i) => i)
+          .sort((a, b) => a > b ? 1 : -1)[0] || "Default";
+        p.data.display = p.data.groups[lowestKey];
+      }
+    })
   }
+      
 
-  _createSoakArray(sheetData: PillarsSheetData) {
+
+  _createSoakArray(sheetData: PillarsActorSheetData) {
     let soakValues = sheetData.data.soak;
 
     sheetData.soaks = {
@@ -400,7 +407,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     };
   }
 
-  _enrichKnownConnections(sheetData: PillarsSheetData) {
+  _enrichKnownConnections(sheetData: PillarsActorSheetData) {
     if (sheetData.actor.data.type == 'character') {
       let connections = sheetData.actor.knownConnections!.value;
       sheetData.KnownConnections = connections.map((i) => {
@@ -463,7 +470,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     });
   }
 
-  _createDeathMarchArray(sheetData: PillarsSheetData): void {
+  _createDeathMarchArray(sheetData: PillarsActorSheetData): void {
     if (this.actor.type == 'character') {
       let marchVal = (<PreparedPillarsCharacterData>sheetData.data).life.march;
       sheetData.deathMarch = [];
@@ -478,14 +485,14 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     }
   }
 
-  _setPowerSourcePercentage(sheetData: PillarsSheetData) {
+  _setPowerSourcePercentage(sheetData: PillarsActorSheetData) {
     let sources = sheetData.items.powerSources;
     sources.forEach((s) => {
-      s.pool.pct = Math.clamped((s.pool.current / s.pool.max) * 100, 0, 100);
+      s.pool!.pct = Math.clamped((s.pool!.current / s.pool!.max) * 100, 0, 100);
     });
   }
 
-  async _dropdown(event: JQuery.MouseUpEvent, dropdownData) {
+  async _dropdown(event: JQuery.MouseUpEvent, dropdownData : {text: string, groups? : PowerGroups}) {
     let dropdownHTML = '';
     event.preventDefault();
     let li = $(event.currentTarget!).parents('.item');
@@ -808,7 +815,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
   _onRestorePoolClick(event: JQuery.ClickEvent) {
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
     let item = this.actor.items.get(itemId!);
-    if (item) return item.update({ 'data.pool.current': item.pool.max });
+    if (item) return item.update({ 'data.pool.current': item.pool?.max });
   }
 
   _onWoundClick(event: JQuery.ClickEvent) {
@@ -889,7 +896,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
         roll: {
           label: 'Roll',
           callback: async (dlg) => {
-            let skill = $(dlg).find("[name='skill']")[0]?.value;
+            let skill = ($(dlg).find("[name='skill']")[0] as HTMLInputElement)?.value;
             if (skill) {
               let check = await this.actor.setupSkillCheck(skill);
               await check.rollCheck();
@@ -922,8 +929,8 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
   async _onItemSkillClick(event: JQuery.ClickEvent) {
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
     let item = this.actor.items.get(itemId!);
-    let skill = this.actor.items.getName(item?.skill.value);
-    if (!skill) return ui.notifications!.warn(`Could not find skill ${item?.skill.value}`);
+    let skill = this.actor.items.getName(item?.skill?.value || "");
+    if (!skill) return ui.notifications!.warn(`Could not find skill ${item?.skill?.value}`);
     let check = await this.actor.setupSkillCheck(skill);
     await check.rollCheck();
     check.sendToChat();
@@ -939,9 +946,12 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsShe
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
     let item = this.actor.items.get(itemId!);
     let groupIndex: number | string = <number | string>item?.getFlag('pillars-of-eternity', 'displayGroup');
-    if (!Number.isNumeric(groupIndex)) groupIndex = 0;
-    else if (typeof groupIndex == 'number') groupIndex++;
-    if (groupIndex >= Object.keys(item.groups).length) groupIndex = 'Default';
+    if (item?.data.type == "power")
+    {
+      if (!Number.isNumeric(groupIndex)) groupIndex = 0;
+      else if (typeof groupIndex == 'number') groupIndex++;
+      if (groupIndex >= Object.keys(item.data.groups).length) groupIndex = 'Default';
+    }
 
     return item?.setFlag('pillars-of-eternity', 'displayGroup', groupIndex);
   }

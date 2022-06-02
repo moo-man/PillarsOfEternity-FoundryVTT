@@ -9,7 +9,7 @@ import { PillarsItem } from '../item/item-pillars.js';
 import { ActorDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData';
 import { DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
 import { PreparedPillarsCharacterData } from '../../global.js';
-import { Defense, ItemType, Tier, Useable } from '../../types/common.js';
+import { Defense, isUsable, ItemType, Tier } from '../../types/common.js';
 import { PILLARS } from '../system/config.js';
 import {
   AssisterData,
@@ -75,9 +75,9 @@ export class PillarsActor extends Actor {
 
     if (speciesItem?.name && this.type == 'character') {
       data.details.species = speciesItem.name;
-      data.stride.value = speciesItem.stride.value;
-      this.data.flags.tooltips.stride.value.push(`${speciesItem.stride.value} (${speciesItem.name})`);
-      data.size.value = speciesItem.size.value;
+      data.stride.value = speciesItem.stride!.value;
+      this.data.flags.tooltips.stride.value.push(`${speciesItem.stride!.value} (${speciesItem.name})`);
+      data.size.value = speciesItem.size!.value;
       this.setSizeData(data);
     } else if (Number.isNumeric(data.size.value)) {
       this.setSizeData(data);
@@ -205,12 +205,12 @@ export class PillarsActor extends Actor {
     this.health.threshold.incap += this.health.modifier;
     this.endurance.threshold.winded += this.endurance.bonus;
     if (equippedArmor) {
-      this.endurance.threshold.winded += equippedArmor.winded.value || 0;
-      this.data.flags.tooltips.endurance.threshold.winded.push(equippedArmor.winded.value + ' (Armor)');
+      this.endurance.threshold.winded += equippedArmor?.winded?.value || 0;
+      this.data.flags.tooltips.endurance.threshold.winded.push(equippedArmor?.winded?.value + ' (Armor)');
     }
     if (equippedShield) {
-      this.endurance.threshold.winded += equippedShield.winded.value || 0;
-      this.data.flags.tooltips.endurance.threshold.winded.push(equippedShield.winded.value + ' (Shield)');
+      this.endurance.threshold.winded += equippedShield?.winded?.value || 0;
+      this.data.flags.tooltips.endurance.threshold.winded.push(equippedShield?.winded?.value + ' (Shield)');
     }
 
     this.health.bloodied = this.health.value > this.health.threshold.bloodied;
@@ -263,24 +263,24 @@ export class PillarsActor extends Actor {
     let equippedShield = this.equippedShield;
 
     if (equippedArmor) {
-      this.soak.base += equippedArmor.soak.value || 0;
-      this.initiative.value += equippedArmor.initiative.value;
-      this.toughness.value += equippedArmor.toughness.value;
-      this.stride.value += equippedArmor.stride.value;
-      this.run.value += equippedArmor.run.value;
+      this.soak.base += equippedArmor.soak!.value || 0;
+      this.initiative.value += equippedArmor.initiative!.value;
+      this.toughness.value += equippedArmor.toughness!.value;
+      this.stride.value += equippedArmor.stride!.value;
+      this.run.value += equippedArmor.run!.value;
 
-      this.data.flags.tooltips.soak.base.push(equippedArmor.soak.value + ' (Armor)');
-      this.data.flags.tooltips.initiative.value.push(equippedArmor.initiative.value + ' (Armor)');
-      this.data.flags.tooltips.toughness.value.push(equippedArmor.toughness.value + ' (Armor)');
-      this.data.flags.tooltips.stride.value.push(equippedArmor.stride.value + ' (Armor)');
-      this.data.flags.tooltips.run.value.push(equippedArmor.run.value + ' (Armor)');
+      this.data.flags.tooltips.soak.base.push(equippedArmor.soak!.value + ' (Armor)');
+      this.data.flags.tooltips.initiative.value.push(equippedArmor.initiative!.value + ' (Armor)');
+      this.data.flags.tooltips.toughness.value.push(equippedArmor.toughness!.value + ' (Armor)');
+      this.data.flags.tooltips.stride.value.push(equippedArmor.stride!.value + ' (Armor)');
+      this.data.flags.tooltips.run.value.push(equippedArmor.run!.value + ' (Armor)');
     }
     if (equippedShield) {
-      this.soak.shield = this.soak.base + (equippedShield.soak.value || 0);
+      this.soak.shield = this.soak.base + (equippedShield.soak!.value || 0);
       this.data.flags.tooltips.soak.shield = this.data.flags.tooltips.soak.shield.concat(this.data.flags.tooltips.soak.base);
-      this.data.flags.tooltips.soak.shield.push(equippedShield.soak.value + ' (Shield)');
-      this.defenses.deflection.value += equippedShield.deflection.value;
-      this.data.flags.tooltips.defenses.deflection.push(equippedShield.deflection.value + ' (Shield)');
+      this.data.flags.tooltips.soak.shield.push(equippedShield.soak!.value + ' (Shield)');
+      this.defenses.deflection.value += equippedShield.deflection!.value;
+      this.data.flags.tooltips.defenses.deflection.push(equippedShield.deflection!.value + ' (Shield)');
     }
 
     this.data.flags.tooltips.soak.physical.push(this.soak.base + ' (Base)');
@@ -336,7 +336,7 @@ export class PillarsActor extends Actor {
 
     if (!weaponItem) throw ui!.notifications!.error('No weapon could be found');
 
-    if (!weaponItem?.skill.value) throw ui!.notifications!.error('No skill assigned to the weapon');
+    if (!weaponItem?.skill?.value) throw ui!.notifications!.error('No skill assigned to the weapon');
 
     let data = this.getWeaponDialogData('weapon', weaponItem);
     let checkData: WeaponCheckData = <WeaponCheckData>await RollDialog.create(data);
@@ -360,10 +360,10 @@ export class PillarsActor extends Actor {
 
     let data = this.getPowerDialogData('power', powerItem!);
     let checkData: PowerCheckData = <PowerCheckData>{};
-    if (powerItem!.roll.value) checkData = <PowerCheckData>await RollDialog.create(data);
+    if (powerItem!.roll?.value) checkData = <PowerCheckData>await RollDialog.create(data);
 
     checkData.title = data.title;
-    checkData.sourceId = powerItem!.SourceItem.id;
+    checkData.sourceId = powerItem!.SourceItem?.id || "";
     checkData.itemId = powerItem!.id || '';
     checkData.speaker = this.speakerData();
     checkData.targetSpeakers = this.targetSpeakerData();
@@ -395,14 +395,14 @@ export class PillarsActor extends Actor {
       if (!power.SourceItem) throw ui.notifications!.error('Could not find Power Source: ' + power.data.data.source.value);
 
       let embeddedParent = power.EmbeddedPowerParent;
-      if (embeddedParent && embeddedParent.category.value != 'grimoire') {
-        if (['longRest', 'encounter'].includes(power.embedded.spendType)) {
-          if (power.embedded.uses.value <= 0) throw ui.notifications!.error('No more uses!');
-        } else if (power.embedded.spendType == 'charges') {
-          if (power.embedded.chargeCost > embeddedParent.powerCharges.value) throw ui.notifications!.error('Not enough charges!');
+      if (embeddedParent && embeddedParent.category?.value != 'grimoire') {
+        if (['longRest', 'encounter'].includes(power.embedded?.spendType || "")) {
+          if (power.embedded!.uses.value <= 0) throw ui.notifications!.error('No more uses!');
+        } else if (power.embedded!.spendType == 'charges') {
+          if (power.embedded!.chargeCost > embeddedParent.powerCharges!.value) throw ui.notifications!.error('Not enough charges!');
         }
-      } else if (power.source.value == 'spirits' && power.category.value == 'phrase') return; // Phrases add 1 to power
-      else if (power.SourceItem.pool.current < power.level.value) throw ui.notifications!.error('Not enough power!');
+      } else if (power.source?.value == 'spirits' && power.category?.value == 'phrase') return; // Phrases add 1 to power
+      else if (power.SourceItem?.pool!.current < power.level!.value) throw ui.notifications!.error('Not enough power!');
     }
   }
 
@@ -434,7 +434,7 @@ export class PillarsActor extends Actor {
   getSkillDialogData(type: string, item: PillarsItem, options: CheckOptions = {}) {
     let dialogData: SkillDialogData = <SkillDialogData>this.getDialogData(type, item, options);
     dialogData.assisters = this.constructAssisterList(item.data.name || options.name || '');
-    dialogData.hasRank = item ? item.xp.rank : false;
+    dialogData.hasRank = item ? !!item.xp!.rank : false
     dialogData.skill = item;
     return dialogData;
   }
@@ -443,18 +443,18 @@ export class PillarsActor extends Actor {
     let dialogData: WeaponDialogData = <WeaponDialogData>this.getDialogData(type, item, options);
     dialogData.title = `${item?.name || options.name} Attack`;
     //dialogData.assisters = this.constructAssisterList(weapon.Skill)
-    dialogData.modifier = (item.misc.value || 0) + (item.accuracy.value || 0);
-    dialogData.hasRank = item.Skill ? item.Skill.rank : false;
+    dialogData.modifier = (((item.misc as {value : number})!.value || 0) + (item.accuracy!.value || 0)).toString()
+    dialogData.hasRank = item.Skill ? !!item.Skill.rank : false;
     dialogData.skill = item.Skill;
     return dialogData;
   }
 
   getPowerDialogData(type: string, item: PillarsItem, options: CheckOptions = {}) {
     let dialogData: PowerDialogData = <PowerDialogData>this.getDialogData(type, item, options);
-    if (item.damage.value.length) dialogData.title = `${item?.name || options.name} Attack`;
+    if (item.damage?.value.length) dialogData.title = `${item?.name || options.name} Attack`;
     else dialogData.title = item?.name || options.name || '';
     //dialogData.assisters = this.constructAssisterList(weapon.Skill)
-    dialogData.modifier = item.SourceItem.attack || 0;
+    dialogData.modifier = (item.SourceItem?.attack || 0).toString();
     dialogData.hasRank = false;
     return dialogData;
   }
@@ -531,15 +531,6 @@ export class PillarsActor extends Actor {
   }
 
   use(type: string, name: string) {
-    // Useable type guard
-    function isUsable(item: any): item is Useable {
-      try {
-        return typeof item.data.data.used.value === 'boolean';
-      } catch (e) {
-        return false;
-      }
-    }
-
     let item = this.getItemTypes(type as ItemType).find((i) => i.name == name);
     if (item) return item.update({ 'data.used.value': true });
     let worldItem = getGame().items!.contents.find((i) => i.type == type && i.name == name);
@@ -563,7 +554,7 @@ export class PillarsActor extends Actor {
 
     // Short/Long rest both refill pools
     this.getItemTypes(ItemType.powerSource).forEach((p) => {
-      updates.items!.push({ name: p.name!, type: p.type, _id: p.id, data: { pool: { current: p.pool.max } } });
+      updates.items!.push({ name: p.name!, type: p.type, _id: p.id, data: { pool: { current: p.pool?.max } } });
     });
 
     // Both rests reset encounter items
@@ -574,12 +565,12 @@ export class PillarsActor extends Actor {
           name: i.name!,
           type: i.type,
           _id: i.id,
-          data: { powerCharges: { value: i.powerCharges.max } },
+          data: { powerCharges: { value: i.powerCharges?.max } },
         });
       });
 
     this.items
-      .filter((i) => i.type == 'power' && i.embedded.spendType == 'encounter')
+      .filter((i) => i.type == 'power' && i.embedded?.spendType == 'encounter')
       .forEach((i) => {
         updates.items!.push({
           name: i.name!,
@@ -588,7 +579,7 @@ export class PillarsActor extends Actor {
           data: {
             embedded: {
               uses: {
-                value: i.embedded.uses.max,
+                value: i.embedded?.uses.max,
               },
             },
           },
@@ -612,13 +603,13 @@ export class PillarsActor extends Actor {
           type: i.type,
           _id: i.id,
           data: {
-            powerCharges: { value: i.powerCharges.max },
+            powerCharges: { value: i.powerCharges?.max },
           },
         });
       });
 
     this.items
-      .filter((i) => i.type == 'power' && i.embedded.spendType == 'longRest')
+      .filter((i) => i.type == 'power' && i.embedded?.spendType == 'longRest')
       .forEach((i) => {
         updates.items!.push({
           name: i.name!,
@@ -627,7 +618,7 @@ export class PillarsActor extends Actor {
           data: {
             embedded: {
               uses: {
-                value: i.embedded.uses.max,
+                value: i.embedded?.uses.max,
               },
             },
           },
@@ -742,7 +733,7 @@ export class PillarsActor extends Actor {
     return this.getItemTypes(ItemType.power).filter((p) => {
       let parent = p.EmbeddedPowerParent;
       if (!parent) return false;
-      else if (parent.canEquip) return parent.equipped.value;
+      else if (parent.canEquip) return parent.equipped?.value;
       else return true;
     });
   }
@@ -787,7 +778,7 @@ export class PillarsActor extends Actor {
         break;
     }
 
-    if (options.shield && this.equippedShield) soak += this.equippedShield.Soak;
+    if (options.shield && this.equippedShield) soak += this.equippedShield?.Soak || 0;
 
     let message = `${damage} Damage - ${soak} Soak`;
 
@@ -883,7 +874,7 @@ export class PillarsActor extends Actor {
   }
 
   calculateShieldDamage(shield: PillarsItem, damage: number) {
-    let damageToShield = Math.min(shield.Soak, damage);
+    let damageToShield = Math.min(shield.Soak || 0, damage);
 
     let shieldObj = shield.toObject();
 
@@ -914,11 +905,11 @@ export class PillarsActor extends Actor {
   // @@@@@@@ ITEM GETTERS @@@@@@@@@
 
   get equippedShield() {
-    return this.getItemTypes(ItemType.shield).filter((i) => i.equipped.value)[0];
+    return this.getItemTypes(ItemType.shield).filter((i) => i.equipped?.value)[0];
   }
 
   get equippedArmor() {
-    return this.getItemTypes(ItemType.armor).filter((i) => i.equipped.value)[0];
+    return this.getItemTypes(ItemType.armor).filter((i) => i.equipped?.value)[0];
   }
 
   // @@@@@@@@ DATA GETTERS @@@@@@@@@@

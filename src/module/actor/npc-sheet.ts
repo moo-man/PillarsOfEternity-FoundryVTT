@@ -30,11 +30,11 @@ export class PillarsNPCSheet extends PillarsActorSheet {
 
         if (!this.isEditable) return
 
-        html.find(".defense-input").change((ev : JQuery.ChangeEvent) => {
+        html.find(".defense-input").on("change", ((ev : JQuery.ChangeEvent) => {
             let defense = ev.currentTarget.dataset.defense
             let value = Number(ev.currentTarget.value)
 
             return this.actor.update({[`data.defenses.${defense}.base`] : value})
-        })
+        }))
     }
 }
