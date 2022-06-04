@@ -1,3 +1,5 @@
+import { getGame } from "../../pillars";
+
 export default function () {
     Hooks.on("getChatLogEntryContext", addChatMessageContextOptions)
 }
@@ -51,7 +53,7 @@ export default function () {
         callback : li => {
           const message = game.messages.get(li.data("messageId"));
           let roll = message.getCheck()
-          roll.addTargets(Array.from(game.user.targets))
+          roll.addTargets(Array.from(getGame().user!.targets))
         }
       }
     );

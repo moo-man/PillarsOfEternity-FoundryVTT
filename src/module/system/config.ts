@@ -1,4 +1,4 @@
-export const PILLARS : {
+export const PILLARS = {
 defenses : {
     deflection: "Deflection",
     fortitude: "Fortitude",
@@ -665,17 +665,17 @@ rangedSpecials : {
 }
 }
 
-CONFIG.statusEffects : [
+CONFIG.statusEffects = [
     {
         id: "bloodied",
         label: "Bloodied",
         icon: "systems/of-eternity/assets/conditions/bloodied.png",
         changes: [
-            { key: "steps", mode: 6, value: -2 },
-            { key: "data.defenses.deflection.value", mode: 2, value: -3 },
-            { key: "data.defenses.fortitude.value", mode: 2, value: -3 },
-            { key: "data.defenses.reflex.value", mode: 2, value: -3 },
-            { key: "data.defenses.will.value", mode: 2, value: -3 }],
+            { key: "steps", mode: 6, value: "-2" },
+            { key: "data.defenses.deflection.value", mode: 2, value: "-3" },
+            { key: "data.defenses.fortitude.value", mode: 2, value: "-3" },
+            { key: "data.defenses.reflex.value", mode: 2, value: "-3" },
+            { key: "data.defenses.will.value", mode: 2, value: "-3" }],
             flags: {
                 "pillars-of-eternity": {
                     changeCondition : {
@@ -689,11 +689,11 @@ CONFIG.statusEffects : [
         label: "Winded",
         icon: "systems/of-eternity/assets/conditions/winded.png",
         changes: [
-            { key: "steps", mode: 6, value: -1 },
-            { key: "data.defenses.deflection.value", mode: 2, value: -2 },
-            { key: "data.defenses.fortitude.value", mode: 2, value: -2 },
-            { key: "data.defenses.reflex.value", mode: 2, value: -2 },
-            { key: "data.defenses.will.value", mode: 2, value: -2 }],
+            { key: "steps", mode: 6, value: "-1" },
+            { key: "data.defenses.deflection.value", mode: 2, value: "-2" },
+            { key: "data.defenses.fortitude.value", mode: 2, value: "-2" },
+            { key: "data.defenses.reflex.value", mode: 2, value: "-2" },
+            { key: "data.defenses.will.value", mode: 2, value: "-2" }],
         flags: {
             "pillars-of-eternity": {
                 changeCondition : {
@@ -967,7 +967,7 @@ CONFIG.statusEffects : [
         id: "blinded",
         label: "Blinded",
         icon: "systems/of-eternity/assets/conditions/blinded.png",
-        changes: [{ key: "steps", mode: 6, value: -3 }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "dis" }],
+        changes: [{ key: "steps", mode: 6, value: "-3" }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
             "pillars-of-eternity": {
@@ -1027,7 +1027,7 @@ CONFIG.statusEffects : [
         id: "demoralized",
         label: "Demoralized",
         icon: "systems/of-eternity/assets/conditions/demoralized.png",
-        changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 7, value: "adv" }],
+        changes: [{ key: "data.initiative.value", mode: 2, value: "-5" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
             "pillars-of-eternity": {
@@ -1041,7 +1041,7 @@ CONFIG.statusEffects : [
         id: "frightened",
         label: "Frightened",
         icon: "systems/of-eternity/assets/conditions/frightened.png",
-        changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
+        changes: [{ key: "data.initiative.value", mode: 2, value: "-5" }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
             "pillars-of-eternity": {
@@ -1056,7 +1056,7 @@ CONFIG.statusEffects : [
         id: "terrified",
         label: "Terrified",
         icon: "systems/of-eternity/assets/conditions/terrified.png",
-        changes: [{ key: "data.initiative.value", mode: 2, value: -5 }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
+        changes: [{ key: "data.initiative.value", mode: 2, value: "-5" }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
             "pillars-of-eternity": {
@@ -1081,7 +1081,7 @@ CONFIG.statusEffects : [
         id: "determined",
         label: "Determined",
         icon: "systems/of-eternity/assets/conditions/determined.png",
-        changes: [{ key: "steps", mode: 6, value: 1 }, { key: "state", mode: 7, value: "dis" }],
+        changes: [{ key: "steps", mode: 6, value: "1" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
             "pillars-of-eternity": {

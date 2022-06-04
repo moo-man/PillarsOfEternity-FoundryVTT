@@ -15,6 +15,8 @@ import {
 } from './types/powers';
 import { WeaponSpecial } from './types/items';
 import { PILLARS } from "./module/system/config.js";
+import DamageDialog from './module/apps/damage-dialog';
+import SkillCheck from './module/system/skill-check';
 
 
 //#region Actor
@@ -668,10 +670,22 @@ InjurySourceData
 declare global {
   interface Game {
     pillars: {
-      apps: {};
-      rollClass: {};
+      apps: {
+        DamageDialog : DamageDialog
+      };
+      rollClass: {
+        [key : string] : SkillCheck
+      };
       config : typeof PILLARS
     };
+    dice3d : {
+      DiceFactory : {
+
+      }
+      constructor : {
+
+      }
+    }
   }
   interface SourceConfig {
     Actor: PillarsActorSourceData;
@@ -685,11 +699,12 @@ declare global {
   interface CONFIG {
     statusEffects : Partial<ActiveEffectDataConstructorData & { id: string }>[];
   }
+}
 
-  interface EffectChangeData {
-    mode? : number
+declare namespace Die {
+  interface Modifiers {
+    xp : "pillars-explode"
   }
-
 }
 
 

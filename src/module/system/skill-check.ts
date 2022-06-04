@@ -1,31 +1,22 @@
+import { ActiveEffectData, ActiveEffectDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
+import { Data } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/foundry.js/roll";
+import { getGame } from "../../pillars.js";
+import { CheckDataFlattened, SkillCheckData } from "../../types/checks.js";
+import { PowerBaseEffect } from "../../types/powers.js";
+import DamageDialog from "../apps/damage-dialog.js";
+import HealingDialog from "../apps/healing-dialog.js";
 import { PillarsItem } from "../item/item-pillars.js";
 import DamageRoll from "../system/damage-roll.js";
+import PillarsActiveEffect from "./pillars-effect.js";
+import PILLARS_UTILITY from "./utility.js";
 
 export default class SkillCheck
 {
-    data = {
-        checkData : {
-            title : "string",
-            modifier : "string",
-            steps : "string",
-            proxy : "string",
-            assister : "string",
-            state : "string",
-            skillId : "string",
-            skillName : "string",
-        },
-        context : {
-            speaker : data.speaker,
-            targetSpeakers : data.targetSpeakers || [],
-            rollClass : this.constructor.name,
-            rollMode : data.rollMode,
-            messageId : "",
-        },
-        result : {}
-    }
+    data? : SkillCheckData
+    roll? : Roll
 
 
-        constructor(data : CheckData) {
+        constructor(data? : CheckDataFlattened) {
             if (!data)
                 return 
             this.data = {
@@ -46,84 +37,84 @@ export default class SkillCheck
                     rollMode : data.rollMode,
                     messageId : "",
                 },
-                result : {}
+                result : <SkillCheckData["result"]>{}
             }
         }
     
-        static recreate(data)
+        static recreate(data : SkillCheckData)
         {
-            let check = new game.pillars.rollClass[data.context.rollClass]()
+            let check = new SkillCheck();
             check.data = data;
-            check.roll = Roll.fromData(check.data.result)
+            check.roll = Roll.fromData(<Data><unknown>check.data.result) // No idea what it wants from me here
             return check
         }
     
         getTerms() 
         {
-            let terms = []
+            let terms : (PoolTerm | OperatorTerm | Die | NumericTerm | RollTerm)[]= []
 
-            if(this.checkData.state == "normal")
+            if(this.checkData?.state == "normal")
             {
-                terms.push(new Die({number : 2, faces : 10, modifiers : ["xp"]}))
+                terms.push(new Die({number : 2, faces : 10, modifiers : ["xp" as keyof Die.Modifiers]}))
             }
             else 
             {
                 let modifier = ""
                 let flavor = ""
-                if (this.checkData.state == "adv") 
+                if (this.checkData?.state == "adv") 
                 {
                     modifier = "kh"
                     flavor = "Advantage"
                 }
-                else if (this.checkData.state == "dis") 
+                else if (this.checkData?.state == "dis") 
                 {
                     flavor = "Disadvantage"
                     modifier = "kl"
                 }
 
 
-
-                terms.push(new PoolTerm({terms : ["2d10xp", `1d20xp[${flavor}]`], modifiers : [modifier] }))
+                                                                                                          // TODO fix this?
+                terms.push(new PoolTerm({terms : ["2d10xp", `1d20xp[${flavor}]`], modifiers : [modifier], isDeterministic : false }))
             }
 
-            let assisterDie = this.assisterDie()
-            
+            let assisterDie : Partial<Die.TermData> = <Partial<Die.TermData>>this.assisterDie()
+
             if (assisterDie)
             {
-                assisterDie.options = {flavor : this.assister.name}
+                assisterDie.options = {flavor : this.assister?.name || ""}
                 terms.push(new OperatorTerm({operator : "+"}))
                 terms.push(new Die(assisterDie))
             }
 
-            if (this.checkData.modifier)
+            if (this.checkData?.modifier)
             {
                 terms.push(new OperatorTerm({operator : "+"}))
-                terms = terms.concat(Roll.parse(this.checkData.modifier))
+                terms = terms.concat(Roll.parse(this.checkData?.modifier, {}))
             }
 
-            if (this.checkData.steps)
+            if (this.checkData?.steps)
             {
-                if (this.checkData.steps > 0)
+                if (this.checkData?.steps > 0)
                     terms.push(new OperatorTerm({operator : "+"}))
-                else if (this.checkData.steps < 0)
+                else if (this.checkData?.steps < 0)
                     terms.push(new OperatorTerm({operator : "-"}))
 
-                let stepsDie = game.pillars.utility.stepsToDice(this.checkData.steps)
+                let stepsDie : Die.TermData = <Die.TermData>PILLARS_UTILITY.stepsToDice(this.checkData?.steps)
 
-                if (this.checkData.steps > 0)
+                if (this.checkData?.steps > 0)
                     stepsDie.options = {flavor : "Bonus Die"}
-                else if (this.checkData.steps < 0)
+                else if (this.checkData?.steps < 0)
                     stepsDie.options = {flavor : "Penalty Die"}
 
                 terms.push(new Die(stepsDie))
             }
 
-            if (!this.checkData.proxy && this.skill)
+            if (!this.checkData?.proxy && this.skill)
             {
                 terms.push(new OperatorTerm({operator : "+"}))
-                terms.push(new NumericTerm({number : this.skill.rank}))
+                terms.push(new NumericTerm({number : this.skill.rank || 0}))
             }
-            else if (this.checkData.proxy)
+            else if (this.checkData?.proxy)
             {
                 terms.push(new OperatorTerm({operator : "+"}))
                 terms.push(new Die(this.proxyDie()))
@@ -140,8 +131,8 @@ export default class SkillCheck
             await this.roll.evaluate({async:true})  
 
             if (this.actor.type == "character")
-                this.actor.use("skill", this.checkData.skillName)
-            this.data.result = this.roll.toJSON()
+                this.actor.use("skill", this.checkData?.skillName || "")
+            this.data!.result = <SkillCheckData["result"]>this.roll.toJSON()
         }
     
     
@@ -153,20 +144,20 @@ export default class SkillCheck
     
         async sendToChat()
         {
-            let tooltip = await this.roll.getTooltip()
+            let tooltip = await this.roll?.getTooltip()
             let content = await renderTemplate("systems/pillars-of-eternity/templates/chat/check.html", {check : this, tooltip})
             let chatData = {
                 content,
-                speaker : this.context.speaker,
+                speaker : this.context?.speaker,
                 "flags.pillars-of-eternity.rollData" : this.data,
                 type : CONST.CHAT_MESSAGE_TYPES.ROLL,
-                roll : this.roll.toJSON()
+                roll : this.roll?.toJSON()
             }
-            ChatMessage.applyRollMode(chatData, this.context.rollMode)
+            ChatMessage.applyRollMode(chatData, this.context!.rollMode)
             if (!this.message)
             {
                 return ChatMessage.create(chatData).then(message => {
-                    message.update({"flags.pillars-of-eternity.rollData.context.messageId" : message.id})
+                    message!.update({"flags.pillars-of-eternity.rollData.context.messageId" : message!.id})
                 })
             }
             else 
@@ -179,42 +170,42 @@ export default class SkillCheck
         static rankToDie(skill : PillarsItem | undefined) : 8 | 6 | 4 | string {
             if (!skill) return ""
 
-            if (skill.rank >= 15)
+            if (skill.rank! >= 15)
                 return 8
-            if (skill.rank >= 10)
+            if (skill.rank! >= 10)
                 return 6
-            if (skill.rank >= 5)
+            if (skill.rank! >= 5)
                 return 4
                 
             return ""
         }
 
         proxyDie() {
-            return {number : 1, faces : SkillCheck.rankToDie(this.skill)}
+            return {number : 1, faces : Number(SkillCheck.rankToDie(this.skill))}
         }
 
         assisterDie() {
-            if (this.checkData.assister)
-                return {number : 1, faces : SkillCheck.rankToDie(this.assister.items.contents.find(i => i.data.name == this.skill.data.name)), options : {appearance : this.assistDieAppearance()}}
-            else return ""
+            if (this.checkData?.assister)
+                return {number : 1, faces : Number(SkillCheck.rankToDie(this.assister?.items.contents.find(i => i.data.name == this.skill?.data.name))), options : {appearance : this.assistDieAppearance()}}
+            else return {}
         }
 
         assisterDieString() {
-            if (this.checkData.assister)
-                return `d${SkillCheck.rankToDie(this.assister.items.contents.find(i => i.data.name == this.skill.data.name))}`
+            if (this.checkData?.assister)
+                return `d${SkillCheck.rankToDie(this.assister?.items.contents.find(i => i.data.name == this.skill?.data.name))}`
             else return ""
         }
 
         assistDieAppearance()
         {            
-            if (game.dice3d)
-                return game.dice3d.DiceFactory.getAppearanceForDice(game.dice3d.constructor.APPEARANCE(this.assisterUser), this.assisterDieString())
+            if (getGame().dice3d)
+                return getGame().dice3d.DiceFactory.getAppearanceForDice(getGame().dice3d.constructor.APPEARANCE(this.assisterUser), this.assisterDieString())
         }
 
         async rollDamage() {
 
             let damages = await new Promise((resolve, reject) => {
-                new game.pillars.apps.DamageDialog(this.item, this, this.targets).render(true, {resolve, reject})
+                new DamageDialog(this.item, this, this.targets).render(true, {resolve, reject})
             })
 
             let roll = new DamageRoll(damages, this);
@@ -224,7 +215,7 @@ export default class SkillCheck
         async rollHealing() {
 
             let healing = await new Promise((resolve, reject) => {
-                new game.pillars.apps.HealingDialog(this.item, this, this.targets).render(true, {resolve, reject})
+                new HealingDialog(this.item, this, this.targets).render(true, {resolve, reject})
             })
 
             let roll = new DamageRoll(healing, this);
@@ -237,51 +228,56 @@ export default class SkillCheck
                 this.message.update({"flags.pillars-of-eternity.rollData" : this.data})
         }
 
-        addTargets(targets) {
-            this.context.targetSpeakers = this.context.targetSpeakers.concat(targets.map(t => t.actor.speakerData(t)))
+        addTargets(targets : Token[]) {
+            this.context!.targetSpeakers = this.context!.targetSpeakers.concat(targets.map(t => t.actor!.speakerData(t)))
             this.sendToChat()
         }
 
         // Convert effect data to effect objects (from ids or keys)
-        _toEffectObjects(effects)
+        _toEffectObjects(effects : PowerBaseEffect[])
         {
-            let effectObjects = []
+            let effectObjects:  (PillarsActiveEffect | {data : Partial<ActiveEffectDataConstructorData & { id: string }>, id : string})[] = []
             effects.forEach(e => {
                 let effectObject 
                 if (this.item?.effects)
                     effectObject = this.item.effects.get(e.value)
                 if (!effectObject)
-                    effectObject = {data : CONFIG.statusEffects.find(i => i.id == e.value), id : e.value}
+                    effectObject = {data : CONFIG.statusEffects.find(i => i.id == e.value)!, id : e.value}
+
                 if (effectObject)
                     effectObjects.push(effectObject)
             })
             return effectObjects
         }
 
-        get checkData() { return this.data.checkData }
-        get context() { return this.data.context}
-        get result() { return this.data.result}
+        get checkData()  { return this.data?.checkData }
+        get context() { return this.data?.context}
+        get result() { return this.data?.result}
     
         get actor() {
-            return game.pillars.utility.getSpeaker(this.context.speaker)
+            let actor = PILLARS_UTILITY.getSpeaker(this.context?.speaker!)
+            if (actor)
+                return actor
+            else throw new Error("Cannot find actor in Check object")
         }
     
         get assister() {
-            return game.actors.get(this.checkData.assister)
+            return getGame().actors!.get(this.checkData?.assister || "")
         }
 
         get assisterUser() {
-            let actor = game.actors.get(this.checkData.assister)
+            let game = getGame()
+            let actor = game.actors!.get(this.checkData?.assister || "")
             if (actor)
-                return game.users.find(i => i.character?.id == actor.id)
+                return game.users!.find(i => i.character?.id == actor!.id)
         }
 
         get target() {
-            return game.pillars.utility.getSpeaker(this.context.targetSpeakers[0])
+            return PILLARS_UTILITY.getSpeaker(this.context?.targetSpeakers[0]!)
         }
 
         get targets() {
-            return this.context.targetSpeakers.map(speaker => game.scenes.get(speaker.scene)?.tokens.get(speaker.token))
+            return this.context?.targetSpeakers.map(speaker => getGame().scenes!.get(speaker.scene || "")?.tokens.get(speaker.token || ""))
         }
 
         get effects () {
@@ -289,20 +285,23 @@ export default class SkillCheck
             return this._toEffectObjects(effects)
         }
 
-        get item() {
+        get item() : PillarsItem {
             return this.skill
         }
 
-        get skill() {
-            return this.actor.items.get(this.checkData.skillId) || game.items.get(this.checkData.skillId);
+        get skill()  : PillarsItem{
+            let skill =  this.actor.items.get(this.checkData?.skillId || "") || getGame().items!.get(this.checkData?.skillId || "");
+            if (skill)
+                return skill
+            else throw new Error("Cannot find skill in Check object")
         }
 
         get doesDamage() {
-            return this.item?.damage?.value?.filter(d => d.base || d.crit)?.length  > 0
+            return this.item?.damage?.value?.filter(d => d.base || d.crit)?.length! > 0
         }
 
         get doesHealing() {
-            return this.item?.healing?.length  > 0
+            return this.item?.healing?.length!  > 0
         }
 
         get hasEffects() {
@@ -310,11 +309,11 @@ export default class SkillCheck
         }
 
         get tags() {
-            return [this.skill.Category]
+            return [this.skill?.Category]
         }
 
         get message() {
-            return game.messages.get(this.context.messageId)
+            return getGame().messages!.get(this.context?.messageId || "")
         }
 
         get requiresRoll() {

@@ -1,19 +1,26 @@
+import { WeaponCheckDataFlattened, WeaponCheckData } from "../../types/checks.js"
+import { PillarsItem } from "../item/item-pillars.js"
 import SkillCheck from "./skill-check.js"
 
 export default class WeaponCheck extends SkillCheck
 {
-        constructor(data) {
+    data? : WeaponCheckData
+
+        constructor(data : WeaponCheckDataFlattened) {
             super(data)
             if (!data)
                 return 
 
-            this.data.checkData.add = data.add
-            this.data.checkData.itemId = data.itemId
+            this.data!.checkData.add = data.add
+            this.data!.checkData.itemId = data.itemId
         }   
 
         get item()
         {
-            return this.actor.items.get(this.checkData.itemId)
+            let item =  this.actor.items.get(this.checkData?.itemId || "")
+            if (item)
+                return item
+            else throw new Error("Cannot find item in Check object")
         }
 
         get weapon() {
@@ -21,16 +28,16 @@ export default class WeaponCheck extends SkillCheck
         }
 
         get tags () {
-            return [this.weapon.Category, this.weapon.skill.value]
+            return [this.weapon?.Category, this.weapon?.skill?.value]
         }
 
         get weaponTags() {
-            return this.weapon.Specials.filter(i => !i.includes("text-decoration"))
+            return this.weapon?.Specials?.filter(i => !i?.includes("text-decoration"))
         }
 
         get addedProperties()
         {
-            return this.data.checkData.add
+            return this.data?.checkData.add
         }
 
         get effects () {
@@ -39,4 +46,7 @@ export default class WeaponCheck extends SkillCheck
                 effects = effects.concat(this.addedProperties?.effects || [])
             return effects
         }
+
+        get checkData()  { return this.data?.checkData }
+
 }

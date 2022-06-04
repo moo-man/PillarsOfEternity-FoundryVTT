@@ -1,25 +1,26 @@
-import { EmbeddedPowers, Useable } from "../../types/common"
-import { PillarsItem } from "../item/item-pillars"
+import { ChatSpeakerDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData"
+import { getGame } from "../../pillars"
+import { PillarsActor } from "../actor/actor-pillars"
 import { PILLARS } from "./config"
 
 export default class PILLARS_UTILITY {
   
-    static getSkillRank(xp)
+    static getSkillRank(xp : number)
     {
         return Math.floor(Math.sqrt(2 * xp + 0.25) - 0.5)
     }
 
-    static getPowerSourceLevel(xp)
+    static getPowerSourceLevel(xp : number)
     {
         return xp < 10 ? 0 : Math.floor(Math.sqrt(0.5 * xp + (1/16)) - (5/4))
     }
 
-    static getPowerSourceAttackBonus(level)
+    static getPowerSourceAttackBonus(level : number)
     {
         return level * 2 + 2
     }
 
-    static getPowerSourcePool(level)
+    static getPowerSourcePool(level : number)
     {
         if (level < 3)
         {
@@ -31,22 +32,22 @@ export default class PILLARS_UTILITY {
             return level * 2 - 1
     }
 
-    static getSpeaker(speaker) {
+    static getSpeaker(speaker : ChatSpeakerDataProperties) : PillarsActor | undefined{
         try {
             if (speaker.actor)
-                return game.actors.get(speaker.actor)
+                return getGame().actors!.get(speaker.actor)
             else if (speaker.token && speaker.scene)
-                return game.scenes.get(speaker.scene).tokens.get(speaker.token).actor
+                return getGame().scenes!.get(speaker.scene)?.tokens.get(speaker.token)?.actor!
             else
                 throw "Could not find speaker"
         }
-        catch (e) {
-            throw new Error(e)
+        catch (e : unknown) {
+            throw new Error(e as string)
         }
 
     }
 
-    static stepsToDice(steps)
+    static stepsToDice(steps : number)
     {
         steps = Math.abs(steps)
         if (steps >= 5)
@@ -57,11 +58,11 @@ export default class PILLARS_UTILITY {
             return {number : 1, faces : 6}
         else if (steps >= 1)
             return {number : 1, faces : 4}
-        else return ""
+        else return {}
     }
 
     static weaponSpecials() {
-        return mergeObject(foundry.utils.deepClone(game.pillars.config.meleeSpecials), game.pillars.config.rangedSpecials)
+        return mergeObject(foundry.utils.deepClone(PILLARS.meleeSpecials), PILLARS.rangedSpecials)
     }
 
 }

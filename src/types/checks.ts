@@ -1,7 +1,9 @@
 import { ChatSpeakerDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData"
+import { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
 import { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
 import { PillarsActor } from "../module/actor/actor-pillars";
 import { PillarsItem } from "../module/item/item-pillars";
+import SkillCheck from "../module/system/skill-check";
 
 enum State {
     ADVANTAGED = "adv",
@@ -9,7 +11,7 @@ enum State {
     DISADVANTAGED = "dis",
 }
 
-export interface CheckData {
+export interface CheckDataFlattened {
         title : string
         modifier : string
         steps : number
@@ -25,12 +27,12 @@ export interface CheckData {
         messageId : string,
 }
 
-export interface WeaponCheckData extends CheckData{
+export interface WeaponCheckDataFlattened extends CheckDataFlattened{
     add : {}
     itemId : string
 }
 
-export interface PowerCheckData extends CheckData {
+export interface PowerCheckDataFlattened extends CheckDataFlattened {
     sourceId : string
     itemId : string
 }
@@ -91,4 +93,44 @@ export interface AssisterData {
 export interface DamageOptions  {
     shield : boolean
 }
+
+
+
+export type SkillCheckData = {
+    checkData : {
+        title : string,
+        modifier : string,
+        steps : number,
+        proxy : string,
+        assister : string,
+        state : State,
+        skillId : string,
+        skillName : string,
+    },
+    context : {
+        speaker : ChatSpeakerDataProperties,
+        targetSpeakers : ChatSpeakerDataProperties[],
+        rollClass : string,
+        rollMode : keyof CONFIG.Dice.RollModes,
+        messageId : string,
+    },
+    result : ReturnType<Roll["toJSON"]> & {results : Array<number | string>}
+}
+
+export type WeaponCheckData = {
+    checkData : {
+        add : any,
+        itemId : string
+    }
+} & SkillCheckData
+
+export type PowerCheckData = {
+    checkData : {
+        sourceId : string
+        itemId : string
+    },
+    result : {
+        chosenWeapon : string
+    }
+} & SkillCheckData
 
