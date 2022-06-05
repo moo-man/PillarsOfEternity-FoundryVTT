@@ -5,7 +5,7 @@ import { PillarsActor } from "../module/actor/actor-pillars";
 import { PillarsItem } from "../module/item/item-pillars";
 import SkillCheck from "../module/system/skill-check";
 
-enum State {
+export enum State {
     ADVANTAGED = "adv",
     NORMAL = "normal",
     DISADVANTAGED = "dis",
@@ -48,7 +48,7 @@ export interface CheckOptions {
     add? : {}
 }
 
-export interface DialogData {
+export interface CheckDialogData {
     title : string
     modifier : string;
     steps : 0;
@@ -63,7 +63,7 @@ export interface DialogData {
     state : { normal?: boolean, adv? : boolean, dis? : boolean };
 }
 
-export interface SkillDialogData extends DialogData {
+export interface SkillDialogData extends CheckDialogData {
     assisters : AssisterData[],
     hasRank : boolean,
     skill : PillarsItem | undefined
@@ -79,7 +79,7 @@ export interface WeaponDialogData extends SkillDialogData {
 
 }
 
-export interface PowerDialogData extends DialogData {
+export interface PowerDialogData extends CheckDialogData {
     hasRank : boolean,
 }
 

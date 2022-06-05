@@ -1,4 +1,6 @@
-export default class ActorConfigure extends FormApplication
+import { PillarsActor } from "../actor/actor-pillars"
+
+export default class ActorConfigure extends FormApplication<any, any, PillarsActor>
 {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -10,7 +12,7 @@ export default class ActorConfigure extends FormApplication
     }
 
     
-    async _updateObject(event, formData) {
+    async _updateObject(event : Event, formData? : object) : Promise<void> {
         this.object.update(formData)
     }
 }

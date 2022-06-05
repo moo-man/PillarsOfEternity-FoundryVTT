@@ -13,13 +13,13 @@ import { Defense, isUsable, ItemType, Tier } from '../../types/common.js';
 import { PILLARS } from '../system/config.js';
 import {
   AssisterData,
-  CheckData,
+  CheckDataFlattened,
   CheckOptions,
-  DialogData,
+  CheckDialogData,
   SkillDialogData,
-  WeaponCheckData,
+  WeaponCheckDataFlattened,
   WeaponDialogData,
-  PowerCheckData,
+  PowerCheckDataFlattened,
   AgingCheckData,
   PowerDialogData,
   DamageOptions,
@@ -27,6 +27,7 @@ import {
 import { getGame } from '../../pillars.js';
 import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
 import { PropertiesToSource } from '@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes';
+import { EffectChangeData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
 
 declare global {
   interface DocumentClassConfig {
@@ -320,7 +321,7 @@ export class PillarsActor extends Actor {
     } else throw new Error('Invalid argument');
 
     let data = this.getSkillDialogData('skill', skillItem!, { name: skill });
-    let checkData: CheckData = await RollDialog.create(data);
+    let checkData: CheckDataFlattened = await RollDialog.create(data);
     checkData.skillName = skill;
     checkData.title = data.title;
     checkData.skillId = skillItem?.id || '';
@@ -339,7 +340,7 @@ export class PillarsActor extends Actor {
     if (!weaponItem?.skill?.value) throw ui!.notifications!.error('No skill assigned to the weapon');
 
     let data = this.getWeaponDialogData('weapon', weaponItem);
-    let checkData: WeaponCheckData = <WeaponCheckData>await RollDialog.create(data);
+    let checkData: WeaponCheckDataFlattened = <WeaponCheckDataFlattened>await RollDialog.create(data);
     checkData.add = options.add || {}; // Properties added via options (right now only from equipped weapon powers)
     checkData.title = data.title;
     checkData.skillId = weaponItem.Skill?.id || '';
@@ -359,8 +360,8 @@ export class PillarsActor extends Actor {
     this._powerUsageValidation(powerItem!);
 
     let data = this.getPowerDialogData('power', powerItem!);
-    let checkData: PowerCheckData = <PowerCheckData>{};
-    if (powerItem!.roll?.value) checkData = <PowerCheckData>await RollDialog.create(data);
+    let checkData: PowerCheckDataFlattened = <PowerCheckDataFlattened>{};
+    if (powerItem!.roll?.value) checkData = <PowerCheckDataFlattened>await RollDialog.create(data);
 
     checkData.title = data.title;
     checkData.sourceId = powerItem!.SourceItem?.id || "";
@@ -415,7 +416,7 @@ export class PillarsActor extends Actor {
 
   getDialogData(type: string, item: PillarsItem, options: CheckOptions = {}) {
     let game = getGame();
-    let dialogData: DialogData = <DialogData>{};
+    let dialogData: CheckDialogData = <CheckDialogData>{};
     dialogData.title = `${item?.name || options.name} Check`;
     dialogData.modifier = '';
     dialogData.steps = 0;

@@ -1,5 +1,6 @@
 
 export class PillarsCombat extends Combat {
+
     async _preCreate(data, options, user)
     {
         await super._preCreate(data, options, user)
@@ -26,6 +27,7 @@ export class PillarsCombat extends Combat {
         super.setupTurns()
         if (this.phase == 0)
             this.turns.reverse()
+        return this.turns
     }
 
     _sortCombatants(...args) {
@@ -37,7 +39,8 @@ export class PillarsCombat extends Combat {
     async startCombat() {
         await super.startCombat();
         this.setupTurns(); // Now that combat has started, sort combatants
-        ui.sidebar.tabs.combat.render(true) // Rerender to show sort
+        ui.sidebar!.tabs.combat!.render(true) // Rerender to show sort
+        return this
 
     }
 
