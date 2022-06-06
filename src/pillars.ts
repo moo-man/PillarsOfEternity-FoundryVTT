@@ -42,17 +42,17 @@ Hooks.on("init", () => {
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("pillars-of-eternity", PillarsActorSheet, { makeDefault: true });
-//   Actors.registerSheet("pillars-of-eternity", PillarsNPCSheet, {types: ["npc"], makeDefault: true });
-//   Items.unregisterSheet("core", ItemSheet);
-//   Items.registerSheet("pillars-of-eternity", PillarsItemSheet, { makeDefault: true });
-
+  Actors.registerSheet("pillars-of-eternity", PillarsNPCSheet, {types: ["npc"], makeDefault: true });
+  Items.unregisterSheet("core", ItemSheet);
+  Items.registerSheet("pillars-of-eternity", PillarsItemSheet, { makeDefault: true });
+  DocumentSheetConfig.registerSheet(ActiveEffect, "pillars-of-eternity", PillarsEffectConfig)
+  
 //   // Assign the actor class to the CONFIG
   CONFIG.Actor.documentClass = PillarsActor;
   CONFIG.Item.documentClass = PillarsItem;
   CONFIG.Combat.documentClass = PillarsCombat;
   CONFIG.Combatant.documentClass = PillarsCombatant;
   CONFIG.ActiveEffect.documentClass = PillarsActiveEffect;
-  CONFIG.ActiveEffect.sheetClass = PillarsEffectConfig;
   CONFIG.Token.documentClass = PillarsTokenDocument
   CONFIG.Combat.defeatedStatusId = "incapacitated"
 //   PillarsExplode()
@@ -83,18 +83,18 @@ Hooks.on("init", () => {
   }
 })
 
-//   CONFIG.ui.combat = PillarsCombatTracker
-//   Hooks.on("setup", () => {
-//     for (let group in POE) {
-//       for (let key in POE[group])
-//         if (typeof POE[group][key] == "string")
-//           POE[group][key] = game.i18n.localize(POE[group][key])
-//     }
-//     FoundryOverrides()
-// })
+  CONFIG.ui.combat = PillarsCombatTracker
+  Hooks.on("setup", () => {
+    for (let group in PILLARS) {
+      for (let key in PILLARS[group as keyof typeof PILLARS])
+        if (typeof PILLARS[group as keyof typeof PILLARS][key] == "string")
+          PILLARS[group][key] = game.i18n.localize(PILLARS[group][key])
+    }
+    FoundryOverrides()
+})
 
-//   // Register all other hooks
-//   hooks();
+  //Register all other hooks
+  hooks();
 
 export function getGame(): Game {
   if(!(game instanceof Game)) {

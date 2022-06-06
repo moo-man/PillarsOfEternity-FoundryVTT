@@ -192,7 +192,6 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
           callback: () => this.item.createEmbeddedDocuments('ActiveEffect', [effectData]),
         },
       },
-      default: '',
       render: (dlg: HTMLElement | JQuery<HTMLElement>) => {
         $(dlg).find('.label').trigger('select'); // TODO test this
       },

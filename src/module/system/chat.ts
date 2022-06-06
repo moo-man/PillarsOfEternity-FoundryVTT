@@ -1,11 +1,19 @@
+import { ActiveEffectDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
+import { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
+import { getGame } from "../../pillars";
+import { isEquippable, isEquippableData } from "../../types/common";
+import DamageRoll from "./damage-roll";
+import WeaponCheck from "./weapon-check";
 
 export class PillarsChat {
 
+    static _highlighted? : Token | null
 
-    static async _onRenderChatMessage(app, html)
+
+    static async _onRenderChatMessage(app : ChatMessage, html : JQuery<HTMLElement>)
     {
                 // Do not display "Blind" chat cards to non-gm
-                if (html.hasClass("blind") && !game.user.isGM) {
+                if (html.hasClass("blind") && !getGame().user!.isGM) {
                     html.find(".message-header").remove(); // Remove header so Foundry does not attempt to update its timestamp
                     html.html("").css("display", "none");
                 }
@@ -14,82 +22,89 @@ export class PillarsChat {
                 let postedItem = html.find(".post-item")[0]
                 if (postedItem)
                 {
-                    postedItem.setAttribute("draggable", true)
-                    postedItem.addEventListener("dragstart", ev => {
-                        ev.dataTransfer.setData("text/plain", JSON.stringify({type: "item", payload : app.getFlag("pillars-of-eternity", "transfer")}))
+                    postedItem.setAttribute("draggable", "true")
+                    postedItem.addEventListener("dragstart", (ev : DragEventInit) => {
+                        ev.dataTransfer!.setData("text/plain", JSON.stringify({type: "item", payload : app.getFlag("pillars-of-eternity", "transfer")}))
                     })
                 }
     }
 
 
-    static async _onDamageButtonClick(ev)
+    static async _onDamageButtonClick(ev : JQuery.ClickEvent)
     {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
-        const message = game.messages.get(messageId);
-        let check = message.getCheck();
-        if (!message.getCheck().actor.isOwner)
-            return ui.notifications.error("You don't have permission to interact with this check")
-        check.rollDamage();
+        const message = getGame().messages?.get(messageId || "");
+        let check = message?.getCheck();
+        if (check?.actor.isOwner)
+            return ui.notifications!.error("You don't have permission to interact with this check")
+        check?.rollDamage();
     }
 
-    static async _onHealingButtonClick(ev)
+    static async _onHealingButtonClick(ev : JQuery.ClickEvent)
     {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
-        const message = game.messages.get(messageId);
-        let check = message.getCheck();
-        if (!message.getCheck().actor.isOwner)
-            return ui.notifications.error("You don't have permission to interact with this check")
-        check.rollHealing();
+        const message = getGame().messages?.get(messageId || "");
+        let check = message?.getCheck();
+        if (check?.actor.isOwner)
+            return ui.notifications!.error("You don't have permission to interact with this check")
+        check?.rollHealing();
     }
 
 
-    static async _onApplyEffectClick(ev) 
+    static async _onApplyEffectClick(ev : JQuery.ClickEvent) 
     {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
-        const message = game.messages.get(messageId);
-        let check = message.getCheck();
-        if (!message.getCheck().actor.isOwner)
-            return ui.notifications.error("You don't have permission to interact with this check")
-        let item = check.item;
-        let effectId = ev.currentTarget.dataset.effect;
-        let effect = item.effects.get(effectId)
-        if (effect)
+        const message = getGame().messages?.get(messageId || "");
+        let check = message?.getCheck();
+        if (check?.actor.isOwner)
+            return ui.notifications!.error("You don't have permission to interact with this check")
+
+        let effectObj : PropertiesToSource<ActiveEffectDataProperties> & {id? : string}
+        if (check)
         {
-            effect = effect.toObject()
-            setProperty(effect, "flags.core.statusId", effect.label.slugify())
-        }
-        else
-        {
-            effect = duplicate(CONFIG.statusEffects.find(i => i.id == effectId))
-            setProperty(effect, "flags.core.statusId", effectId)
-            delete effect.id
+            let item = check.item;
+            let effectId = ev.currentTarget.dataset.effect;
+            let effect = item.effects.get(effectId)
+            if (effect)
+            {
+                effectObj = effect.toObject()
+                setProperty(effectObj, "flags.core.statusId", effect.label.slugify())
+            }
+            else
+            {
+                effectObj = foundry.utils.deepClone(CONFIG.statusEffects.find(i => i.id == effectId)) as PropertiesToSource<ActiveEffectDataProperties> & {id? : string}
+
+                setProperty(effectObj, "flags.core.statusId", effectId)
+                delete effectObj.id
+            }
         }
 
-        let tokens = game.user.targets.size ?  Array.from(game.user.targets) :  canvas.tokens.controlled
+        let game = getGame()
+        let tokens = game.user!.targets.size ?  Array.from(game.user!.targets) :  canvas?.tokens!.controlled || []
 
 
         tokens.forEach(t => {
             if (!t.document.isOwner)
-                game.socket.emit("system.pillars-of-eternity", {type: "applyEffect" , payload : {effects : [effect], speaker : t.document.actor.speakerData(t)}})
+                game.socket!.emit("system.pillars-of-eternity", {type: "applyEffect" , payload : {effects : [effectObj], speaker : t.document.actor!.speakerData(t)}})
             else 
-                t.actor.createEmbeddedDocuments("ActiveEffect", [effect])
+                t.actor!.createEmbeddedDocuments("ActiveEffect", [effectObj])
         })
     }
 
-    static _onHoverInTargetImage(ev)
+    static _onHoverInTargetImage(ev : JQuery.MouseEnterEvent)
     {
         ev.preventDefault();
-        if ( !canvas.ready ) return;
+        if ( !canvas?.ready ) return;
         const li = ev.target;
         let tokenId = li.dataset.tokenId
-        const token = canvas.tokens.get(tokenId);
+        const token = canvas.tokens?.get(tokenId);
         if ( token?.isVisible ) {
           if ( !token._controlled ) token._onHoverIn(ev);
           this._highlighted = token;
         }
     }
 
-    static _onHoverOutTargetImage(ev)
+    static _onHoverOutTargetImage(ev : JQuery.MouseLeaveEvent)
     {
         ev.preventDefault();
         if ( this._highlighted ) this._highlighted._onHoverOut(ev);
@@ -97,48 +112,56 @@ export class PillarsChat {
     }
 
     
-    static _onClickTargetImage(ev)
+    static _onClickTargetImage(ev : JQuery.ClickEvent)
     {
         ev.preventDefault();
-        if ( !canvas.ready ) return;
+        if ( !canvas?.ready ) return;
         const li = ev.target;
         let tokenId = li.dataset.tokenId
-        const token = canvas.tokens.get(tokenId);
-        canvas.animatePan({x: token.center.x, y: token.center.y, duration: 250});
+        const token = canvas.tokens!.get(tokenId);
+        if (token)
+            canvas.animatePan({x: token.center.x, y: token.center.y, duration: 250});
     }
 
 
-    static _onShieldClick(ev){
+    static _onShieldClick(ev : JQuery.ClickEvent){
         let id = ev.currentTarget.dataset.id
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
-        const message = game.messages.get(messageId);
-        let check = message.getCheck();
-        check.toggleShield(id)
+        const message = getGame().messages!.get(messageId || "");
+        let check = message?.getDamage();
+        check?.toggleShield(id)
         
     }
 
-    static _onAddSummonClick(ev) 
+    static _onAddSummonClick(ev : JQuery.ClickEvent) 
     {
+        let game = getGame();
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
-        const message = game.messages.get(messageId);
-        let check = message.getCheck();
-        if (!message.getCheck().actor.isOwner)
-            return ui.notifications.error("You don't have permission to interact with this check")
-        let item = check.item;
-        let index= ev.currentTarget.dataset.index;
-        let itemData = duplicate(item.summons[index].data);
+        const message = getGame().messages!.get(messageId || "");
+        let check = message?.getCheck();
+        if (check?.actor.isOwner)
+            return ui.notifications!.error("You don't have permission to interact with this check")
+        let item = check?.item;
+        let index = Number(ev.currentTarget.dataset.index);
+        if (item && item.data.type == "power")
+        {
+            let itemData = foundry.utils.deepClone(item.summons![index]?.data);
 
-        itemData.data.equipped.value = true;
-
-        let tokens = game.user.targets.size ?  Array.from(game.user.targets) :  canvas.tokens.controlled
-
-        tokens.forEach(t => {
-            if (!t.document.isOwner)
-                game.socket.emit("system.pillars-of-eternity", {type: "addItems" , payload : {items : [itemData], speaker : t.document.actor.speakerData(t)}})
-            else 
-                t.actor.createEmbeddedDocuments("Item", [itemData])
-
-            ui.notifications.notify(`${itemData.name} created on ${t.document.name}`)
-        })
+            if (isEquippableData(itemData))
+            {
+                itemData.data.equipped.value = true;
+            }
+                
+            let tokens = game.user!.targets.size ?  Array.from(game.user!.targets) :  canvas!.tokens?.controlled || []
+            
+            tokens.forEach(t => {
+                if (!t.document.isOwner)
+                game.socket!.emit("system.pillars-of-eternity", {type: "addItems" , payload : {items : [itemData], speaker : t.document.actor?.speakerData(t)}})
+                else 
+                t.actor?.createEmbeddedDocuments("Item", [{...itemData}])
+                
+                ui.notifications!.notify(`${itemData?.name} created on ${t.document.name}`)
+            })
+        }
     }
 }   

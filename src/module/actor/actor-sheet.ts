@@ -674,7 +674,6 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
           callback: () => this.actor.createEmbeddedDocuments('ActiveEffect', [effectData]),
         },
       },
-      default: '',
       render: (dlg) => {
         $(dlg).find('.label').select();
       },
@@ -983,7 +982,6 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
           callback: () => this.actor.longRest(),
         },
       },
-      default: '',
     }).render(true);
   }
 

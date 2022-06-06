@@ -6,7 +6,7 @@ export default function () {
     Hooks.on("renderChatMessage", PillarsChat._onRenderChatMessage)
 
     // Activate chat listeners defined in dice-wfrp4e.js
-    Hooks.on('renderChatLog', (log, html, data) => {
+    Hooks.on<Hooks.RenderApplication>('renderChatLog', (log : Application, html : JQuery<HTMLElement>) => {
 
         html.on("click", ".roll-damage", PillarsChat._onDamageButtonClick)
         html.on("click", ".roll-healing", PillarsChat._onHealingButtonClick)

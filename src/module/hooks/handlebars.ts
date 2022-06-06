@@ -1,26 +1,29 @@
-import { POE } from "../system/config.js"
+import { getGame } from "../../pillars"
+import { PILLARS } from "../system/config"
+
 export default function () {
 
     Hooks.on("init", () => {
-        Handlebars.registerHelper("ifIsGM", function (options) {
-            return game.user.isGM ? options.fn(this) : options.inverse(this)
-        })
+        // Dunno how to do this, not really needed
+        // Handlebars.registerHelper("ifIsGM", function (options : any) {
+        //     return getGame().user!.isGM ? options(this) : options.inverse(this)
+        // })
 
 
         Handlebars.registerHelper("isGM", function (options) {
-            return game.user.isGM
+            return getGame().user!.isGM
         })
 
 
-        Handlebars.registerHelper("config", function (key) {
-            return POE[key]
+        Handlebars.registerHelper("config", function (key : string) {
+            return PILLARS[key as keyof typeof PILLARS]
         })
 
         Handlebars.registerHelper("configLookup", function (obj, key) {
-            return POE[obj][key]
+            return PILLARS[obj as keyof typeof PILLARS]?[key]
         })
 
-        Handlebars.registerHelper("array", function (array, cls) {
+        Handlebars.registerHelper("array", function (array: string[], cls: string) {
             if (typeof cls == "string")
                 return array.map(i => `<a class="${cls}">${i}</a>`).join(`<span class="array-comma">,</span>`)
             else

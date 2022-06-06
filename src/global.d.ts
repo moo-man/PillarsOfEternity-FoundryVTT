@@ -17,6 +17,7 @@ import { WeaponSpecial } from './types/items';
 import { PILLARS } from "./module/system/config.js";
 import DamageDialog from './module/apps/damage-dialog';
 import SkillCheck from './module/system/skill-check';
+import DamageRoll from './module/system/damage-roll';
 
 
 //#region Actor
@@ -699,6 +700,22 @@ declare global {
   interface CONFIG {
     statusEffects : Partial<ActiveEffectDataConstructorData & { id: string }>[];
   }
+
+
+  interface ChatMessage {
+    test : number,
+    getCheck : () => SkillCheck
+    getDamage : () => DamageRoll
+  }
+  
+
+  namespace ClientSettings {
+    interface Values {
+      'pillars-of-eternity.playerApplyDamage': boolean;
+      'pillars-of-eternity.systemMigrationVersion': string;
+    }
+  }
+
 }
 
 declare namespace Die {

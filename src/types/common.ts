@@ -98,9 +98,11 @@ interface CategoryItem {
 }
 
 interface EquippableItem {
-  data : {
+  data : EquippableData
+}
+
+interface EquippableData {
     data: Equipped 
-  }
 }
 
 interface PhysicalItem {
@@ -133,6 +135,11 @@ export function hasCategory(item: any) : item is CategoryItem {
 export function isEquippable(item : any) : item is EquippableItem
 {
   return item.data.data.equipped != undefined
+}
+
+export function isEquippableData(item : any) : item is EquippableData
+{
+  return item.data.equipped != undefined
 }
 
 export function isPhysical(item : any) : item is PhysicalItem

@@ -98,8 +98,7 @@ export default class PowerCheck extends SkillCheck
                             label : "Apply",
                             callback : (dlg) => {resolve($(dlg).find("select")[0]?.value)}
                         }
-                    },
-                    default: ""
+                    }
                 }).render(true)
             })
         }

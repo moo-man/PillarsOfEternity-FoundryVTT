@@ -462,7 +462,6 @@ export class PillarsItem extends Item {
               },
             },
           },
-          default: '',
         }).render(true);
       });
     else return true;

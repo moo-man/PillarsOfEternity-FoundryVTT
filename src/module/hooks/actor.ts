@@ -1,6 +1,10 @@
+import { ActorDataConstructor } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData"
+import { getGame } from "../../pillars"
+import { PillarsActor } from "../actor/actor-pillars"
+
 export default function () {
-    Hooks.on("updateActor", async (actor, data, options, userId) => {
-        if (game.user.id == userId)
+    Hooks.on("updateActor", async (actor : PillarsActor, data : Record<string, unknown>, options : unknown, userId: string) => {
+        if (getGame().user?.id == userId)
         {
             if (hasProperty(data, "data.health") || hasProperty(data, "data.endurance"))
             {
