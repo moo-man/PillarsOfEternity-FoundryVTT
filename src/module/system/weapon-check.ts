@@ -1,6 +1,5 @@
-import { WeaponCheckDataFlattened, WeaponCheckData } from "../../types/checks.js"
-import { PillarsItem } from "../item/item-pillars.js"
-import SkillCheck from "./skill-check.js"
+import { WeaponCheckDataFlattened, WeaponCheckData } from "../../types/checks"
+import SkillCheck from "./skill-check"
 
 export default class WeaponCheck extends SkillCheck
 {

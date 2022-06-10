@@ -1,4 +1,3 @@
-import { ActorDataConstructor } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData"
 import { getGame } from "../../pillars"
 import { PillarsActor } from "../actor/actor-pillars"
 

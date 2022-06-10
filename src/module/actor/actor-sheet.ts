@@ -3,11 +3,10 @@ import BookOfSeasons from '../apps/book-of-seasons';
 import ActorConfigure from '../apps/actor-configure';
 import { PillarsItem } from '../item/item-pillars';
 import PillarsActiveEffect from '../system/pillars-effect';
-import { BasePreparedPillarsActorData, PillarsActorTooltips, PreparedPillarsCharacterData } from '../../global';
+import { BasePreparedPillarsActorData, PreparedPillarsCharacterData } from '../../global';
 import { Defense, ItemType, SoakType } from '../../types/common';
 import { getGame } from '../../pillars';
 import PILLARS_UTILITY from '../system/utility';
-import DamageDialog from '../apps/damage-dialog';
 import { PowerGroups } from '../../types/powers';
 
 // Overwrite default ActorSheet.Data data property and replace it with system data

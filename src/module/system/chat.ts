@@ -1,9 +1,7 @@
 import { ActiveEffectDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
 import { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
 import { getGame } from "../../pillars";
-import { isEquippable, isEquippableData } from "../../types/common";
-import DamageRoll from "./damage-roll";
-import WeaponCheck from "./weapon-check";
+import { isEquippableData } from "../../types/common";
 
 export class PillarsChat {
 

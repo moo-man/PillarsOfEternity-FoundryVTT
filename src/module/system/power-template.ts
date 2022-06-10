@@ -1,11 +1,7 @@
-import { MeasuredTemplateData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
-import { BaseActor } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/documents.mjs/baseActor';
 import { getGame } from '../../pillars';
 import { PowerGroups } from '../../types/powers';
-import { PillarsActorSheet } from '../actor/actor-sheet';
 import { PillarsItem } from '../item/item-pillars';
 import { PILLARS } from './config';
-import PILLARS_UTILITY from './utility';
 
 export default class PowerTemplate extends MeasuredTemplate {
 

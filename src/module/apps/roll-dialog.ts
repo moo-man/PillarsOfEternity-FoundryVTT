@@ -1,4 +1,4 @@
-import { CheckDataFlattened, CheckDialogData, State, WeaponCheckDataFlattened } from '../../types/checks';
+import { CheckDataFlattened, CheckDialogData, State } from '../../types/checks';
 import { PillarsEffectChangeDataProperties } from '../../types/effects';
 import { PillarsActor } from '../actor/actor-pillars';
 import PILLARS_UTILITY from '../system/utility';

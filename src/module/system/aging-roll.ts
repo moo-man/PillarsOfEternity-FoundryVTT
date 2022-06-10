@@ -1,5 +1,3 @@
-import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
-import { getGame } from '../../pillars';
 import { AgingCheckData, AgingCheckDataFlattened } from '../../types/checks';
 import { PILLARS } from './config';
 import PILLARS_UTILITY from './utility';

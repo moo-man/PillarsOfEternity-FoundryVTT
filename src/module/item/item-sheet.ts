@@ -1,14 +1,12 @@
 import { ActiveEffectDataConstructorData, ActiveEffectDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
-import { EffectChangeData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
 import { ItemDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
-import {  PillarsItemSystemData } from '../../global.js';
-import { getGame } from '../../pillars.js';
-import { hasEmbeddedPowers, ItemType } from '../../types/common.js';
-import { EmbeddedPower, PowerBaseEffect, PowerDamage, PowerDuration, PowerHealing, PowerMisc, PowerRange, PowerSummon, PowerTarget } from '../../types/powers.js';
-import ItemSpecials from '../apps/item-specials.js';
-import { PILLARS } from '../system/config.js';
-import PillarsActiveEffect from '../system/pillars-effect.js';
-import { PillarsItem } from './item-pillars.js';
+import {  PillarsItemSystemData } from '../../global';
+import { getGame } from '../../pillars';
+import { hasEmbeddedPowers, ItemType } from '../../types/common';
+import { EmbeddedPower, PowerBaseEffect, PowerDamage, PowerDuration, PowerHealing, PowerMisc, PowerRange, PowerSummon, PowerTarget } from '../../types/powers';
+import ItemSpecials from '../apps/item-specials';
+import PillarsActiveEffect from '../system/pillars-effect';
+import { PillarsItem } from './item-pillars';
 
 interface PillarsItemSheetData extends Omit<ItemSheet.Data, 'data'> {
   data: PillarsItemSystemData;

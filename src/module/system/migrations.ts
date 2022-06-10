@@ -1,10 +1,8 @@
 import { ActiveEffectDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
 import { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
-import { PreparedPillarsActorData, PreparedPillarsCharacterData } from "../../global";
 import { getGame } from "../../pillars";
 import { PillarsActor } from "../actor/actor-pillars";
 import { PillarsItem } from "../item/item-pillars";
-import PillarsActiveEffect from "./pillars-effect";
 
 export default class Migration {
 

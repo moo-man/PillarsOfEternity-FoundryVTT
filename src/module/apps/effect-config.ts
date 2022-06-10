@@ -1,5 +1,5 @@
 
-import EffectScriptConfig from "./effect-script.js"
+import EffectScriptConfig from "./effect-script"
 
 
 export default class PillarsEffectConfig extends ActiveEffectConfig<ActiveEffectConfig.Options, ActiveEffectConfig.Data & {showEquip : boolean, modes : Record<number, string>}> {

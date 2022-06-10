@@ -1,4 +1,4 @@
-import { Category, Equipped, Physical, PowerSource, Used } from '../global';
+import { Category, Equipped, Physical, Used } from '../global';
 import { PILLARS } from '../module/system/config';
 import { EmbeddedPower } from './powers';
 

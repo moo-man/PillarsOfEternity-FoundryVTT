@@ -14,7 +14,7 @@ import {
   PowerTarget,
 } from './types/powers';
 import { WeaponSpecial } from './types/items';
-import { PILLARS } from "./module/system/config.js";
+import { PILLARS } from "./module/system/config";
 import DamageDialog from './module/apps/damage-dialog';
 import SkillCheck from './module/system/skill-check';
 import DamageRoll from './module/system/damage-roll';

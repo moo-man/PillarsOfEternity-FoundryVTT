@@ -1,4 +1,4 @@
-import { PillarsChat } from "../system/chat.js";
+import { PillarsChat } from "../system/chat";
 
 export default function () {
 

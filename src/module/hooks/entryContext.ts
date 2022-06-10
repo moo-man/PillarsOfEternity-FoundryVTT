@@ -1,5 +1,4 @@
 import { getGame } from "../../pillars";
-import { DamageType } from "../../types/common";
 
 export default function () {
     Hooks.on("getChatLogEntryContext", addChatMessageContextOptions)

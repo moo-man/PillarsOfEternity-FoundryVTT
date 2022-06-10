@@ -669,7 +669,7 @@ CONFIG.statusEffects = [
     {
         id: "bloodied",
         label: "Bloodied",
-        icon: "systems/of-eternity/assets/conditions/bloodied.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/bloodied.png",
         changes: [
             { key: "steps", mode: 6, value: "-2" },
             { key: "data.defenses.deflection.value", mode: 2, value: "-3" },
@@ -687,7 +687,7 @@ CONFIG.statusEffects = [
     {
         id: "winded",
         label: "Winded",
-        icon: "systems/of-eternity/assets/conditions/winded.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/winded.png",
         changes: [
             { key: "steps", mode: 6, value: "-1" },
             { key: "data.defenses.deflection.value", mode: 2, value: "-2" },
@@ -705,7 +705,7 @@ CONFIG.statusEffects = [
     {
         id: "weakened",
         label: "Weakened",
-        icon: "systems/of-eternity/assets/conditions/weakened.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/weakened.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags: {
             "pillars-of-eternity": {
@@ -719,7 +719,7 @@ CONFIG.statusEffects = [
     {
         id: "sickened",
         label: "Sickened",
-        icon: "systems/of-eternity/assets/conditions/sickened.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/sickened.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -734,7 +734,7 @@ CONFIG.statusEffects = [
     {
         id: "enfeebled",
         label: "Enfeebled",
-        icon: "systems/of-eternity/assets/conditions/enfeebled.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/enfeebled.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -749,7 +749,7 @@ CONFIG.statusEffects = [
     {
         id: "fit",
         label: "Fit",
-        icon: "systems/of-eternity/assets/conditions/fit.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/fit.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -764,7 +764,7 @@ CONFIG.statusEffects = [
     {
         id: "hardy",
         label: "Hardy",
-        icon: "systems/of-eternity/assets/conditions/hardy.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/hardy.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -779,7 +779,7 @@ CONFIG.statusEffects = [
     {
         id: "robust",
         label: "Robust",
-        icon: "systems/of-eternity/assets/conditions/robust.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/robust.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -794,7 +794,7 @@ CONFIG.statusEffects = [
     {
         id: "prone",
         label: "Prone",
-        icon: "systems/of-eternity/assets/conditions/prone.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/prone.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -809,7 +809,7 @@ CONFIG.statusEffects = [
     {
         id: "knocked-down",
         label: "Knocked Down",
-        icon: "systems/of-eternity/assets/conditions/knocked-down.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/knocked-down.png",
         changes: [{ key: "state", mode: 6, value: "dis" }],
         flags:             
         {
@@ -824,7 +824,7 @@ CONFIG.statusEffects = [
     {
         id: "down-n-out",
         label: "Down and Out",
-        icon: "systems/of-eternity/assets/conditions/down-n-out.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/down-n-out.png",
         changes: [{ key: "state", mode: 6, value: "dis" }],
         flags:             
         {
@@ -839,7 +839,7 @@ CONFIG.statusEffects = [
     {
         id: "hampered",
         label: "Hampered",
-        icon: "systems/of-eternity/assets/conditions/hampered.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/hampered.png",
         changes: [{ key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -853,7 +853,7 @@ CONFIG.statusEffects = [
     {
         id: "immobilized",
         label: "Immobilized",
-        icon: "systems/of-eternity/assets/conditions/immobilized.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/immobilized.png",
         changes: [{ key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -867,7 +867,7 @@ CONFIG.statusEffects = [
     {
         id: "paralyzed",
         label: "Paralyzed",
-        icon: "systems/of-eternity/assets/conditions/paralyzed.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/paralyzed.png",
         changes: [{ key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -881,7 +881,7 @@ CONFIG.statusEffects = [
     {
         id: "nimble",
         label: "Nimble",
-        icon: "systems/of-eternity/assets/conditions/nimble.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/nimble.png",
         changes: [{ key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -895,7 +895,7 @@ CONFIG.statusEffects = [
     {
         id: "quickened",
         label: "Quickened",
-        icon: "systems/of-eternity/assets/conditions/quickened.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/quickened.png",
         changes: [{ key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -909,7 +909,7 @@ CONFIG.statusEffects = [
     {
         id: "swift",
         label: "Swift",
-        icon: "systems/of-eternity/assets/conditions/swift.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/swift.png",
         changes: [{ key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -923,7 +923,7 @@ CONFIG.statusEffects = [
     {
         id: "distracted",
         label: "Distracted",
-        icon: "systems/of-eternity/assets/conditions/distracted.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/distracted.png",
         changes: [{ key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -951,7 +951,7 @@ CONFIG.statusEffects = [
     {
         id: "dazzled",
         label: "Dazzled",
-        icon: "systems/of-eternity/assets/conditions/dazzled.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/dazzled.png",
         changes: [{ key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -966,7 +966,7 @@ CONFIG.statusEffects = [
     {
         id: "blinded",
         label: "Blinded",
-        icon: "systems/of-eternity/assets/conditions/blinded.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/blinded.png",
         changes: [{ key: "steps", mode: 6, value: "-3" }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -981,7 +981,7 @@ CONFIG.statusEffects = [
     {
         id: "aware",
         label: "Aware",
-        icon: "systems/of-eternity/assets/conditions/aware.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/aware.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -996,7 +996,7 @@ CONFIG.statusEffects = [
     {
         id: "insightful",
         label: "Insightful",
-        icon: "systems/of-eternity/assets/conditions/insightful.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/insightful.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -1011,7 +1011,7 @@ CONFIG.statusEffects = [
     {
         id: "all-seeing",
         label: "All-Seeing",
-        icon: "systems/of-eternity/assets/conditions/all-seeing.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/all-seeing.png",
         changes: [{ key: "state", mode: 6, value: "adv" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -1026,7 +1026,7 @@ CONFIG.statusEffects = [
     {
         id: "demoralized",
         label: "Demoralized",
-        icon: "systems/of-eternity/assets/conditions/demoralized.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/demoralized.png",
         changes: [{ key: "data.initiative.value", mode: 2, value: "-5" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -1040,7 +1040,7 @@ CONFIG.statusEffects = [
     {
         id: "frightened",
         label: "Frightened",
-        icon: "systems/of-eternity/assets/conditions/frightened.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/frightened.png",
         changes: [{ key: "data.initiative.value", mode: 2, value: "-5" }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -1055,7 +1055,7 @@ CONFIG.statusEffects = [
     {
         id: "terrified",
         label: "Terrified",
-        icon: "systems/of-eternity/assets/conditions/terrified.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/terrified.png",
         changes: [{ key: "data.initiative.value", mode: 2, value: "-5" }, { key: "state", mode: 6, value: "dis" }, { key: "state", mode: 7, value: "adv" }],
         flags:             
         {
@@ -1070,17 +1070,17 @@ CONFIG.statusEffects = [
     {
         id: "charmed",
         label: "Charmed",
-        icon: "systems/of-eternity/assets/conditions/charmed.png"
+        icon: "systems/pillars-of-eternity/assets/conditions/charmed.png"
     },
     {
         id: "dominated",
         label: "Dominated",
-        icon: "systems/of-eternity/assets/conditions/dominated.png"
+        icon: "systems/pillars-of-eternity/assets/conditions/dominated.png"
     },
     {
         id: "determined",
         label: "Determined",
-        icon: "systems/of-eternity/assets/conditions/determined.png",
+        icon: "systems/pillars-of-eternity/assets/conditions/determined.png",
         changes: [{ key: "steps", mode: 6, value: "1" }, { key: "state", mode: 7, value: "dis" }],
         flags:             
         {
@@ -1095,12 +1095,12 @@ CONFIG.statusEffects = [
     {
         id: "resolute",
         label: "Resolute",
-        icon: "systems/of-eternity/assets/conditions/resolute.png"
+        icon: "systems/pillars-of-eternity/assets/conditions/resolute.png"
     },
     {
         id: "inspiring",
         label: "Inspiring",
-        icon: "systems/of-eternity/assets/conditions/inspiring.png"
+        icon: "systems/pillars-of-eternity/assets/conditions/inspiring.png"
     },
     {
         id: "incapacitated",
@@ -1110,6 +1110,6 @@ CONFIG.statusEffects = [
     {
         id: "dead",
         label: "Dead",
-        icon: "systems/of-eternity/assets/conditions/dead.svg"
+        icon: "systems/pillars-of-eternity/assets/conditions/dead.svg"
     }
 ]

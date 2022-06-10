@@ -14,7 +14,6 @@ import { ItemDataConstructorData } from "@league-of-foundry-developers/foundry-v
 import { PowerSource } from "../global";
 import { PillarsActor } from "../module/actor/actor-pillars";
 import { PillarsItem } from "../module/item/item-pillars";
-import { PILLARS } from "../module/system/config";
 
 // export enum PowerTargetTypes  {
 //     TARGET = "Target",

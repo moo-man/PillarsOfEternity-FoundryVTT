@@ -20,6 +20,8 @@ if (foundryConfig.foundryDataPath)
 else
     buildPath = path.resolve(__dirname, 'build')
 
+    console.log(buildPath)
+
 
 module.exports = {
     entry: './src/pillars.ts',
@@ -30,7 +32,10 @@ module.exports = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             }
-        ]
+        ],
+    },
+    optimization : {
+        minimize: false
     },
     resolve : {
         extensions: [".ts", ".js"]
@@ -42,9 +47,11 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin({
             patterns: [
-                { from: 'static' }
+                { from: 'static' },
+                { from: './template.json' },
+                { from: './system.json' }
             ]
         })
-    ]
+    ],
 };
 

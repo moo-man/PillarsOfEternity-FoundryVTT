@@ -1,14 +1,13 @@
-import { Context, DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
+import {  DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
 import { ChatMessageDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatMessageData';
 import { ItemDataConstructorData, ItemDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
-import { PowerSource } from '../../global.js';
-import { getGame } from '../../pillars.js';
-import { DamageType, Defense, hasCategory, hasEmbeddedPowers, isEquippable, isPhysical, ItemType } from '../../types/common.js';
-import { ItemChatData,  WeaponSpecialData } from '../../types/items.js';
-import { PowerBaseEffect, PowerDamage, PowerDisplay, PowerDuration, PowerGroup, PowerGroups, PowerHealing, PowerMisc, PowerRange, PowersConstructorContext, PowerTarget } from '../../types/powers.js';
-import { PillarsActor } from '../actor/actor-pillars.js';
-import { PILLARS } from '../system/config.js';
-import PILLARS_UTILITY from '../system/utility.js';
+import { PowerSource } from '../../global';
+import { getGame } from '../../pillars';
+import { DamageType, Defense, hasCategory, hasEmbeddedPowers, isEquippable, isPhysical, ItemType } from '../../types/common';
+import { ItemChatData,  WeaponSpecialData } from '../../types/items';
+import { PowerBaseEffect, PowerDamage, PowerDisplay, PowerDuration, PowerGroup, PowerGroups, PowerHealing, PowerMisc, PowerRange, PowersConstructorContext, PowerTarget } from '../../types/powers';
+import { PILLARS } from '../system/config';
+import PILLARS_UTILITY from '../system/utility';
 /**
  * Extend the FVTT Item class for Pillars functionality
  * @extends {ItemSheet}

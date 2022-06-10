@@ -1,16 +1,16 @@
-import RollDialog from '../apps/roll-dialog.js';
-import SkillCheck from '../system/skill-check.js';
-import PillarsActiveEffect from '../system/pillars-effect.js';
-import AgingDialog from '../apps/aging-dialog.js';
-import WeaponCheck from '../system/weapon-check.js';
-import PowerCheck from '../system/power-check.js';
-import AgingRoll from '../system/aging-roll.js';
-import { PillarsItem } from '../item/item-pillars.js';
+import RollDialog from '../apps/roll-dialog';
+import SkillCheck from '../system/skill-check';
+import PillarsActiveEffect from '../system/pillars-effect';
+import AgingDialog from '../apps/aging-dialog';
+import WeaponCheck from '../system/weapon-check';
+import PowerCheck from '../system/power-check';
+import AgingRoll from '../system/aging-roll';
+import { PillarsItem } from '../item/item-pillars';
 import { ActorDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData';
 import { DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
-import { PreparedPillarsCharacterData } from '../../global.js';
-import { Defense, isUsable, ItemType, Tier } from '../../types/common.js';
-import { PILLARS } from '../system/config.js';
+import { PreparedPillarsCharacterData } from '../../global';
+import { Defense, isUsable, ItemType, Tier } from '../../types/common';
+import { PILLARS } from '../system/config';
 import {
   AssisterData,
   CheckDataFlattened,
@@ -24,11 +24,9 @@ import {
   PowerDialogData,
   DamageOptions,
 } from '../../types/checks.js';
-import { getGame } from '../../pillars.js';
+import { getGame } from '../../pillars';
 import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
-import { PropertiesToSource } from '@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes';
-import { EffectChangeData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
-import { PillarsEffectChangeDataProperties } from '../../types/effects.js';
+import { PillarsEffectChangeDataProperties } from '../../types/effects';
 
 declare global {
   interface DocumentClassConfig {

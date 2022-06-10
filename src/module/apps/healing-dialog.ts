@@ -1,5 +1,4 @@
 import { DialogHealing } from "../../types/checks";
-import { PowerHealing } from "../../types/powers";
 import { PillarsItem } from "../item/item-pillars";
 import SkillCheck from "../system/skill-check";
 

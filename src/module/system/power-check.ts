@@ -1,8 +1,8 @@
-import { PowerCheckData, PowerCheckDataFlattened } from "../../types/checks.js"
-import { ItemType } from "../../types/common.js"
-import { PillarsItem } from "../item/item-pillars.js"
-import { PILLARS } from "./config.js"
-import SkillCheck from "./skill-check.js"
+import { PowerCheckData, PowerCheckDataFlattened } from "../../types/checks"
+import { ItemType } from "../../types/common"
+import { PillarsItem } from "../item/item-pillars"
+import { PILLARS } from "./config"
+import SkillCheck from "./skill-check"
 
 export default class PowerCheck extends SkillCheck
 {

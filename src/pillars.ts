@@ -4,7 +4,6 @@
  */
 // Import Modules
 
-//import FoundryOverrides from "./module/system/overrides.js"
 import { PillarsItemSheet } from "./module/item/item-sheet";
 import { PillarsItem } from "./module/item/item-pillars";
 import { PillarsActorSheet } from "./module/actor/actor-sheet";
@@ -31,6 +30,15 @@ import DamageRoll from "./module/system/damage-roll";
 import { PillarsNPCSheet } from "./module/actor/npc-sheet";
 import HealingDialog from "./module/apps/healing-dialog";
 import { PillarsCombatant } from "./module/system/combatant";
+
+
+
+//@ts-ignore
+import FoundryOverrides from "./module/system/overrides.js"
+//@ts-ignore
+import PillarsExplode from "./module/system/explode.js"
+
+
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -54,7 +62,7 @@ Hooks.on("init", () => {
   CONFIG.ActiveEffect.documentClass = PillarsActiveEffect;
   CONFIG.Token.documentClass = PillarsTokenDocument
   CONFIG.Combat.defeatedStatusId = "incapacitated"
-//   PillarsExplode()
+  PillarsExplode()
 
 
   let game = getGame()
@@ -94,7 +102,7 @@ Hooks.on("init", () => {
         }
       }
     }
-    //FoundryOverrides()
+    FoundryOverrides()
 })
 
   //Register all other hooks
@@ -106,3 +114,4 @@ export function getGame(): Game {
   }
   return game;
 }
+

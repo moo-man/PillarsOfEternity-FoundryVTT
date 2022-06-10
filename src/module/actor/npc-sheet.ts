@@ -1,5 +1,4 @@
-import PowerTemplate from "../system/power-template.js";
-import { PillarsActorSheet } from "./actor-sheet.js";
+import { PillarsActorSheet } from "./actor-sheet";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
