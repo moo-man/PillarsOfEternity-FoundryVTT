@@ -1,6 +1,6 @@
 export default function () {
     Die.MODIFIERS["xp"] = "explodePillars"
-    Die.prototype.explodePillars = function (...args) {
+    Die.prototype.explodePillars = function () {
 
         // Recursively explode until there are no remaining results to explode
         let checked = 0;

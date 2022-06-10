@@ -1,4 +1,5 @@
 import { CheckDataFlattened, CheckDialogData, State, WeaponCheckDataFlattened } from '../../types/checks';
+import { PillarsEffectChangeDataProperties } from '../../types/effects';
 import { PillarsActor } from '../actor/actor-pillars';
 import PILLARS_UTILITY from '../system/utility';
 
@@ -148,19 +149,18 @@ export default class RollDialog extends Dialog {
     stepDice.value = negative ? `-${dice}` : dice;
   }
 
-  _onEffectSelect(ev) {
-    let changes = [];
-    $(ev.currentTarget)
-      .val()
-      .map((i) => {
+  _onEffectSelect(ev : JQuery.ChangeEvent) {
+    let changes : PillarsEffectChangeDataProperties[] = [];
+    let selected =  $(ev.currentTarget).val() as string[]
+      selected.map((i) => {
         let indices = i.split(',');
         indices.forEach((changeIndex) => {
-          changes.push(this.data.dialogData.changes[parseInt(changeIndex)]);
+          changes.push(this.data.dialogData.changes[parseInt(changeIndex)]!);
         });
       });
 
     for (let type in this.dynamicInputs) {
-      if (type != 'state') this.dynamicInputs[type][0].value = this.userEntry[type];
+      if (type != 'state') this.dynamicInputs[type]![0]!.value = this.userEntry[type as keyof typeof this.userEntry].toString();
     }
 
     changes.forEach((change) => {
@@ -168,7 +168,7 @@ export default class RollDialog extends Dialog {
       if (input) {
         if (change.key == 'modifier') {
           if (input.value == '') input.value = change.value;
-          else if (isNaN(Number(input.value)) || isNaN(change.value)) {
+          else if (isNaN(Number(input.value)) || isNaN(Number(change.value))) {
             input.value = input.value + ' + ' + change.value;
           } else {
             input.value = (parseInt(input.value) + parseInt(change.value)).toString();

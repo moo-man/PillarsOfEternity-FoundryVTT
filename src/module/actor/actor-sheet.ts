@@ -577,7 +577,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     html.on('click', '.power-roll', this._onPowerTargetClick.bind(this));
     html.find('.restore-pool').on('click', this._onRestorePoolClick.bind(this));
     html.find('.sheet-roll').on('click', this._onSheetRollClick.bind(this));
-    html.on('click', '.damage-roll', this._onDamageRollClick.bind(this));
+    //html.on('click', '.damage-roll', this._onDamageRollClick.bind(this));
     html.find('.roll-item-skill').on('click', this._onItemSkillClick.bind(this));
     html.find('.age-roll').on('click', this._onAgeRoll.bind(this));
     html.find('.roll-initiative').on('click', this._onInitiativeClick.bind(this));
@@ -753,8 +753,9 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
   _onSpecialClicked(event: JQuery.MouseUpEvent) {
     let text = (<HTMLAnchorElement>event.currentTarget).text?.split('(')[0]?.trim();
-    for (let special in PILLARS_UTILITY.weaponSpecials()) {
-      if (PILLARS_UTILITY.weaponSpecials()[special].label == text) return this._dropdown(event, { text: PILLARS_UTILITY.weaponSpecials()[special].description });
+    let specials = PILLARS_UTILITY.weaponSpecials()
+    for (let special in specials) {
+      if (specials[special as keyof typeof specials].label == text) return this._dropdown(event, { text: specials[special as keyof typeof specials].description });
     }
   }
 
@@ -805,10 +806,13 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
   _onPowerTargetClick(event: JQuery.ClickEvent) {
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
-    let index = $(event.currentTarget!).attr('data-index');
+    let index = parseInt($(event.currentTarget!).attr('data-index') || "");
     let item = this.actor.items.get(itemId!);
-    let groupId = item?.displayGroupKey(); //$(event.currentTarget!).attr("data-group")
-    PowerTemplate.fromItem(item, groupId, index).drawPreview();
+    if (item)
+    {
+      let groupId = item.displayGroupKey(); //$(event.currentTarget!).attr("data-group")
+      PowerTemplate.fromItem(item, groupId!, index)?.drawPreview();
+    }
   }
 
   _onRestorePoolClick(event: JQuery.ClickEvent) {
@@ -824,16 +828,17 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
   /* -------------------------------------------- */
 
-  _onSheetRollClick(event: JQuery.ClickEvent) {
-    new Roll((<HTMLAnchorElement>event.target).text).roll().toMessage({ speaker: this.actor.speakerData() });
+  async _onSheetRollClick(event: JQuery.ClickEvent) {
+    (await new Roll((<HTMLAnchorElement>event.target).text).roll()).toMessage({ speaker: this.actor.speakerData() });
   }
 
-  _onDamageRollClick(event: JQuery.ClickEvent) {
-    let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
-    let group = $(event.currentTarget!).attr('data-group');
-    let item = this.actor.items.get(itemId!);
-    new DamageDialog(item, undefined, Array.from(getGame().user!.targets)).render(true);
-  }
+  // _onDamageRollClick(event: JQuery.ClickEvent) {
+  //   let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
+  //   let group = $(event.currentTarget!).attr('data-group');
+  //   let item = this.actor.items.get(itemId!);
+  //   if (item)
+  //     new DamageDialog(item, undefined, Array.from(getGame().user!.targets)).render(true);
+  // }
 
   _onInitiativeClick(event: JQuery.ClickEvent) {
     new Dialog({

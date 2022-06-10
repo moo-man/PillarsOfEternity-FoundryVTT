@@ -1,11 +1,27 @@
+import { DialogHealing } from "../../types/checks";
+import { PowerHealing } from "../../types/powers";
+import { PillarsItem } from "../item/item-pillars";
+import SkillCheck from "../system/skill-check";
 
+interface HealingDialogRenderOptions extends Application.RenderOptions {
+    resolve : (value: DialogHealing[]) => void
+    reject : (reason?: any) => void
+}
 
 export default class HealingDialog extends Application
 {
-    constructor(item, check, targets)
+    item : PillarsItem
+    check : SkillCheck
+    targets : TokenDocument[]
+    additionalHealing : number
+    healing : DialogHealing[]
+    resolve? : (value: DialogHealing[]) => void
+    reject? : (reason?: any) => void
+
+    constructor(item : PillarsItem, check : SkillCheck, targets: TokenDocument[])
     {
         super();
-        this.item = item.clone();
+        this.item = foundry.utils.deepClone(item);
         this.check = check;
         this.targets = targets//.map(i => i.document)
         this.additionalHealing = 0
@@ -18,7 +34,7 @@ export default class HealingDialog extends Application
             id: "healing-dialog",
             classes : ["pillars-of-eternity"],
             title : "Healing",
-            height: "auto",
+            //height: "auto",
             resizable: true,
             width: 500,
             template : "systems/pillars-of-eternity/templates/apps/healing-dialog.html"
@@ -26,35 +42,38 @@ export default class HealingDialog extends Application
     }
 
 
-    render(force=false, options) {
+    render(force=false, options: Partial<HealingDialogRenderOptions>) {
         super.render(force, options)
-        this.resolve = options.resolve
-        this.reject = options.reject
+        if (options.resolve)
+            this.resolve = options.resolve
+        if (options.reject)
+            this.reject = options.reject
     }
     
     getData() {
-        let data = super.getData();
+
+        let data : Partial<Pick<HealingDialog, "healing" | "targets">> = {};
+
         data.healing = this.healing;
         data.targets = this.targets
-        data.disabled = this.disabled
         
         return data;
     }
 
     constructHealing() {
-        let healing = []
-        healing = foundry.utils.deepClone(this.item.healing)
+        let healing : DialogHealing[]
+        healing = foundry.utils.deepClone(this.item.healing)!
 
         healing.forEach(h => {
-            if (!h.label) h.label = this.item.name
+            if (!h.label) h.label = this.item.name!
         })
         return healing
     }
 
     addHealing() {
         this.additionalHealing++;
-        this.healing.push(duplicate(this.healing[this.healing.length-1]))
-        this.render(true)
+        this.healing.push(duplicate(this.healing[this.healing.length-1]) as DialogHealing)
+        this.render(true, {})
     }
 
     assignTargets() 
@@ -63,7 +82,7 @@ export default class HealingDialog extends Application
 
         for (let i = 0; i < sizeDiff; i++)
         {
-            this.healing.push(duplicate(this.healing[this.healing.length-1]))
+            this.healing.push(duplicate(this.healing[this.healing.length-1]) as DialogHealing)
             this.additionalHealing++;
         }
 
@@ -81,24 +100,25 @@ export default class HealingDialog extends Application
 
 
 
-    setTargetImage(index)
+    setTargetImage(index: number)
     {
         let healing = this.healing[index]
-        let target = this.targets.find(i => i.id == healing.target)
+        let target = this.targets.find(i => i.id == healing?.target)
         let parent = this.element.find(`[data-index='${index}']`)
         let img = target ? target.data.img : ""
         parent.find(".target").find("img").attr("src", img)
     }
 
     submit() {
-        let healing = duplicate(this.healing)
+        let healing = duplicate(this.healing) as typeof this.healing
         healing.forEach(h => h.target = this.targets.find(i => i.id == h.target))
         healing.forEach(h => h.healing = true)
-        this.close()
-        return this.resolve(healing)
+        this.close({})
+        if (this.resolve)
+            return this.resolve(healing)
     }
 
-    _onKeyDown(ev)
+    _onKeyDown(ev : JQuery.KeyDownEvent)
     {
         if (ev.key == "Enter")
         {
@@ -108,35 +128,40 @@ export default class HealingDialog extends Application
         }
     }
 
-    async close(options) {
+    async close(options : Application.CloseOptions) {
         $(document).off('keydown.damage');
         return super.close(options);
       }
 
-    activateListeners(html)
+    activateListeners(html : JQuery<HTMLElement>)
     {
         super.activateListeners(html)
 
-        html.find(".add-damage").click(this.addHealing.bind(this))
-        html.find("button").click(this.submit.bind(this))
+        html.find(".add-damage").on("click", this.addHealing.bind(this))
+        html.find("button").on("click", this.submit.bind(this))
 
-        html.find(".label,.base").change(ev => {
+        html.find(".label,.base").on("change", (ev : JQuery.ChangeEvent) => {
             let parent = $(ev.currentTarget).parents(".healing")
-            let index = parent.attr("data-index")
+            let index = parseInt(parent.attr("data-index") || "")
             let property = ev.currentTarget.classList[1]
-            this.healing[index][property] = ev.target.value
+            if (Number.isNumeric(index) && this.healing[index])
+                setProperty(this.healing[index]!, property, ev.target.value)
         })
 
-        html.find(".target-select").change(ev => {
+        html.find(".target-select").on("change", (ev : JQuery.ChangeEvent) => {
             let parent = $(ev.currentTarget).parents(".healing")
-            let healingIndex = parent.attr("data-index")
+            let healingIndex = parseInt(parent.attr("data-index") || "")
  
-            this.healing[healingIndex].target = ev.target.value
-            this.healing[healingIndex].img = this.targets.find(i => i.id == ev.target.value)?.data?.img
-            this.setTargetImages(healingIndex)
+            if (Number.isNumeric(healingIndex) && this.healing[healingIndex])
+            {
+                this.healing[healingIndex]!.target = ev.target.value
+                this.healing[healingIndex]!.img = this.targets.find(i => i.id == ev.target.value)?.data?.img
+                this.setTargetImages()
+
+            }
         })
 
-        $(document).on('keydown.damage', this._onKeyDown.bind(this))
+        $(document).on('keydown', '.damage', this._onKeyDown.bind(this))
     }
 
 

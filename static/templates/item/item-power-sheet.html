@@ -186,6 +186,7 @@
                 {{#each item.healing as |healing i|}}
                 <div class="property-inputs" data-index="{{i}}">
                     <input type="text" data-path="group" class="power-property group" title="Group" value="{{healing.group}}">
+                    <input type="text" data-path="label" class="power-property" placeholder="Label" value="{{healing.label}}">
                     <input type="text" data-path="value" class="power-property" value="{{healing.value}}">
                     <select data-path="type" class="power-property">
                         {{#select healing.type}}

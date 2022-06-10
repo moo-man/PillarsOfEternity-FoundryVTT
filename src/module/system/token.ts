@@ -1,23 +1,25 @@
-export default class PillarsTokenDocument extends TokenDocument{
+import { ObjectAttributeBar } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/documents/token';
+import { DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
+import { TokenDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData';
+import { PillarsCombatant } from './combatant';
 
-  async _preUpdate(data, options, user)
-  {
-    super._preUpdate(data, options, user);
-    if ((data.x || data.y) && this.combatant)
-    {
-      let distance = canvas.grid.measureDistances([{ ray: new Ray({ x: this.data.x, y: this.data.y }, { x: (data.x || this.data.x), y : (data.y || this.data.y) }) }], { gridSpaces: true })[0]
-      distance = options.isUndo ? distance * -1 : distance
+export default class PillarsTokenDocument extends TokenDocument {
+  async _preUpdate(data: TokenDataConstructorData, options: DocumentModificationOptions, user: foundry.documents.BaseUser) {
+    if ((data.x || data.y) && this.combatant) {
+      let distance = canvas?.grid!.measureDistances([{ ray: new Ray({ x: this.data.x, y: this.data.y }, { x: data.x || this.data.x, y: data.y || this.data.y }) }], { gridSpaces: true })[0] || 0; 
+      distance = options.isUndo ? distance * -1 : distance;
       this.combatant.handleMovement(distance);
     }
   }
 
-  getBarAttribute(...args) {
+  getBarAttribute(...args : Parameters<TokenDocument["getBarAttribute"]>) {
+    let bar = super.getBarAttribute(...args);
+    let data = foundry.utils.getProperty(this.actor?.data.data!, bar!.attribute);
+    if (data.threshold?.incap) (<ObjectAttributeBar>bar).max = data.threshold.incap + 1;
+    return bar;
+  }
 
-    let bar = super.getBarAttribute(...args)
-    let data = foundry.utils.getProperty(this.actor.data.data, bar.attribute)
-    if (data.threshold?.incap)
-      bar.max = data.threshold.incap + 1
-
-    return bar
+  get combatant() : PillarsCombatant {
+    return super.combatant as PillarsCombatant
   }
 }

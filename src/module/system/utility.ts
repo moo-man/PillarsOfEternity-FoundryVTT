@@ -32,19 +32,21 @@ export default class PILLARS_UTILITY {
             return level * 2 - 1
     }
 
-    static getSpeaker(speaker : ChatSpeakerDataProperties) : PillarsActor | undefined{
-        try {
-            if (speaker.actor)
+    static getSpeaker(speaker : ChatSpeakerDataProperties | undefined) : PillarsActor | undefined{
+        if (speaker)
+        {
+            try {
+                if (speaker.actor)
                 return getGame().actors!.get(speaker.actor)
-            else if (speaker.token && speaker.scene)
+                else if (speaker.token && speaker.scene)
                 return getGame().scenes!.get(speaker.scene)?.tokens.get(speaker.token)?.actor!
-            else
+                else
                 throw "Could not find speaker"
+            }
+            catch (e : unknown) {
+                throw new Error(e as string)
+            }
         }
-        catch (e : unknown) {
-            throw new Error(e as string)
-        }
-
     }
 
     static stepsToDice(steps : number)

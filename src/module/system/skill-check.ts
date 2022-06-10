@@ -1,7 +1,7 @@
+import { Data } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/dice/roll";
 import { ActiveEffectData, ActiveEffectDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
-import { Data } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/foundry.js/roll";
 import { getGame } from "../../pillars.js";
-import { CheckDataFlattened, SkillCheckData } from "../../types/checks.js";
+import { AppliedDamage, CheckDataFlattened, DialogDamage, SkillCheckData } from "../../types/checks.js";
 import { PowerBaseEffect } from "../../types/powers.js";
 import DamageDialog from "../apps/damage-dialog.js";
 import HealingDialog from "../apps/healing-dialog.js";
@@ -199,12 +199,13 @@ export default class SkillCheck
         assistDieAppearance()
         {            
             if (getGame().dice3d)
+                //@ts-ignore
                 return getGame().dice3d.DiceFactory.getAppearanceForDice(getGame().dice3d.constructor.APPEARANCE(this.assisterUser), this.assisterDieString())
         }
 
         async rollDamage() {
 
-            let damages = await new Promise((resolve, reject) => {
+            let damages = await new Promise<DialogDamage[]>((resolve, reject) => {
                 new DamageDialog(this.item, this, this.targets).render(true, {resolve, reject})
             })
 
@@ -276,8 +277,11 @@ export default class SkillCheck
             return PILLARS_UTILITY.getSpeaker(this.context?.targetSpeakers[0]!)
         }
 
-        get targets() {
-            return this.context?.targetSpeakers.map(speaker => getGame().scenes!.get(speaker.scene || "")?.tokens.get(speaker.token || ""))
+        get targets() : TokenDocument[] {
+            return this.context?.targetSpeakers
+            .map(speaker => getGame().scenes!.get(speaker.scene || "")?.tokens.get(speaker.token || "")!)
+            .filter(i => i)
+            || []
         }
 
         get effects () {

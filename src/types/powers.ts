@@ -126,6 +126,7 @@ export interface PowerRange {
 
 export interface PowerHealing {
   group: string;
+  label : string
   value: string;
   type: string;
 }

@@ -1,7 +1,15 @@
-import { AgingCheckData, AgingDialogData } from "../../types/checks"
+import { AgingCheckDataFlattened, AgingDialogData } from "../../types/checks"
 
 
 export default class AgingDialog extends Dialog {
+
+    dynamicInputs : Record<string, JQuery<HTMLInputElement> | null> = {
+        modifier: null
+    }
+
+    userEntry : {
+        modifier: string
+    } = {modifier : ""}
 
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -16,14 +24,15 @@ export default class AgingDialog extends Dialog {
             return new this({
                 title: "Aging Roll",
                 content: html,
-                effects,
+                dialogData : {changes, changeList},
                 buttons : {
                     roll : {
                         label : "Roll",
-                        callback : (html, check) : void => {
-                            let data : AgingCheckData = <AgingCheckData>{}
-                            data.modifier = html.find("input[name='modifier']").val()
-                            data.lifestyle = html.find("select[name='lifestyle']").val()
+                        callback : (dlg) : void => {
+                            let data : AgingCheckDataFlattened = <AgingCheckDataFlattened>{}
+                            let html = $(dlg)
+                            data.modifier = html.find("input[name='modifier']").val()?.toString() || ""
+                            data.lifestyle = html.find("select[name='lifestyle']").val()?.toString() || ""
                             resolve(data)
                         }
                     }
@@ -41,11 +50,11 @@ export default class AgingDialog extends Dialog {
             modifier : null
         }
 
-        html.find("input").focus(ev => {
+        html.find("input").on("focus", (ev : JQuery.FocusEvent) => {
             ev.currentTarget.select()
         })
 
-        this.dynamicInputs.modifier = html.find("[name='modifier']").change(ev => {
+        this.dynamicInputs.modifier = html.find("[name='modifier']").on("change", (ev : JQuery.ChangeEvent) => {
             this.userEntry.modifier = $(ev.currentTarget).val()
         })
 

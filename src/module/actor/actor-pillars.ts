@@ -20,7 +20,7 @@ import {
   WeaponCheckDataFlattened,
   WeaponDialogData,
   PowerCheckDataFlattened,
-  AgingCheckData,
+  AgingCheckDataFlattened,
   PowerDialogData,
   DamageOptions,
 } from '../../types/checks.js';
@@ -28,6 +28,7 @@ import { getGame } from '../../pillars.js';
 import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
 import { PropertiesToSource } from '@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes';
 import { EffectChangeData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
+import { PillarsEffectChangeDataProperties } from '../../types/effects.js';
 
 declare global {
   interface DocumentClassConfig {
@@ -378,7 +379,7 @@ export class PillarsActor extends Actor {
         changeList: this.getDialogChanges({ condense: true }),
         changes: this.getDialogChanges(),
       };
-      let checkData: AgingCheckData = <AgingCheckData>await AgingDialog.create(dialogData);
+      let checkData: AgingCheckDataFlattened = <AgingCheckDataFlattened>await AgingDialog.create(dialogData);
       checkData.title = 'Aging Roll';
       checkData.speaker = this.speakerData();
       return new AgingRoll(checkData);
@@ -479,17 +480,17 @@ export class PillarsActor extends Actor {
    * Get effects listed in the dialog
    * Effects are sourced from the rolling actor and targeted actor, if applicable
    */
-  getDialogChanges({ condense = false } = {}): PropertiesToSource<EffectChangeData>[] {
+  getDialogChanges({ condense = false } = {}): PillarsEffectChangeDataProperties[] {
     // Aggregate dialog changes from each effect
-    let changes: PropertiesToSource<EffectChangeData>[] = this.effects
+    let changes: PillarsEffectChangeDataProperties[] = this.effects
       .filter((i) => !i.data.disabled)
-      .reduce((prev: PropertiesToSource<EffectChangeData>[], current) => prev.concat(current.getDialogChanges({ condense, indexOffset: prev.length })), []);
+      .reduce((prev: PillarsEffectChangeDataProperties[], current) => prev.concat(current.getDialogChanges({ condense, indexOffset: prev.length })), []);
 
     if (getGame().user!.targets.size > 0) {
       let target = Array.from(getGame().user!.targets)[0]!.actor;
       if (target) {
         let targetChanges = target.effects.reduce(
-          (prev: PropertiesToSource<EffectChangeData>[], current) =>
+          (prev: PillarsEffectChangeDataProperties[], current) =>
             prev.concat(
               current.getDialogChanges({
                 target,

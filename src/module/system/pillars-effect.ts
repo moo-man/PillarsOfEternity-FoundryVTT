@@ -1,4 +1,7 @@
+import { getGame } from "../../pillars"
+import { PillarsEffectChangeDataProperties } from "../../types/effects"
 import { PillarsActor } from "../actor/actor-pillars"
+import { PillarsItem } from "../item/item-pillars"
 
 declare global {
     interface DocumentClassConfig {
@@ -10,12 +13,12 @@ export default class PillarsActiveEffect extends ActiveEffect {
     
 
     prepareData() {
-        if (game.ready && this.requiresEquip && this.item?.canEquip)
-            this.data.disabled = !this.item.equipped.value
+        if (getGame().ready && this.requiresEquip && this.item?.canEquip)
+            this.data.disabled = !this.item.equipped?.value
     }
 
     getDialogChanges({target = undefined, condense = false, indexOffset = 0} : {target? : PillarsActor | null, condense? : boolean, indexOffset? : number} ={}) {
-        let allChanges = this.data.changes.map(c => c.toObject())
+        let allChanges = this.data.changes.map(c => c.toObject()) as PillarsEffectChangeDataProperties[]
         allChanges.forEach((c, i) => {
             c.conditional = this.changeConditionals[i] || {}
             c.document = this
@@ -28,7 +31,7 @@ export default class PillarsActiveEffect extends ActiveEffect {
         // changes with the same description as under the same condition (use the first ones' script)
         if (condense)
         {
-            let uniqueChanges = []
+            let uniqueChanges :  PillarsEffectChangeDataProperties[] = []
             dialogChanges.forEach(c => {
                 let existing = uniqueChanges.find(unique => unique.conditional.description == c.conditional.description)
                 if (existing)
@@ -56,7 +59,7 @@ export default class PillarsActiveEffect extends ActiveEffect {
     get item() {
         if (this.parent && this.parent.documentName == "Item")
             return this.parent
-        else if (this.data.origin && this.parent.documentName == "Actor") 
+        else if (this.data.origin && this.parent?.documentName == "Actor") 
         {
             let origin = this.data.origin.split(".")
             if (origin[1] == this.parent.id) // If origin ID is same as parent ID
@@ -81,13 +84,20 @@ export default class PillarsActiveEffect extends ActiveEffect {
 
         if (data.length == 4)
         {
-            let item = this.parent.items.get(data[3])
+            
+            let item : PillarsItem | undefined;
+            let parent = this.parent;
+            if (parent && parent instanceof PillarsActor)
+            {
+                item = parent.items.get(data[3] || "")
+            }
             if (item)
-                return item.name
-            else
+                return item.name!
+            else 
                 return super.sourceName;
         }
-        this.data.changes
+        return ""
+        //this.data.changes
     }
 
     get conditionId() {

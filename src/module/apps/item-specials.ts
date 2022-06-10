@@ -1,7 +1,9 @@
 import { WeaponSpecialData } from "../../types/items";
 import { PillarsItem } from "../item/item-pillars";
 
-export default class ItemSpecials extends FormApplication<FormApplicationOptions, {specials : Record<string, WeaponSpecialData & {itemHas : boolean, itemValue : string}>}, PillarsItem>
+type ItemSpecialsFormData = Record<string, WeaponSpecialData & {itemHas : boolean, itemValue : string}>
+
+export default class ItemSpecials extends FormApplication<FormApplicationOptions, {specials : ItemSpecialsFormData}, PillarsItem>
 {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -16,7 +18,7 @@ export default class ItemSpecials extends FormApplication<FormApplicationOptions
 
     async getData() {
         let data = await super.getData();
-        data.specials = foundry.utils.deepClone(this.object.specialList)
+        data.specials = <ItemSpecialsFormData>foundry.utils.deepClone(this.object.specialList)
         let itemSpecials = this.object.specials
         for (let special in data.specials)
         {

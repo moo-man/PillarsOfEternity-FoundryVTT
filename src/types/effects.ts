@@ -1,4 +1,5 @@
-import { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData"
+import { EffectChangeData, EffectChangeDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData"
+import PillarsActiveEffect from "../module/system/pillars-effect";
 
 export interface ConfigEffect {
     id?: string,
@@ -8,11 +9,20 @@ export interface ConfigEffect {
     flags: EffectFlags
 }
 
+export interface PillarsEffectChangeDataProperties extends EffectChangeDataProperties {
+    conditional : {description : string, script : string}
+    document : PillarsActiveEffect
+    target: boolean
+    index : number[]
+}
+
+type PillarsChangeCondition = {description : string, script : string}
+
 
 interface EffectFlags {
     "pillars-of-eternity": {
         changeCondition : {
-            [key : number] : {description : string, script : string}
+            [key : number] : PillarsChangeCondition
         }
     }
 }

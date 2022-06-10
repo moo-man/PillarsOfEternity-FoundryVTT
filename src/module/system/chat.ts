@@ -99,6 +99,7 @@ export class PillarsChat {
         let tokenId = li.dataset.tokenId
         const token = canvas.tokens?.get(tokenId);
         if ( token?.isVisible ) {
+          //@ts-ignore not sure how to handle private functions, this function is useful and don't understand why it's private
           if ( !token._controlled ) token._onHoverIn(ev);
           this._highlighted = token;
         }
@@ -107,6 +108,7 @@ export class PillarsChat {
     static _onHoverOutTargetImage(ev : JQuery.MouseLeaveEvent)
     {
         ev.preventDefault();
+        //@ts-ignore
         if ( this._highlighted ) this._highlighted._onHoverOut(ev);
         this._highlighted = null;
     }

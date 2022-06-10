@@ -703,11 +703,9 @@ declare global {
 
 
   interface ChatMessage {
-    test : number,
     getCheck : () => SkillCheck
     getDamage : () => DamageRoll
   }
-  
 
   namespace ClientSettings {
     interface Values {
@@ -715,7 +713,22 @@ declare global {
       'pillars-of-eternity.systemMigrationVersion': string;
     }
   }
+}
 
+
+
+// Below this line does not work
+// --------------------------------------------------------------
+
+declare namespace RollTerm {
+  interface Options {
+    crit : string
+    accumulator : number
+  }
+}
+
+interface Die {
+  explodePillars : () => void
 }
 
 declare namespace Die {
