@@ -20,7 +20,7 @@ export default function () {
         })
 
         Handlebars.registerHelper("configLookup", function (obj, key) {
-            return PILLARS[obj as keyof typeof PILLARS]?[key]
+            return getProperty(PILLARS[obj as keyof typeof PILLARS], key)
         })
 
         Handlebars.registerHelper("array", function (array: string[], cls: string) {

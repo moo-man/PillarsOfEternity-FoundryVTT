@@ -1,4 +1,5 @@
 import { getGame } from "../../pillars"
+import { DamageRollData, SkillCheckData } from "../../types/checks";
 import PILLARS_UTILITY from "../system/utility";
 
 export default function () {
@@ -8,22 +9,18 @@ export default function () {
         let game = getGame();
 
         CONFIG.ChatMessage.documentClass.prototype.getCheck = function () {
-            let rollData = this.getFlag("pillars-of-eternity", "rollData")
+            let rollData = this.getFlag("pillars-of-eternity", "rollData") as SkillCheckData
             let game = getGame()
             if (rollData)
                 return game.pillars.rollClass.SkillCheck.recreate(rollData)
-
-            let damageData = this.getFlag("pillars-of-eternity", "damageData")
-            if (damageData)
-                return game.pillars.rollClass.DamageRoll.recreate(damageData)
 
         }
 
         CONFIG.ChatMessage.documentClass.prototype.getDamage = function () {
             let game = getGame()
-            let damageData = this.getFlag("pillars-of-eternity", "damageData")
+            let damageData = this.getFlag("pillars-of-eternity", "damageData") as DamageRollData
             if (damageData)
-                return game.pillars.rollClass.DamageRoll.recreate(damageData)
+                return game.pillars.DamageRoll.recreate(damageData)
 
         }
 

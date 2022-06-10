@@ -18,6 +18,18 @@ import { PILLARS } from "./module/system/config.js";
 import DamageDialog from './module/apps/damage-dialog';
 import SkillCheck from './module/system/skill-check';
 import DamageRoll from './module/system/damage-roll';
+import { PillarsActorSheet } from './module/actor/actor-sheet';
+import { PillarsItemSheet } from './module/item/item-sheet';
+import BookOfSeasons from './module/apps/book-of-seasons';
+import RollDialog from './module/apps/roll-dialog';
+import ActorConfigure from './module/apps/actor-configure';
+import HealingDialog from './module/apps/healing-dialog';
+import WeaponCheck from './module/system/weapon-check';
+import PowerCheck from './module/system/power-check';
+import Migration from './module/system/migrations';
+import PILLARS_UTILITY from './module/system/utility';
+import { PillarsChat } from './module/system/chat';
+import PowerTemplate from './module/system/power-template';
 
 
 //#region Actor
@@ -671,13 +683,26 @@ InjurySourceData
 declare global {
   interface Game {
     pillars: {
-      apps: {
-        DamageDialog : DamageDialog
-      };
-      rollClass: {
-        [key : string] : SkillCheck
-      };
-      config : typeof PILLARS
+      apps : {
+        PillarsActorSheet : typeof PillarsActorSheet,
+        PillarsItemSheet : typeof PillarsItemSheet,
+        BookOfSeasons : typeof BookOfSeasons,
+        RollDialog : typeof RollDialog,
+        ActorConfigure : typeof ActorConfigure,
+        DamageDialog : typeof DamageDialog,
+        HealingDialog : typeof HealingDialog
+      },
+      rollClass : {
+        SkillCheck : typeof SkillCheck,
+        WeaponCheck : typeof WeaponCheck,
+        PowerCheck : typeof PowerCheck,
+      },
+      DamageRoll : typeof DamageRoll
+      migration : typeof Migration,
+      utility: typeof PILLARS_UTILITY,
+      config : typeof PILLARS,
+      chat : typeof PillarsChat,
+      templates : typeof PowerTemplate,
     };
     dice3d : {
       DiceFactory : {
@@ -703,8 +728,8 @@ declare global {
 
 
   interface ChatMessage {
-    getCheck : () => SkillCheck
-    getDamage : () => DamageRoll
+    getCheck : () => SkillCheck | undefined
+    getDamage : () => DamageRoll | undefined
   }
 
   namespace ClientSettings {

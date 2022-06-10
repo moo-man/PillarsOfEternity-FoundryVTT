@@ -1,7 +1,7 @@
 import { Data } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/dice/roll";
 import { ActiveEffectData, ActiveEffectDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
 import { getGame } from "../../pillars.js";
-import { AppliedDamage, CheckDataFlattened, DialogDamage, SkillCheckData } from "../../types/checks.js";
+import {  CheckDataFlattened, DialogDamage, DialogHealing, SkillCheckData } from "../../types/checks.js";
 import { PowerBaseEffect } from "../../types/powers.js";
 import DamageDialog from "../apps/damage-dialog.js";
 import HealingDialog from "../apps/healing-dialog.js";
@@ -43,7 +43,8 @@ export default class SkillCheck
     
         static recreate(data : SkillCheckData)
         {
-            let check = new SkillCheck();
+            let classes = getGame()!.pillars.rollClass;
+            let check = new classes[data.context.rollClass as keyof typeof classes]();
             check.data = data;
             check.roll = Roll.fromData(<Data><unknown>check.data.result) // No idea what it wants from me here
             return check
@@ -207,7 +208,7 @@ export default class SkillCheck
 
             let damages = await new Promise<DialogDamage[]>((resolve, reject) => {
                 new DamageDialog(this.item, this, this.targets).render(true, {resolve, reject})
-            })
+            }) as (DialogHealing & DialogDamage)[]
 
             let roll = new DamageRoll(damages, this);
             await roll.rollDice()
@@ -215,9 +216,9 @@ export default class SkillCheck
 
         async rollHealing() {
 
-            let healing = await new Promise((resolve, reject) => {
+            let healing = await new Promise<DialogHealing[]>((resolve, reject) => {
                 new HealingDialog(this.item, this, this.targets).render(true, {resolve, reject})
-            })
+            }) as (DialogHealing & DialogDamage)[]
 
             let roll = new DamageRoll(healing, this);
             await roll.rollDice()

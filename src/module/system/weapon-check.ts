@@ -6,7 +6,7 @@ export default class WeaponCheck extends SkillCheck
 {
     data? : WeaponCheckData
 
-        constructor(data : WeaponCheckDataFlattened) {
+        constructor(data? : WeaponCheckDataFlattened) {
             super(data)
             if (!data)
                 return 

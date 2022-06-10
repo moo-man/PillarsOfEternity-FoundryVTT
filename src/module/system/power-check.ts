@@ -9,7 +9,7 @@ export default class PowerCheck extends SkillCheck
     data? : PowerCheckData
 
     
-        constructor(data : PowerCheckDataFlattened) {
+        constructor(data? : PowerCheckDataFlattened) {
             super(data)
             if (!data)
                 return 
@@ -74,7 +74,7 @@ export default class PowerCheck extends SkillCheck
                 let weaponId = await this.weaponSelectDialog() as string
                 this.result!.chosenWeapon = weaponId
                 this.updateMessageFlags();
-                this.actor.setupWeaponCheck(weaponId, {add : {damage, allEffects}}).then(async check => {
+                this.actor.setupWeaponCheck(weaponId, {add : {damage, effects: allEffects}}).then(async check => {
                     await check.rollCheck()
                     check.sendToChat();
                 })

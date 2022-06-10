@@ -222,8 +222,8 @@ export class PillarsItem extends Item {
       // NPCs don't use xp, so use level directly
       if (this.actor!.type == 'character') this.xp!.level = PILLARS_UTILITY.getPowerSourceLevel(this.xp!.value);
 
-      this.data.data.attack = PILLARS_UTILITY.getPowerSourceAttackBonus(this.xp!.level);
-      this.pool!.max = PILLARS_UTILITY.getPowerSourcePool(this.xp!.level);
+      this.data.data.attack = PILLARS_UTILITY.getPowerSourceAttackBonus(this.xp!.level!);
+      this.pool!.max = PILLARS_UTILITY.getPowerSourcePool(this.xp!.level!);
     }
   }
 
@@ -813,7 +813,7 @@ export class PillarsItem extends Item {
     },
     range: { group: '', value: 'none' },
     duration: { group: '', value: 'momentary' },
-    healing: { group: '', value: '', type: 'health' },
+    healing: { group: '', value: '', type: 'health', label: "" },
     misc: { group: '', value: '', modifier: 0 },
     'damage.value': {
       label: '',

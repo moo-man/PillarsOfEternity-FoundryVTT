@@ -1,15 +1,26 @@
 import { AgingCheckDataFlattened, AgingDialogData } from "../../types/checks"
+import { PillarsEffectChangeDataProperties } from "../../types/effects"
 
 
 export default class AgingDialog extends Dialog {
 
-    dynamicInputs : Record<string, JQuery<HTMLInputElement> | null> = {
+    dynamicInputs : {modifier : JQuery<HTMLInputElement> | null} = {
         modifier: null
     }
+
+    data :  AgingDialogData = <AgingDialogData>{}
+
 
     userEntry : {
         modifier: string
     } = {modifier : ""}
+
+
+    constructor(data: AgingDialogData) {
+        super(data);
+        this.data.dialogData = data.dialogData 
+      }
+    
 
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -18,13 +29,15 @@ export default class AgingDialog extends Dialog {
         })
     }
 
-    static async create({modifier, changeList, changes} : AgingDialogData) {
-        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/aging-dialog.html", {modifier, effects})
+    static async create({modifier, changeList, changes} : AgingDialogData["dialogData"]) {
+
+
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/aging-dialog.html", {modifier, changeList, changes})
         return new Promise((resolve) => {
             return new this({
                 title: "Aging Roll",
                 content: html,
-                dialogData : {changes, changeList},
+                dialogData : {changes, changeList, modifier},
                 buttons : {
                     roll : {
                         label : "Roll",
@@ -43,7 +56,7 @@ export default class AgingDialog extends Dialog {
 
     }
 
-    activateListeners(html)
+    activateListeners(html : JQuery<HTMLElement>)
     {
         super.activateListeners(html)
         this.dynamicInputs = {
@@ -54,48 +67,50 @@ export default class AgingDialog extends Dialog {
             ev.currentTarget.select()
         })
 
-        this.dynamicInputs.modifier = html.find("[name='modifier']").on("change", (ev : JQuery.ChangeEvent) => {
-            this.userEntry.modifier = $(ev.currentTarget).val()
+        this.dynamicInputs.modifier = html.find<HTMLInputElement>("[name='modifier']").on("change", (ev : JQuery.ChangeEvent) => {
+            this.userEntry.modifier = $(ev.currentTarget).val()?.toString() || ""
         })
 
         html.find(".effect-select").change(this._onEffectSelect.bind(this))
 
         this.userEntry = {
-            modifier : this.dynamicInputs.modifier[0].value
+            modifier : this.dynamicInputs.modifier[0]?.value.toString() || ""
         }
     }   
 
 
-    _onEffectSelect(ev) 
+    _onEffectSelect(ev : JQuery.ChangeEvent) 
     {
-        let selectedEffects = $(ev.currentTarget).val().map(i => this.data.effects[parseInt(i)])
-        let changes = selectedEffects.reduce((prev, current) => prev = prev.concat(current.data.changes), []).filter(i => i.mode == 0)
+        let changes : PillarsEffectChangeDataProperties[] = [];
+        let selected =  $(ev.currentTarget).val() as string[]
+          selected.map((i) => {
+            let indices = i.split(',');
+            indices.forEach((changeIndex) => {
+              changes.push(this.data.dialogData.changes[parseInt(changeIndex)]!);
+            });
+          });
+
 
         for(let type in this.dynamicInputs)
         {
-            if (type != "state")
-                this.dynamicInputs[type][0].value = this.userEntry[type]
+                this.dynamicInputs[type as keyof typeof this.dynamicInputs]![0]!.value = this.userEntry[type as keyof typeof this.dynamicInputs]
         }
 
-        changes.forEach(change => {
-            let input = this.dynamicInputs[change.key][0]
-            if (input)
-            {
-                if (change.key == "modifier")
-                {
-                    if (input.value == "")
-                        input.value = change.value
-
-                    else if(isNaN(input.value) || isNaN(change.value))
-                    {
-                        input.value = input.value + " + " + change.value
-                    }
-                    else 
-                    {
-                        input.value = parseInt(input.value) + parseInt(change.value)
-                    }
+        changes.forEach((change) => {
+            let input = this.dynamicInputs[change.key as keyof typeof this.dynamicInputs]?.[0] as HTMLInputElement
+            if (input) {
+              if (change.key == 'modifier') {
+                if (input.value == '') input.value = change.value;
+                else if (isNaN(Number(input.value)) || isNaN(Number(change.value))) {
+                  input.value = input.value + ' + ' + change.value;
+                } else {
+                  input.value = (parseInt(input.value) + parseInt(change.value)).toString();
                 }
+              }
+              if (change.key == 'steps') {
+                input.value = (parseInt(input.value) + parseInt(change.value)).toString();
+              }
             }
-        })
+          });
     }
 }

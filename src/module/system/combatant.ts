@@ -36,7 +36,7 @@ export class PillarsCombatant extends Combatant {
         return {
             running : this.isRunning,
             counter : this.getFlag("pillars-of-eternity", "moveCounter") as number,
-            stride : this.actor?.stride.value,
+            stride : this.actor?.stride.value || 0,
         }
     }
 

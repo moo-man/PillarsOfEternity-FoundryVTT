@@ -1,9 +1,11 @@
+import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
 import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
-import { EffectChangeData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
+import { EffectChangeData, EffectChangeDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
 import { TokenDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData';
 import { PropertiesToSource } from '@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes';
 import { PillarsActor } from '../module/actor/actor-pillars';
 import { PillarsItem } from '../module/item/item-pillars';
+import PillarsActiveEffect from '../module/system/pillars-effect';
 import SkillCheck from '../module/system/skill-check';
 import { PillarsEffectChangeDataProperties } from './effects';
 import { PowerDamage, PowerHealing } from './powers';
@@ -31,7 +33,7 @@ export interface CheckDataFlattened {
 }
 
 export interface WeaponCheckDataFlattened extends CheckDataFlattened {
-  add: {};
+  add: CheckAddData;
   itemId: string;
 }
 
@@ -48,7 +50,7 @@ export interface AgingCheckDataFlattened {
 }
 export interface CheckOptions {
   name?: string;
-  add?: {};
+  add?: CheckAddData;
 }
 
 export interface CheckDialogData {
@@ -72,10 +74,12 @@ export interface SkillDialogData extends CheckDialogData {
   skill: PillarsItem | undefined;
 }
 
-export interface AgingDialogData {
-  modifier: number;
-  changeList: PillarsEffectChangeDataProperties[];
-  changes: PillarsEffectChangeDataProperties[];
+export interface AgingDialogData extends Dialog.Data {
+  dialogData: {
+    modifier: number;
+    changeList: PillarsEffectChangeDataProperties[];
+    changes: PillarsEffectChangeDataProperties[];
+  };
 }
 
 export interface WeaponDialogData extends SkillDialogData {}
@@ -118,12 +122,15 @@ export type SkillCheckData = {
 
 export type WeaponCheckData = {
   checkData: {
-    add: {
-      damage: PowerDamage[];
-    };
+    add: CheckAddData
     itemId: string;
   };
 } & SkillCheckData;
+
+export interface CheckAddData {
+  damage?: PowerDamage[];
+  effects?: (PillarsActiveEffect | {data : Partial<ActiveEffectDataConstructorData & { id: string }>, id : string})[];
+}
 
 export type PowerCheckData = {
   checkData: {
@@ -161,41 +168,35 @@ export type DialogDamage = {
   mult?: number | undefined;
   target?: string | TokenDocument | null | undefined;
   img?: string | null | undefined;
-  misses? : TokenDataProperties[]
-  healing? : boolean
+  misses?: TokenDataProperties[];
+  healing?: boolean;
 } & PowerDamage;
 
 export type DialogHealing = {
   target?: string | TokenDocument | null | undefined;
   img?: string | null | undefined;
-  healing? : boolean
+  healing?: boolean;
 } & PowerHealing;
 
-
-
-
-export interface  ConsolidatedDamage extends Omit<DialogDamage, "target">  {
-  value? : string,
-  target : DamageTarget[]
-  parts : DamageTermToolTip[]
-  roll: Roll
+export interface ConsolidatedDamage extends Omit<DialogDamage, 'target'> {
+  value?: string;
+  target: DamageTarget[];
+  parts: DamageTermToolTip[];
+  roll: Roll;
 }
-
 
 export interface DamageTarget {
-  token? : TokenDataProperties | null,
-  crit : number
-  shield? : boolean
+  token?: TokenDataProperties | null;
+  crit: number;
+  shield?: boolean;
 }
-
 
 export interface DamageTermOptions extends RollTerm.Options {
-  crit : string | number,
-  accumulator? : number,
-  targets : DamageTarget[]
+  crit: string | number;
+  accumulator?: number;
+  targets: DamageTarget[];
 }
 
-export interface DamageTermToolTip extends DiceTerm.ToolTipData 
-{
-  options : DamageTermOptions
+export interface DamageTermToolTip extends DiceTerm.ToolTipData {
+  options: DamageTermOptions;
 }
