@@ -3,7 +3,6 @@ import { DialogDamage } from "../../types/checks";
 import { Defense } from "../../types/common";
 import { PillarsItem } from "../item/item-pillars";
 import SkillCheck from "../system/skill-check";
-import WeaponCheck from "../system/weapon-check";
 
 
 
@@ -77,7 +76,7 @@ export default class DamageDialog extends Application
         if(this.item.damage)
         {
             damages = foundry.utils.deepClone(this.item.damage.value) as DialogDamage[]
-            if (this.check instanceof WeaponCheck && this.check.addedProperties?.damage?.length)
+            if (this.check.addedProperties?.damage?.length)
             {
                 // Separate 
                 this.addedCrits = this.check.addedProperties.damage.filter(d => !d.base && !d.crit && d.defaultCrit).reduce((prev, current) => prev += current.defaultCrit, 0)

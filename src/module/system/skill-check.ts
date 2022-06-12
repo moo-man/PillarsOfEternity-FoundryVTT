@@ -1,7 +1,7 @@
 import { Data } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/dice/roll";
 import { ActiveEffectDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
 import { getGame } from "../../pillars";
-import {  CheckDataFlattened, DialogDamage, DialogHealing, SkillCheckData } from "../../types/checks";
+import {  CheckAddData, CheckDataFlattened, DialogDamage, DialogHealing, SkillCheckData } from "../../types/checks";
 import { PowerBaseEffect } from "../../types/powers";
 import DamageDialog from "../apps/damage-dialog";
 import HealingDialog from "../apps/healing-dialog";
@@ -28,7 +28,7 @@ export default class SkillCheck
                     assister : data.assister,
                     state : data.state || "normal",
                     skillId : data.skillId,
-                    skillName : data.skillName
+                    skillName : data.skillName,
                 },
                 context : {
                     speaker : data.speaker,
@@ -323,5 +323,12 @@ export default class SkillCheck
 
         get requiresRoll() {
             return true
+        }
+        get addedProperties(): CheckAddData | undefined
+        {
+            return  {
+                damage: [],
+                effects: []
+            } 
         }
 }
