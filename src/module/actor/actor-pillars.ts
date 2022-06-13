@@ -764,9 +764,6 @@ export class PillarsActor extends Actor {
       case 'freeze':
         soak += this.soak.freeze;
         break;
-      case 'raw':
-        soak += this.soak.raw;
-        break;
       case 'corrode':
         soak += this.soak.corrode;
         break;

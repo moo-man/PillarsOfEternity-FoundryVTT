@@ -82,7 +82,6 @@ export default class SkillCheck
 
             if (this.checkData?.assister)
             {
-                assisterDie.options = {flavor : this.assister?.name || ""}
                 terms.push(new OperatorTerm({operator : "+"}))
                 terms.push(new Die(assisterDie))
             }
@@ -187,7 +186,7 @@ export default class SkillCheck
 
         assisterDie() {
             if (this.checkData?.assister)
-                return {number : 1, faces : Number(SkillCheck.rankToDie(this.assister?.items.contents.find(i => i.data.name == this.skill?.data.name))), options : {appearance : this.assistDieAppearance()}}
+                return {number : 1, faces : Number(SkillCheck.rankToDie(this.assister?.items.contents.find(i => i.data.name == this.skill?.data.name))), options : {appearance : this.assistDieAppearance(), flavor : this.assister?.name}}
             else return {}
         }
 

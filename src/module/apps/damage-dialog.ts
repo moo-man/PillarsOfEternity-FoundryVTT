@@ -76,13 +76,13 @@ export default class DamageDialog extends Application
         if(this.item.damage)
         {
             damages = foundry.utils.deepClone(this.item.damage.value) as DialogDamage[]
-            if (this.check.addedProperties?.damage?.length)
+            if (this.check && this.check.addedProperties?.damage?.length)
             {
                 // Separate 
                 this.addedCrits = this.check.addedProperties.damage.filter(d => !d.base && !d.crit && d.defaultCrit).reduce((prev, current) => prev += current.defaultCrit, 0)
                 damages = damages.concat(this.check.addedProperties.damage as DialogDamage[])
             }
-            
+                
             damages = damages.filter(d => d.crit || d.base)
             damages.forEach((damage, i) => {
                 damage.mult = undefined
@@ -119,7 +119,7 @@ export default class DamageDialog extends Application
                 if (damage.mult >= 0)
                 {
                     damage.mult += this.addedCrits
-                    damage.mult += damage.defaultCrit
+                    damage.mult += damage.defaultCrit || 0
                 }
 
                 // Don't try to use a multiplier if no crit dice
