@@ -135,56 +135,26 @@ export class PillarsItem extends Item {
     }
   }
 
-  _preparationFunctions: { [K in ItemType]: Function | null } = {
-    attribute: null,
-    skill: this.prepareSkill,
-    trait: null,
-    power: this.preparePower,
-    powerSource: null,
-    weapon: this.prepareWeapon,
-    armor: null,
-    shield: null,
-    equipment: null,
-    connection: null,
-    culture: null,
-    background: null,
-    setting: null,
-    species: null,
-    stock: null,
-    godlike: null,
-    reputation: null,
-    injury: null,
-  };
-
-  _preparationOwnedFunctions: { [K in ItemType]: Function | null } = {
-    attribute: null,
-    skill: this.prepareOwnedSkill,
-    trait: null,
-    power: null,
-    powerSource: null,
-    weapon: null,
-    armor: null,
-    shield: null,
-    equipment: null,
-    connection: this.prepareOwnedConnection,
-    culture: null,
-    background: null,
-    setting: null,
-    species: null,
-    stock: null,
-    godlike: null,
-    reputation: this.prepareOwnedReputation,
-    injury: null,
-  };
 
   //#region Data Preparation
   prepareData() {
     super.prepareData();
-    if (this._preparationFunctions[this.data.type]) this._preparationFunctions[this.data.type]!();
+
+    let prepareFunction : Function = (this[`prepare${this.type[0]!.toUpperCase() + this.type.slice(1)}` as keyof this]) as unknown as Function
+    
+    if (prepareFunction)
+    {
+      prepareFunction.bind(this)()
+    }
   }
 
   prepareOwnedData() {
-    if (this._preparationOwnedFunctions[this.data.type]) this._preparationOwnedFunctions[this.data.type]!();
+    let prepareOwnedFunction : Function = (this[`prepareOwned${this.type[0]!.toUpperCase() + this.type.slice(1)}` as keyof this]) as unknown as Function
+    
+    if (prepareOwnedFunction)
+    {
+      prepareOwnedFunction.bind(this)()
+    }
 
     if (this.weight) {
       this.weight.value *= this.quantity?.value || 0;

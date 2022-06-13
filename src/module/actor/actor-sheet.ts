@@ -425,15 +425,16 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     if (data.modifier > 0) healthBonus = data.modifier;
     else healthPenalty = Math.abs(data.modifier);
 
-    data.array = new Array(data.max).fill({ state: 0 });
-    if (healthBonus) data.array = new Array(healthBonus).fill({ bonus: true, state: 0 }).concat(data.array);
+    // .map is necessary, without it, all elements in the array point to the same object instance
+    data.array = new Array(data.max).fill(undefined).map(i => {return {state : 0}}); 
+    if (healthBonus) data.array = data.array.concat(new Array(healthBonus).fill(undefined).map(i => {return {state : 0, bonus: true}}))
     else if (healthPenalty) data.array = data.array.slice(healthPenalty);
 
     let deathBonus, deathPenalty;
     if (data.death.modifier > 0) deathBonus = data.death.modifier;
     else deathPenalty = Math.abs(data.death.modifier);
 
-    if (deathBonus) data.array = data.array.concat(new Array(data.death.modifier).fill({ state: 0, bonus: true }));
+    if (deathBonus) data.array = data.array.concat(new Array(data.death.modifier).fill(undefined).map(i => {return {state : 0, bonus: true}}));
     else if (deathPenalty) {
       let counter = 0;
       for (let i = data.array.length - 1; i >= 0 && counter < deathPenalty; i--) {
@@ -454,8 +455,9 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   }
 
   _createEnduranceArray(data: ActorEnduranceSheetData): void {
-    data.array = new Array(data.max).fill({ state: 0 });
-    if (data.bonus) data.array = new Array(data.bonus).fill({ bonus: true, state: 0 }).concat(data.array);
+    // .map is necessary, without it, all elements in the array point to the same object instance
+    data.array = new Array(data.max).fill(undefined).map(i => {return {state : 0}}); 
+    if (data.bonus) data.array = data.array.concat(new Array(data.bonus).fill(undefined).map(i => {return { bonus: true, state: 0 }}))
     if (data.penalty) {
       let penaltyCounter = 0;
       for (let i = data.array.length - 1; i >= 0 && penaltyCounter < data.penalty; i--) {

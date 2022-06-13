@@ -31,7 +31,6 @@ import PILLARS_UTILITY from './module/system/utility';
 import { PillarsChat } from './module/system/chat';
 import PowerTemplate from './module/system/power-template';
 
-
 //#region Actor
 
 export interface PillarsActorSourceSystemData {

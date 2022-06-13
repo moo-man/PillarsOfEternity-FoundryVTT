@@ -7,7 +7,7 @@ type DialogData = Dialog.Data & { actor: PillarsActor; targets: Token[]; dialogD
 
 export default class RollDialog extends Dialog {
   actor?: PillarsActor;
-  data: DialogData = <DialogData>{};
+  data: DialogData
   dynamicInputs : Record<string, JQuery<HTMLInputElement> | null> = {
     modifier: null,
     state: null,
@@ -26,6 +26,7 @@ export default class RollDialog extends Dialog {
 
   constructor(data: DialogData) {
     super(data);
+    this.data = data;
   }
 
   static get defaultOptions() {
@@ -68,7 +69,7 @@ export default class RollDialog extends Dialog {
               let html = $(dlg);
               data.modifier = html.find("input[name='modifier']").val()?.toString() || '';
               data.steps = parseInt(html.find("select[name='steps']").val()?.toString() || '') || 0;
-              data.proxy = html.find("input[name='proxy']").is(':checked')?.toString() || '';
+              data.proxy = html.find("input[name='proxy']").is(':checked')
               data.assister = html.find("select[name='assistance']").val()?.toString() || '';
               data.state = <State>(html.find("input:radio[name='state']:checked").val()) || State.NORMAL;
               data.rollMode = (html.find("select[name='rollMode']").val()?.toString() as keyof CONFIG.Dice.RollModes) || CONFIG.Dice.rollModes.publicroll;

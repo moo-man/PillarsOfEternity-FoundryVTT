@@ -41,5 +41,5 @@ interface ActorHealthSheetData extends ActorHealthPreparedData {
 
 
 interface ActorEnduranceSheetData extends ActorEndurancePreparedData {
-    array : {state : number}[]
+    array : {state : number, bonus? : boolean}[]
 }

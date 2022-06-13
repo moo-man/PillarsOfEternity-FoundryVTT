@@ -17,7 +17,7 @@ export interface CheckDataFlattened {
   title: string;
   modifier: string;
   steps: number;
-  proxy: string;
+  proxy: boolean;
   assister: string;
   state: State;
   skillId: string;
@@ -101,7 +101,7 @@ export type SkillCheckData = {
     title: string;
     modifier: string;
     steps: number;
-    proxy: string;
+    proxy: boolean;
     assister: string;
     state: State;
     skillId: string;

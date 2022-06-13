@@ -18,11 +18,11 @@ export class PillarsCombat extends Combat {
         if (data.turn == 0 && data.round! > 1 && this.phase == 0)
         {
             data.round = data.round! - 1
-            data.flags!["pillars-of-eternity.phase"] = 1
+            setProperty(data, "flags.pillars-of-eternity.phase",  1)
         }
         else if (data.turn == 0 && data.round! > 1 && this.phase == 1)
         {
-            data.flags!["pillars-of-eternity.phase"] = 0
+            setProperty(data, "flags.pillars-of-eternity.phase", 0)
             data.combatants = this.combatants.map(c => c.resetMoveCounter())
         }
     }

@@ -8,7 +8,7 @@
   "templateVersion": 2,
   "author": "Moo Man",
   "esmodules": ["pillars.js"],
-  "styles": ["styles/apps.css", "styles/actor.css", "styles/item.css", "styles/common.css"],
+  "styles": ["pillars.css"],
   "scripts" : [],
   "packs": [],
   "languages": [

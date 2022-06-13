@@ -80,7 +80,7 @@ export default class SkillCheck
 
             let assisterDie : Partial<Die.TermData> = <Partial<Die.TermData>>this.assisterDie()
 
-            if (assisterDie)
+            if (this.checkData?.assister)
             {
                 assisterDie.options = {flavor : this.assister?.name || ""}
                 terms.push(new OperatorTerm({operator : "+"}))

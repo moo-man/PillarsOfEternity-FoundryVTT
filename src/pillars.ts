@@ -32,12 +32,10 @@ import HealingDialog from "./module/apps/healing-dialog";
 import { PillarsCombatant } from "./module/system/combatant";
 
 
-
 //@ts-ignore
 import FoundryOverrides from "./module/system/overrides.js"
 //@ts-ignore
 import PillarsExplode from "./module/system/explode.js"
-
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */

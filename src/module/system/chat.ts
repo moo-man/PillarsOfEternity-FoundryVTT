@@ -33,7 +33,7 @@ export class PillarsChat {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
         const message = getGame().messages?.get(messageId || "");
         let check = message?.getCheck();
-        if (check?.actor.isOwner)
+        if (!check?.actor.isOwner)
             return ui.notifications!.error("You don't have permission to interact with this check")
         check?.rollDamage();
     }
@@ -43,7 +43,7 @@ export class PillarsChat {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
         const message = getGame().messages?.get(messageId || "");
         let check = message?.getCheck();
-        if (check?.actor.isOwner)
+        if (!check?.actor.isOwner)
             return ui.notifications!.error("You don't have permission to interact with this check")
         check?.rollHealing();
     }
@@ -54,7 +54,7 @@ export class PillarsChat {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
         const message = getGame().messages?.get(messageId || "");
         let check = message?.getCheck();
-        if (check?.actor.isOwner)
+        if (!check?.actor.isOwner)
             return ui.notifications!.error("You don't have permission to interact with this check")
 
         let effectObj : PropertiesToSource<ActiveEffectDataProperties> & {id? : string}
@@ -139,7 +139,7 @@ export class PillarsChat {
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
         const message = getGame().messages!.get(messageId || "");
         let check = message?.getCheck();
-        if (check?.actor.isOwner)
+        if (!check?.actor.isOwner)
             return ui.notifications!.error("You don't have permission to interact with this check")
         let item = check?.item;
         let index = Number(ev.currentTarget.dataset.index);
