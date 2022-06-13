@@ -41,7 +41,7 @@ declare global {
 export class PillarsActor extends Actor {
   itemCategories: Record<keyof typeof ItemType, PillarsItem[]> | undefined;
 
-  async _preCreate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: foundry.documents.BaseUser) {
+  async _preCreate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: User) {
     await super._preCreate(data, options, user);
     // Set wounds, advantage, and display name visibility
     if (!data.token)
@@ -62,7 +62,7 @@ export class PillarsActor extends Actor {
     }
   }
 
-  async _preUpdate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: foundry.documents.BaseUser) {
+  async _preUpdate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: User) {
     await super._preUpdate(data, options, user);
     this.handleScrollingText(data);
   }

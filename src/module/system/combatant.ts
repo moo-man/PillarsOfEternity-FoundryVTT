@@ -3,7 +3,7 @@ import { CombatantDataConstructorData } from "@league-of-foundry-developers/foun
 import { PillarsCombat } from "./combat";
 
 export class PillarsCombatant extends Combatant {
-    async _preCreate(data: CombatantDataConstructorData, options: DocumentModificationOptions, user: foundry.documents.BaseUser) 
+    async _preCreate(data: CombatantDataConstructorData, options: DocumentModificationOptions, user: User) 
     {
         await super._preCreate(data, options, user)
         this.data.update({"flags.pillars-of-eternity.moveCounter": 0})

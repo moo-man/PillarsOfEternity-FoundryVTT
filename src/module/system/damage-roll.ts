@@ -162,23 +162,25 @@ export default class DamageRoll {
   toggleShield(id: string) {
     if (!canvas?.tokens?.get(id)?.actor?.isOwner) return;
 
-    if (this.checkMessage) {
-      let html = $(this.checkMessage.data.content);
-      let shield = html.find(`.shield[data-id="${id}"]`)[0];
-      let game = getGame();
-      if (shield) {
-        if (shield.classList.contains('active')) {
-          this.data.usingShield = this.data.usingShield.filter((_id) => _id != id);
-          shield.classList.remove('active');
-        } else {
-          this.data.usingShield.push(id);
-          shield.classList.add('active');
+    for (let message of this.damageMessages) {
+      if (message) {
+        let html = $(message.data.content);
+        let shield = html.find(`.shield[data-id="${id}"]`)[0];
+        let game = getGame();
+        if (shield) {
+          if (shield.classList.contains('active')) {
+            this.data.usingShield = this.data.usingShield.filter((_id) => _id != id);
+            shield.classList.remove('active');
+          } else {
+            this.data.usingShield.push(id);
+            shield.classList.add('active');
+          }
+
+          let update = { content: html[0]?.outerHTML, 'flags.pillars-of-eternity.damageData': this.data };
+
+          if (game.user?.isGM) return message.update(update);
+          else game.socket?.emit('system.pillars-of-eternity', { type: 'updateMessage', payload: { id: message.id, update } });
         }
-
-        let update = { content: html[0]?.outerHTML, 'flags.pillars-of-eternity.damageData': this.data };
-
-        if (game.user?.isGM) return this.checkMessage.update(update);
-        else game.socket?.emit('system.pillars-of-eternity', { type: 'updateMessage', payload: { id: this.checkMessage.id, update } });
       }
     }
   }
@@ -246,7 +248,7 @@ export default class DamageRoll {
     return getGame().messages!.get(this.data.checkId)?.getCheck();
   }
 
-  get rollMessages() {
+  get damageMessages() {
     return this.data.rollMessageIds.map((id) => getGame().messages!.get(id));
   }
 

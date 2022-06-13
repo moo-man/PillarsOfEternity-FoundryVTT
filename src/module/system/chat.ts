@@ -62,7 +62,7 @@ export class PillarsChat {
         {
             let item = check.item;
             let effectId = ev.currentTarget.dataset.effect;
-            let effect = item.effects.get(effectId)
+            let effect = item?.effects.get(effectId)
             if (effect)
             {
                 effectObj = effect.toObject()

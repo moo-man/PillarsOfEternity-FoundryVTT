@@ -206,7 +206,7 @@ export default class SkillCheck
         async rollDamage() {
 
             let damages = await new Promise<DialogDamage[]>((resolve, reject) => {
-                new DamageDialog(this.item, this, this.targets).render(true, {resolve, reject})
+                new DamageDialog(this.item!, this, this.targets).render(true, {resolve, reject})
             }) as (DialogHealing & DialogDamage)[]
 
             let roll = new DamageRoll(damages, this);
@@ -216,7 +216,7 @@ export default class SkillCheck
         async rollHealing() {
 
             let healing = await new Promise<DialogHealing[]>((resolve, reject) => {
-                new HealingDialog(this.item, this, this.targets).render(true, {resolve, reject})
+                new HealingDialog(this.item!, this, this.targets).render(true, {resolve, reject})
             }) as (DialogHealing & DialogDamage)[]
 
             let roll = new DamageRoll(healing, this);
@@ -289,15 +289,14 @@ export default class SkillCheck
             return this._toEffectObjects(effects)
         }
 
-        get item() : PillarsItem {
+        get item() : PillarsItem | undefined {
             return this.skill
         }
 
-        get skill()  : PillarsItem{
+        get skill()  : PillarsItem | undefined{
             let skill =  this.actor.items.get(this.checkData?.skillId || "") || getGame().items!.get(this.checkData?.skillId || "");
             if (skill)
                 return skill
-            else throw new Error("Cannot find skill in Check object")
         }
 
         get doesDamage() {

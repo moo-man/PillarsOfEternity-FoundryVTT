@@ -575,7 +575,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     html.find('.edit-connection').on('click', this._onEditConnection.bind(this));
     html.find('.delete-connection').on('click', this._onDeleteConnection.bind(this));
     html.find('.connection-name').on('click', this._onConnectionClick.bind(this));
-    html.on('click', '.power-roll', this._onPowerTargetClick.bind(this));
+    html.on("click", '.power-target', this._onPowerTargetClick.bind(this));
     html.find('.restore-pool').on('click', this._onRestorePoolClick.bind(this));
     html.find('.sheet-roll').on('click', this._onSheetRollClick.bind(this));
     //html.on('click', '.damage-roll', this._onDamageRollClick.bind(this));
@@ -807,7 +807,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
   _onPowerTargetClick(event: JQuery.ClickEvent) {
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
-    let index = parseInt($(event.currentTarget!).attr('data-index') || "");
+    let index = parseInt($(event.currentTarget!).attr('data-index') || "0");
     let item = this.actor.items.get(itemId!);
     if (item)
     {

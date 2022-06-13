@@ -5,13 +5,13 @@ import { PillarsCombatant } from "./combatant"
 
 export class PillarsCombat extends Combat {
 
-    async _preCreate(data: CombatDataConstructorData, options: DocumentModificationOptions, user: foundry.documents.BaseUser) 
+    async _preCreate(data: CombatDataConstructorData, options: DocumentModificationOptions, user: User) 
     {
         await super._preCreate(data, options, user)
         this.data.update({"flags.pillars-of-eternity.phase": 0})
     }
 
-    async _preUpdate(data: CombatDataConstructorData, options: DocumentModificationOptions, user: foundry.documents.BaseUser)
+    async _preUpdate(data: CombatDataConstructorData, options: DocumentModificationOptions, user: User)
     {
         await super._preUpdate(data, options, user)
 

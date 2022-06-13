@@ -27,7 +27,7 @@ export class PillarsItem extends Item {
   }
 
 
-  async _preUpdate(updateData: ItemDataConstructorData, options: DocumentModificationOptions, user: foundry.documents.BaseUser): Promise<void> {
+  async _preUpdate(updateData: ItemDataConstructorData, options: DocumentModificationOptions, user: User): Promise<void> {
     await super._preUpdate(updateData, options, user);
 
     // Clamp the shield health to between max and 0
@@ -69,7 +69,7 @@ export class PillarsItem extends Item {
     }
   }
 
-  async _preCreate(data: ItemDataConstructorData, options: DocumentModificationOptions, user: foundry.documents.BaseUser) {
+  async _preCreate(data: ItemDataConstructorData, options: DocumentModificationOptions, user: User) {
     await super._preCreate(data, options, user);
 
     // Adding singleton items, if item of that type already exists, delete it
@@ -82,7 +82,7 @@ export class PillarsItem extends Item {
   }
 
   // Powers embedded in an item are created on the actor when the item is added, when the item is deleted, delete the embedded powers that were added.
-  async _preDelete(options: DocumentModificationOptions, user: foundry.documents.BaseUser) {
+  async _preDelete(options: DocumentModificationOptions, user: User) {
     if (this.isOwned && hasEmbeddedPowers(this)) {
       let embeddedPowers = this.actor!.getItemTypes(ItemType.power).filter((i) => i.embedded?.item == this.id);
 
