@@ -9,7 +9,7 @@ import { PillarsItem } from '../item/item-pillars';
 import { ActorDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData';
 import { DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
 import { PreparedPillarsCharacterData } from '../../global';
-import { Defense, isUsable, ItemType, Tier } from '../../types/common';
+import { Defense, isUsable, ItemType, Season, SeasonData, Tier } from '../../types/common';
 import { PILLARS } from '../system/config';
 import {
   AssisterData,
@@ -27,6 +27,7 @@ import {
 import { getGame } from '../../pillars';
 import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
 import { PillarsEffectChangeDataProperties } from '../../types/effects';
+import PILLARS_UTILITY from '../system/utility';
 
 declare global {
   interface DocumentClassConfig {
@@ -363,19 +364,21 @@ export class PillarsActor extends Actor {
     if (powerItem!.roll?.value) checkData = <PowerCheckDataFlattened>await RollDialog.create(data);
 
     checkData.title = data.title;
-    checkData.sourceId = powerItem!.SourceItem?.id || "";
+    checkData.sourceId = powerItem!.SourceItem?.id || '';
     checkData.itemId = powerItem!.id || '';
     checkData.speaker = this.speakerData();
     checkData.targetSpeakers = this.targetSpeakerData();
     return new PowerCheck(checkData);
   }
 
-  async setupAgingRoll() {
+  async setupAgingRoll(year? : number) {
     if (this.type == 'character') {
       let dialogData = {
         modifier: PILLARS.lifePhaseModifier[this.life!.phase] || 0,
         changeList: this.getDialogChanges({ condense: true }),
         changes: this.getDialogChanges(),
+        years : this.seasons?.filter(i => !i.aging).map(i => i.year) || [],
+        defaultYear : year
       };
       let checkData: AgingCheckDataFlattened = <AgingCheckDataFlattened>await AgingDialog.create(dialogData);
       checkData.title = 'Aging Roll';
@@ -396,7 +399,7 @@ export class PillarsActor extends Actor {
 
       let embeddedParent = power.EmbeddedPowerParent;
       if (embeddedParent && embeddedParent.category?.value != 'grimoire') {
-        if (['longRest', 'encounter'].includes(power.embedded?.spendType || "")) {
+        if (['longRest', 'encounter'].includes(power.embedded?.spendType || '')) {
           if (power.embedded!.uses.value <= 0) throw ui.notifications!.error('No more uses!');
         } else if (power.embedded!.spendType == 'charges') {
           if (power.embedded!.chargeCost > embeddedParent.powerCharges!.value) throw ui.notifications!.error('Not enough charges!');
@@ -434,7 +437,7 @@ export class PillarsActor extends Actor {
   getSkillDialogData(type: string, item: PillarsItem, options: CheckOptions = {}) {
     let dialogData: SkillDialogData = <SkillDialogData>this.getDialogData(type, item, options);
     dialogData.assisters = this.constructAssisterList(item.data.name || options.name || '');
-    dialogData.hasRank = item ? !!item.xp!.rank : false
+    dialogData.hasRank = item ? !!item.xp!.rank : false;
     dialogData.skill = item;
     return dialogData;
   }
@@ -443,7 +446,7 @@ export class PillarsActor extends Actor {
     let dialogData: WeaponDialogData = <WeaponDialogData>this.getDialogData(type, item, options);
     dialogData.title = `${item?.name || options.name} Attack`;
     //dialogData.assisters = this.constructAssisterList(weapon.Skill)
-    dialogData.modifier = (((item.misc as {value : number})!.value || 0) + (item.accuracy!.value || 0)).toString()
+    dialogData.modifier = (((item.misc as { value: number })!.value || 0) + (item.accuracy!.value || 0)).toString();
     dialogData.hasRank = item.Skill ? !!item.Skill.rank : false;
     dialogData.skill = item.Skill;
     return dialogData;
@@ -877,6 +880,79 @@ export class PillarsActor extends Actor {
 
     if (shieldObj.type == 'shield') shieldObj.data.health.current -= damageToShield;
     return shieldObj; // Return data instead of updating it to send it with the rest of the update
+  }
+
+  /**
+   * Helper method to easily update seasonal data
+   * 
+   * @param year Number - year being updated
+   * @param type Property being updated, such as `aging` or `winter`
+   * @param message Value being added to the property
+   * @returns 
+   */
+  updateSeasonYear(year : number, type : string, message : string) 
+  {
+    if (this.seasons)
+    {
+      let seasons = duplicate(this.seasons)
+      let index = seasons.findIndex(s => s.year == year)
+      return this.updateSeasonIndex(index, type, message);
+    }
+    else throw new Error(`Could not update season: year ${year} was not found`)
+  }
+
+    /**
+   * Helper method to easily update seasonal data
+   * 
+   * @param index index of the season being updated
+   * @param type Property being updated, such as `aging` or `winter`
+   * @param message Value being added to the property
+   * @returns 
+   */
+  updateSeasonIndex(index : number, type : string, message : string)
+  {
+    if (this.seasons)
+    {
+      let seasons = duplicate(this.seasons)
+      let season = seasons[index]
+
+      if (season)
+      {
+        setProperty(season, type, message);
+        return this.update({"data.seasons" : seasons});
+      }
+      else throw new Error(`Could not update season: index ${index} was not in range`)
+    }
+  }
+
+  /**
+   * Compares the current time in the world settings and returns the index-season values that need updating
+   */
+  get seasonsNeedUpdating(): Record<string, boolean> | boolean {
+    let needsUpdating: Record<string, boolean> = {};
+    let currentTime = getGame().settings.get('pillars-of-eternity', 'season');
+    if (this.seasons) {
+      this.seasons.forEach((s, i) => {
+        if (Number.isNumeric(s.year)) {
+          if (!s.autumn && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.AUTUMN, year: s.year })) {
+            needsUpdating[`${i}-autumn`] = true;
+          }
+          if (!s.spring && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SPRING, year: s.year })) {
+            needsUpdating[`${i}-spring`] = true;
+          }
+          if (!s.summer && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SUMMER, year: s.year })) {
+            needsUpdating[`${i}-summer`] = true;
+          }
+          if (!s.winter && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.WINTER, year: s.year })) {
+            needsUpdating[`${i}-winter`] = true;
+          }
+          if (!s.aging && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.WINTER, year: s.year })) {
+            needsUpdating[`${i}-aging`] = true;
+          }
+        }
+      });
+      return foundry.utils.isObjectEmpty(needsUpdating) ? false : needsUpdating
+    } else return false;
   }
 
   // addWound(type)

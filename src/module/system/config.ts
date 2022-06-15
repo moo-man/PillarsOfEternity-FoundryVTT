@@ -35,6 +35,13 @@ tiers : {
     "paragon": "Paragon"
 },
 
+seasons : {
+    0:  "Spring",
+    1:  "Summer",
+    2:  "Autumn",
+    3:  "Winter",
+},
+
 tierBonus : {
     "novice": {
         def: 0,

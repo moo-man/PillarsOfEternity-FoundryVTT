@@ -13,6 +13,7 @@ export default class AgingRoll {
         title: data.title,
         modifier: data.modifier,
         lifestyle: data.lifestyle,
+        year : data.year
       },
       context: {
         speaker: data.speaker,
@@ -33,12 +34,87 @@ export default class AgingRoll {
 
     if (isNaN(Number(this.checkData?.modifier))) this.checkData!.modifier = "0";
 
-    this.roll = new Roll('1d12 + @modifier + @lifeStyleMod', { modifier: this.checkData?.modifier, lifestyleMod: lifestyleMod });
+    this.roll = new Roll('1d12 + @modifier + @lifestyleMod', { modifier: this.checkData?.modifier, lifestyleMod: lifestyleMod });
     await this.roll.evaluate({ async: true });
+
+    let message = this.handleAgeRollResult()
+    if (this.checkData?.year)
+    {
+      await this.actor?.updateSeasonYear(this.data?.checkData.year!, "aging", message)
+    }
+    ui.notifications!.notify(message)
+    return this
+  }
+
+  handleAgeRollResult() {
+
+    try {
+      if (this.roll && this.roll.total)
+      {
+        let message = this.roll.total.toString() + ": "
+        if (this.roll.total <= 2)
+        {
+          message += `No Apparent Aging`
+        }
+        else if (this.roll.total <= 9)
+        {
+          message += "Increase Apparent Age by 1 year"
+        }
+        else if (this.roll.total <= 12)
+        {
+          message += "Increase Apparent Age by 1 year, gain 1 Aging Point" 
+        }
+        else if (this.roll.total <= 13)
+        {
+          let points = this._pointsToNextDeathMarch(2)
+          message += `Gain ${points} Aging Point (increases Death March by 1), suffer a Malady, increase Apparent Age by 3`
+        }
+        else if (this.roll.total <= 19)
+        {
+          message += `Increase Apparent Age by 1 year, Gain 2 Aging Points`
+        }
+        else if (this.roll.total <= 20)
+      {
+        let points = this._pointsToNextDeathMarch(2)
+        message += `Gain ${points} Aging Point (increases Death March by 2), suffer a Malady, increase Apparent Age by 3`
+      }
+      else if (this.roll.total >= 21)
+      {
+        message += `Gain 6 Aging Points, Increase Apparent Age by 2`
+      }
+      return message
+    }
+    else throw new Error(`Roll object or result not found`)
+  }
+  catch(e)
+  {
+    let error = `Could not compute Aging Roll: ${e}`
+    ui.notifications?.error(error)
+    throw Error(error)
+  }
+}
+
+  _pointsToNextDeathMarch(marches = 0) : number
+  {
+    if (this.actor?.life)
+    {
+      let march = this.actor.life.march;
+      let index = -1;
+      if (march > 0)
+        index = march - 1 
+
+      let pointThresholds = Object.keys(PILLARS.agePointsDeathRank).map(i => Number(i))
+
+      let targetThreshold = march + marches;
+
+      let agingPoints = this.actor.life.agingPoints;
+      return pointThresholds[targetThreshold]! - agingPoints
+    }
+    return 0
   }
 
   async sendToChat() {
-    this.roll?.toMessage({ flavor: this.checkData?.title, speaker: ChatMessage.getSpeaker({ actor: this.actor }), flags: { 'pillars-of-eternity.rollData': this.data } });
+    return this.roll?.toMessage({ flavor: this.checkData?.title, speaker: ChatMessage.getSpeaker({ actor: this.actor }), flags: { 'pillars-of-eternity.rollData': this.data } });
   }
 
   get checkData() {

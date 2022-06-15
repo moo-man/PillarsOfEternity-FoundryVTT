@@ -172,7 +172,32 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     await super._render(force, options);
     this._setScrollPos(); // Set scroll positions
 
+
+    this.checkSeasonAlerts();
     //this._refocus(this._element)
+  }
+
+  checkSeasonAlerts()
+  {
+    // Change the seasons button color if seasons need updating
+    let buttons = this.element.find<HTMLAnchorElement>(".header-button.seasons")[0]
+    if (buttons)
+    {
+      let icon = buttons.firstElementChild as HTMLElement
+      if(this.actor.seasonsNeedUpdating)
+      {
+          buttons.classList.add("alert")
+          if (icon)
+            icon.classList.replace("fa-book", 'fa-exclamation-circle')
+      }
+      else
+      {   
+        buttons.classList.remove("alert")     
+        if (icon)
+          icon.classList.replace('fa-exclamation-circle', "fa-book")
+      }
+        
+    }
   }
 
   /**
@@ -832,6 +857,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   async _onSheetRollClick(event: JQuery.ClickEvent) {
     (await new Roll((<HTMLAnchorElement>event.target).text).roll()).toMessage({ speaker: this.actor.speakerData() });
   }
+
 
   // _onDamageRollClick(event: JQuery.ClickEvent) {
   //   let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');

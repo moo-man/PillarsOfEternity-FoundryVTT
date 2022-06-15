@@ -36,6 +36,7 @@ import { PillarsCombatant } from "./module/system/combatant";
 import FoundryOverrides from "./module/system/overrides.js"
 //@ts-ignore
 import PillarsExplode from "./module/system/explode.js"
+import TimeTracker from "./module/apps/time-tracker";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -85,6 +86,7 @@ Hooks.on("init", () => {
     config : PILLARS,
     chat : PillarsChat,
     templates : PowerTemplate,
+    TimeTracker : new TimeTracker()
   }
 })
 

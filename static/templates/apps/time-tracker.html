@@ -1,0 +1,16 @@
+<div class="time-tracker pillars-of-eternity">
+    {{#if (isGM)}}
+    <a class="backward controls"><i class="fas fa-backward"></i></a> 
+    {{/if}}
+    <div class="date">
+        <span class="year">
+            {{year}}
+        </span>
+        <span class="season">
+            {{season}}
+        </span>
+    </div>
+    {{#if (isGM)}}
+    <a class="forward controls"><i class="fas fa-forward"></i></a> 
+    {{/if}}
+</div>

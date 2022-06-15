@@ -44,6 +44,8 @@ export interface AgingCheckDataFlattened {
   speaker: ChatSpeakerDataProperties;
   modifier: string;
   lifestyle: string;
+  year: number
+  defaultYear? : number
 }
 export interface CheckOptions {
   name?: string;
@@ -76,7 +78,9 @@ export interface AgingDialogData extends Dialog.Data {
     modifier: number;
     changeList: PillarsEffectChangeDataProperties[];
     changes: PillarsEffectChangeDataProperties[];
-  };
+    years : number[]
+    defaultYear? : number
+};
 }
 
 export interface WeaponDialogData extends SkillDialogData {}
@@ -144,6 +148,7 @@ export type AgingCheckData = {
     title: string;
     modifier: string;
     lifestyle: string;
+    year : number
   };
   context: {
     speaker: ChatSpeakerDataProperties;

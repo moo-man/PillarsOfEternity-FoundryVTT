@@ -1,5 +1,6 @@
 import { ChatSpeakerDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData"
 import { getGame } from "../../pillars"
+import { Time } from "../../types/common"
 import { PillarsActor } from "../actor/actor-pillars"
 import { PILLARS } from "./config"
 
@@ -67,4 +68,24 @@ export default class PILLARS_UTILITY {
         return mergeObject(foundry.utils.deepClone(PILLARS.meleeSpecials), PILLARS.rangedSpecials)
     }
 
+    /**
+     * Returns true if timeA is later than timeB
+     * @param timeA 
+     * @param timeB 
+     */
+    static isLaterDate(timeA : Time, timeB : Time)
+    {
+        if (timeA.year > timeB.year)
+        {
+            return true
+        }
+        else if (timeA.year < timeB.year)
+        {
+            return false
+        }
+        else if (timeA.year == timeB.year)
+        {
+            return timeA.season > timeB.season
+        }
+    }
 }

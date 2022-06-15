@@ -1,5 +1,5 @@
 import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
-import { Defense, LifePhase, Season } from './types/common';
+import { Defense, LifePhase, Season, SeasonData } from './types/common';
 import {
   EmbeddedPower,
   PowerBaseEffect,
@@ -30,6 +30,7 @@ import Migration from './module/system/migrations';
 import PILLARS_UTILITY from './module/system/utility';
 import { PillarsChat } from './module/system/chat';
 import PowerTemplate from './module/system/power-template';
+import TimeTracker from './module/apps/time-tracker';
 
 //#region Actor
 
@@ -113,7 +114,7 @@ export interface PillarsCharacterSourceSystemData
   childhood: {
     value: string;
   };
-  seasons : Season[]
+  seasons : SeasonData[]
 }
 
 interface CharacterDataSource {
@@ -160,7 +161,7 @@ export interface PreparedPillarsCharacterData
   childhood: {
     value: string;
   };
-  seasons : Season[]
+  seasons : SeasonData[]
 }
 
 interface PillarsActorTooltips {
@@ -702,6 +703,7 @@ declare global {
       config : typeof PILLARS,
       chat : typeof PillarsChat,
       templates : typeof PowerTemplate,
+      TimeTracker : TimeTracker
     };
     dice3d : {
       DiceFactory : {
@@ -735,6 +737,8 @@ declare global {
     interface Values {
       'pillars-of-eternity.playerApplyDamage': boolean;
       'pillars-of-eternity.systemMigrationVersion': string;
+      'pillars-of-eternity.season': {season: Season, year : number};
+      'pillars-of-eternity.seasonPosition': {left: number, top : number};
     }
   }
 }

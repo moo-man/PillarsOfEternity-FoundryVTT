@@ -7,33 +7,58 @@
                 <h3>Year <input type="number" name="{{season.index}}-year" value="{{season.year}}"></h3>
                 </div>
                 <div class="form-group">
-                    <label>Spring</label>
+                    <a class="alert" data-target="{{season.index}}-aging" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                    <label>Aging</label>
                     <div class="form-fields">
-                        <input type="text" name="{{season.index}}-spring" value="{{season.spring}}">
+                        <input type="text" name="{{season.index}}-aging" value="{{season.aging}}">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Summer</label>
-                    <div class="form-fields">
-                        <input type="text" name="{{season.index}}-summer" value="{{season.summer}}">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Autumn</label>
-                    <div class="form-fields">
-                        <input type="text" name="{{season.index}}-autumn" value="{{season.autumn}}">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Winter</label>
+                    <a class="alert" data-target="{{season.index}}-winter" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                    {{#if (eq season.current "winter")}}
+                    <a class="current"><i class="fas fa-angle-right"></i></a>
+                    {{/if}}
+                    <label>
+                        Winter
+                    </label>
                     <div class="form-fields">
                         <input type="text" name="{{season.index}}-winter" value="{{season.winter}}">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Aging</label>
+                    <a class="alert" data-target="{{season.index}}-autumn" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                    {{#if (eq season.current "autumn")}}
+                    <a class="current"><i class="fas fa-angle-right"></i></a>
+                    {{/if}}
+                    <label>
+                        Autumn
+                    </label>
                     <div class="form-fields">
-                        <input type="text" name="{{season.index}}-aging" value="{{season.aging}}">
+                        <input type="text" name="{{season.index}}-autumn" value="{{season.autumn}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a class="alert" data-target="{{season.index}}-summer" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                    {{#if (eq season.current "summer")}}
+                    <a class="current"><i class="fas fa-angle-right"></i></a>
+                    {{/if}}
+                    <label>
+                        Summer
+                    </label>
+                    <div class="form-fields">
+                        <input type="text" name="{{season.index}}-summer" value="{{season.summer}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a class="alert" data-target="{{season.index}}-spring" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                    {{#if (eq season.current "spring")}}
+                    <a class="current"><i class="fas fa-angle-right"></i></a>
+                    {{/if}}
+                    <label>
+                        Spring
+                    </label>     
+                    <div class="form-fields">
+                        <input type="text" name="{{season.index}}-spring" value="{{season.spring}}">
                     </div>
                 </div>
             </div>

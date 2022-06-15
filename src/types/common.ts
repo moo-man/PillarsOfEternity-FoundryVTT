@@ -111,13 +111,25 @@ interface PhysicalItem {
   }
 }
 
-export interface Season {
+export interface SeasonData {
   year: number;
   spring: string;
   summer: string;
   autumn: string;
   winter: string;
   aging: string;
+}
+
+export enum Season {
+  SPRING,
+  SUMMER,
+  AUTUMN,
+  WINTER
+}
+
+export interface Time {
+  season : Season,
+  year : number
 }
 
 export function isUsable(item: any): item is Useable {

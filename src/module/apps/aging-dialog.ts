@@ -8,7 +8,7 @@ export default class AgingDialog extends Dialog {
         modifier: null
     }
 
-    data :  AgingDialogData = <AgingDialogData>{}
+    data :  AgingDialogData
 
 
     userEntry : {
@@ -18,6 +18,7 @@ export default class AgingDialog extends Dialog {
 
     constructor(data: AgingDialogData) {
         super(data);
+        this.data = data
         this.data.dialogData = data.dialogData 
       }
     
@@ -29,15 +30,15 @@ export default class AgingDialog extends Dialog {
         })
     }
 
-    static async create({modifier, changeList, changes} : AgingDialogData["dialogData"]) {
+    static async create({modifier, changeList, changes, years, defaultYear} : AgingDialogData["dialogData"]) {
 
 
-        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/aging-dialog.html", {modifier, changeList, changes})
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/aging-dialog.html", {modifier, changeList, changes, years, defaultYear: defaultYear || years[0]})
         return new Promise((resolve) => {
             return new this({
                 title: "Aging Roll",
                 content: html,
-                dialogData : {changes, changeList, modifier},
+                dialogData : {changes, changeList, modifier, years},
                 buttons : {
                     roll : {
                         label : "Roll",
@@ -46,6 +47,7 @@ export default class AgingDialog extends Dialog {
                             let html = $(dlg)
                             data.modifier = html.find("input[name='modifier']").val()?.toString() || ""
                             data.lifestyle = html.find("select[name='lifestyle']").val()?.toString() || ""
+                            data.year = parseInt(html.find("select[name='year']").val()?.toString() || "")
                             resolve(data)
                         }
                     }
@@ -71,7 +73,7 @@ export default class AgingDialog extends Dialog {
             this.userEntry.modifier = $(ev.currentTarget).val()?.toString() || ""
         })
 
-        html.find(".effect-select").change(this._onEffectSelect.bind(this))
+        html.find(".effect-select").on("change", this._onEffectSelect.bind(this))
 
         this.userEntry = {
             modifier : this.dynamicInputs.modifier[0]?.value.toString() || ""

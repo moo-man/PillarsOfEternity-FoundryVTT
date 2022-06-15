@@ -8,6 +8,7 @@ import effects from "./effects";
 import entryContextHooks from "./entryContext";
 import scene from "./scene";
 import initHooks from "./init"
+import settings from "./settings";
 
 export default function () {
     initHooks()
@@ -20,4 +21,5 @@ export default function () {
     effects();
     entryContextHooks();
     scene();
+    settings();
 }
