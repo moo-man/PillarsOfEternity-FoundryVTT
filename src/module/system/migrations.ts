@@ -8,7 +8,7 @@ export default class Migration {
 
   async migrateWorld() {
     let game = getGame()
-    ui.notifications!.info(`Applying pillars-of-eternity System Migration for version ${game.system.data.version}. Please be patient and do not close your game or shut down your server.`, { permanent: true });
+    ui.notifications!.info(game.i18n.format("PILLARS.Migration", {version : game.system.data.version}), { permanent: true });
     // Migrate World Items
     for (let i of game.items!.contents) {
       try {
@@ -18,7 +18,7 @@ export default class Migration {
           await i.update(updateData, { enforceTypes: false });
         }
       } catch (err: any) {
-        err.message = `Failed pillars-of-eternity system migration for Item ${i.name}: ${err.message}`;
+        err.message = game.i18n.format("PILLARS.ErrorFailedItemMigration", {name : i.name}) + ": " + err.message;
         console.error(err);
       }
     }
@@ -32,14 +32,14 @@ export default class Migration {
           await a.update(updateData, { enforceTypes: false });
         }
       } catch (err: any) {
-        err.message = `Failed pillars-of-eternity system migration for Actor ${a.name}: ${err.message}`;
+        err.message = game.i18n.format("PILLARS.ErrorFailedActorMigration", {name : a.name}) + ": " + err.message;
         console.error(err);
       }
     }
 
     // // Set the migration as complete
     game.settings.set("pillars-of-eternity", "systemMigrationVersion", game.system.data.version);
-    ui.notifications!.info(`pillars-of-eternity System Migration to version ${game.system.data.version} completed!`, { permanent: true });
+    ui.notifications!.info(game.i18n.format("PILLARS.MigrationComplete", {version : game.system.data.version}), { permanent: true });
   };
 
   /* -------------------------------------------- */

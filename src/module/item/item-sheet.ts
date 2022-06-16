@@ -40,7 +40,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     let buttons = super._getHeaderButtons();
     if (this.item.isOwner) {
       buttons.unshift({
-        label: 'Post',
+        label: getGame().i18n.localize("PILLARS.Post"),
         class: 'post',
         icon: 'fas fa-comment',
         onclick: this.item.postToChat,
@@ -87,7 +87,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
 
   async handleEmbeddedPowerDrop(power: EmbeddedPower) {
     if (this.item.type == 'equipment' && this.item.category?.value == 'grimoire' && power.data.source.value != 'arcana')
-      return ui.notifications?.error('Only Arcana Powers can be placed inside Grimoires');
+      return ui.notifications?.error(getGame().i18n.localize("PILLARS.OnlyArcanaInGrimoire"))
     if (this.item.type == 'equipment' && this.item.category?.value == 'grimoire') power.data.embedded.spendType = 'source';
 
     // If drag item was an owned power already, add embedded data to it
@@ -119,11 +119,11 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     super.activateListeners(html);
     if (!this.options.editable) return;
 
-    $('input[type=text]').focusin(function () {
+    $('input[type=text]').on("focusin", function () {
       $(this).select();
     });
 
-    $('input[type=number]').focusin(function () {
+    $('input[type=number]').on("focusin", function () {
       $(this).select();
     });
 
@@ -163,17 +163,18 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
   }
 
   async _onEffectCreate(ev: JQuery.ClickEvent) {
+    let game = getGame();
     if (this.item.isOwned)
-      return ui.notifications!.error('Creating effects on Owned Items is not currently supported by Foundry. You must create the effect on a World Item and then add that Item to the actor.');
+      return ui.notifications!.error(game.i18n.localize("PILLARS.ErrorCreateEffectOnOwnedItem"))
 
     let effectData: ActiveEffectDataSource = <ActiveEffectDataSource>{ label: this.item.name!, icon: this.item.data.img || 'icons/svg/aura.svg' };
     let html = await renderTemplate('systems/pillars-of-eternity/templates/apps/quick-effect.html', effectData);
     new Dialog({
-      title: 'Quick Effect',
+      title: game.i18n.localize("PILLARS.QuickEffect"),
       content: html,
       buttons: {
         create: {
-          label: 'Create',
+          label: game.i18n.localize("PILLARS.Create"),
           callback: (dlg: JQuery<HTMLElement> | HTMLElement) => {
             let mode = 2;
             let html = $(dlg)
@@ -186,7 +187,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
           },
         },
         skip: {
-          label: 'Skip',
+          label: game.i18n.localize("PILLARS.Skip"),
           callback: () => this.item.createEmbeddedDocuments('ActiveEffect', [effectData]),
         },
       },
@@ -222,7 +223,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
 
   _onAddProperty(ev: JQuery.ClickEvent) {
     let property = $(ev.currentTarget).parents('.form-group').attr('data-property')!;
-    if (property == 'summons') return ui.notifications!.notify('Drag and drop an Item to create a Summon');
+    if (property == 'summons') return ui.notifications!.notify(getGame().i18n.localize("PILLARS.DragDropSummonPrompt"));
 
     let data = foundry.utils.deepClone(getProperty(this.item, property));
     data.push(PillarsItem.baseData[property as keyof typeof PillarsItem.baseData]);

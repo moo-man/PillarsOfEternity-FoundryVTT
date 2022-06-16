@@ -11,7 +11,7 @@ export default class SeasonalActivity extends FormApplication<FormApplicationOpt
       id: 'seasonal-activity',
       template: 'systems/pillars-of-eternity/templates/apps/seasonal-activity.html',
       width: 500,
-      title: 'Seasonal Activity',
+      title: getGame().i18n.localize("PILLARS.SeasonalActivity"),
     });
   }
 

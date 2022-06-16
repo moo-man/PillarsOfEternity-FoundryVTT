@@ -248,7 +248,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     if (this.actor.type == 'character') {
       buttons.unshift({
         class: 'seasons',
-        label: 'Seasons',
+        label: getGame().i18n.localize("PILLARS.Seasons"),
         icon: 'fas fa-book',
         onclick: (ev) => {
           new BookOfSeasons(this.actor).render(true);
@@ -386,12 +386,14 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   }
 
   constructPowerDisplay(sheetData: PillarsActorSheetData) {
+    let game = getGame();
+
     sheetData.items.powers.forEach((p) => {
       if (p.data.type == "power")
       {
         let lowestKey = Object.keys(p.data.groups)
           .filter((i) => i)
-          .sort((a, b) => a > b ? 1 : -1)[0] || "Default";
+          .sort((a, b) => a > b ? 1 : -1)[0] || game.i18n.localize("Default");
         p.data.display = p.data.groups[lowestKey];
       }
     })
@@ -636,24 +638,15 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   _onItemDelete(event: JQuery.ClickEvent) {
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
     if (!itemId) return;
+    let game = getGame();
 
-    new Dialog({
-      title: 'Delete Item',
-      content: `<p>Are you sure you want to delete this item?`,
-      buttons: {
-        yes: {
-          label: 'Yes',
-          callback: () => {
-            this.actor.deleteEmbeddedDocuments('Item', [itemId!]);
-          },
-        },
-        no: {
-          label: 'No',
-          callback: () => {},
-        },
-      },
-      default: 'yes',
-    }).render(true);
+    Dialog.confirm({
+      title: game.i18n.localize("PILLARS.DeleteItem"),
+      content: `<p>${game.i18n.localize("PILLARS.DeleteConfirmation")}</p>`,
+      yes: () => {this.actor.deleteEmbeddedDocuments('Item', [itemId!])},
+      no: () => {},
+      defaultYes: true
+    })
   }
   _onItemCreate(event: JQuery.ClickEvent) {
     let type = $(event.currentTarget!).attr('data-type');
@@ -672,14 +665,14 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
   async _onEffectCreate(ev: JQuery.ClickEvent) {
     let type = (<HTMLElement>ev.currentTarget).dataset['type'];
-    let effectData: Record<string, unknown> = { label: 'New Effect', icon: 'icons/svg/aura.svg' };
+    let effectData: Record<string, unknown> = { label: getGame().i18n.localize("PILLARS.NewEffect"), icon: 'icons/svg/aura.svg' };
     if (type == 'temporary') {
       effectData['duration.rounds'] = 1;
     }
 
     let html = await renderTemplate('systems/pillars-of-eternity/templates/apps/quick-effect.html', effectData);
     let dialog = new Dialog({
-      title: 'Quick Effect',
+      title: getGame().i18n.localize("PILLARS.QuickEffect"),
       content: html,
       buttons: {
         create: {
@@ -736,7 +729,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   _onInfoClick(event: JQuery.ClickEvent) {
     let type = $(event.currentTarget!).attr('data-type');
     let item = this.actor.getItemTypes(<ItemType>type!)[0];
-    if (!item) return ui.notifications!.error(`No owned item of type ${type}`);
+    if (!item) return ui.notifications!.error(getGame().i18n.format("PILLARS.ErrorNoOwnedItem", {type}))
     else if (item) item.sheet!.render(true);
   }
 
@@ -788,7 +781,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   _onCreateConnection(event: JQuery.ClickEvent) {
     let connections = duplicate(this.actor.knownConnections?.value || []);
     if (connections) {
-      connections.push({ name: 'New Connection' });
+      connections.push({ name: getGame().i18n.format("PILLARS.NewConnection")});
       this.actor.update({ 'data.knownConnections.value': connections });
     }
   }
@@ -796,10 +789,11 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   _onEditConnection(event: JQuery.ClickEvent) {
     let index: number = parseInt($(event.currentTarget!).parents('.item').attr('data-index') || '');
     let connections = duplicate(this.actor.knownConnections?.value || []);
+    let game = getGame()
     new Dialog({
-      title: 'Change Connection',
+      title: game.i18n.localize("PILLARS.ChangeConnection"),
       content: `
-            <p>Enter the name of the connection</p>
+            <p>${game.i18n.localize("PILLARS.PromptConnectionNanme")}</p>
             <div class="form-group">
             <input type="text" name="connection" value=${connections[index]!.name}>
             </div>
@@ -868,6 +862,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   // }
 
   _onInitiativeClick(event: JQuery.ClickEvent) {
+    let game = getGame();
     new Dialog({
       title: 'Roll Initiative',
       content: '',
@@ -875,7 +870,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
         adv: {
           label: 'Advantaged',
           callback: () => {
-            this.actor.rollInitiative({ createCombatants: true, rerollInitiative: true, initiativeOptions: { formula: '{2d10, 1d20}kh[Initiative] + (1d12[Tiebreaker] / 100) + @initiative.value' } });
+            this.actor.rollInitiative({ createCombatants: true, rerollInitiative: true, initiativeOptions: { formula: `{2d10, 1d20}kh[${game.i18n.localize("PILLARS.Initiative")}] + (1d12[${game.i18n.localize("PILLARS.Tiebreaker")}] / 100) + @initiative.value` } });
           },
         },
         normal: {
@@ -887,7 +882,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
         dis: {
           label: 'Disadvantaged',
           callback: () => {
-            this.actor.rollInitiative({ createCombatants: true, rerollInitiative: true, initiativeOptions: { formula: '{2d10, 1d20}kl[Initiative] + (1d12[Tiebreaker] / 100) + @initiative.value' } });
+            this.actor.rollInitiative({ createCombatants: true, rerollInitiative: true, initiativeOptions: { formula: `{2d10, 1d20}kl[${game.i18n.localize("PILLARS.Initiative")}] + (1d12[${game.i18n.localize("PILLARS.Tiebreaker")}] / 100) + @initiative.value` } });
           },
         },
       },
@@ -918,9 +913,9 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     let selectElement = `<select name="skill">`;
     for (let s of allSkills) selectElement += `<option name=${s.name}>${s.name}</option>`;
     selectElement += '</select>';
-
+    let game = getGame()
     let dialog = new Dialog({
-      title: 'Untrained Skill',
+      title: game.i18n.localize("PILLARS.UntrainedSkill"),
       //content : `<div style="display:flex; align-items: center"><label style="flex: 1">Name of Skill</label><input style="flex: 1" type='text' name='skill'/></div>`,
       content: `<div style="display:flex; align-items: center"><label style="flex: 1">Skill</label>${selectElement}</div>`,
       buttons: {
@@ -932,7 +927,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
               let check = await this.actor.setupSkillCheck(skill);
               await check.rollCheck();
               check.sendToChat();
-            } else ui.notifications!.error('Please enter a skill name');
+            } else ui.notifications!.error(game.i18n.localize("PILLARS.PromptItemName"));
           },
         },
       },
@@ -961,7 +956,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
     let item = this.actor.items.get(itemId!);
     let skill = this.actor.items.getName(item?.skill?.value || "");
-    if (!skill) return ui.notifications!.warn(`Could not find skill ${item?.skill?.value}`);
+    if (!skill) return ui.notifications!.warn(getGame().i18n.format("PILLARS.ErrorSKillNotFound", {name : item?.skill?.value}))
     let check = await this.actor.setupSkillCheck(skill);
     await check.rollCheck();
     check.sendToChat();
@@ -981,7 +976,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     {
       if (!Number.isNumeric(groupIndex)) groupIndex = 0;
       else if (typeof groupIndex == 'number') groupIndex++;
-      if (groupIndex >= Object.keys(item.data.groups).length) groupIndex = 'Default';
+      if (groupIndex >= Object.keys(item.data.groups).length) groupIndex = getGame().i18n.localize('Default');
     }
 
     return item?.setFlag('pillars-of-eternity', 'displayGroup', groupIndex);
@@ -1001,16 +996,17 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   }
 
   _onLongRestClick(ev: JQuery.ClickEvent) {
+    let game = getGame()
     new Dialog({
-      title: 'Rest',
-      content: '<p>Short or Long Rest?</p>',
+      title: game.i18n.localize("PILLARS.Rest"),
+      content: `<p>${game.i18n.localize("PILLARS.PromptShortLongRest")}</p>`,
       buttons: {
         long: {
-          label: 'Short Rest',
+          label: game.i18n.localize("PILLARS.ShortRest"),
           callback: () => this.actor.shortRest(),
         },
         short: {
-          label: 'Long Rest',
+          label: game.i18n.localize("PILLARS.LongRest"),
           callback: () => this.actor.longRest(),
         },
       },

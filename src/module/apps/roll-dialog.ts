@@ -1,3 +1,4 @@
+import { getGame } from '../../pillars';
 import { CheckDataFlattened, CheckDialogData, State } from '../../types/checks';
 import { PillarsEffectChangeDataProperties } from '../../types/effects';
 import { PillarsActor } from '../actor/actor-pillars';
@@ -88,7 +89,7 @@ export default class RollDialog extends Dialog {
         let func = new Function('data', c.conditional.script).bind({ actor: this.data.actor, targets: this.data.targets, effect: c.document });
         return func(this.data.dialogData) == true; // Only accept true returns
       } catch (e) {
-        console.error('Something went wrong when processing conditional dialog effect: ' + e, c);
+        console.error(getGame().i18n.localize("PILLARS.ErrorConditionalDialogEffect") + ": " + e, c);
         return false;
       }
     });

@@ -17,7 +17,7 @@ export default class BookOfSeasons extends Application {
       template: 'systems/pillars-of-eternity/templates/apps/book-of-seasons.html',
       height: 900,
       width: 400,
-      title: 'Book of Seasons',
+      title: getGame().i18n.localize("PILLARS.BookOfSeasons"),
       resizable: true,
       scrollY: ['.season-list'],
     });

@@ -44,7 +44,7 @@ export default function () {
         if (game.user!.isGM) {
           let actor = PILLARS_UTILITY.getSpeaker(data.payload.speaker);
           actor?.update(data.payload.updateData);
-          ui.notifications!.notify(`Applied Damage to ${actor?.name}`);
+          ui.notifications!.notify(getGame().i18n.format("PILLARs.AppliedDamageTo", {name : actor?.name}))
         }
       } else if (data.type == 'applyEffect') {
         if (game.user!.isGM) {

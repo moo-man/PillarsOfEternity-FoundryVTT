@@ -87,12 +87,13 @@ export default class DamageRoll {
       let crit = Number.isNumeric(damage.mult) ? damage.mult || 0 : Math.floor(margin / 5);
       return { token: <TokenDataProperties>token.toObject(), crit, shield: !!token.actor.equippedShield };
     } catch (e) {
-      console.error('Something went wrong when calculating damage crit on target', token, damage);
+      console.error(getGame().i18n.localize("PILLARS.ErrorCalculatingCrit"), token, damage);
       return { token: null, crit: 0 };
     }
   }
 
   async rollDamages() {
+    let game = getGame();
     for (let i = 0; i < this.damages.length; i++) {
       let damage = this.damages[i];
       let baseDice: (Die | NumericTerm | OperatorTerm)[] = [];
@@ -105,7 +106,7 @@ export default class DamageRoll {
             new Die({
               number: parseInt(damage.base.split('d')[0] || ''),
               faces: parseInt(damage.base.split('d')[1] || ''),
-              options: <DamageTermOptions>{ flavor: 'Hit', crit: 'base', targets: damage.target.filter((t) => t.crit == 0) },
+              options: <DamageTermOptions>{ flavor: game.i18n.localize("PILLARS.Hit"), crit: 'base', targets: damage.target.filter((t) => t.crit == 0) },
             }),
           ];
           for (let i = 0; i < multiplier; i++) {
@@ -114,7 +115,7 @@ export default class DamageRoll {
               new Die({
                 number: parseInt(damage.crit.split('d')[0] || ''),
                 faces: parseInt(damage.crit.split('d')[1] || ''),
-                options: <DamageTermOptions>{ flavor: `${i + 1}x Crit`, crit: i + 1, targets: damage.target.filter((t) => t.crit == i + 1) },
+                options: <DamageTermOptions>{ flavor: `${i + 1}x ${game.i18n.localize("PILLARS.Crit")}`, crit: i + 1, targets: damage.target.filter((t) => t.crit == i + 1) },
               })
             );
           }
@@ -126,14 +127,14 @@ export default class DamageRoll {
               new Die({
                 number: parseInt(damage.value?.split('d')[0] || ''),
                 faces: parseInt(damage.value?.split('d')[1] || ''),
-                options: <DamageTermOptions>{ flavor: 'Heal', crit: 'base', targets: damage.target.filter((t) => t.crit == 0) },
+                options: <DamageTermOptions>{ flavor: game.i18n.localize("PILLARS.Heal"), crit: 'base', targets: damage.target.filter((t) => t.crit == 0) },
               }),
             ];
           else
             baseDice = [
               new NumericTerm({
                 number: parseInt(damage.value || ''),
-                options: <DamageTermOptions>{ flavor: 'Heal', crit: 'base', targets: damage.target.filter((t) => t.crit == 0) },
+                options: <DamageTermOptions>{ flavor: game.i18n.localize("PILLARS.Heal"), crit: 'base', targets: damage.target.filter((t) => t.crit == 0) },
               }),
             ];
         }
@@ -186,12 +187,13 @@ export default class DamageRoll {
   }
 
   async sendToChat(newMessage = false) {
+    let game = getGame();
     this.damages.forEach(async (damage, i) => {
       let type = PILLARS.damageTypes[damage.type as keyof typeof PILLARS.damageTypes];
-      let label = 'Damage';
+      let label = game.i18n.localize("PILLARS.Damage");
       if (damage.healing) {
         type = damage.type[0]?.toUpperCase() + damage.type.substr(1);
-        label = 'Healing';
+        label = game.i18n.localize("PILLARS.Healing");
       }
 
       let html = await renderTemplate('systems/pillars-of-eternity/templates/chat/damage.html', damage);

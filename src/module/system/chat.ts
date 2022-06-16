@@ -30,32 +30,35 @@ export class PillarsChat {
 
     static async _onDamageButtonClick(ev : JQuery.ClickEvent)
     {
+        let game = getGame();
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
-        const message = getGame().messages?.get(messageId || "");
+        const message = game.messages?.get(messageId || "");
         let check = message?.getCheck();
         if (!check?.actor.isOwner)
-            return ui.notifications!.error("You don't have permission to interact with this check")
+            return ui.notifications!.error(game.i18n.localize("PILLARS.ErrorCheckInteractPermission"))
         check?.rollDamage();
     }
 
     static async _onHealingButtonClick(ev : JQuery.ClickEvent)
     {
+        let game = getGame();
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
-        const message = getGame().messages?.get(messageId || "");
+        const message = game.messages?.get(messageId || "");
         let check = message?.getCheck();
         if (!check?.actor.isOwner)
-            return ui.notifications!.error("You don't have permission to interact with this check")
+            return ui.notifications!.error(game.i18n.localize("PILLARS.ErrorCheckInteractPermission"))
         check?.rollHealing();
     }
 
 
     static async _onApplyEffectClick(ev : JQuery.ClickEvent) 
     {
+        let game = getGame();
         let messageId = $(ev.currentTarget).parents(".message").attr("data-message-id")
-        const message = getGame().messages?.get(messageId || "");
+        const message = game.messages?.get(messageId || "");
         let check = message?.getCheck();
         if (!check?.actor.isOwner)
-            return ui.notifications!.error("You don't have permission to interact with this check")
+            return ui.notifications!.error(game.i18n.localize("PILLARS.ErrorCheckInteractPermission"))
 
         let effectObj : PropertiesToSource<ActiveEffectDataProperties> & {id? : string}
         if (check)
@@ -77,7 +80,6 @@ export class PillarsChat {
             }
         }
 
-        let game = getGame()
         let tokens = game.user!.targets.size ?  Array.from(game.user!.targets) :  canvas?.tokens!.controlled || []
 
 
@@ -140,7 +142,7 @@ export class PillarsChat {
         const message = getGame().messages!.get(messageId || "");
         let check = message?.getCheck();
         if (!check?.actor.isOwner)
-            return ui.notifications!.error("You don't have permission to interact with this check")
+            return ui.notifications!.error(game.i18n.localize("PILLARS.ErrorCheckInteractPermission"))
         let item = check?.item;
         let index = Number(ev.currentTarget.dataset.index);
         if (item && item.data.type == "power")
@@ -160,7 +162,8 @@ export class PillarsChat {
                 else 
                 t.actor?.createEmbeddedDocuments("Item", [{...itemData}])
                 
-                ui.notifications!.notify(`${itemData?.name} created on ${t.document.name}`)
+                
+                ui.notifications!.notify(game.i18n.format("PILLARS.ItemCreatedOn", {item: itemData?.name, actor : t.document.name}))
             })
         }
     }

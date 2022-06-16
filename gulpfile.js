@@ -16,4 +16,5 @@ gulp.task('system', function(){
 
 gulp.task('watch', function () {
   gulp.watch('./src/styles/*', gulp.series('sass'));
+  //gulp.watch('./stat', gulp.series('sass'));
 });

@@ -52,6 +52,7 @@ export default class SkillCheck
     
         getTerms() 
         {
+            let game = getGame()
             let terms : (PoolTerm | OperatorTerm | Die | NumericTerm | RollTerm)[]= []
 
             if(this.checkData?.state == "normal")
@@ -65,11 +66,11 @@ export default class SkillCheck
                 if (this.checkData?.state == "adv") 
                 {
                     modifier = "kh"
-                    flavor = "Advantage"
+                    flavor = game.i18n.localize("PILLARS.Advantage")
                 }
                 else if (this.checkData?.state == "dis") 
                 {
-                    flavor = "Disadvantage"
+                    flavor = game.i18n.localize("PILLARS.Disadvantage")
                     modifier = "kl"
                 }
 
@@ -102,9 +103,9 @@ export default class SkillCheck
                 let stepsDie : Die.TermData = <Die.TermData>PILLARS_UTILITY.stepsToDice(this.checkData?.steps)
 
                 if (this.checkData?.steps > 0)
-                    stepsDie.options = {flavor : "Bonus Die"}
+                    stepsDie.options = {flavor : game.i18n.localize("PILLARS.BonusDie")}
                 else if (this.checkData?.steps < 0)
-                    stepsDie.options = {flavor : "Penalty Die"}
+                    stepsDie.options = {flavor : game.i18n.localize("PILLARS.PenaltyDie")}
 
                 terms.push(new Die(stepsDie))
             }
@@ -259,7 +260,7 @@ export default class SkillCheck
             let actor = PILLARS_UTILITY.getSpeaker(this.context?.speaker!)
             if (actor)
                 return actor
-            else throw new Error("Cannot find actor in Check object")
+            else throw new Error(getGame().i18n.localize("PILLARS.ErrorCannotFindCheckActor"))
         }
     
         get assister() {

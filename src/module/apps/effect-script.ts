@@ -1,3 +1,4 @@
+import { getGame } from "../../pillars"
 import PillarsActiveEffect from "../system/pillars-effect"
 
 export default class EffectScriptConfig extends FormApplication<FormApplicationOptions, {script: string, description: string}, {effect : PillarsActiveEffect, index : number}> {
@@ -7,7 +8,7 @@ export default class EffectScriptConfig extends FormApplication<FormApplicationO
             template: "systems/pillars-of-eternity/templates/apps/effect-script.html",
             height: 400,
             width: 500,
-            title: "Effect Script Config",
+            title: getGame().i18n.localize("PILLARS.EffectScriptConfig"),
             resizable: true
         })
     }

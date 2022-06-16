@@ -1,3 +1,4 @@
+import { getGame } from '../../pillars';
 import { AgingCheckData, AgingCheckDataFlattened } from '../../types/checks';
 import { PILLARS } from './config';
 import PILLARS_UTILITY from './utility';
@@ -48,47 +49,48 @@ export default class AgingRoll {
 
   handleAgeRollResult() {
 
+    let game = getGame();
     try {
       if (this.roll && this.roll.total)
       {
         let message = this.roll.total.toString() + ": "
         if (this.roll.total <= 2)
         {
-          message += `No Apparent Aging`
+          message += game.i18n.format("PILLARS.AgingResult1", {}) // No Apparent Aging`
         }
         else if (this.roll.total <= 9)
         {
-          message += "Increase Apparent Age by 1 year"
+          message += game.i18n.format("PILLARS.AgingResult2", {age : 1}) // Increase Apparent Age by 1 year"
         }
         else if (this.roll.total <= 12)
         {
-          message += "Increase Apparent Age by 1 year, gain 1 Aging Point" 
+          message += game.i18n.format("PILLARS.AgingResult3", {age : 1, points : 1})//Increase Apparent Age by 1 year, gain 1 Aging Point" 
         }
         else if (this.roll.total <= 13)
         {
           let points = this._pointsToNextDeathMarch(2)
-          message += `Gain ${points} Aging Point (increases Death March by 1), suffer a Malady, increase Apparent Age by 3`
+          message += game.i18n.format("PILLARS.AgingResult4", {points, march : 1, age : 3}) // Gain ${points} Aging Point (increases Death March by 1), suffer a Malady, increase Apparent Age by 3`
         }
         else if (this.roll.total <= 19)
         {
-          message += `Increase Apparent Age by 1 year, Gain 2 Aging Points`
+          message += game.i18n.format("PILLARS.AgingResult5", {age : 1, points: 2}) // Increase Apparent Age by 1 year, Gain 2 Aging Points`
         }
         else if (this.roll.total <= 20)
       {
         let points = this._pointsToNextDeathMarch(2)
-        message += `Gain ${points} Aging Point (increases Death March by 2), suffer a Malady, increase Apparent Age by 3`
+        message += game.i18n.format("PILLARS.AgingResult6", {points, march : 2, age : 3}) // Gain ${points} Aging Point (increases Death March by 2), suffer a Malady, increase Apparent Age by 3`
       }
       else if (this.roll.total >= 21)
       {
-        message += `Gain 6 Aging Points, Increase Apparent Age by 2`
+        message += game.i18n.format("PILLARS.AgingResult7", {points: 6, age : 2}) // Gain 6 Aging Points, Increase Apparent Age by 2`
       }
       return message
     }
-    else throw new Error(`Roll object or result not found`)
+    else throw new Error(game.i18n.localize("PILLARS.ErrorAgingRollObjectNotFound"))
   }
   catch(e)
   {
-    let error = `Could not compute Aging Roll: ${e}`
+    let error = game.i18n.localize("PILLARS.ErrorComputeAgingRoll") + ": " + e
     ui.notifications?.error(error)
     throw Error(error)
   }
