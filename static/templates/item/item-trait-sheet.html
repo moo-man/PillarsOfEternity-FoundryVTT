@@ -2,8 +2,8 @@
     {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.Type physical=false}}
 
     <nav class="sheet-tabs tabs">
-      <a class="item" data-tab="details">{{localize "Details"}}</a>
-      <a class="item" data-tab="effects">{{localize "Effects"}}</a>
+      <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+      <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
     </nav>
 
     <section class="content">
@@ -12,7 +12,7 @@
         <div class="tab details active" data-tab="details">
 
             <div class="form-group">
-                <label>Type</label>
+                <label>{{localize "PILLARS.Type"}}</label>
                 <select name="data.category.value">
                     {{#select data.category.value}}
                     {{#each (config "traitTypes") as |type t|}}
@@ -22,7 +22,7 @@
                 </select>
             </div>
 
-            <h2 class="note-section label">Description</h2>
+            <h2 class="note-section label">{{localize "PILLARS.Description"}}</h2>
           {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
 
 

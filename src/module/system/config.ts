@@ -827,7 +827,7 @@ CONFIG.statusEffects = [
     },
     {
       id: 'knocked-down',
-      label: 'PILLARS.AfflictionKnocked Down',
+      label: 'PILLARS.AfflictionKnockedDown',
       icon: 'systems/pillars-of-eternity/assets/conditions/knocked-down.png',
       changes: [{ key: 'state', mode: 6, value: 'dis' }],
       flags: {
@@ -844,7 +844,7 @@ CONFIG.statusEffects = [
     },
     {
       id: 'down-n-out',
-      label: 'PILLARS.AfflictionDown and Out',
+      label: 'PILLARS.AfflictionDownAndOut',
       icon: 'systems/pillars-of-eternity/assets/conditions/down-n-out.png',
       changes: [{ key: 'state', mode: 6, value: 'dis' }],
       flags: {
@@ -1034,7 +1034,7 @@ CONFIG.statusEffects = [
     },
     {
       id: 'all-seeing',
-      label: 'PILLARS.AfflictionAll-Seeing',
+      label: 'PILLARS.AfflictionAllSeeing',
       icon: 'systems/pillars-of-eternity/assets/conditions/all-seeing.png',
       changes: [
         { key: 'state', mode: 6, value: 'adv' },

@@ -2,10 +2,10 @@
     {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.Type physical=true}}
 
     <nav class="sheet-tabs tabs">
-        <a class="item active" data-tab="description">{{localize "Description"}}</a>
-        <a class="item" data-tab="details">{{localize "Details"}}</a>
-        <a class="item" data-tab="effects">{{localize "Effects"}}</a>
-        <a class="item" data-tab="powers">{{localize "Powers"}}</a>
+        <a class="item active" data-tab="description">{{localize "PILLARS.Description"}}</a>
+        <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+        <a class="item" data-tab="powers">{{localize "PILLARS.Powers"}}</a>
     </nav>
 
     <section class="content">
@@ -15,7 +15,7 @@
         <div class="tab details active" data-tab="details"> 
 
             <div class="form-group">
-                <label>Type</label>
+                <label>{{localize "PILLARS.Type"}}</label>
                 <div class="form-fields">
                     <select name="data.category.value">
                         {{#select data.category.value}}
@@ -29,7 +29,7 @@
             </div>
 
             <div class="form-group">
-                <label>Skill</label>
+                <label>{{localize "PILLARS.Skill"}}</label>
                 <div class="form-fields">
                     <select name="data.skill.value">
                         {{#select data.skill.value}}
@@ -43,13 +43,13 @@
             </div>
 
             <div class="form-group">
-                <label>Accuracy</label>
+                <label>{{localize "PILLARS.Accuracy"}}</label>
                 <div class="form-fields small">
                     <input type="text" name="data.accuracy.value" value="{{data.accuracy.value}}" data-dtype="Number">
                 </div>
             </div>
             <div class="form-group">
-                <label>Miscellaneous</label>
+                <label>{{localize "PILLARS.Miscellaneous"}}</label>
                 <div class="form-fields small">
                     <input type="text" name="data.misc.value" value="{{data.misc.value}}" data-dtype="Number">
                 </div>
@@ -57,16 +57,16 @@
 
             {{#if item.isRanged}}
             <div class="form-group">
-                <label>Range</label>
+                <label>{{localize "PILLARS.Range"}}</label>
                 <div class="form-fields small">
                     <input type="text" name="data.range.value" value="{{data.range.value}}" data-dtype="Number">
-                    <label>Hexes</label>
+                    <label>{{localize "PILLARS.Hexes"}}</label>
                 </div>
             </div>
             {{/if}}
             <hr>
             <div class="form-group power-group" data-property="damage.value">
-                <h3>Damage <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <h3>{{localize "PILLARS.Damage"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
                 <div class="property-list">
                 {{#each item.damage.value as |damage d|}}
                 <div class="property-inputs" data-index="{{d}}">
@@ -99,7 +99,7 @@
 
             <hr>
 
-            <button type="button" class="item-specials">Configure Special Properties</button>
+            <button type="button" class="item-specials">{{localize "PILLARS.ConfigureSpecialProperties"}}</button>
         
         </div>
 

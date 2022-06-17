@@ -2,8 +2,8 @@
     {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.Type physical=false}}
 
     <nav class="sheet-tabs tabs">
-        <a class="item active" data-tab="description">{{localize "Description"}}</a>
-        <a class="item" data-tab="details">{{localize "Details"}}</a>
+        <a class="item active" data-tab="description">{{localize "PILLARS.Description"}}</a>
+        <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
     </nav>
 
     <section class="content">
@@ -11,7 +11,7 @@
 
         <div class="tab details active" data-tab="details"> 
             <div class="form-group">
-                <label>Type</label>
+                <label>{{localize "PILLARS.Type"}}</label>
                 <div class="form-fields">
                     <select name="data.category.value">
                         {{#select data.category.value}}
@@ -25,7 +25,7 @@
             </div>
 
             <div class="form-group">
-                <label>Specialization</label>
+                <label>{{localize "PILLARS.Specialization"}}</label>
                 <div class="form-fields">
                     <input type="checkbox" name="data.specialization.has" data-dtype="Number" {{checked data.specialization.has}}>
 
@@ -34,7 +34,7 @@
             </div>
 
             <div class="form-group xp-rank">
-                <label>XP and Rank</label>
+                <label>"PILLARS.XPAndRank</label>
                 <div class="form-fields">
                     <input type="number" name="data.xp.value" value="{{data.xp.value}}" data-dtype="Number">
                     <input type="number" disabled value="{{item.xp.rank}}" data-dtype="Number">
@@ -42,14 +42,14 @@
             </div>
 
             <div class="form-group">
-                <label>Requires</label>
+                <label>{{localize "PILLARS.Requires"}}</label>
                 <div class="form-fields">
                     <input type="text" name="data.requires.value" value="{{data.requires.value}}" data-dtype="String">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Modifier</label>
+                <label>{{localize "PILLARS.Modifier"}}</label>
                 <div class="form-fields">
                     <input type="number" name="data.modifier.value" value="{{data.modifier.value}}" data-dtype="Number">
                 </div>

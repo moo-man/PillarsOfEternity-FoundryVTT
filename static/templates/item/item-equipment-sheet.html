@@ -2,10 +2,10 @@
     {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.Type physical=true}}
 
     <nav class="sheet-tabs tabs">
-        <a class="item active" data-tab="description">{{localize "Description"}}</a>
-        <a class="item" data-tab="details">{{localize "Details"}}</a>
-        <a class="item" data-tab="effects">{{localize "Effects"}}</a>
-        <a class="item" data-tab="powers">{{localize "Powers"}}</a>
+        <a class="item active" data-tab="description">{{localize "PILLARS.Description"}}</a>
+        <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+        <a class="item" data-tab="powers">{{localize "PILLARS.Powers"}}</a>
     </nav>
 
     <section class="content">
@@ -14,7 +14,7 @@
 
         <div class="tab details active" data-tab="details"> 
             <div class="form-group">
-                <label>Type</label>
+                <label>{{localize "PILLARS.Type"}}</label>
                 <div class="form-fields">
                     <select name="data.category.value">
                         {{#select data.category.value}}
@@ -28,14 +28,14 @@
             </div>
             {{#if (eq data.category.value "tool")}}
             <div class="form-group">
-                <label>Skill</label>
+                <label>{{localize "PILLARS.Skill"}}</label>
                 <div class="form-fields">
                     <input type="text" name="data.skill.value" value="{{data.skill.value}}" data-dtype="String">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Suitability</label>
+                <label>{{localize "PILLARS.Suitability"}}</label>
                 <div class="form-fields">
                     <select name="data.skill.suitability">
                         {{#select data.skill.suitability}}
@@ -49,7 +49,7 @@
             {{else if (eq data.category.value "gear")}}
             
             <div class="form-group">
-                <label>Wearable</label>
+                <label>{{localize "PILLARS.Wearable"}}</label>
                 <div class="form-fields">
                     <input type="checkbox" name="data.wearable.value" value="{{data.wearable.value}}" {{checked data.wearable.value}}>
                 </div>

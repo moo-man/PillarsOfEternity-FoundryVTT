@@ -13,7 +13,7 @@
         </div>
         <section class="defenses">
             <div class="property-group">
-                <label>Def</label>
+                <label>{{localize "PILLARS.Def"}}</label>
                 <div class="property-value">
                     <input type="number" disabled title="{{tooltips.defenses.deflection}}" value="{{data.defenses.deflection.value}}" />
                 </div>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="property-group">
-                <label>Fort</label>
+                <label>{{localize "PILLARS.Fort"}}</label>
                 <div class="property-value">
                     <input type="number" disabled title="{{tooltips.defenses.fortitude}}" value="{{data.defenses.fortitude.value}}" />
                 </div>
@@ -41,7 +41,7 @@
             </div>
 
             <div class="property-group">
-                <label>Ref</label>
+                <label>{{localize "PILLARS.Ref"}}</label>
                 <div class="property-value">
                     <input type="number" disabled title="{{tooltips.defenses.reflex}}" value="{{data.defenses.reflex.value}}" />
                 </div>
@@ -55,7 +55,7 @@
             </div>
 
             <div class="property-group">
-                <label>Will</label>
+                <label>{{localize "PILLARS.Will"}}</label>
                 <div class="property-value">
                     <input type="number" disabled title="{{tooltips.defenses.will}}" value="{{data.defenses.will.value}}" />
                 </div>
@@ -73,7 +73,7 @@
         <section class="status">
             <div class="health-endurance">
                 <div class="property-group {{#if actor.health.bloodied}}bloodied{{/if}}" >
-                    <label>Health</label>
+                    <label>{{localize "PILLARS.Health"}}</label>
                     <div class="status-array">
                         {{#each data.health.array as | value key| }}
                         {{#if (eq key ../data.health.threshold.bloodied)}}
@@ -95,7 +95,7 @@
                     </div>
                 </div>
                 <div class="property-group {{#if actor.endurance.winded}}winded{{/if}}">
-                    <label>Endurance <a class="endurance-action" data-type="exert" title="Exert"><i class="fas fa-arrow-down"></i></a><a class="endurance-action" data-type="breath" title="Catch Breath"><i class="fas fa-arrow-up"></i></a></label>
+                    <label>{{localize "PILLARS.Endurance"}} <a class="endurance-action" data-type="exert" title="Exert"><i class="fas fa-arrow-down"></i></a><a class="endurance-action" data-type="breath" title="Catch Breath"><i class="fas fa-arrow-up"></i></a></label>
                     <div class="status-array">
                         {{#each data.endurance.array as | value key| }}
                         {{#if (eq key ../data.endurance.threshold.winded)}}
@@ -116,13 +116,13 @@
             </div>
             <div class="toughness-di">
                     <div class="property-group small">
-                        <label>Tough.</label>
+                        <label>{{localize "PILLARS.ToughAbbrev"}}</label>
                         <div class="property-value">
                             <input type="number" title="{{tooltips.toughness.value}}" disabled value="{{data.toughness.value}}" />
                         </div>
                     </div>
                     <div class="property-group small">
-                        <label>D.I.</label>
+                        <label>{{localize "PILLARS.DamageIncrementAbbrev"}}</label>
                         <div class="property-value">
                             <input type="number" title="{{tooltips.damageIncrement.value}}" disabled value="{{data.damageIncrement.value}}" />
                         </div>
@@ -134,7 +134,7 @@
             <div class="injuries">
                 <ol class="items-list">
                     <li class="items-header flexrow">
-                        <h3 class="item-name flexrow">Injuries</h3>
+                        <h3 class="item-name flexrow">{{localize "PILLARS.Injuries"}}</h3>
                         <div class="item-controls">
                             <a class="item-control item-create" title="Create" data-type="injury" data-category="benefit"><i class="fas fa-plus"></i></a>
                         </div>
@@ -169,7 +169,7 @@
             <div class="wounds">
                 <div class="wound-group">
                     <div class="wound-label">
-                        <label>Wounds:</label> {{data.health.wounds.value}} 
+                        <label>{{localize "PILLARS.Wounds"}}:</label> {{data.health.wounds.value}} 
                     </div>
                     <div class="wound-buttons">
                         <a class="subtract-wound"> <i class="far fa-minus-square"></i></a>
@@ -219,38 +219,38 @@
         </div>
         <div class="char-info">
             <div class="info-group" >
-                <label>Culture</label>
+                <label>{{localize "PILLARS.Culture"}}</label>
                 <div data-type="culture" class="fake-input open-info">{{data.details.culture}}</div>
             </div>
             <div class="info-group" >
-                <label>Species</label>
+                <label>{{localize "PILLARS.Species"}}</label>
                 <div data-type="species" class="fake-input open-info">{{data.details.species}}</div>
             </div>
             <div class="info-group" >
-                <label>Stock</label>
+                <label>{{localize "PILLARS.Stock"}}</label>
                 <div data-type="stock" class="fake-input open-info">{{data.details.stock}}</div>
             </div>
             <div class="info-group" >
-                <label>Godlike</label>
+                <label>{{localize "PILLARS.Godlike"}}</label>
                 <div data-type="godlike" class="fake-input open-info">{{data.details.godlike}}</div>
             </div>
             <div class="info-group">
-                <label>Size</label>
+                <label>{{localize "PILLARS.Size"}}</label>
                 <input type="text" disabled value="{{data.size.value}}">
             </div>
             <div class="info-group age">
-                <label>Apparent Age</label>
+                <label>{{localize "PILLARS.ApparentAge"}}</label>
                 <input type="text" disabled value="{{data.life.apparentAge}}">
             </div>
         </div>
         <section class="tab-section">
             <nav class="sheet-tabs tabs">
-                <a  class="tab-select item active" data-tab="main">Main</a>
-                <a  class="tab-select item" data-tab="combat">Combat</a>
-                <a  class="tab-select item" data-tab="effects">Effects</a>
-                <a  class="tab-select item" data-tab="powers">Powers</a>
-                <a  class="tab-select item" data-tab="inventory">Inventory</a>
-                <a  class="tab-select item" data-tab="details">Details</a>
+                <a  class="tab-select item active" data-tab="main">{{localize "PILLARS.Main"}}</a>
+                <a  class="tab-select item" data-tab="combat">{{localize "PILLARS.Combat"}}</a>
+                <a  class="tab-select item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+                <a  class="tab-select item" data-tab="powers">{{localize "PILLARS.Powers"}}</a>
+                <a  class="tab-select item" data-tab="inventory">{{localize "PILLARS.Inventory"}}</a>
+                <a  class="tab-select item" data-tab="details">{{localize "PILLARS.Details"}}</a>
             </nav>
             <div class="tab-content">
                 <div class="tab main save-scroll" data-tab="main">

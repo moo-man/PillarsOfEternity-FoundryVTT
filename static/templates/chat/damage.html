@@ -8,7 +8,7 @@
                 {{#each misses as |target t|}}
                 <img class="target-img highlight-token" src="{{target.img}}" data-token-id="{{target._id}}" title = "{{target.name}}">
                 {{/each}}
-                <span class="part-flavor">Miss</span>
+                <span class="part-flavor">{{localize "PILLARS.Miss"}}</span>
             </div>
         {{/if}}
         {{#each parts}}

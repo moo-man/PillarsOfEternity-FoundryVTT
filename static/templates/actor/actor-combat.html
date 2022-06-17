@@ -2,20 +2,20 @@
     <div class="combat-fields">
 
         <div class="initiative">
-            <h3>Initiative</h3><a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a>
+            <h3>{{localize "PILLARS.Initiative"}}</h3><a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a>
             <input type="number" class="value" title="{{tooltips.initiative.value}}" disabled value="{{data.initiative.value}}" />
         </div>
         <div class="stride">
-            <h3>Stride: </h3>
+            <h3>{{localize "PILLARS.Stride"}}: </h3>
             <input type="number" disabled class="value" title="{{tooltips.stride.value}}" value="{{data.stride.value}}">
         </div>
         <div class="run">
-            <h3>Run: </h3>
+            <h3>{{localize "PILLARS.Run"}}: </h3>
             <input type="number" disabled class="value"  title="{{tooltips.run.value}}" value="{{data.run.value}}">
         </div>
 
         <div class="soak">
-            <h3>Soak: </h3>
+            <h3>{{localize "PILLARS.Soak"}}: </h3>
             <input type="number" disabled class="value" title="{{tooltips.soak.base}}" value="{{data.soak.base}}">
             {{#if items.equipped.shields.length}}
             <div class="soak-group">
@@ -38,10 +38,10 @@
     <div class="defence-items">
         <ol class="items-list armor">
             <li class="items-header flexrow">
-                <h3 class="item-name flexrow">Armor</h3>
-                <span class="item-property-column">Soak</span>
-                <span class="item-property-column">Winded</span>
-                <span class="item-property-column">Init</span>
+                <h3 class="item-name flexrow">{{localize "PILLARS.Armor"}}</h3>
+                <span class="item-property-column">{{localize "PILLARS.Soak"}}</span>
+                <span class="item-property-column">{{localize "PILLARS.Winded"}}</span>
+                <span class="item-property-column">{{localize "PILLARS.Init"}}</span>
                 <div class="item-controls"></div>
             </li>
     
@@ -76,11 +76,11 @@
     
         <ol class="items-list shield">
             <li class="items-header flexrow">
-                <h3 class="item-name flexrow">Shield</h3>
-                <span class="item-property-column">Deflection</span>
-                <span class="item-property-column">Soak</span>
-                <span class="item-property-column">Winded</span>
-                <span class="item-property-column">Health</span>
+                <h3 class="item-name flexrow">{{localize "PILLARS.Shield"}}</h3>
+                <span class="item-property-column">{{localize "PILLARS.Deflection"}}</span>
+                <span class="item-property-column">{{localize "PILLARS.Soak"}}</span>
+                <span class="item-property-column">{{localize "PILLARS.Winded"}}</span>
+                <span class="item-property-column">{{localize "PILLARS.Health"}}</span>
                 <div class="item-controls"></div>
             </li>
     
@@ -125,12 +125,12 @@
     {{#if items.equipped.meleeWeapons.length}}
     <ol class="items-list">
         <li class="items-header flexrow">
-            <h3 class="item-name flexrow">Melee Weapons</h3>
-            <span class="item-property-column">Skill</span>
-            <span class="item-property-column">Misc</span>
-            <span class="item-property-column">Accuracy</span>
+            <h3 class="item-name flexrow">{{localize "PILLARS.MeleeWeapons"}}</h3>
+            <span class="item-property-column">{{localize "PILLARS.Skill"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Misc"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Accuracy"}}</span>
             <!-- <span class="item-property-column">Dmg</span> -->
-            <span class="item-property-column flex">Special</span>
+            <span class="item-property-column flex">{{localize "PILLARS.Special"}}</span>
             <div class="item-controls"></div>
         </li>
 
@@ -170,13 +170,13 @@
     {{#if items.equipped.rangedWeapons.length}}
     <ol class="items-list">
         <li class="items-header flexrow">
-            <h3 class="item-name flexrow">Ranged Weapons</h3>
-            <span class="item-property-column">Skill</span>
-            <span class="item-property-column">Misc</span>
-            <span class="item-property-column">Accuracy</span>
+            <h3 class="item-name flexrow">{{localize "PILLARS.RangedWeapons"}}</h3>
+            <span class="item-property-column">{{localize "PILLARS.Skill"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Misc"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Accuracy"}}</span>
             <!-- <span class="item-property-column">Dmg</span> -->
-            <span class="item-property-column">Range</span>
-            <span class="item-property-column flex">Special</span>
+            <span class="item-property-column">{{localize "PILLARS.Range"}}</span>
+            <span class="item-property-column flex">{{localize "PILLARS.Special"}}</span>
             <div class="item-controls"></div>
         </li>
 
