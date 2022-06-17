@@ -8,6 +8,7 @@
     "file-loader": "^6.2.0",
     "fs-extra": "^10.1.0",
     "gulp": "^4.0.2",
+    "gulp-esbuild": "^0.10.3",
     "gulp-sass": "^5.1.0",
     "gulp-watch": "^5.0.1",
     "js-loader": "^0.1.1",
@@ -119,9 +120,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:code": "node esbuild.config.js",
     "build:css": "gulp sass",
-    "build:watch": "gulp watch",
+    "watch": "gulp watch",
     "build:system": "gulp system",
-    "build": "npm run build:css && npm run build:system && npm run build:code"
+    "build": "gulp build"
   },
   "keywords": [],
   "author": "",
