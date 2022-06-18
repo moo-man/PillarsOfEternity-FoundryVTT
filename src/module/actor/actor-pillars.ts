@@ -115,9 +115,9 @@ export class PillarsActor extends Actor {
     this.data.flags.tooltips.defenses.fortitude.push(game.i18n.format("PILLARS.Tooltip", {value :  data.defenses.fortitude.base, source : game.i18n.localize("PILLARS.TooltipBase")}));
     this.data.flags.tooltips.defenses.will.push(game.i18n.format("PILLARS.Tooltip", {value :  data.defenses.will.base, source : game.i18n.localize("PILLARS.TooltipBase")}));
 
-    this.data.flags.tooltips.defenses.deflection.push(game.i18n.format("PILLARS.SizeToolTip", {value : -data.size.value * 2, source : game.i18n.localize("PILLARS.TooltipSize")}));
-    this.data.flags.tooltips.defenses.reflex.push(game.i18n.format("PILLARS.SizeToolTip", {value : -data.size.value * 2, source : game.i18n.localize("PILLARS.TooltipSize")}));
-    this.data.flags.tooltips.defenses.fortitude.push(game.i18n.format("PILLARS.SizeToolTip", {value : data.size.value * 2, source : game.i18n.localize("PILLARS.TooltipSize")}));
+    this.data.flags.tooltips.defenses.deflection.push(game.i18n.format("PILLARS.Tooltip", {value : -data.size.value * 2, source : game.i18n.localize("PILLARS.TooltipSize")}));
+    this.data.flags.tooltips.defenses.reflex.push(game.i18n.format("PILLARS.Tooltip", {value : -data.size.value * 2, source : game.i18n.localize("PILLARS.TooltipSize")}));
+    this.data.flags.tooltips.defenses.fortitude.push(game.i18n.format("PILLARS.Tooltip", {value : data.size.value * 2, source : game.i18n.localize("PILLARS.TooltipSize")}));
   }
 
   prepareBaseData() {

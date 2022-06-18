@@ -412,7 +412,7 @@ export class PillarsItem extends Item {
       return new Promise((resolve) => {
         new Dialog({
           title: game.i18n.localize("PILLARS.RemoveArcanePowers"),
-          content: game.i18n.format("PILLARS.RemoveArcanePowersPrompt", {powers : nonArcanaPowers.map((i) => `<li>${i.name}</li>`).join('')}),
+          content: game.i18n.format("PILLARS.PromptRemoveArcanePowers", {powers : nonArcanaPowers.map((i) => `<li>${i.name}</li>`).join('')}),
           buttons: {
             remove: {
               label: game.i18n.localize("PILLARS.Remove"),

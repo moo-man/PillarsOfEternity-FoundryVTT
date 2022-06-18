@@ -706,7 +706,7 @@ CONFIG.statusEffects = [
         'pillars-of-eternity': {
           changeCondition: {
             0: {
-              description: 'DisPILLARS.AdvantageInvolvingPhysicalActivity',
+              description: 'PILLARS.DisadvantageInvolvingPhysicalActivity',
               script: "if (data.skill && (data.skill.category.value :: 'physical' || data.skill.category.value :: 'martial')) return true",
             },
             1: { description: 'PILLARS.AfflictionDescription.FortitudeAttacksAdvantage', script: '' },
@@ -1060,7 +1060,7 @@ CONFIG.statusEffects = [
       flags: {
         'pillars-of-eternity': {
           changeCondition: {
-            1: { description: 'PILLARS.AfflictionDescription.WillAttacksAdvadvantage', script: 'return data.item.isVsWill' },
+            1: { description: 'PILLARS.AfflictionDescription.WillAttacksAdvantage', script: 'return data.item.isVsWill' },
           },
         },
       },
@@ -1078,7 +1078,7 @@ CONFIG.statusEffects = [
         'pillars-of-eternity': {
           changeCondition: {
             1: { description: 'PILLARS.AfflictionDescription.AttacksWithinSightOfFear', script: '' },
-            2: { description: 'PILLARS.AfflictionDescription.WillAttacksAdvadvantage', script: 'return data.item.isVsWill' },
+            2: { description: 'PILLARS.AfflictionDescription.WillAttacksAdvantage', script: 'return data.item.isVsWill' },
           },
         },
       },
@@ -1096,7 +1096,7 @@ CONFIG.statusEffects = [
         'pillars-of-eternity': {
           changeCondition: {
             1: { description: 'PILLARS.AfflictionDescription.AttacksWithinSightOfFear', script: '' },
-            2: { description: 'PILLARS.AfflictionDescription.WillAttacksAdvadvantage', script: 'return data.item.isVsWill' },
+            2: { description: 'PILLARS.AfflictionDescription.WillAttacksAdvantage', script: 'return data.item.isVsWill' },
           },
         },
       },
@@ -1123,7 +1123,7 @@ CONFIG.statusEffects = [
         'pillars-of-eternity': {
           changeCondition: {
             0: { description: 'PILLARS.AfflictionDescription.BonusStepOncePerRound', script: '' },
-            1: { description: 'PILLARS.AfflictionDescription.WillAttacksAdvadvantage', script: 'return data.item.isVsWill' },
+            1: { description: 'PILLARS.AfflictionDescription.WillAttacksDisadvantage', script: 'return data.item.isVsWill' },
           },
         },
       },

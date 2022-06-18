@@ -793,7 +793,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     new Dialog({
       title: game.i18n.localize("PILLARS.ChangeConnection"),
       content: `
-            <p>${game.i18n.localize("PILLARS.PromptConnectionNanme")}</p>
+            <p>${game.i18n.localize("PILLARS.PromptConnectionName")}</p>
             <div class="form-group">
             <input type="text" name="connection" value=${connections[index]!.name}>
             </div>
@@ -956,7 +956,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
     let item = this.actor.items.get(itemId!);
     let skill = this.actor.items.getName(item?.skill?.value || "");
-    if (!skill) return ui.notifications!.warn(getGame().i18n.format("PILLARS.ErrorSKillNotFound", {name : item?.skill?.value}))
+    if (!skill) return ui.notifications!.warn(getGame().i18n.format("PILLARS.ErrorSkillNotFound", {name : item?.skill?.value}))
     let check = await this.actor.setupSkillCheck(skill);
     await check.rollCheck();
     check.sendToChat();
