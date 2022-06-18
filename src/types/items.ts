@@ -22,3 +22,8 @@ export interface WeaponSpecialData
     skilled: boolean,
     value? : string
 }
+
+export interface BondTrait {
+    name : string,
+    description: string
+}

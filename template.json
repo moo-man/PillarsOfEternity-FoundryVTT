@@ -214,7 +214,8 @@
             "stock",
             "godlike",
             "reputation",
-            "injury"
+            "injury",
+            "bond"
         ],
         "templates": {
             "category": {
@@ -587,6 +588,16 @@
         "templates" : [
             "description"
         ]
+    },
+    "bond" : {
+        "templates" : [
+            "description",
+            "xp"
+        ],
+        "partner" : "",
+        "traits" : {
+
+        }
     }
 }
 }

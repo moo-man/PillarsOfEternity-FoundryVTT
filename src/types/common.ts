@@ -1,4 +1,4 @@
-import { Category, Equipped, Physical, Used } from '../global';
+import { Category, Equipped, Physical, Used, XP } from '../global';
 import { PILLARS } from '../module/system/config';
 import { EmbeddedPower } from './powers';
 
@@ -28,6 +28,7 @@ export enum ItemType {
   godlike = 'godlike',
   reputation = 'reputation',
   injury = 'injury',
+  bond = 'bond',
 }
 
 export enum Tier {
@@ -97,6 +98,12 @@ interface CategoryItem {
   }
 }
 
+
+interface UsableItem {
+  data : Useable
+}
+
+
 interface EquippableItem {
   data : EquippableData
 }
@@ -108,6 +115,12 @@ interface EquippableData {
 interface PhysicalItem {
   data : {
     data : Physical
+  }
+}
+
+interface XPItem {
+  data : {
+    data : XP & {modifier : {value : number}}
   }
 }
 
@@ -133,7 +146,11 @@ export interface Time {
 }
 
 export function isUsable(item: any): item is Useable {
-  return true;
+  return item.data.used
+}
+
+export function isUsableItem(item: any): item is UsableItem {
+  return item.data.data.used
 }
 
 export function hasEmbeddedPowers(item: any): item is EmbeddedPowersItem {
@@ -157,4 +174,9 @@ export function isEquippableData(item : any) : item is EquippableData
 export function isPhysical(item : any) : item is PhysicalItem
 {
   return item.data.data.weight != undefined && item.data.data.quantiy != undefined && item.data.data.cost != undefined
+}
+
+export function hasXP(item : any) : item is XPItem
+{
+  return item.data.data.xp
 }

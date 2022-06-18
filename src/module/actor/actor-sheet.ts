@@ -81,6 +81,7 @@ interface SheetItemData {
   settings: PillarsItem[];
   connections: PillarsItem[];
   reputations: PillarsItem[];
+  bonds : PillarsItem[];
 
   inventory: InventorySheetData;
 
@@ -327,6 +328,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     items.settings = sheetData.actor.getItemTypes(ItemType.setting);
     items.connections = sheetData.actor.getItemTypes(ItemType.connection);
     items.reputations = sheetData.actor.getItemTypes(ItemType.reputation);
+    items.bonds = sheetData.actor.getItemTypes(ItemType.bond);
 
     items.inventory = this.constructInventory(sheetData);
 

@@ -4,6 +4,7 @@ import {  PillarsItemSystemData } from '../../global';
 import { getGame } from '../../pillars';
 import { hasEmbeddedPowers, ItemType } from '../../types/common';
 import { EmbeddedPower, PowerBaseEffect, PowerDamage, PowerDuration, PowerHealing, PowerMisc, PowerRange, PowerSummon, PowerTarget } from '../../types/powers';
+import { PillarsActor } from '../actor/actor-pillars';
 import ItemSpecials from '../apps/item-specials';
 import PillarsActiveEffect from '../system/pillars-effect';
 import { PillarsItem } from './item-pillars';
@@ -12,7 +13,8 @@ interface PillarsItemSheetData extends Omit<ItemSheet.Data, 'data'> {
   data: PillarsItemSystemData;
   powerEffects : {conditions : ActiveEffectDataConstructorData[], item : PillarsActiveEffect[]}
   martialSkills : PillarsItem[],
-  allowEmbeddedPowers : boolean
+  allowEmbeddedPowers : boolean,
+  possibleBonds : PillarsActor[]
 }
 
 /**
@@ -64,6 +66,11 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     if (this.item.type == 'weapon') {
       data.martialSkills = getGame().items!.contents.filter((i) => i.type == 'skill' && i.category?.value == 'martial');
       if (this.item.isOwned) data.martialSkills = data.martialSkills.concat(this.item.actor!.getItemTypes(ItemType.skill).filter((i) => i.category?.value == 'martial'));
+    }
+
+    if (this.item.type == "bond")
+    {
+      data.possibleBonds = getGame().actors!.contents.filter((i) => (i.hasPlayerOwner || i.data.token.disposition > 0) && i.id != this.id);
     }
 
     if (hasEmbeddedPowers(this.item.data.type)) data.allowEmbeddedPowers = true;

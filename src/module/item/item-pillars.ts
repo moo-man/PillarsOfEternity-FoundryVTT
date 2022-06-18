@@ -3,7 +3,7 @@ import { ChatMessageDataConstructorData } from '@league-of-foundry-developers/fo
 import { ItemDataConstructorData, ItemDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
 import { PowerSource } from '../../global';
 import { getGame } from '../../pillars';
-import { DamageType, Defense, hasCategory, hasEmbeddedPowers, isEquippable, isPhysical, ItemType } from '../../types/common';
+import { DamageType, Defense, hasCategory, hasEmbeddedPowers, hasXP, isEquippable, isPhysical, isUsableItem, ItemType } from '../../types/common';
 import { ItemChatData,  WeaponSpecialData } from '../../types/items';
 import { PowerBaseEffect, PowerDamage, PowerDisplay, PowerDuration, PowerGroup, PowerGroups, PowerHealing, PowerMisc, PowerRange, PowersConstructorContext, PowerTarget } from '../../types/powers';
 import { PILLARS } from '../system/config';
@@ -33,6 +33,14 @@ export class PillarsItem extends Item {
     // Clamp the shield health to between max and 0
     if (this.type == 'shield' && hasProperty(updateData, 'data.health.current'))
       setProperty(updateData, 'data.health.current', Math.clamped(getProperty(updateData, 'data.health.current'), 0, this.health?.max || 0));
+
+    if (this.data.type == "bond" && hasProperty(updateData, "data.partner"))
+    {
+      let id = getProperty(updateData, "data.partner")
+      let actor = getGame().actors?.get(id);
+      if (actor)
+        updateData.img = actor.data.token.img
+    }
 
     // Convenience feature to set the power source name to the same as the newly selected source
     if (this.type == 'powerSource' && hasProperty(updateData, 'data.source.value'))
@@ -184,6 +192,12 @@ export class PillarsItem extends Item {
 
   prepareOwnedConnection() {
     this.xp!.rank = PILLARS_UTILITY.getSkillRank(this.xp!.value) + (this.modifier?.value || 0);
+  }
+
+  prepareOwnedBond() {
+    this.xp!.rank = PILLARS_UTILITY.getSkillRank(this.xp!.value) + (this.modifier?.value || 0);
+    if (this.data.type == "bond")
+      this.data.active = this.xp!.value >= 15
   }
 
   prepareOwnedPowerSource() {
@@ -543,6 +557,13 @@ export class PillarsItem extends Item {
     if (this.soak && this.health) return Math.min(this.soak.value || 0, this.health.current || 0);
   }
 
+  get Bond() {
+    if (this.data.type == "bond" && this.partner)
+    {
+      return getGame().actors!.get(this.partner);
+    }
+  }
+
   displayGroupKey(type?: keyof PowerGroup): string | undefined {
     try {
       if (this.data.type == 'power') {
@@ -632,10 +653,10 @@ export class PillarsItem extends Item {
     if (hasCategory(this)) return this.data.data.category;
   }
   get xp() {
-    if (this.data.type == 'skill' || this.data.type == 'powerSource' || this.data.type == 'connection' || this.data.type == 'reputation') return this.data.data.xp;
+    if (hasXP(this)) return this.data.data.xp;
   }
   get used() {
-    if (this.data.type == 'shield' || this.data.type == 'skill' || this.data.type == 'trait') return this.data.data.used;
+    if (isUsableItem(this)) return this.data.data.used;
   }
   get equipped() {
     if (isEquippable(this)) return this.data.data.equipped;
@@ -701,7 +722,7 @@ export class PillarsItem extends Item {
     if (this.data.type == 'weapon') return this.data.data.special;
   }
   get modifier() {
-    if (this.data.type == 'reputation' || this.data.type == 'connection' || this.data.type == 'skill') return this.data.data.modifier;
+    if (hasXP(this)) return this.data.data.modifier;
   }
   get setting() {
     if (this.data.type == 'background') return this.data.data.setting;
@@ -762,6 +783,9 @@ export class PillarsItem extends Item {
   }
   get specialization() {
     if (this.data.type == 'skill') return this.data.data.specialization;
+  }
+  get partner() {
+    if (this.data.type == "bond") return this.data.data.partner
   }
 
   // Processed data getters

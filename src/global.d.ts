@@ -13,7 +13,7 @@ import {
   PowerSummon,
   PowerTarget,
 } from './types/powers';
-import { WeaponSpecial } from './types/items';
+import { BondTrait, WeaponSpecial } from './types/items';
 import { PILLARS } from "./module/system/config";
 import DamageDialog from './module/apps/damage-dialog';
 import SkillCheck from './module/system/skill-check';
@@ -638,6 +638,20 @@ export interface InjurySource {
 
 export interface InjurySourceData extends Description {}
 
+export interface BondSource {
+  type: 'bond';
+  data: BondSourceData;
+  active : boolean // NOTE: Does not exist on source, actually exists only on prepared data
+}
+
+export interface BondSourceData extends Description, XP {
+  traits : BondTrait[]
+  partner : string
+  modifier : {
+    value : number
+  }
+}
+
 type PillarsItemDataSource =
  | AttributeSource
  | SkillSource
@@ -657,6 +671,7 @@ type PillarsItemDataSource =
  | GodlikeSource
  | ReputationSource
  | InjurySource
+ | BondSource
 
 export type PillarsItemSystemData  =
 AttributeSourceData |
@@ -676,7 +691,8 @@ SpeciesSourceData |
 StockSourceData |
 GodlikeSourceData |
 ReputationSourceData |
-InjurySourceData
+InjurySourceData |
+BondSourceData
 
 //#endregion
 
