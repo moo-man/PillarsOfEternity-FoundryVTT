@@ -2,9 +2,9 @@
     {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.Type physical=false}}
 
     <nav class="sheet-tabs tabs">
-      <a class="item" data-tab="details">{{localize "Details"}}</a>
-      <a class="item" data-tab="effects">{{localize "Effects"}}</a>
-        <a class="item" data-tab="powers">{{localize "Powers"}}</a>
+      <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+      <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+        <a class="item" data-tab="powers">{{localize "PILLARS.Powers"}}</a>
     </nav>
 
     <section class="content">
@@ -13,7 +13,7 @@
         <div class="tab details active" data-tab="details">
 
             <div class="form-group">
-                <label>Type</label>
+                <label>{{localize "PILLARS.Type"}}</label>
                 <select name="data.category.value">
                     {{#select data.category.value}}
                     {{#each (config "attributeTypes") as |type t|}}

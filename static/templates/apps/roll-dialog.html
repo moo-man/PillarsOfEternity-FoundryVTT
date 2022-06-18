@@ -1,12 +1,12 @@
 <div class="dialog-fields">
     <div class="form-group">
-        <label>Modifier</label>
+        <label>{{localize "PILLARS.Modifier"}}</label>
         <div class="form-fields">
             <input tabindex="1" type="text" name="modifier" value="{{modifier}}">
         </div>
     </div>
     <div class="form-group steps">
-        <label>Steps</label>
+        <label>{{localize "PILLARS.Steps"}}</label>
         <div class="form-fields">
             <!-- <input type="number" name="steps" value="{{steps}}"> -->
             <select name="steps" value="{{steps}}">
@@ -26,13 +26,13 @@
         </div>
     </div>
     <div class="form-group">
-        <label>Proxy</label>
+        <label>{{localize "PILLARS.Proxy"}}</label>
         <div class="form-fields">
             <input type="checkbox" name="proxy" {{#unless hasRank}}disabled{{/unless}}>
         </div>
     </div>
     <div class="form-group">
-        <label>Assistance</label>
+        <label>{{localize "PILLARS.Assistance"}}</label>
         <div class="form-fields">
             <select name="assistance">
                 <option value="">-</option>
@@ -45,20 +45,20 @@
     </div>
     <div class="form-group advantage-disadvantage">
         <div>
-            <label>Advantaged</label>
+            <label>{{localize "PILLARS.Advantaged"}}</label>
             <input type="radio" id="state-adv" name="state" value="adv" {{checked state.adv}} />
         </div>
         <div>
-            <label>Normal</label>
+            <label>{{localize "PILLARS.Normal"}}</label>
             <input type="radio" id="state-normal" name="state" value="normal" {{checked state.normal}} />
         </div>
         <div>
-            <label>Disadvantaged</label>
+            <label>{{localize "PILLARS.Disadvantaged"}}</label>
             <input type="radio" id="state-dis" name="state" value="dis" {{checked state.dis}} />
         </div>
     </div>
     <div class="form-group">
-        <label>Roll Mode</label>
+        <label>{{localize "PILLARS.RollMode"}}</label>
         <div class="form-fields">
             <select name="rollMode">
                 {{#select rollMode}}

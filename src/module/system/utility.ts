@@ -42,7 +42,7 @@ export default class PILLARS_UTILITY {
                 else if (speaker.token && speaker.scene)
                 return getGame().scenes!.get(speaker.scene)?.tokens.get(speaker.token)?.actor!
                 else
-                throw "Could not find speaker"
+                throw getGame().i18n.localize("PILLARS.ErrorCannotFindSpeaker")
             }
             catch (e : unknown) {
                 throw new Error(e as string)

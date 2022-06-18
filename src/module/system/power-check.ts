@@ -1,3 +1,4 @@
+import { getGame } from "../../pillars"
 import { PowerCheckData, PowerCheckDataFlattened } from "../../types/checks"
 import { ItemType } from "../../types/common"
 import { PillarsItem } from "../item/item-pillars"
@@ -67,7 +68,7 @@ export default class PowerCheck extends SkillCheck
 
             if (this.power.data.type == "power")
             {
-                let {damage, effects} = (this.power.data.groups[rangeGroup] || this.power.data.groups["Default"])!
+                let {damage, effects} = (this.power.data.groups[rangeGroup] || this.power.data.groups[getGame().i18n.localize("Default")])!
                 
                 let allEffects = this._toEffectObjects(effects);
                 
@@ -83,6 +84,7 @@ export default class PowerCheck extends SkillCheck
 
         // Show the dialog to select which equipped weapon to apply this power to
         async weaponSelectDialog() {
+            let game = getGame()
             let weapons = this.actor.getItemTypes(ItemType.weapon).filter(w => w.equipped?.value);
             let html = `<select>`
             weapons.forEach(w => {
@@ -91,11 +93,11 @@ export default class PowerCheck extends SkillCheck
             html += `</select>`
             return new Promise(resolve => {
                 new Dialog({
-                    title : "Select a Weapon",
+                    title : game.i18n.localize("PILLARS.PromptSelectWeapon"),
                     content : html,
                     buttons : {
                         apply : {
-                            label : "Apply",
+                            label : game.i18n.localize("PILLARs.Apply"),
                             callback : (dlg) => {resolve($(dlg).find("select")[0]?.value)}
                         }
                     }
@@ -112,7 +114,7 @@ export default class PowerCheck extends SkillCheck
             let item =  this.actor.items.get(this.checkData?.itemId || "")
             if (item)
                 return item
-            else throw new Error("Cannot find item in Check object")
+            else throw new Error(getGame().i18n.localize("PILLARS.ErrorCannotFindCheckItem"));
         }
 
         get power() {
@@ -131,6 +133,6 @@ export default class PowerCheck extends SkillCheck
             let item =  this.actor.items.get(this.checkData?.sourceId || "")
             if (item)
                 return item
-            else throw new Error("Cannot find item in Check object")
+            else throw new Error(getGame().i18n.localize("PILLARS.ErrorCannotFindCheckItem"))
         }
 }

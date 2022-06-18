@@ -1,3 +1,4 @@
+import { getGame } from "../../pillars"
 import { WeaponCheckDataFlattened, WeaponCheckData } from "../../types/checks"
 import SkillCheck from "./skill-check"
 
@@ -19,7 +20,7 @@ export default class WeaponCheck extends SkillCheck
             let item =  this.actor.items.get(this.checkData?.itemId || "")
             if (item)
                 return item
-            else throw new Error("Cannot find item in Check object")
+            else throw new Error(getGame().i18n.localize("PILLARS.ErrorCannotFindCheckItem"))
         }
 
         get weapon() {

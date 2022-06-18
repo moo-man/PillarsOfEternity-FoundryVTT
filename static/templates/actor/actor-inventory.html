@@ -1,13 +1,13 @@
 <div class="gear-header">
     <div class="wealth">
-        <h3>Wealth:</h3>
+        <h3>{{localize "PILLARS.Wealth"}}:</h3>
         <input type="text" name="data.wealth.cp" value={{data.wealth.cp}}>
-        <h3>cp</h3>
+        <h3>{{localize "PILLARS.CP"}}</h3>
     </div>
     <div class="weight">
-        <h3>Weight:</h3>
+        <h3>{{localize "PILLARS.Weight"}}:</h3>
         <input disabled type="text" value={{actor.data.weight}}>
-        <h3>ibs</h3>
+        <h3>{{localize "PILLARS.IBS"}}</h3>
     </div>
 </div>
 <div class="inventory-lists">
@@ -16,12 +16,12 @@
         <li class="items-header flexrow">
             <h3 class="item-name flexrow">{{section.label}}</h3>
             {{#if (eq s "tools")}}
-            <span class="item-property-column large">Skill</span>
+            <span class="item-property-column large">{{localize "PILLARS.Skill"}}</span>
             {{/if}}
 
-            <span class="item-property-column">Eqp.</span>
-            <span class="item-property-column">Qty.</span>
-            <span class="item-property-column">Wt.</span>
+            <span class="item-property-column">{{localize "PILLARS.Eqp"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Qty"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Wt"}}</span>
             <div class="item-controls">
                 <a class="item-control item-create" title="Create" data-type="{{section.type}}"><i class="fas fa-plus"></i></a>
             </div>

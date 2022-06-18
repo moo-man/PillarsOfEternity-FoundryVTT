@@ -1,4 +1,5 @@
 
+import { getGame } from "../../pillars";
 import EffectScriptConfig from "./effect-script"
 
 
@@ -10,10 +11,11 @@ export default class PillarsEffectConfig extends ActiveEffectConfig<ActiveEffect
 
     async getData()
     {
+        let game = getGame()
         let data = await super.getData();
         data.showEquip = this.object.item?.canEquip || false
-        data.modes[6] = "Roll Dialog"
-        data.modes[7] = "Targeter's Roll Dialog"
+        data.modes[6] = game.i18n.localize("PILLARS.RollDialogEffect")
+        data.modes[7] = game.i18n.localize("PILLARS.TargetersRollDialogEffect")
         return data
     }   
 

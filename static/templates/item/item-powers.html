@@ -1,7 +1,7 @@
 <div class="tab powers active" data-tab="powers">
   {{#unless (eq data.category.value "grimoire")}}
   <div class="charges">
-    <label>Item Charges</label>
+    <label>{{localize "PILLARS.ItemCharges"}}</label>
     <input class="small" type="text" name="data.powerCharges.value" value="{{data.powerCharges.value}}"
       data-dtype="Number">
     <input class="small" type="text" name="data.powerCharges.max" value="{{data.powerCharges.max}}" data-dtype="Number">
@@ -17,7 +17,7 @@
   {{/unless}}
   <ol class="items-list">
     <li class="items-header flexrow">
-      <h3 class="item-name flexrow">Powers</h3>
+      <h3 class="item-name flexrow">{{localize "PILLARS.Powers"}}</h3>
       {{#unless (eq data.category.value "grimoire")}}
       <span class="item-property-column flex">Type</span>
       {{/unless}}

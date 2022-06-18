@@ -1,6 +1,7 @@
 import { DocumentModificationOptions } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs"
 import EmbeddedCollection from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs"
 import { CombatData, CombatDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/combatData"
+import { getGame } from "../../pillars"
 import { PillarsCombatant } from "./combatant"
 
 export class PillarsCombat extends Combat {
@@ -61,7 +62,7 @@ export class PillarsCombat extends Combat {
     }
 
     get Phase() {
-        return this.phase == 0 ? "Move" : "Action"
+        return getGame().i18n.localize(this.phase == 0 ? "PILLARS.Move" : "PILLARS.Action")
     }
 }
 

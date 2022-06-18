@@ -301,7 +301,7 @@ export class PillarsItem extends Item {
           let text = `${current.base} ${config.damageTypes[<DamageType>current.type]} @DAMAGES vs. ${config.defenses[<Defense>current.defense]}` + ' ';
           if (current.label) text += ' ' + current.label;
 
-          if (current.type == 'endurance') text = text.replace('@DAMAGES', '(Endurance)');
+          if (current.type == 'endurance') text = text.replace('@DAMAGES', `(${getGame().i18n.localize("PILLARS.Endurance")})`);
           else text = text.replace('@DAMAGES', '');
 
           prev.push(text);
@@ -352,7 +352,7 @@ export class PillarsItem extends Item {
       if (Object.keys(groups).length == 1 && groups['']) groups['Default'] = groups[''];
       delete groups[''];
     } catch (e) {
-      console.error(`Something went wrong when organizing power groups for ${this.name}: ` + e);
+      console.error(getGame().i18n.format("PILLARS.ErrorOrganizingPowerGroups", {name : this.name}) + ": " + e);
       console.log(this);
     }
     return groups;
@@ -389,7 +389,7 @@ export class PillarsItem extends Item {
         this.data.data.pl = pl;
         level = PillarsItem._abstractToLevel(pl) + (this.level?.modifier || 0);
       } catch (e) {
-        console.log(`Could not calculate PL for ${this.name}: ${e}`);
+        console.log(getGame().i18n.format("PILLARS.ErrorPLCalculation", {name : this.name}) + ": " +  e);
       }
     }
     return level;
@@ -406,15 +406,16 @@ export class PillarsItem extends Item {
   async _checkGrimoirePowers() {
     let powers = duplicate(this.powers || []);
 
+    let game = getGame();
     let nonArcanaPowers = powers.filter((i) => i.data.source.value != 'arcana');
     if (nonArcanaPowers.length)
       return new Promise((resolve) => {
         new Dialog({
-          title: 'Remove Non-Arcana Powers',
-          content: `Grimoires must only include Arcana powers. The following must be removed. <br> <ul>${nonArcanaPowers.map((i) => `<li>${i.name}</li>`).join('')}</ul>`,
+          title: game.i18n.localize("PILLARS.RemoveArcanePowers"),
+          content: game.i18n.format("PILLARS.PromptRemoveArcanePowers", {powers : nonArcanaPowers.map((i) => `<li>${i.name}</li>`).join('')}),
           buttons: {
             remove: {
-              label: 'Remove',
+              label: game.i18n.localize("PILLARS.Remove"),
               callback: async () => {
                 let arcanaPowers = powers.filter((i) => i.data.source.value == 'arcana');
                 arcanaPowers.forEach((p) => {
@@ -425,7 +426,7 @@ export class PillarsItem extends Item {
               },
             },
             cancel: {
-              label: 'Cancel',
+              label: game.i18n.localize('Cancel'),
               callback: () => {
                 resolve(false);
               },
@@ -470,12 +471,12 @@ export class PillarsItem extends Item {
   }
 
   get Range() {
-    return getGame().pillars.config.powerRanges[this.range?.find((i) => (i.group || 'Default') == this.displayGroupKey('range'))?.value! as keyof typeof PILLARS.powerRanges];
+    return getGame().pillars.config.powerRanges[this.range?.find((i) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('range'))?.value! as keyof typeof PILLARS.powerRanges];
   }
 
   get Target() {
     try {
-      let targetObj = this.target?.find((i) => (i.group || 'Default') == this.displayGroupKey('target'));
+      let targetObj = this.target?.find((i) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('target'));
       if (!targetObj) return;
       let targetSubTypes = getGame().pillars.config[`power${targetObj!.value[0]!.toUpperCase() + targetObj.value.slice(1)}s` as keyof typeof PILLARS];
       let target = targetSubTypes[targetObj.subtype as keyof typeof targetSubTypes] as string;
@@ -483,17 +484,17 @@ export class PillarsItem extends Item {
 
       return target;
     } catch (e) {
-      console.error('Error when getting target');
+      console.error(getGame().i18n.localize("PILLARS.ErrorGettingPowerTarget"))
     }
   }
   get Duration() {
-    return getGame().pillars.config.powerDurations[this.duration?.find((i) => (i.group || 'Default') == this.displayGroupKey('duration'))?.value as keyof typeof PILLARS.powerDurations];
+    return getGame().pillars.config.powerDurations[this.duration?.find((i) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('duration'))?.value as keyof typeof PILLARS.powerDurations];
   }
   get Speed() {
     return getGame().pillars.config.powerSpeeds[this.speed?.value as keyof typeof PILLARS.powerSpeeds];
   }
   get Exclusion() {
-    return getGame().pillars.config.powerExclusions[this.target?.find((i) => (i.group || 'Default') == this.displayGroupKey('target'))?.exclusion as keyof typeof PILLARS.powerExclusions];
+    return getGame().pillars.config.powerExclusions[this.target?.find((i) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('target'))?.exclusion as keyof typeof PILLARS.powerExclusions];
   }
   get Skill() {
     return this.actor?.getItemTypes(ItemType.skill).find((i) => i.name == this.skill?.value);
@@ -527,8 +528,9 @@ export class PillarsItem extends Item {
 
   get EmbeddedDisplay() {
     let string = '';
+    let game = getGame()
     if (this.embedded) {
-      if (['encounter', 'longRest'].includes(this.embedded.spendType)) string += `${this.embedded.uses.value}/${this.embedded.uses.max} ${this.embedded.spendType == 'encounter' ? 'E' : 'LR'}`;
+      if (['encounter', 'longRest'].includes(this.embedded.spendType)) string += `${this.embedded.uses.value}/${this.embedded.uses.max} ${this.embedded.spendType == 'encounter' ? game.i18n.localize("PILLARS.EncounterAbbreviation") : game.i18n.localize("PILLARS.LongRestAbbreviation")}`;
       else if (this.embedded.spendType == 'charges') string += `${this.EmbeddedPowerParent?.powerCharges?.value}/${this.EmbeddedPowerParent?.powerCharges?.max}`;
       else if (this.embedded.spendType == 'source') {
         string += getGame().pillars.config.powerSources[this.source?.value as keyof typeof PILLARS.powerSources];
@@ -561,7 +563,7 @@ export class PillarsItem extends Item {
         }
       }
     } catch (e) {
-      console.error('Error getting power group display key: ' + e);
+      console.error(getGame().i18n.format("PILLARS.ErrorPowerGroupDisplayKey") + ": " + e);
       return '';
     }
     return '';
@@ -575,7 +577,7 @@ export class PillarsItem extends Item {
         return group;
       }
     } catch (e) {
-      console.error('Error when trying to get current display group');
+      console.error(getGame().i18n.format("PILLARS.ErrorCurrentPowerGroupDisplayKey") + ": " + e);
     }
   }
 

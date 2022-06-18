@@ -14,8 +14,8 @@ export default function () {
         });
         
         game.settings.register("pillars-of-eternity", "playerApplyDamage", {
-            name: "Players can apply damage",
-            hint : "Allow players to apply damage to actors they don't have permission to update normally.",
+            name: "PILLARS.SettingAllowPlayersApplyDamage",
+            hint: "PILLARS.SettingHintAllowPlayersApplyDamage",
             scope: "world",
             config: true,
             type: Boolean,
@@ -23,16 +23,15 @@ export default function () {
         });
 
         game.settings.register("pillars-of-eternity", "season", {
-            name: "Season",
-            hint : "Current Year and Season",
+            name: "PILLARS.SettingSeason",
+            hint: "PILLARS.SettingHintSeason",
             scope: "world",
             config: false,
             default: { season: 1, year: 2830}
         });
 
         game.settings.register("pillars-of-eternity", "seasonPosition", {
-            name: "Season Position",
-            hint : "",
+            name: "PILLARS.SettingSeasonPosition",
             scope: "client",
             config: false,
             default: { left: 200, top: 1000}

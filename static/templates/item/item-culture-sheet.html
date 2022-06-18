@@ -2,9 +2,9 @@
     {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.Type physical=false}}
 
     <nav class="sheet-tabs tabs">
-        <a class="item active" data-tab="description">{{localize "Description"}}</a>
-        <a class="item" data-tab="details">{{localize "Details"}}</a>
-        <a class="item" data-tab="effects">{{localize "Effects"}}</a>
+        <a class="item active" data-tab="description">{{localize "PILLARS.Description"}}</a>
+        <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
     </nav>
 
     <section class="content">
@@ -14,20 +14,20 @@
         <div class="tab details active" data-tab="details"> 
 
             <div class="form-group">
-                <label>Native Language</label>
+                <label>{{localize "PILLARS.NativeLanguage"}}</label>
                 <div class="form-fields">
                     <input type="text" name="data.languages.native" value="{{data.languages.native}}" data-dtype="String">
                 </div>
             </div>
             <div class="form-group">
-                <label>Local Languages</label>
+                <label>{{localize "PILLARS.LocalLanguages"}}</label>
                 <div class="form-fields">
                     <input type="text" name="data.languages.local" value="{{data.languages.local}}" data-dtype="String">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Cultural Skills</label>
+                <label>{{localize "PILLARS.CulturalSkills"}}</label>
                 <div class="form-fields">
                     <input type="text" name="data.skills.value" value="{{data.skills.value}}" data-dtype="String">
                 </div>

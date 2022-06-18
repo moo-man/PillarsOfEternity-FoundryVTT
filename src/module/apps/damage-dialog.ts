@@ -1,4 +1,5 @@
 import { TokenDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData";
+import { getGame } from "../../pillars";
 import { DialogDamage } from "../../types/checks";
 import { Defense } from "../../types/common";
 import { PillarsItem } from "../item/item-pillars";
@@ -42,7 +43,7 @@ export default class DamageDialog extends Application
         return mergeObject(super.defaultOptions, {
             id: "damage-dialog",
             classes : ["pillars-of-eternity"],
-            title : "Damage",
+            title : getGame().i18n.localize("PILLARS.Damage"),
             //height: "auto",
             resizable: true,
             width: 500,
@@ -144,7 +145,7 @@ export default class DamageDialog extends Application
         }
         catch(e)
         {
-            console.log(`Could not set target data for damage : ${e}`)
+            console.log(getGame().i18n.localize("PILLARS.ErrorSetTargetDamage") + ": " + e)
         }
 
     }

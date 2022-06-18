@@ -1,3 +1,4 @@
+import { getGame } from "../../pillars"
 import { PillarsActor } from "../actor/actor-pillars"
 
 export default class ActorConfigure extends FormApplication<any, any, PillarsActor>
@@ -5,7 +6,7 @@ export default class ActorConfigure extends FormApplication<any, any, PillarsAct
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
             id: "actor-configure",
-            title : "Actor Configuration",
+            title : getGame().i18n.localize("PILLARS.ActorConfiguration"),
             template : "systems/pillars-of-eternity/templates/apps/actor-configure.html",
             width:420
         })

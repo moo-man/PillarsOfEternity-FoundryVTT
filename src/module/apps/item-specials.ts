@@ -1,3 +1,4 @@
+import { getGame } from "../../pillars";
 import { WeaponSpecialData } from "../../types/items";
 import { PillarsItem } from "../item/item-pillars";
 
@@ -11,7 +12,7 @@ export default class ItemSpecials extends FormApplication<FormApplicationOptions
             template : "systems/pillars-of-eternity/templates/apps/item-specials.html",
             height : "auto",
             width : "auto",
-            title : "Item Specials"
+            title : getGame().i18n.localize("PILLARS.ItemSpecials")
             
         })
     }

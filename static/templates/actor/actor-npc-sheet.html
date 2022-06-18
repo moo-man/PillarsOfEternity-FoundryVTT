@@ -13,7 +13,7 @@
         </div>
         <section class="defenses">
             <div class="property-group">
-                <label>Def</label>
+                <label>{{localize "PILLARS.Def"}}</label>
                 <div class="property-value">
                     <input type="number" title="{{tooltips.defenses.deflection}}" class="defense-input" data-defense="deflection" value="{{data.defenses.deflection.value}}" />
                 </div>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="property-group">
-                <label>Fort</label>
+                <label>{{localize "PILLARS.Fort"}}</label>
                 <div class="property-value">
                     <input type="number" title="{{tooltips.defenses.fortitude}}" class="defense-input" data-defense="fortitude" value="{{data.defenses.fortitude.value}}" />
                 </div>
@@ -41,7 +41,7 @@
             </div>
 
             <div class="property-group">
-                <label>Ref</label>
+                <label>{{localize "PILLARS.Ref"}}</label>
                 <div class="property-value">
                     <input type="number" title="{{tooltips.defenses.reflex}}" class="defense-input" data-defense="reflex" value="{{data.defenses.reflex.value}}" />
                 </div>
@@ -55,7 +55,7 @@
             </div>
 
             <div class="property-group">
-                <label>Will</label>
+                <label>{{localize "PILLARS.Will"}}</label>
                 <div class="property-value">
                     <input type="number" title="{{tooltips.defenses.will}}" class="defense-input" data-defense="will" value="{{data.defenses.will.value}}" />
                 </div>
@@ -73,7 +73,7 @@
         <section class="status">
             <div class="health-endurance">
                 <div class="property-group {{#if actor.health.bloodied}}bloodied{{/if}}" >
-                    <label>Health</label>
+                    <label>{{localize "PILLARS.Health"}}</label>
                     <div class="status-array">
                         {{#each data.health.array as | value key| }}
                         {{#if (eq key ../data.health.threshold.bloodied)}}
@@ -95,7 +95,7 @@
                     </div>
                 </div>
                 <div class="property-group {{#if actor.endurance.winded}}winded{{/if}}">
-                    <label>Endurance</label>
+                    <label>{{localize "PILLARS.Endurance"}}</label>
                     <div class="status-array">
                         {{#each data.endurance.array as | value key| }}
                         {{#if (eq key ../data.endurance.threshold.winded)}}
@@ -116,13 +116,13 @@
             </div>
             <div class="toughness-di">
                     <div class="property-group small">
-                        <label>Tough.</label>
+                        <label>{{localize "PILLARS.ToughAbbrev"}}</label>
                         <div class="property-value">
                             <input type="number" title="{{tooltips.toughness.value}}" name="data.toughness.value" value="{{data.toughness.value}}" />
                         </div>
                     </div>
                     <div class="property-group small">
-                        <label>D.I.</label>
+                        <label>{{localize "PILLARS.DamageIncrementAbbrev"}}</label>
                         <div class="property-value">
                             <input type="number" title="{{tooltips.damageIncrement.value}}" name="data.damageIncrement.value" value="{{data.damageIncrement.value}}" />
                         </div>
@@ -134,7 +134,7 @@
             <div class="wounds">
                 <div class="wound-group">
                     <div class="wound-label">
-                        <label>Wounds:</label> {{data.health.wounds.value}} 
+                        <label>{{localize "PILLARS.Wounds"}}:</label> {{data.health.wounds.value}} 
                     </div>
                     <div class="wound-buttons">
                         <a class="subtract-wound"> <i class="far fa-minus-square"></i></a>
@@ -173,20 +173,20 @@
             <div class="combat-fields">
 
                 <div class="initiative">
-                    <h3>Initiative <a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a></h3>
+                    <h3>{{localize "PILLARS.Initiative"}} <a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a></h3>
                     <input type="number" class="value" title="{{tooltips.initiative.value}}" name="data.initiative.value" value="{{data.initiative.value}}" />
                 </div>
                 <div class="stride">
-                    <h3>Stride: </h3>
+                    <h3>{{localize "PILLARS.Stride"}}: </h3>
                     <input type="number" class="value" title="{{tooltips.stride.value}}" name="data.stride.value" value="{{data.stride.value}}">
                 </div>
                 <div class="run">
-                    <h3>Run: </h3>
+                    <h3>{{localize "PILLARS.Run"}}: </h3>
                     <input type="number" class="value"  title="{{tooltips.run.value}}" name="data.run.value" value="{{data.run.value}}">
                 </div>
         
                 <div class="soak">
-                    <h3>Soak: </h3>
+                    <h3>{{localize "PILLARS.Soak"}}: </h3>
                     <input type="number" class="value" title="{{tooltips.soak.base}}" name="data.soak.base" value="{{data.soak.base}}">
                     {{#if items.equipped.shields.length}}
                     <div class="soak-group">
@@ -242,11 +242,11 @@
         </div> -->
         <section class="tab-section">
             <nav class="sheet-tabs tabs">
-                <a  class="tab-select item active" data-tab="main">Main</a>
-                <a  class="tab-select item" data-tab="effects">Effects</a>
-                <a  class="tab-select item" data-tab="powers">Powers</a>
-                <a  class="tab-select item" data-tab="inventory">Inventory</a>
-                <a  class="tab-select item" data-tab="details">Details</a>
+                <a  class="tab-select item active" data-tab="main">{{localize "PILLARS.Main"}}</a>
+                <a  class="tab-select item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+                <a  class="tab-select item" data-tab="powers">{{localize "PILLARS.Powers"}}</a>
+                <a  class="tab-select item" data-tab="inventory">{{localize "PILLARS.Inventory"}}</a>
+                <a  class="tab-select item" data-tab="details">{{localize "PILLARS.Details"}}</a>
             </nav>
             <div class="tab-content">
                 <div class="tab main save-scroll" data-tab="main">

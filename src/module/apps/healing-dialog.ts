@@ -1,3 +1,4 @@
+import { getGame } from "../../pillars";
 import { DialogHealing } from "../../types/checks";
 import { PillarsItem } from "../item/item-pillars";
 import SkillCheck from "../system/skill-check";
@@ -32,7 +33,7 @@ export default class HealingDialog extends Application
         return mergeObject(super.defaultOptions, {
             id: "healing-dialog",
             classes : ["pillars-of-eternity"],
-            title : "Healing",
+            title : getGame().i18n.localize("PILLARS.Healing"),
             //height: "auto",
             resizable: true,
             width: 500,

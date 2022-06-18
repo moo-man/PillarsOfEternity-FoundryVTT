@@ -1,20 +1,20 @@
 <div class="detail-group">
-    <label>The Cause</label>
+    <label>{{localize "PILLARS.TheCause"}}</label>
     <input type="text" name="data.details.cause" value="{{data.details.cause}}">
 </div>
 
 <div class="detail-group">
-    <label>Call to the Cause</label>
+    <label>{{localize "PILLARS.CallToTheCause"}}</label>
     <input type="text" name="data.details.call" value="{{data.details.call}}">
 </div>
 
 <div class="detail-group">
-    <label>Personal Goal</label>
+    <label>{{localize "PILLARS.PersonalGoal"}}</label>
     <input type="text" name="data.details.goal" value="{{data.details.goal}}">
 </div>
 
 <div class="detail-group textbox">
-    <label>Relationships</label>
+    <label>{{localize "PILLARS.Relationships"}}</label>
     <textarea name="data.details.relationships">{{data.details.relationships}}</textarea>
 </div>
 <hr>
@@ -25,7 +25,7 @@
 <!-- childhood/background -->
 <div class="background">
     <div class="detail-group">
-        <label>Childhood: </label>
+        <label>{{localize "PILLARS.Childhood"}}: </label>
         <select name="data.childhood.value">
             {{#select data.childhood.value}}
             <option value=""></option>
@@ -35,7 +35,7 @@
             {{/select}}
         </select>
         <div class="settings">
-            <label>Settings: </label>
+            <label>{{localize "PILLARS.Settings"}}: </label>
             {{#each items.settings as |setting s|}}
             <a class="setting" data-item-id={{setting.id}}>{{setting.name}},</a>
             {{/each}}
@@ -43,9 +43,9 @@
     </div>
     <ol class="items-list">
         <li class="items-header flexrow">
-            <h3 class="item-name flexrow">Backgrounds</h3>
-            <span class="item-property-column flex">Setting</span>
-            <span class="item-property-column">Years</span>
+            <h3 class="item-name flexrow">{{localize "PILLARS.Backgrounds"}}</h3>
+            <span class="item-property-column flex">{{localize "PILLARS.Setting"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Years"}}</span>
             <div class="item-controls">
                 <a class="item-control item-create" title="Create" data-type="background"><i
                         class="fas fa-plus"></i></a>
@@ -106,10 +106,10 @@
 <div class="connection">
     <ol class="items-list">
         <li class="items-header flexrow">
-            <h3 class="item-name flexrow">Connection</h3>
-            <span class="item-property-column">XP</span>
-            <span class="item-property-column">Rank</span>
-            <span class="item-property-column">Mod</span>
+            <h3 class="item-name flexrow">{{localize "PILLARS.Connection"}}</h3>
+            <span class="item-property-column">{{localize "PILLARS.XP"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Rank"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Mod"}}</span>
             <div class="item-controls">
                 <a class="item-control item-create" title="Create" data-type="connection"><i
                         class="fas fa-plus"></i></a>
@@ -151,7 +151,7 @@
     </ol>
     <ol class="items-list">
         <li class="items-header flexrow">
-            <h3 class="item-name flexrow">Known Connection</h3>
+            <h3 class="item-name flexrow">{{localize "PILLARS.KnownConnection"}}</h3>
             <div class="item-controls">
                 <a class="item-control create-connection" title="Create"><i class="fas fa-plus"></i></a>
             </div>
@@ -184,11 +184,11 @@
 <div>
     <ol class="items-list">
         <li class="items-header flexrow">
-            <h3 class="item-name flexrow">Reputation</h3>
-            <span class="item-property-column flex">Group</span>
-            <span class="item-property-column">XP</span>
-            <span class="item-property-column">Rank</span>
-            <span class="item-property-column">Mod</span>
+            <h3 class="item-name flexrow">{{localize "PILLARS.Reputation"}}</h3>
+            <span class="item-property-column flex">{{localize "PILLARS.Group"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.XP"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Rank"}}</span>
+            <span class="item-property-column">{{localize "PILLARS.Mod"}}</span>
 
             <div class="item-controls">
                 <a class="item-control item-create" title="Create" data-type="reputation"><i
@@ -234,26 +234,26 @@
 </div>
 <hr>
 <div class="aging">
-    <div class="section-header"><h3>Aging</h3></div>
+    <div class="section-header"><h3>{{localize "PILLARS.Aging"}}</h3></div>
     <div class="aging-details">
         <div class="aging-inputs">
             
             <div class="points">
-                <label>Actual Age: </label>
+                <label>{{localize "PILLARS.ActualAge"}}: </label>
                 <input type="text" name="data.life.age" value="{{data.life.age}}">
             </div>
             
             <div class="points">
-                <label>Apparent Age: </label>
+                <label>{{localize "PILLARS.ApparentAge"}}: </label>
                 <input type="text" name="data.life.apparentAge" value="{{data.life.apparentAge}}">
             </div>
             
             <div class="points">
-                <label>Aging Points: </label>
+                <label>{{localize "PILLARS.AgingPoints"}}: </label>
                 <input type="text" name="data.life.agingPoints" value="{{data.life.agingPoints}}">
             </div>
             <div class="phase">
-                <label>Current Phase: </label>
+                <label>{{localize "PILLARS.CurrentPhase"}}: </label>
                 <select name="data.life.phase">
                     {{#select data.life.phase}}
                     <option value="">-</option>
@@ -266,7 +266,7 @@
         </div>
     
         <div class="death-march">
-            <h3>Death March</h3>
+            <h3>{{localize "PILLARS.DeathMarch"}}</h3>
             <div class="track">
                 {{#each deathMarch as |value index|}}        
                 {{{value}}}

@@ -1,9 +1,9 @@
 <div>
     <ol>
         <li class="damage section-header">
-            <div class="damage-element">Label</div>
-            <div class="damage-element">Base</div>
-            <div class="damage-element target">Target</div>
+            <div class="damage-element">{{localize "PILLARS.Label"}}</div>
+            <div class="damage-element">{{localize "PILLARS.Base"}}</div>
+            <div class="damage-element target">{{localize "PILLARS.Target"}}</div>
         </li>
         {{#each healing as |heal d|}}
 
@@ -12,8 +12,8 @@
                 <input type="text" class="damage-element base" placeholder="Base" value="{{heal.value}}"/>
                 <select class="damage-element type">
                     {{#select heal.type}}
-                    <option value="health">Health</option>
-                    <option value="endurance">Endurance</option>
+                    <option value="health">{{localize "PILLARS.Health"}}</option>
+                    <option value="endurance">{{localize "PILLARS.Endurance"}}</option>
                     {{/select}}
                 </select>
                 <div class="damage-element target">
@@ -33,5 +33,5 @@
     <div class="damage-control">
     <a class="add-damage"><i class="fas fa-plus-square"></i></a>
     </div>
-    <button>Roll</button>
+    <button>{{localize "Roll"}}</button>
 </div>
