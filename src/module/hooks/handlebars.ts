@@ -30,6 +30,11 @@ export default function () {
                 return array.join(", ")
         })
 
+        Handlebars.registerHelper("enrich", function (string : string) {
+            return TextEditor.enrichHTML(string)
+        })
+        
+
         loadTemplates([
             "systems/pillars-of-eternity/templates/actor/actor-main.html",
             "systems/pillars-of-eternity/templates/actor/actor-npc-main.html",

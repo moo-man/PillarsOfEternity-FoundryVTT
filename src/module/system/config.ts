@@ -1,46 +1,46 @@
 export const PILLARS = {
-  defenses: {
-    deflection: 'PILLARS.Deflection',
-    fortitude: 'PILLARS.Fortitude',
-    reflex: 'PILLARS.Reflex',
-    will: 'PILLARS.Will',
+    defenses: {
+      deflection: 'PILLARS.Deflection',
+      fortitude: 'PILLARS.Fortitude',
+      reflex: 'PILLARS.Reflex',
+      will: 'PILLARS.Will',
+    },
+    
+    attributeTypes: {
+      benefit: 'PILLARS.Benefit',
+      hindrance: 'PILLARS.Hindrance',
+    },
+    
+    skillTypes: {
+      academic: 'PILLARS.Academic',
+      artistic: 'PILLARS.Artistic',
+      language: 'PILLARS.Language',
+      martial: 'PILLARS.Martial',
+      physical: 'PILLARS.Physical',
+      social: 'PILLARS.Social',
+      worldly: 'PILLARS.Worldly',
+    },
+    
+    traitTypes: {
+      adventure: 'PILLARS.Adventure',
+      experience: 'PILLARS.Experience',
+    },
+    
+    tiers: {
+      novice: 'PILLARS.Novice',
+      apprentice: 'PILLARS.Apprentice',
+      master: 'PILLARS.Master',
+      expert: 'PILLARS.Expert',
+      paragon: 'PILLARS.Paragon',
   },
-
-  attributeTypes: {
-    benefit: 'PILLARS.Benefit',
-    hindrance: 'PILLARS.Hindrance',
-  },
-
-  skillTypes: {
-    academic: 'PILLARS.Academic',
-    artistic: 'PILLARS.Artistic',
-    language: 'PILLARS.Language',
-    martial: 'PILLARS.Martial',
-    physical: 'PILLARS.Physical',
-    social: 'PILLARS.Social',
-    worldly: 'PILLARS.Worldly',
-  },
-
-  traitTypes: {
-    adventure: 'PILLARS.Adventure',
-    experience: 'PILLARS.Experience',
-  },
-
-  tiers: {
-    novice: 'PILLARS.Novice',
-    apprentice: 'PILLARS.Apprentice',
-    master: 'PILLARS.Master',
-    expert: 'PILLARS.Expert',
-    paragon: 'PILLARS.Paragon',
-  },
-
+  
   seasons: {
     0: 'PILLARS.Spring',
     1: 'PILLARS.Summer',
     2: 'PILLARS.Autumn',
     3: 'PILLARS.Winter',
   },
-
+  
   tierBonus: {
     novice: {
       def: 0,
@@ -63,7 +63,7 @@ export const PILLARS = {
       bonus: 1,
     },
   },
-
+  
   lifePhases: {
     childhood: 'PILLARS.Childhood',
     adolescence: 'PILLARS.Adolescence',
@@ -73,7 +73,7 @@ export const PILLARS = {
     old: 'PILLARS.Old',
     venerable: 'PILLARS.Venerable',
   },
-
+  
   lifePhaseModifier: {
     childhood: 0,
     adolescence: 0,
@@ -83,7 +83,7 @@ export const PILLARS = {
     old: 5,
     venerable: 8,
   },
-
+  
   agePointsDeathRank: {
     6: 1,
     10: 2,
@@ -94,7 +94,7 @@ export const PILLARS = {
     45: 7,
     999: 8,
   },
-
+  
   lifeStyles: {
     impoverished: 'PILLARS.Impoverished',
     poor: 'PILLARS.Poor',
@@ -103,7 +103,7 @@ export const PILLARS = {
     rich: 'PILLARS.Rich',
     extravagant: 'PILLARS.Extravagant',
   },
-
+  
   lifestyleModifier: {
     impoverished: 3,
     poor: 1,
@@ -112,7 +112,7 @@ export const PILLARS = {
     rich: -2,
     extravagant: -3,
   },
-
+  
   powerRanges: {
     none: 'PILLARS.None',
     adjacent: 'PILLARS.Adjacent',
@@ -123,7 +123,7 @@ export const PILLARS = {
     far: 'PILLARS.Far',
     extreme: 'PILLARS.Extreme',
   },
-
+  
   powerTargetTypes: {
     target: 'PILLARS.Target',
     circle: 'PILLARS.Circle',
@@ -133,48 +133,48 @@ export const PILLARS = {
     line: 'PILLARS.Line',
     boundary: 'PILLARS.Boundary',
   },
-
+  
   powerTargets: {
     self: 'PILLARS.Self',
     individualEU: 'PILLARS.IndividualEU',
     individual: 'PILLARS.Individual',
     space: 'PILLARS.Space',
   },
-
+  
   powerCircles: {
     small: 'PILLARS.SmallCircle',
     medium: 'PILLARS.MediumCircle',
     large: 'PILLARS.LargeCircle',
   },
-
+  
   powerAuras: {
     small: 'PILLARS.SmallAura',
     large: 'PILLARS.LargeAura',
   },
-
+  
   powerCones: {
     small: 'PILLARS.SmallCone',
     medium: 'PILLARS.MediumCone',
     large: 'PILLARS.LargeCone',
   },
-
+  
   powerRays: {
     narrow: 'PILLARS.NarrowRay',
     wide: 'PILLARS.WideRay',
   },
-
+  
   powerLines: {
     short: 'PILLARS.ShortLine',
     long: 'PILLARS.LongLine',
   },
-
+  
   powerBoundarys: {
     adjacent: 'PILLARS.AdjacentBoundary',
     small: 'PILLARS.SmallBoundary',
     large: 'PILLARS.LargeBoundary',
     huge: 'PILLARS.HugeBoundary',
   },
-
+  
   powerDurations: {
     momentary: 'PILLARS.Momentary',
     momentary2R: 'PILLARS.Momentary2R',
@@ -189,7 +189,7 @@ export const PILLARS = {
     season: 'PILLARS.Season',
     year: 'PILLARS.Year',
   },
-
+  
   powerSpeeds: {
     slow: 'PILLARS.Slow',
     move: 'PILLARS.Move',
@@ -199,20 +199,20 @@ export const PILLARS = {
     triggered1rest: 'PILLARS.Triggered1Rest',
     triggered1encounter: 'PILLARS.Triggered1Encounter',
   },
-
+  
   powerExclusions: {
     none: 'PILLARS.None',
     target: 'PILLARS.Target',
     single: 'PILLARS.Single',
     selective: 'PILLARS.Selective',
   },
-
+  
   powerJumps: {
     jump3: 'PILLARS.3Hexes',
     jump6: 'PILLARS.6Hexes',
     jump9: 'PILLARS.9Hexes',
   },
-
+  
   powerLevelValues: {
     powerRanges: {
       none: 0,
@@ -248,7 +248,7 @@ export const PILLARS = {
       narrow: 1,
       wide: 3,
     },
-
+    
     powerLines: {
       short: 2,
       long: 4,
@@ -296,7 +296,7 @@ export const PILLARS = {
     bounce: 1,
     attacksDecreaseDefense: -1.5,
   },
-
+  
   powerSources: {
     arcana: 'PILLARS.Arcana',
     discipline: 'PILLARS.Discipline',
@@ -653,6 +653,108 @@ export const PILLARS = {
       skilled: false,
     },
   },
+
+  bondTraits : {
+    emotionSense : {
+      key : "emotionSense",
+      name : "PILLARS.BOND.EmotionSense",
+      description : "PILLARS.BOND_DESCRIPTION.EmotionSense",
+      effect : undefined,
+      
+    },
+    silentAssistance : {
+      key : "silentAssistance",
+      name : "PILLARS.BOND.SilentAssistance",
+      description : "PILLARS.BOND_DESCRIPTION.SilentAssistance",
+      effect : undefined
+    },
+    bondedGrief : {
+      key : "bondedGrief",
+      name : "PILLARS.BOND.BondedGrief",
+      description : "PILLARS.BOND_DESCRIPTION.BondedGrief",
+      effect : {
+        label: 'PILLARS.BOND.BondedGrief',
+        icon: 'systems/pillars-of-eternity/assets/conditions/bloodied.png',
+        disabled : true,
+        changes: [
+          { key: 'state', mode: 6, value: 'dis' },
+          { key: 'data.defenses.deflection.value', mode: 2, value: '-2' },
+          { key: 'data.defenses.fortitude.value', mode: 2, value: '-2' },
+          { key: 'data.defenses.reflex.value', mode: 2, value: '-2' },
+          { key: 'data.defenses.will.value', mode: 2, value: '-2' },
+        ],
+        flags: {
+          'pillars-of-eternity': {
+            bondTrait : "bondedGrief",
+            changeCondition: {
+              0: { description: 'PILLARS.AfflictionDescription.AllCheckPenalty', script: 'return true' },
+            },
+          },
+        },
+      }
+    },
+    bondedCharisma : {
+      key : "bondedCharisma",
+      name : "PILLARS.BOND.BondedCharisma",
+      description : "PILLARS.BOND_DESCRIPTION.BondedCharisma",
+      effect : undefined
+    },
+    bondedInitiative : {
+      key : "bondedInitiative",
+      name : "PILLARS.BOND.BondedInitiative",
+      description : "PILLARS.BOND_DESCRIPTION.BondedInitiative",
+      effect : undefined
+    },
+    bondedReassurance : {
+      key : "bondedReassurance",
+      name : "PILLARS.BOND.BondedReassurance",
+      description : "PILLARS.BOND_DESCRIPTION.BondedReassurance",
+      effect : undefined
+    },
+    bondedRecovery : {
+      key : "bondedRecovery",
+      name : "PILLARS.BOND.BondedRecovery",
+      description : "PILLARS.BOND_DESCRIPTION.BondedRecovery",
+      effect : undefined
+    },
+    bondedSprint : {
+      key : "bondedSprint",
+      name : "PILLARS.BOND.BondedSprint",
+      description : "PILLARS.BOND_DESCRIPTION.BondedSprint",
+      effect : undefined
+    },
+    bondedStudy : {
+      key : "bondedStudy",
+      name : "PILLARS.BOND.BondedStudy",
+      description : "PILLARS.BOND_DESCRIPTION.BondedStudy",
+      effect : undefined
+    },
+    bondedSurvival : {
+      key : "bondedSurvival",
+      name : "PILLARS.BOND.BondedSurvival",
+      description : "PILLARS.BOND_DESCRIPTION.BondedSurvival",
+      effect : undefined
+    },
+    bondedTransfer : {
+      key : "bondedTransfer",
+      name : "PILLARS.BOND.BondedTransfer",
+      description : "PILLARS.BOND_DESCRIPTION.BondedTransfer",
+      effect : undefined
+    },
+    bondedVengeance : {
+      key : "bondedVengeance",
+      name : "PILLARS.BOND.BondedVengeance",
+      description : "PILLARS.BOND_DESCRIPTION.BondedVengeance",
+      effect : undefined
+    },
+    bondedVigor : {
+      key : "bondedVigor",
+      name : "PILLARS.BOND.BondedVigor",
+      description : "PILLARS.BOND_DESCRIPTION.BondedVigor",
+      effect : undefined
+    }
+  }
+
 };
 
 CONFIG.statusEffects = [
@@ -726,7 +828,7 @@ CONFIG.statusEffects = [
         'pillars-of-eternity': {
           changeCondition: {
             0: {
-              description: 'DisPILLARS.AdvantageInvolvingPhysicalActivity',
+              description: 'PILLARS.DisadvantageInvolvingPhysicalActivity',
               script: "if (data.skill && (data.skill.category.value :: 'physical' || data.skill.category.value :: 'martial')) return true",
             },
             1: { description: 'PILLARS.AfflictionDescription.FortitudeAttacksAdvantage', script: '' },
@@ -746,7 +848,7 @@ CONFIG.statusEffects = [
         'pillars-of-eternity': {
           changeCondition: {
             0: {
-              description: 'DisPILLARS.AdvantageInvolvingPhysicalActivity',
+              description: 'PILLARS.DisadvantageInvolvingPhysicalActivity',
               script: "if (data.skill && (data.skill.category.value :: 'physical' || data.skill.category.value :: 'martial')) return true",
             },
             1: { description: 'PILLARS.AfflictionDescription.FortitudeAttacksAdvantage', script: '' },

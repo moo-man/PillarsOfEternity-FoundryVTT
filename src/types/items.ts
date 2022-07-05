@@ -26,4 +26,6 @@ export interface WeaponSpecialData
 export interface BondTrait {
     name : string,
     description: string
+    active?: boolean
+    key : string
 }

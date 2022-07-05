@@ -3,18 +3,33 @@ import { ItemDataConstructorData } from '@league-of-foundry-developers/foundry-v
 import {  PillarsItemSystemData } from '../../global';
 import { getGame } from '../../pillars';
 import { hasEmbeddedPowers, ItemType } from '../../types/common';
+import { BondTrait } from '../../types/items';
 import { EmbeddedPower, PowerBaseEffect, PowerDamage, PowerDuration, PowerHealing, PowerMisc, PowerRange, PowerSummon, PowerTarget } from '../../types/powers';
 import { PillarsActor } from '../actor/actor-pillars';
 import ItemSpecials from '../apps/item-specials';
+import { PILLARS } from '../system/config';
 import PillarsActiveEffect from '../system/pillars-effect';
 import { PillarsItem } from './item-pillars';
 
 interface PillarsItemSheetData extends Omit<ItemSheet.Data, 'data'> {
   data: PillarsItemSystemData;
+
+  // power
   powerEffects : {conditions : ActiveEffectDataConstructorData[], item : PillarsActiveEffect[]}
+
+  // weapon
   martialSkills : PillarsItem[],
+
+  //'attribute', 'weapon', 'armor', 'shield', 'equipment', 'species', 'stock', 'godlike'
   allowEmbeddedPowers : boolean,
-  possibleBonds : PillarsActor[]
+
+  // bond
+  possibleBonds : PillarsActor[],
+  traits : (BondTrait & {disabled : boolean})[],
+  traitsAllowed : number,
+  traitsOwned : number,
+  traitsAvailable : number
+  matching : boolean
 }
 
 /**
@@ -68,9 +83,23 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
       if (this.item.isOwned) data.martialSkills = data.martialSkills.concat(this.item.actor!.getItemTypes(ItemType.skill).filter((i) => i.category?.value == 'martial'));
     }
 
-    if (this.item.type == "bond")
+    if (this.item.data.type == "bond")
     {
+      data.matching = this.item.hasMatchingBond() || false
+
       data.possibleBonds = getGame().actors!.contents.filter((i) => (i.hasPlayerOwner || i.data.token.disposition > 0) && i.id != this.id);
+      data.traitsAllowed = Math.max((this.item.data.data.xp.rank || 0) - 5, 0)
+      data.traitsOwned = Math.max(this.item.data.data.traits.length - 3, 0) // Don't count default traits
+      data.traitsAvailable = Math.max(data.traitsAllowed - data.traitsOwned, 0)
+      data.traits = Object.values(PILLARS.bondTraits).map((t : BondTrait) => {
+        if (this.item.data.type == "bond")
+        {
+          t.active = this.item.data.data.traits.includes(t.key);
+          (<PillarsItemSheetData["traits"][0]> t ).disabled = (data.traitsAvailable <= 0 && !t.active) || this.item.data.data.xp.rank! < 5 
+        }
+
+        return t as PillarsItemSheetData["traits"][0]
+      })
     }
 
     if (hasEmbeddedPowers(this.item.data.type)) data.allowEmbeddedPowers = true;
@@ -148,6 +177,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     html.find('.power-edit').on('click', this._onEditPower.bind(this));
     html.find('.power-delete').on('click', this._onPowerDelete.bind(this));
     html.find('.embedded-power-edit').on('change', this._onEditEmbeddedPower.bind(this));
+    html.find(".bond-trait input").on("change", this._onBondTraitChecked.bind(this));
   }
 
   _onConfigureSpecialsClick(ev: JQuery.ClickEvent) {
@@ -313,6 +343,24 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
       }
       
       return this.item.update({ 'data.powers': powers });
+    }
+  }
+
+  _onBondTraitChecked(ev : JQuery.ChangeEvent) {
+    let checked = ev.currentTarget.checked
+    let bond = ev.currentTarget.dataset.bond as string
+    if (this.item.data.type == "bond")
+    {
+      let traits = duplicate(this.item.data.data.traits);
+      if (checked && !traits.includes(bond))
+      {
+        traits.push(bond);
+      }
+      else if (!checked)
+      {
+        traits = traits.filter(t => t != bond);
+      }
+      this.item.update({"data.traits" : traits})
     }
   }
 }

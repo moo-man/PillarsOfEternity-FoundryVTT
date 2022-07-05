@@ -645,7 +645,7 @@ export interface BondSource {
 }
 
 export interface BondSourceData extends Description, XP {
-  traits : BondTrait[]
+  traits : string[]
   partner : string
   modifier : {
     value : number

@@ -595,9 +595,7 @@
             "xp"
         ],
         "partner" : "",
-        "traits" : {
-
-        }
+        "traits" : []
     }
 }
 }

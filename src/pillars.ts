@@ -61,6 +61,8 @@ Hooks.on("init", () => {
   CONFIG.ActiveEffect.documentClass = PillarsActiveEffect;
   CONFIG.Token.documentClass = PillarsTokenDocument
   CONFIG.Combat.defeatedStatusId = "incapacitated"
+  CONFIG.ui.combat = PillarsCombatTracker
+
   PillarsExplode()
 
 
@@ -90,18 +92,9 @@ Hooks.on("init", () => {
   }
 })
 
-  CONFIG.ui.combat = PillarsCombatTracker
   Hooks.on("setup", () => {
-    for (let groupKey in PILLARS) {
-      {
-        for (let key in PILLARS[groupKey as keyof typeof PILLARS])
-        {
-          let group = PILLARS[groupKey as keyof typeof PILLARS]
-          if (typeof group[key as keyof typeof group] == "string")
-            setProperty(group, key, getGame().i18n!.localize(group[key as keyof typeof group]))
-        }
-      }
-    }
+    localizeConfigObject(PILLARS);
+    localizeConfigObject(CONFIG.statusEffects);
     FoundryOverrides()
 })
 
@@ -113,5 +106,22 @@ export function getGame(): Game {
     throw new Error('game is not initialized yet!');
   }
   return game;
+}
+
+
+function localizeConfigObject(object : any)
+{
+  let game = getGame();
+  for (let key in object) 
+  {
+    if (typeof object[key] == "string")
+    {
+      object[key] = game.i18n.localize(object[key] as string);
+    }
+    else if (typeof object[key] == "object")
+    {
+      localizeConfigObject(object[key])
+    }
+  }
 }
 

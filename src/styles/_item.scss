@@ -191,16 +191,26 @@ form .form-group.power-group h3 {
   display: flex;
 }
 
-
-
 .pillars-of-eternity.item.sheet .property-button{
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-
 .pillars-of-eternity.item.sheet .item-property-column input.embedded-power-edit{
   width: 30px;
   margin: 0px 5px;
 }
+
+.pillars-of-eternity.item.sheet .bond-trait {
+  display: flex;
+  border-top : 1px solid #CCC;
+  padding: 5px;
+
+  span {
+    margin: 5px;
+  }
+
+}
+
+

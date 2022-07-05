@@ -10,7 +10,12 @@
         {{> systems/pillars-of-eternity/templates/item/item-description.html}}
 
         <div class="tab details active" data-tab="details"> 
-            <div class="form-group xp-rank">
+
+            {{#unless matching}}
+            <span class="notification warning">{{localize "PILLARS.ErrorBondMatch"}}</span>
+            {{/unless}}
+
+            <div class="form-group">
                 <label>{{localize "PILLARS.Bond"}}</label>
                 <div class="form-fields">
                     <select name="data.partner">
@@ -37,9 +42,23 @@
                     <input type="number" name="data.modifier.value" value="{{data.modifier.value}}" data-dtype="Number">
                 </div>
             </div>
+
+            {{#if traitsAvailable}}
+            <div>
+                {{traitsOwned}} / {{traitsAllowed}} Traits Selected
+            </div>
+            {{/if}}
+            <ul>
+                {{#each traits as |trait t|}}
+                <li class="bond-trait" {{#if trait.disabled}}style="opacity:0.5"{{/if}}>
+                        <input type="checkbox" data-bond={{trait.key}} {{checked trait.active}} {{#if trait.disabled}}disabled{{/if}}>
+                        <span>
+                            <b>{{trait.name}}</b>: {{{enrich trait.description}}}
+                        </span>
+                </li>
+                {{/each}}
+            </ul>
         </div>
-
-
     </section>
 
 </form>

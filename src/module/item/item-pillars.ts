@@ -1,4 +1,5 @@
 import {  DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
+import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
 import { ChatMessageDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatMessageData';
 import { ItemDataConstructorData, ItemDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
 import { PowerSource } from '../../global';
@@ -39,7 +40,10 @@ export class PillarsItem extends Item {
       let id = getProperty(updateData, "data.partner")
       let actor = getGame().actors?.get(id);
       if (actor)
+      {
         updateData.img = actor.data.token.img
+        updateData.name = actor.name || this.name!
+      }
     }
 
     // Convenience feature to set the power source name to the same as the newly selected source
@@ -140,6 +144,64 @@ export class PillarsItem extends Item {
         parentPowers![index] = powerData;
         embeddedParent.update({ 'data.powers': parentPowers });
       }
+    }
+
+
+    if (this.data.type == "bond")
+    {
+      if (this.xp!.rank! >= 5)
+      {
+        let traits = foundry.utils.deepClone(this.data.data.traits)
+        if (!traits.includes("emotionSense"))
+        {
+          traits.push("emotionSense")
+        }
+        if (!traits.includes("silentAssistance"))
+        {
+          traits.push("silentAssistance")
+        }
+        if (!traits.includes("bondedGrief"))
+        {
+          traits.push("bondedGrief")
+        }
+        this.update({"data.traits" : traits})
+      }
+      else this.update({"data.traits" : []})
+
+      this.checkBondTraitEffects();
+    }
+
+  }
+
+
+  async checkBondTraitEffects() {
+    if(this.data.type == "bond" && this.isOwned)
+    {
+      let toAdd: Partial<ActiveEffectDataConstructorData>[] = [];
+      let toDelete = []
+      let bondEffects = this.actor!.effects.filter(i => !!(i.getFlag("pillars-of-eternity", "bondTrait") as string))
+
+      // Find traits owned but with no effect and add them
+      for(let trait of this.data.data.traits)
+      {
+        let existing = bondEffects.find(i => trait == i.getFlag("pillars-of-eternity", "bondTrait") as string)
+        if (!existing)
+          toAdd.push(PILLARS.bondTraits[trait as keyof typeof PILLARS.bondTraits].effect!)
+      }
+
+      // Find effects that should be removed
+      for(let effect of bondEffects)
+      {
+        let key = effect.getFlag("pillars-of-eternity", "bondTrait") as string
+
+        if (!this.data.data.traits.includes(key))
+          toDelete.push(effect.id!);
+      }
+
+      if (toDelete.length > 0)
+        await this.actor!.deleteEmbeddedDocuments("ActiveEffect", toDelete)
+      if (toAdd.length > 0)
+        await this.actor!.createEmbeddedDocuments("ActiveEffect", toAdd.filter(i => i));
     }
   }
 
@@ -449,6 +511,56 @@ export class PillarsItem extends Item {
         }).render(true);
       });
     else return true;
+  }
+
+  hasMatchingBond() {
+    if (this.data.type == "bond" && this.isOwned)
+    {
+      let partner = getGame().actors!.get(this.data.data.partner)
+      let partnerBond = partner?.getItemTypes(ItemType.bond).find(b => {
+        if (b.data.type == "bond")
+        {
+          return b.data.data.partner == this.parent!.id
+        }
+      })
+      if (partnerBond && partnerBond.data.type == "bond")
+      {
+        let matching = true;
+        if (this.xp!.value != partnerBond.xp!.value)
+          matching = false;
+        if (this.modifier!.value != partnerBond.modifier!.value)
+          matching = false;
+        if (this.data.data.traits.length == partnerBond.data.data.traits.length)
+        {
+
+          // If both partner and self arrays have the same values, return true
+          let matchingArrays = this.data.data.traits.every(t => {
+            if (partnerBond?.data.type == "bond")
+            {
+              return partnerBond.data.data.traits.includes(t)
+            }
+          })
+          &&
+          partnerBond.data.data.traits.every(t => {
+            if (this.data.type == "bond")
+            {
+              return this.data.data.traits.includes(t)
+            }
+          })
+
+          // Don't set matching = matchingArrays, only want to test for false
+          if (!matchingArrays)
+          {
+            matching = false;
+          }
+        }
+        else // arrays are different length, always false
+          matching = false;
+
+        return matching
+      }
+      else return false
+    }
   }
 
   //#endregion
