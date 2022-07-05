@@ -33,6 +33,18 @@ export const PILLARS = {
       expert: 'PILLARS.Expert',
       paragon: 'PILLARS.Paragon',
   },
+
+  followerTypes: {
+    generalist: 'PILLARS.Generalist',
+    specialist: 'PILLARS.Specialist',
+    expert: 'PILLARS.Expert',
+  },
+
+  followerSkills : {
+    generalist : [{number : 6, rank : 6}],
+    specialist : [{number : 2, rank : 8}, {number : 3, rank : 6}],
+    expert : [{number : 1, rank : 10}, {number : 3, rank : 6}]
+  },
   
   seasons: {
     0: 'PILLARS.Spring',

@@ -363,3 +363,22 @@
   }
 }
   
+
+.item-dialog {
+  p {
+    text-align: center;
+  }
+
+  .active {
+    box-shadow: 0 0 6px inset var(--color-shadow-highlight);
+  }
+
+  .dialog-content {
+    height: 500px;
+    overflow: auto
+  }
+
+  .dialog-buttons {
+    flex: 0 0 40px;
+  }
+}

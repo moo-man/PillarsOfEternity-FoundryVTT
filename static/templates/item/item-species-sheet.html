@@ -12,7 +12,7 @@
         {{> systems/pillars-of-eternity/templates/item/item-description.html}}
 
 
-        <div class="tab details active" data-tab="details"> 
+        <div class="tab details active" data-tab="details">
 
             <div class="form-group">
                 <label>{{localize "PILLARS.Size"}}</label>
@@ -34,7 +34,35 @@
                     <input type="number" name="data.stride.value" value="{{data.stride.value}}" data-dtype="Number">
                 </div>
             </div>
-        
+
+            <hr>
+            <h3>{{localize "PILLARS.LifePhases"}}</h3>
+
+            {{#each data.phases as |range phase|}}
+            <div class="form-group">
+                <label>{{configLookup "lifePhases" phase}}</label>
+                <div class="form-fields small" data-phase="{{phase}}">
+
+                    <!-- Childhood - Must start at 0 -->
+                    {{#if (eq phase "childhood")}}
+                    <input type="number" class="phase-range" data-index="0" disabled value="0">
+                    <input class="phase-range" data-index="1" type="number" value="{{range.[1]}}">
+                    <!-- Venerable - Unbounded right side -->
+                    {{else if (eq phase "venerable")}}
+                    <input type="number" class="phase-range" data-index="0"
+                        value="{{range.[0]}}"> 
+                    <input class="phase-range" data-index="1" type="number" disabled>
+                    {{else}}
+                    <!-- Other Phases freely editable -->
+                    <input type="number" class="phase-range" data-index="0"
+                        value="{{range.[0]}}"> 
+                    <input class="phase-range" data-index="1" type="number"
+                        value="{{range.[1]}}">
+                    {{/if}}
+                </div>
+            </div>
+            {{/each}}
+
         </div>
 
         {{> systems/pillars-of-eternity/templates/item/item-effects.html}}

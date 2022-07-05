@@ -900,6 +900,10 @@ export class PillarsItem extends Item {
     if (this.data.type == "bond") return this.data.data.partner
   }
 
+  get phases() {
+    if (this.data.type == "species") return this.data.data.phases
+  }
+
   // Processed data getters
   get rank() {
     return this.xp!.rank;

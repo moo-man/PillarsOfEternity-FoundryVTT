@@ -34,6 +34,7 @@ import TimeTracker from './module/apps/time-tracker';
 
 //#region Actor
 
+//#region Source Data
 export interface PillarsActorSourceSystemData {
   defenses: {
     [key in Defense]: {
@@ -117,6 +118,28 @@ export interface PillarsCharacterSourceSystemData
   seasons : SeasonData[]
 }
 
+export interface PillarsFollowerSourceSystemData
+  extends PillarsActorSourceSystemData {
+  details: {
+    culture: string;
+    species: string;
+    stock: string;
+    godlike: string;
+    birthYear : number,
+    phase : LifePhase,
+    startYear : number
+  },
+  subtype : {
+    value : string
+  }
+  loyalty : {
+    value : number
+  }
+  upkeep: {
+    value : number
+  }
+}
+
 interface CharacterDataSource {
   type: 'character';
   data: PillarsCharacterSourceSystemData;
@@ -127,7 +150,17 @@ interface NPCDataSource {
   data: PillarsActorSourceSystemData;
 }
 
-export type PillarsActorSourceData = CharacterDataSource | NPCDataSource;
+interface FollowerDataSource {
+  type: 'follower';
+  data: PillarsFollowerSourceSystemData;
+}
+
+
+export type PillarsActorSourceData = CharacterDataSource | NPCDataSource | FollowerDataSource;
+
+//#endregion
+
+//#region Prepared Data
 
 export interface BasePreparedPillarsActorData
   extends PillarsActorSourceSystemData {
@@ -211,9 +244,40 @@ interface PillarsActorTooltips {
   };
 }
 
+export interface PreparedPillarsFollowerData
+  extends BasePreparedPillarsActorData {
+  details: {
+    culture: string;
+    species: string;
+    stock: string;
+    godlike: string;
+    birthYear : number,
+    phase : LifePhase,
+    startYear : number,
+    age : number
+  },
+  subtype : {
+    value : string
+  }
+  loyalty : {
+    value : number
+  }
+  upkeep: {
+    value : number
+  }
+}
+
 type PreparedPillarsNPC = {
   type: 'npc';
   data: BasePreparedPillarsActorData;
+  flags: {
+    tooltips: PillarsActorTooltips;
+  };
+};
+
+type PreparedPillarsFollower = {
+  type: 'follower';
+  data: PreparedPillarsFollowerData;
   flags: {
     tooltips: PillarsActorTooltips;
   };
@@ -229,7 +293,10 @@ type PreparedPillarsCharacter = {
 
 export type PreparedPillarsActorData =
   | PreparedPillarsCharacter
-  | PreparedPillarsNPC;
+  | PreparedPillarsNPC
+  | PreparedPillarsFollower;
+
+//#endregion 
 
 //#endregion
 
@@ -601,6 +668,15 @@ export interface SpeciesSourceData extends Description, Powers {
   species: {
     value: string;
   };
+  phases : {
+    childhood :  number[],
+    adolescence : number[],
+    youngAdult : number[],
+    adult : number[],
+    middleAge : number[],
+    old : number[],
+    venerable : number[]
+},
 }
 
 export interface StockSource {

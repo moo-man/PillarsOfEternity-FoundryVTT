@@ -84,6 +84,14 @@
                     "value" : 1
                 }
             },
+            "species" : {
+                "details" : {
+                    "culture": "",
+                    "species": "",
+                    "stock": "",
+                    "godlike": ""
+            }
+            },
             "damageIncrement" : {
                 "damageIncrement" : {
                     "value" : 1
@@ -155,11 +163,7 @@
                 "cause": "",
                 "call": "",
                 "goal": "",
-                "relationships": "",
-                "culture": "",
-                "species": "",
-                "stock": "",
-                "godlike": ""
+                "relationships": ""
             },
             "knownConnections": {
                 "value": []
@@ -185,14 +189,43 @@
                 "endurance",
                 "toughness",
                 "damageIncrement",
-                "species",
                 "tier",
+                "species",
                 "soak",
                 "size",
                 "initiative",
                 "stride",
                 "notes"
             ]
+        },
+        "follower": {
+            "templates": [
+                "defenses",
+                "health",
+                "endurance",
+                "toughness",
+                "damageIncrement",
+                "species",
+                "soak",
+                "size",
+                "initiative",
+                "stride",
+                "notes"
+            ],
+            "details" : {
+                "birthYear" : null,
+                "phase" : "",
+                "startYear" : null
+            },
+            "subtype" : {
+                "value" : ""
+            },
+            "loyalty" : {
+                "value" : 5
+            },
+            "upkeep" : {
+                "value" : 1
+            }
         }
     },
     "Item": {
@@ -546,6 +579,15 @@
         },
         "stride": {
             "value": 6
+        },
+        "phases" : {
+            "childhood" : [0],
+            "adolescence" : [],
+            "youngAdult" : [],
+            "adult" : [],
+            "middleAge" : [],
+            "old" : [],
+            "venerable" : []
         },
         "species": {
             "value": ""

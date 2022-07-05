@@ -28,6 +28,7 @@ import PowerCheck from "./module/system/power-check";
 import PillarsTokenDocument from "./module/system/token";
 import DamageRoll from "./module/system/damage-roll";
 import { PillarsNPCSheet } from "./module/actor/npc-sheet";
+import { PillarsFollowerSheet } from "./module/actor/follower-sheet";
 import HealingDialog from "./module/apps/healing-dialog";
 import { PillarsCombatant } from "./module/system/combatant";
 
@@ -49,6 +50,7 @@ Hooks.on("init", () => {
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("pillars-of-eternity", PillarsActorSheet, { makeDefault: true });
   Actors.registerSheet("pillars-of-eternity", PillarsNPCSheet, {types: ["npc"], makeDefault: true });
+  Actors.registerSheet("pillars-of-eternity", PillarsFollowerSheet, {types: ["follower"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("pillars-of-eternity", PillarsItemSheet, { makeDefault: true });
   DocumentSheetConfig.registerSheet(ActiveEffect, "pillars-of-eternity", PillarsEffectConfig)
@@ -69,7 +71,7 @@ Hooks.on("init", () => {
   let game = getGame()
   game.pillars = {
     apps : {
-      PillarsActorSheet: PillarsActorSheet,
+      PillarsActorSheet,
       PillarsItemSheet,
       BookOfSeasons,
       RollDialog,

@@ -2,7 +2,7 @@ import { ActiveEffectDataConstructorData, ActiveEffectDataSource } from '@league
 import { ItemDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
 import {  PillarsItemSystemData } from '../../global';
 import { getGame } from '../../pillars';
-import { hasEmbeddedPowers, ItemType } from '../../types/common';
+import { hasEmbeddedPowers, ItemType, LifePhase } from '../../types/common';
 import { BondTrait } from '../../types/items';
 import { EmbeddedPower, PowerBaseEffect, PowerDamage, PowerDuration, PowerHealing, PowerMisc, PowerRange, PowerSummon, PowerTarget } from '../../types/powers';
 import { PillarsActor } from '../actor/actor-pillars';
@@ -178,6 +178,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     html.find('.power-delete').on('click', this._onPowerDelete.bind(this));
     html.find('.embedded-power-edit').on('change', this._onEditEmbeddedPower.bind(this));
     html.find(".bond-trait input").on("change", this._onBondTraitChecked.bind(this));
+    html.find(".phase-range").on("change", this._onPhaseRangeChange.bind(this))
   }
 
   _onConfigureSpecialsClick(ev: JQuery.ClickEvent) {
@@ -362,5 +363,24 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
       }
       this.item.update({"data.traits" : traits})
     }
+  }
+
+  _onPhaseRangeChange(ev : JQuery.ChangeEvent)
+  {
+    let index = Number(ev.currentTarget.dataset.index)
+    let phase = $(ev.currentTarget).parents(".form-fields")[0]?.dataset.phase as LifePhase;
+
+    if (index != 0 && index != 1)
+      return 
+
+    
+    let range = duplicate(this.item.phases?.[phase]);
+
+    if (range)
+    {
+      range[index] = Number(ev.currentTarget.value);
+    }
+
+    this.item.update({[`data.phases.${phase}`] : range})
   }
 }

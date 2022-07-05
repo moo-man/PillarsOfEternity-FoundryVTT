@@ -1,0 +1,11 @@
+<p><strong>{{text}}</strong></p>
+<div class="directory">
+    <ol class="directory-list">
+        {{#each items as |item i|}}
+        <li class="directory-item document item flexrow" data-index="{{i}}">
+            <img class="thumbnail" src="{{item.data.img}}">
+            <h4 class="document-name">{{item.name}}</h4>
+        </li>
+        {{/each}}
+    </ol>
+</div>

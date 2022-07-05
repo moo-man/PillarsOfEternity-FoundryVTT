@@ -1,3 +1,4 @@
+import { getGame } from "../../pillars"
 import { AgingCheckDataFlattened, AgingDialogData } from "../../types/checks"
 import { PillarsEffectChangeDataProperties } from "../../types/effects"
 
@@ -36,7 +37,7 @@ export default class AgingDialog extends Dialog {
         let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/aging-dialog.html", {modifier, changeList, changes, years, defaultYear: defaultYear || years[0]})
         return new Promise((resolve) => {
             return new this({
-                title: "Aging Roll",
+                title: getGame().i18n.localize("PILLARS.AgingRoll"),
                 content: html,
                 dialogData : {changes, changeList, modifier, years},
                 buttons : {

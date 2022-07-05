@@ -145,7 +145,6 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ['pillars-of-eternity', 'sheet', 'actor'],
-      template: 'systems/pillars-of-eternity/templates/actor/actor-sheet.html',
       width: 1200,
       height: 700,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.tab-content', initial: 'main' }],
@@ -155,7 +154,6 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
   get template(): string {
     if (this.actor.type == 'character') return 'systems/pillars-of-eternity/templates/actor/actor-sheet.html';
-    else if (this.actor.type == 'npc') return 'systems/pillars-of-eternity/templates/actor/actor-npc-sheet.html';
     else return '';
   }
 
@@ -174,8 +172,13 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     this._setScrollPos(); // Set scroll positions
 
 
-    this.checkSeasonAlerts();
+    this.checkAlerts();
     //this._refocus(this._element)
+  }
+
+
+  checkAlerts() {
+    this.checkSeasonAlerts();
   }
 
   checkSeasonAlerts()
@@ -197,7 +200,6 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
         if (icon)
           icon.classList.replace('fa-exclamation-circle', "fa-book")
       }
-        
     }
   }
 

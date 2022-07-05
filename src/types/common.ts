@@ -1,4 +1,5 @@
 import { Category, Equipped, Physical, Used, XP } from '../global';
+import { PillarsItem } from '../module/item/item-pillars';
 import { PILLARS } from '../module/system/config';
 import { EmbeddedPower } from './powers';
 
@@ -143,6 +144,21 @@ export enum Season {
 export interface Time {
   season : Season,
   year : number
+}
+
+export interface ItemDialogData {
+  filters : ItemFilter[],
+  text : string,
+  diff : Record<string, unknown>
+  collection : Collection<PillarsItem>,
+  choices : number
+}
+
+export interface ItemFilter {
+  type : "comparison" | "regex",
+  test : string,
+  target : string,
+  value : string | number
 }
 
 export function isUsable(item: any): item is Useable {
