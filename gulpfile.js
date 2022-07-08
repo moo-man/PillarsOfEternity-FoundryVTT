@@ -1,9 +1,9 @@
 var gulp = require('gulp');
-var watch = require('gulp-watch');
 const gulpEsbuild = require('gulp-esbuild')
 const sass = require('gulp-sass')(require('sass'));
+const esCopy = require("esbuild-plugin-copy")
 const foundryPath = require("./foundry-path.js")
-const copyStaticFiles = require("esbuild-copy-static-files")
+const esBuildConfig = require("./esbuild.config");
 let buildPath = foundryPath.systemPath
 
 gulp.task('sass', function () {
@@ -12,26 +12,21 @@ gulp.task('sass', function () {
     .pipe(gulp.dest(foundryPath.systemPath))
 });
 
-gulp.task('system', function () {
-  return gulp.src(["./system.json", "./template.json"])
-    .pipe(gulp.dest(foundryPath.systemPath))
-});
-
 gulp.task('watch', function () {
   gulp.watch('./src/styles/*', gulp.series('sass'));
-  gulp.watch('./static/**/*', gulp.series('build'));
-  gulp.watch('./src/**/*', gulp.series('build'));
+  gulp.watch('./static/**/*', gulp.series('src'));
+  gulp.watch('./src/**/*', gulp.series('src'));
+  gulp.watch('./template.json', gulp.series('src'));
+  gulp.watch('./system.json', gulp.series('src'));
 });
 
-gulp.task("build", function (resolve) {
-  gulp.src("src/pillars.ts").pipe(gulpEsbuild({
-    bundle: true,
-    outfile: "pillars.js",
-    plugins: [copyStaticFiles({
-      src: "./static",
-      dest: buildPath + "/",
-      recursive: true,
-    })]
-  })).pipe(gulp.dest(buildPath))
+gulp.task("build", function()
+{
+  gulp.series("src", "sass", "watch")();
+})
+
+gulp.task("src", function (resolve) {
+  gulp.src("src/pillars.ts").pipe(gulpEsbuild(esBuildConfig)).pipe(gulp.dest(buildPath))
   resolve();
 })
+
