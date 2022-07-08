@@ -95,7 +95,7 @@ export interface PillarsCharacterSourceSystemData
   life: {
     age: number;
     apparentAge: number;
-    phase: keyof LifePhase;
+    phase: LifePhase;
     agingPoints: number;
     march: number;
   };
@@ -125,10 +125,12 @@ export interface PillarsFollowerSourceSystemData
     species: string;
     stock: string;
     godlike: string;
+  },
+  life : {
     birthYear : number,
     phase : LifePhase,
-    startYear : number
-  },
+    startYear : number,
+  }
   subtype : {
     value : string
   }
@@ -251,10 +253,12 @@ export interface PreparedPillarsFollowerData
     species: string;
     stock: string;
     godlike: string;
+  },
+  life : {
+    age : number
     birthYear : number,
     phase : LifePhase,
     startYear : number,
-    age : number
   },
   subtype : {
     value : string

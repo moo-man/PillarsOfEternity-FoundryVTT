@@ -230,23 +230,23 @@ export class PillarsActor extends Actor {
 
     this.health.value = Math.max(this.health.value, this.health.wounds.value);
 
-    if (this.type == 'character' || this.type == 'follower') {
-      if (this.type == 'character') {
+    if (this.data.type == 'character' || this.data.type == 'follower') {
+      if (this.data.type == 'character') {
         let thresholds = PILLARS.agePointsDeathRank;
         for (let pointThreshold in thresholds) {
-          if (this.life!.agingPoints < parseInt(pointThreshold)) {
-            this.life!.march = thresholds[<keyof typeof thresholds>parseInt(pointThreshold)];
+          if (this.data.data.life.agingPoints < parseInt(pointThreshold)) {
+            this.data.data.life.march = thresholds[<keyof typeof thresholds>parseInt(pointThreshold)];
             break;
           }
         }
-        this.life!.march -= 1;
+        this.data.data.life.march -= 1;
       }
 
       let age = 0;
 
       // TODO don't like the different paths here
-      if (this.data.type == 'character') age = this.life!.age;
-      else if (this.data.type == 'follower') age = game.settings.get('pillars-of-eternity', 'season').year - this.data.data.details.birthYear;
+      if (this.data.type == 'character') age = this.data.data.life.age;
+      else if (this.data.type == 'follower') age = game.settings.get('pillars-of-eternity', 'season').year - this.data.data.life.birthYear;
 
       let currentPhase = '';
       let species = this.getItemTypes(ItemType.species)[0];
@@ -258,12 +258,9 @@ export class PillarsActor extends Actor {
             break;
           }
         }
-        if (this.data.type == 'follower') 
-        {
-          this.data.data.details.phase = currentPhase as LifePhase;
-          this.data.data.details.age = age
-        }
-        else if (this.data.type == 'character') this.data.data.life.phase = currentPhase as LifePhase;
+        this.data.data.life!.phase = currentPhase as LifePhase;
+        if (this.data.type == "follower")
+          this.data.data.life.age = age
       }
     }
   }
@@ -1013,7 +1010,7 @@ export class PillarsActor extends Actor {
     let age = YA_age + Math.ceil(CONFIG.Dice.randomUniform() * 6);
     let birthYear = year - age;
 
-    return this.update({ 'data.details': { birthYear, startYear: year } });
+    return this.update({ 'data.life': { birthYear, startYear: year } });
   }
 
   /**
@@ -1088,7 +1085,7 @@ export class PillarsActor extends Actor {
     return this.data.data.health;
   }
   get life() {
-    if (this.data.type == 'character') return this.data.data.life;
+    if (this.data.type == 'character' || this.data.type == "follower") return this.data.data.life;
   }
   get size() {
     return this.data.data.size;
