@@ -21,6 +21,15 @@ export default class XPAllocationActivity extends SeasonalActivity {
     experience?: HTMLAnchorElement;
   } = {};
 
+
+    
+  static get defaultOptions() {
+    let options = super.defaultOptions;
+    options.width = 700;
+    return options
+  }
+
+
   constructor(data: XPAllocationData, resolve?: SeasonalActivityResolve, options?: ApplicationOptions) {
     super(data, resolve, options);
     this.experience = data.experience;
@@ -108,7 +117,7 @@ export default class XPAllocationActivity extends SeasonalActivity {
   }
 
   checkData() {
-    let errors = [];
+    let errors : string[] = [];
 
     // If no experience, prevent item lists from being filled
     if (!this.ui.totalExp?.value && !this.ui.itemLists?.classList.contains('disabled')) {

@@ -40,6 +40,7 @@ import PillarsExplode from "./module/system/explode.js"
 import TimeTracker from "./module/apps/time-tracker";
 import AdventureSeasonalActivity from "./module/apps/seasonal/adventure";
 import SocializingSeasonalActivity from "./module/apps/seasonal/socializing";
+import PracticeSeasonalActivity from "./module/apps/seasonal/practice";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -88,7 +89,8 @@ Hooks.on("init", () => {
     },
     seasonalActivities : [
       AdventureSeasonalActivity,
-      SocializingSeasonalActivity
+      SocializingSeasonalActivity,
+      PracticeSeasonalActivity
     ],
     DamageRoll : DamageRoll,
     migration : Migration,

@@ -22,3 +22,7 @@ export interface XPAllocationTemplateData {
     experience : number | undefined
     editableExperience : boolean
 }
+
+export interface PracticeTemplateData {
+    skills : PillarsItem[]
+}

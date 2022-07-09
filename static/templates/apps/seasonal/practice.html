@@ -1,0 +1,30 @@
+<div class="practice">
+    <header>
+        <h3>Select or drag a Skill item to Practice</h3>
+    </header>
+
+    <div class="skill item-drag-container">
+        <div class="skill-header">
+            <h3 class="skill-name"></h3>
+            <a class="alert" title="{{localize 'PILLARS.CantPracticeSkill'}}" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+        </div>
+        <div class="item-drag">
+            <div class="dragarea">
+                <img src="">
+            </div>
+        </div>
+
+        <select>
+            <option value=""></option>
+            {{#each skills as |skill index|}}
+            <option value="{{skill.id}}">{{skill.name}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+    <div class="xp">
+        XP Received: 
+        <input type="number" disabled>
+    </div>
+    <button type="submit">{{localize "Submit"}}</button>
+</div>

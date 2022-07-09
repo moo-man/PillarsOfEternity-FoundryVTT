@@ -12,7 +12,6 @@ export default class SeasonalActivity extends Application {
   static get defaultOptions() {
     let options = super.defaultOptions;
     options.classes.push("seasonal-activity")
-    options.width = 700;
     options.resizable = true;
     return options
   }

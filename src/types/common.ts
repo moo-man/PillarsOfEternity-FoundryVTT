@@ -121,8 +121,12 @@ interface PhysicalItem {
 
 interface XPItem {
   data : {
-    data : XP & {modifier : {value : number}}
+    data : XPData
   }
+}
+
+interface XPData {
+    data : XP & {modifier : {value : number}}
 }
 
 export interface SeasonData {
@@ -195,4 +199,9 @@ export function isPhysical(item : any) : item is PhysicalItem
 export function hasXP(item : any) : item is XPItem
 {
   return item.data.data.xp
+}
+
+export function hasXPData(item : any) : item is XPData
+{
+  return item.data.xp
 }
