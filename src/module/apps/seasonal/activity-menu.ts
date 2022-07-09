@@ -4,13 +4,13 @@ import { PillarsActor } from "../../actor/actor-pillars";
 import BookOfSeasons from "../book-of-seasons";
 import SeasonalActivity from "./seasonal-activity";
 
-export default class SeasonalActivityMenu extends FormApplication<FormApplicationOptions, {activities : string[]}, {actor : PillarsActor, book : BookOfSeasons, index : number, season: string}> {
+export default class SeasonalActivityMenu extends FormApplication<FormApplicationOptions, {activities : string[]}, {actor : PillarsActor, index : number, season: string}> {
 
   activities : typeof SeasonalActivity[] = []
 
   resultData? : SeasonalActivityResult
 
-  constructor(object : {actor : PillarsActor, book : BookOfSeasons, index : number, season: string})
+  constructor(object : {actor : PillarsActor, index : number, season: string})
   {
     super(object);
     this.activities = getGame().pillars.seasonalActivities
@@ -33,7 +33,7 @@ export default class SeasonalActivityMenu extends FormApplication<FormApplicatio
 
   async _updateObject(event: Event, formData?: Record<string, string>): Promise<unknown> {
       let promise = await this.object.actor?.updateSeasonIndex(this.object.index, this.object.season, formData!["activity"] || "")
-      this.object.book.render();
+      this.object.actor.book.render();
       if (this.resultData)
       {
         await this.object.actor.update(this.resultData.data);

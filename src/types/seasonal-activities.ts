@@ -6,19 +6,19 @@ export interface SeasonalActivityData {
     actor : PillarsActor
 }
 
+export type SeasonalActivityResolve = (value :  SeasonalActivityResult) => void
+
 export interface SeasonalActivityResult {
     text : string, 
     data : ActorDataConstructorData
 }
 
-export interface AdventureActivityData extends SeasonalActivityData {
+export interface XPAllocationData extends SeasonalActivityData {
     experience : number | undefined
 }
 
-export interface AdventureTemplateData {
-    skills : PillarsItem[],
-    connections : PillarsItem[],
-    powerSources : PillarsItem[],
+export interface XPAllocationTemplateData {
+    lists : Record<string, {label : string, items : PillarsItem[]}>
     experience : number | undefined
     editableExperience : boolean
 }

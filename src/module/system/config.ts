@@ -407,6 +407,8 @@ export const PILLARS = {
     gear: 'PILLARS.Gear',
     tool: 'PILLARS.Tool',
     grimoire: 'PILLARS.Grimoire',
+    maedr: 'PILLARS.Maedr',
+    book: 'PILLARS.Book'
   },
 
   suitabilities: {

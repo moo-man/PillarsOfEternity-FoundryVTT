@@ -64,8 +64,8 @@ export default class BookOfSeasons extends Application {
     });
   }
 
-  indexToYear(index: number): number {
-    return this.actor?.seasons![index]?.year || -1;
+  static indexToYear(index: number, actor : PillarsActor): number {
+    return actor?.seasons![index]?.year || -1;
   }
 
   activateListeners(html: JQuery<HTMLElement>) {
@@ -92,13 +92,13 @@ export default class BookOfSeasons extends Application {
       let target = ev.currentTarget.dataset['target'];
       let index = parseInt(target.split('-')[0]);
       if (target.includes('aging')) {
-        let year = this.indexToYear(index);
+        let year = BookOfSeasons.indexToYear(index, this.actor!);
         let roll = await this.actor?.setupAgingRoll(year);
         await roll?.rollCheck();
         await roll?.sendToChat();
         this.render(true);
       } else {
-        new SeasonalActivityMenu({ actor: this.actor!, book: this, index, season: target.split('-')[1] }).render(true);
+        new SeasonalActivityMenu({ actor: this.actor!, index, season: target.split('-')[1] }).render(true);
       }
     });
 

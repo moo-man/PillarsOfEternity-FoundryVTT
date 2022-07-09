@@ -52,6 +52,11 @@ export default class TimeTracker extends Application<ApplicationOptions> {
   }
 
   _onForwardClick(ev: JQuery.ClickEvent) {
+    
+    if (!ev.shiftKey)
+    {
+
+    }
     this.changeTime(1);
   }
 

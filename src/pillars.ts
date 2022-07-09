@@ -39,6 +39,7 @@ import FoundryOverrides from "./module/system/overrides.js"
 import PillarsExplode from "./module/system/explode.js"
 import TimeTracker from "./module/apps/time-tracker";
 import AdventureSeasonalActivity from "./module/apps/seasonal/adventure";
+import SocializingSeasonalActivity from "./module/apps/seasonal/socializing";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -86,7 +87,8 @@ Hooks.on("init", () => {
       PowerCheck,
     },
     seasonalActivities : [
-      AdventureSeasonalActivity
+      AdventureSeasonalActivity,
+      SocializingSeasonalActivity
     ],
     DamageRoll : DamageRoll,
     migration : Migration,

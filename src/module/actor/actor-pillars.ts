@@ -29,6 +29,8 @@ import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry
 import { PillarsEffectChangeDataProperties } from '../../types/effects';
 import PILLARS_UTILITY from '../system/utility';
 import ItemDialog from '../apps/item-dialog';
+import BookOfSeasons from '../apps/book-of-seasons';
+import SeasonalActivityMenu from '../apps/seasonal/activity-menu';
 
 declare global {
   interface DocumentClassConfig {
@@ -957,6 +959,39 @@ export class PillarsActor extends Actor {
     }
   }
 
+  async handleSeasonChange() {
+    let game = getGame();
+    let needsUpdating = Object.keys(this.seasonsNeedUpdating).reverse();
+    // ex. 3-winter, 2-summer
+    let mostRecentSeason = needsUpdating[0]?.split("-");
+    let aging = mostRecentSeason?.[1] == "winter" || mostRecentSeason?.[1] == "aging"
+
+
+    // Prevent trying to update Aging section with normal seasonal activities
+    if (aging && mostRecentSeason)
+    {
+      mostRecentSeason[1] = "winter"
+    }
+
+    if (aging)
+    {
+      let roll = await this.setupAgingRoll(BookOfSeasons.indexToYear(Number(mostRecentSeason?.[0]), this));
+      await roll?.rollCheck();
+      await roll?.sendToChat();
+    }
+
+
+    if (mostRecentSeason)
+    {
+      Dialog.confirm({
+        title : game.i18n.localize("PILLARS.NewSeason"),
+        content : `<p>${game.i18n.localize("PILLARS.NewSeasonPrompt")}</p>`,
+        yes : () => new SeasonalActivityMenu({actor : this, index : Number(mostRecentSeason?.[0]), season : mostRecentSeason?.[1]!}).render(true),
+        no : () => {}
+      })
+    }
+  }
+
   /**
    *
    * Set a follower type, ignore subsequent changes
@@ -1076,6 +1111,11 @@ export class PillarsActor extends Actor {
   //     this.health.wounds.severe * (this.health.threshold.severe / 2);
   //   return woundModifier;
   // }
+
+
+  get book() {
+    return new BookOfSeasons(this)
+  }
 
   // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
 

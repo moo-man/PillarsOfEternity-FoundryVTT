@@ -1,0 +1,48 @@
+<div class="xp-allocation">
+    <header>
+        <div class="rules">
+            <div class="3into3">
+                <span class="status">3 into 3</span>
+                <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                <a class="pass" style="display: none"><i class="fas fa-check"></i></a>
+            </div>
+
+            <div class="experience">
+                <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                XP
+                <input type="number" class="availableExp" readonly value="{{experience}}">
+                /
+                <input type="number" class="totalExp" {{#unless editableExperience}}readonly{{/unless}} value="{{experience}}">
+            </div>
+
+        </div>
+
+    </header>
+
+    <div class="item-lists">
+
+
+        {{#each lists as |list type|}}
+        
+        <div class="item-list {{type}}">
+            <p><strong>{{list.label}}</strong></p>
+            <div class="directory">
+                <ol class="directory-list">
+                    {{#each list.items as |item i|}}
+                    <li class="directory-item document item flexrow" data-id="{{item.id}}">
+                        <img class="thumbnail" src="{{item.data.img}}">
+                        <h4 class="document-name">{{item.name}}</h4>
+                        <input class="item-experience" type="number">
+                    </li>
+                    {{/each}}
+                </ol>
+            </div>
+        </div>
+        {{/each}}
+
+
+    </div>
+
+    <button type="submit">{{localize "Submit"}}</button>
+
+</div>

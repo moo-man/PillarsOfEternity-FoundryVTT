@@ -254,7 +254,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
         label: getGame().i18n.localize("PILLARS.Seasons"),
         icon: 'fas fa-book',
         onclick: (ev) => {
-          new BookOfSeasons(this.actor).render(true);
+          this.actor.book.render(true);
         },
       });
     }
@@ -918,7 +918,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     for (let s of allSkills) selectElement += `<option name=${s.name}>${s.name}</option>`;
     selectElement += '</select>';
     let game = getGame()
-    let dialog = new Dialog({
+    new Dialog({
       title: game.i18n.localize("PILLARS.UntrainedSkill"),
       //content : `<div style="display:flex; align-items: center"><label style="flex: 1">Name of Skill</label><input style="flex: 1" type='text' name='skill'/></div>`,
       content: `<div style="display:flex; align-items: center"><label style="flex: 1">Skill</label>${selectElement}</div>`,
@@ -939,7 +939,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
       render: (dlg) => {
         $(dlg).find('select')[0]?.focus();
       },
-    });
+    }).render(true);
   }
 
   async _onWeaponRoll(event: JQuery.ClickEvent) {

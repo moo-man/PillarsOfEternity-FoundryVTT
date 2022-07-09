@@ -7,13 +7,12 @@ export default function () {
 
 
     Hooks.on("updateSetting", (setting : Setting) => {
-
+        let game = getGame()
         // When the season setting is updated, make sure alerts for season notes are updated real time
         if (setting.key == "pillars-of-eternity.season")
         {
-            getGame().pillars.TimeTracker.render(true)
+            game.pillars.TimeTracker.render(true)
             let windows = Object.values(ui.windows)   
-            
             windows.forEach(w => {
 
                 // We don't rerender actor sheets (as this can disrupt player inputs), only edit the DOM directly
@@ -29,6 +28,13 @@ export default function () {
                     // w.checkAlerts();
                 }
             })
+
+
+            if (!game.user!.isGM && game.user!.character)
+            {
+                game.user?.character.handleSeasonChange();
+            }
+
         }
     })
 

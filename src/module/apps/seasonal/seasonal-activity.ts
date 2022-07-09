@@ -1,12 +1,12 @@
 import { getGame } from '../../../pillars';
-import { SeasonalActivityData, SeasonalActivityResult } from '../../../types/seasonal-activities';
+import { SeasonalActivityData, SeasonalActivityResolve, SeasonalActivityResult } from '../../../types/seasonal-activities';
 import { PillarsActor } from '../../actor/actor-pillars';
 import BookOfSeasons from '../book-of-seasons';
 
 export default class SeasonalActivity extends Application {
 
   actor: PillarsActor;
-  resolve? : (value :  SeasonalActivityResult) => void
+  resolve? : SeasonalActivityResolve
 
   
   static get defaultOptions() {
@@ -18,7 +18,7 @@ export default class SeasonalActivity extends Application {
   }
 
 
-  constructor(data : SeasonalActivityData, resolve? : (value :  SeasonalActivityResult) => void, options?: ApplicationOptions) {
+  constructor(data : SeasonalActivityData, resolve? : SeasonalActivityResolve, options?: ApplicationOptions) {
     super(options);
     {
       this.actor = data.actor;
