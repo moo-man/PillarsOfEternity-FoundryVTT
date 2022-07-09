@@ -2,6 +2,13 @@
     <div class="form-group">
         <label>{{localize "PILLARS.Activity"}}</label>
         <div class="form-fields">
+            <select class="activity-select">
+                <option value=""></option>
+                {{#each activities as |activity index|}}
+                <option value="{{index}}">{{activity}}</option> 
+                {{/each}}
+            </select> 
+            
             <input type="text" name="activity">
         </div>
     </div>

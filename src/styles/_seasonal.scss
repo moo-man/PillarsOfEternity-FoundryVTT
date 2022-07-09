@@ -1,0 +1,94 @@
+#activity-menu {
+
+  label {
+    flex : 1;
+  }
+
+  .form-fields {
+    flex : 3;
+  }
+
+  input[name='activity'] {
+      flex: 4
+  }
+}
+
+.seasonal-activity {
+  .directory {
+    overflow: auto;
+  }
+
+  .window-content {
+    overflow-y: hidden;
+
+    > * {
+      height: 100%
+    }
+  }
+
+  .alert {
+    margin: 3px
+  }
+
+
+  .item-lists {
+    display: flex;
+    height: calc(100% - 60px);
+
+    .item-list.skills {
+      flex: 2
+    }
+
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      flex : 1;
+      overflow-y: auto;
+      input {
+        flex: 0 0 40px;
+        margin: 10px;
+      }
+
+      li {
+        border-bottom: none;
+        align-items: center;
+      }
+
+      li:last-of-type {
+        border-bottom: 1px solid black
+      }
+
+    }
+  }
+
+  p {
+    text-align: center;
+  }
+
+  input[type="number"] {
+    text-align: center;
+  }
+
+  .rules {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    > * {
+      display: flex;
+      align-items: center;
+    }
+
+    .experience {
+      input {
+        width: 30px;
+        border: none;
+      }
+    }
+  }
+
+  .disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}

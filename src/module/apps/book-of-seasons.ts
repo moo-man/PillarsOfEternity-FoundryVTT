@@ -2,7 +2,8 @@ import { getGame } from '../../pillars';
 import { SeasonData } from '../../types/common';
 import { PillarsActor } from '../actor/actor-pillars';
 import { PILLARS } from '../system/config';
-import SeasonalActivity from './seasonal-activity';
+import SeasonalActivityMenu from './seasonal/activity-menu';
+import SeasonalActivity from './seasonal/seasonal-activity';
 
 export default class BookOfSeasons extends Application {
   actor?: PillarsActor;
@@ -97,7 +98,7 @@ export default class BookOfSeasons extends Application {
         await roll?.sendToChat();
         this.render(true);
       } else {
-        new SeasonalActivity({ book: this, index, season: target.split('-')[1] }).render(true);
+        new SeasonalActivityMenu({ actor: this.actor!, book: this, index, season: target.split('-')[1] }).render(true);
       }
     });
 

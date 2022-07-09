@@ -1013,6 +1013,22 @@ export class PillarsActor extends Actor {
     return this.update({ 'data.life': { birthYear, startYear: year } });
   }
 
+
+  /**
+   * Clears used items
+   */
+  clearUsed() {
+    let items = this.items.filter(i => !!i.used?.value).map(i => i.toObject())
+
+    items.forEach(i => {
+      if (isUsable(i))
+        i.data.used.value = false
+    })
+
+    if (items.length)
+      return this.update({items})
+  }
+
   /**
    * Compares the current time in the world settings and returns the index-season values that need updating
    */
