@@ -120,9 +120,8 @@ interface PhysicalItem {
 }
 
 interface XPItem {
-  data : {
-    data : XPData
-  }
+  data : XPData
+  
 }
 
 interface XPData {

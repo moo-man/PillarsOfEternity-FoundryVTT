@@ -588,9 +588,26 @@ export interface EquipmentSourceData
     value: string;
     suitability: string;
   };
+  subtype : {
+    value : string
+  },
+  range : number[],
+  subject : {
+    value: string
+  }
+  training : {
+      value : number
+  },
+  language : {
+      value : string
+  },
   wearable: {
     value: boolean;
   };
+  qualities : {
+    greater :  string,
+    lesser : string
+  }
 }
 
 export interface ConnectionSource {

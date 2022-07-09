@@ -411,6 +411,16 @@ export const PILLARS = {
     book: 'PILLARS.Book'
   },
 
+  bookTypes: {
+    powerSource: 'PILLARS.PowerSource',
+    academic: 'PILLARS.Academic',
+    artistic: 'PILLARS.Artistic',
+    martial: 'PILLARS.Martial',
+    physical: 'PILLARS.Physical',
+    social: 'PILLARS.Social',
+    worldly: 'PILLARS.Worldly',
+  },
+
   suitabilities: {
     none: 'PILLARS.NoSuitability',
     good: 'PILLARS.GoodSuitability',

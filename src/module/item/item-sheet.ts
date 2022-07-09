@@ -179,6 +179,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     html.find('.embedded-power-edit').on('change', this._onEditEmbeddedPower.bind(this));
     html.find(".bond-trait input").on("change", this._onBondTraitChecked.bind(this));
     html.find(".phase-range").on("change", this._onPhaseRangeChange.bind(this))
+    html.find(".array-edit").on("change", this._onArrayEdit.bind(this))
   }
 
   _onConfigureSpecialsClick(ev: JQuery.ClickEvent) {
@@ -383,4 +384,21 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
 
     this.item.update({[`data.phases.${phase}`] : range})
   }
+
+  
+  // Handle data properties that are arrays
+  _onArrayEdit(ev : JQuery.ChangeEvent)
+  { 
+    let index = Number(ev.currentTarget.dataset.index);
+    let path = ev.currentTarget.dataset.path as string
+    let value = ev.target.value as number | string
+    let array = duplicate(getProperty(this.item.data, path));
+
+    if (Number.isNumeric(value))
+      value = Number(value);
+
+    array[index] = value
+    return this.item.update({[`${path}`] : array})
+  }
 }
+

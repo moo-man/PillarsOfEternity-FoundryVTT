@@ -511,9 +511,26 @@
                 "value": "",
                 "suitability": "none"
             },
+            "subtype" : {
+                "value" : ""
+            },
+            "subject" : {
+                "value" : ""
+            },
+            "range" : [null, null],
+            "training" : {
+                "value" : 0
+            },
+            "language" : {
+                "value" : ""
+            },
             "wearable": {
                 "value": false
-            }
+            },
+            "qualities" : {
+                "greater" : "",
+                "lesser" : ""
+              }
         },
         "connection": {
             "templates": [
