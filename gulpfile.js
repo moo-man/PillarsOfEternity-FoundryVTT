@@ -1,5 +1,7 @@
 var gulp = require('gulp');
 const gulpEsbuild = require('gulp-esbuild')
+const esbuild = require('esbuild')
+
 const sass = require('gulp-sass')(require('sass'));
 const esCopy = require("esbuild-plugin-copy")
 const foundryPath = require("./foundry-path.js")
@@ -26,7 +28,9 @@ gulp.task("build", function()
 })
 
 gulp.task("src", function (resolve) {
-  gulp.src("src/pillars.ts").pipe(gulpEsbuild(esBuildConfig)).pipe(gulp.dest(buildPath))
+  //gulp.src("src/pillars.ts").pipe(gulpEsbuild(esBuildConfig)).pipe(gulp.dest("buildPath")) doesn't work with es-copy
+
+  esbuild.build(esBuildConfig)
   resolve();
 })
 
