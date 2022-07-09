@@ -295,8 +295,27 @@ export class PillarsActor extends Actor {
   prepareCombat() {
     let equippedArmor = this.equippedArmor;
     let equippedShield = this.equippedShield;
-
+    let equippedWeapons = this.getItemTypes(ItemType.weapon).filter(i => i.equipped?.value)
     let game = getGame();
+
+    let weaponDeflectionBonus = 0;
+    for(let weapon of equippedWeapons)
+    {
+      let skill = weapon.Skill
+      if(skill)
+      {
+        let bonus = Math.floor((skill.rank || 0) / 5)
+        if (bonus > weaponDeflectionBonus)
+          weaponDeflectionBonus = bonus;
+      }
+    }
+
+    if (weaponDeflectionBonus > 0)
+    {
+      this.defenses.deflection.value += weaponDeflectionBonus
+      this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: weaponDeflectionBonus, source: game.i18n.localize('PILLARS.TooltipWeaponDeflectionBonus') }));
+    }
+
 
     if (equippedArmor) {
       this.soak.base += equippedArmor.soak!.value || 0;
