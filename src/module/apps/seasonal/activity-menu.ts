@@ -33,12 +33,12 @@ export default class SeasonalActivityMenu extends FormApplication<FormApplicatio
 
   async _updateObject(event: Event, formData?: Record<string, string>): Promise<unknown> {
       let promise = await this.object.actor?.updateSeasonIndex(this.object.index, this.object.season, formData!["activity"] || "")
-      this.object.actor.book.render();
       if (this.resultData)
       {
         await this.object.actor.update(this.resultData.data);
         await this.object.actor.clearUsed();
       }
+      this.object.actor.book.render(true);
       return promise
   }
 
@@ -46,6 +46,8 @@ export default class SeasonalActivityMenu extends FormApplication<FormApplicatio
       super.activateListeners(html)
 
       html.find(".activity-select").on("change", async (ev : JQuery.ChangeEvent)=> {
+        if (!ev.currentTarget.value)
+          return
         let index = Number(ev.currentTarget.value);
         if (this.activities[index])
         {

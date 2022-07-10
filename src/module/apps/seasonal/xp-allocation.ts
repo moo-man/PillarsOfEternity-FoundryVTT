@@ -12,8 +12,7 @@ export default class XPAllocationActivity extends SeasonalActivity {
     availableExperience?: HTMLInputElement;
     totalExp?: HTMLInputElement;
     itemLists?: HTMLDivElement;
-    submitButton?: HTMLButtonElement;
-  } = {};
+  } & SeasonalActivity["ui"]= {};
 
   alerts: {
     threeIntoThreeAlert?: HTMLAnchorElement;
@@ -91,34 +90,13 @@ export default class XPAllocationActivity extends SeasonalActivity {
     this.alerts.threeIntoThreePass = html.find<HTMLAnchorElement>('.3into3 .pass')[0];
     this.alerts.experience = html.find<HTMLAnchorElement>('.experience .alert')[0];
 
-    this.ui.submitButton = html.find<HTMLButtonElement>("button[type='submit']").on('click', (ev: JQuery.ClickEvent) => {
-      let game = getGame();
-
-      let errors = this.checkData();
-
-      if (errors?.length) {
-        Dialog.confirm({
-          title: game.i18n.localize('Error'),
-          content: game.i18n.format('PILLARS.XPAllocationErrors', { errors: `<ul>${'<li>' + errors.join('</li><li>') + '</li>'}</ul>` }),
-
-          yes: () => {
-            this.submit();
-            this.close();
-          },
-          no: () => {},
-        });
-      } else {
-        this.submit();
-        this.close();
-      }
-    })[0];
-
-    this.checkData();
+    this.checkData()
   }
 
-  checkData() {
-    let errors : string[] = [];
+  checkData() : {errors : string[], message : string}{
 
+    let state : {errors: string[], message : string}= {errors : [], message : ""};
+ 
     // If no experience, prevent item lists from being filled
     if (!this.ui.totalExp?.value && !this.ui.itemLists?.classList.contains('disabled')) {
       this.ui.itemLists?.classList.add('disabled');
@@ -126,11 +104,12 @@ export default class XPAllocationActivity extends SeasonalActivity {
       this.hideAlert(this.alerts.experience);
       this.hideAlert(this.alerts.threeIntoThreeAlert);
       this.hideAlert(this.alerts.threeIntoThreePass);
-      return;
+      return state;
     } else if (this.ui.itemLists?.classList.contains('disabled')) {
-      this.ui.submitButton!.disabled = false;
       this.ui.itemLists.classList.remove('disabled');
     }
+
+    this.ui.submitButton!.disabled = this.ui.itemLists?.classList.contains("disabled")!
 
     // Get all items with experience allocated
     let itemsAllocated = Array.from(this.ui.itemLists?.querySelectorAll<HTMLInputElement>('.item-experience')!).filter((i) => (i.value || 0) > 0);
@@ -140,10 +119,10 @@ export default class XPAllocationActivity extends SeasonalActivity {
 
     if (experienceAllocated > Number(this.ui.totalExp?.value || 0)) {
       this.showAlert(this.alerts.experience);
-      errors.push('Allocated XP exceeds total XP available.');
+      state.errors.push('Allocated XP exceeds total XP available.');
     } else {
        if (experienceAllocated < Number(this.ui.totalExp?.value || 0))
-        errors.push('XP still available to spend')
+        state.errors.push('XP still available to spend')
        this.hideAlert(this.alerts.experience);
     }
 
@@ -156,12 +135,14 @@ export default class XPAllocationActivity extends SeasonalActivity {
     if (greaterThan3.length < 3 && experienceAllocated > 0) {
       this.showAlert(this.alerts.threeIntoThreeAlert);
       this.hideAlert(this.alerts.threeIntoThreePass);
-      errors.push('3 into 3 rule not satisified');
+      state.errors.push('3 into 3 rule not satisified');
     } else if (experienceAllocated > 0) {
       this.hideAlert(this.alerts.threeIntoThreeAlert);
       this.showAlert(this.alerts.threeIntoThreePass);
     }
 
-    return errors;
+    state.message = getGame().i18n.format('PILLARS.XPAllocationErrors', { errors: `<ul>${'<li>' + state.errors.join('</li><li>') + '</li>'}</ul>` })
+
+    return state;
   }
 }

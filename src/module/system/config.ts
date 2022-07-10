@@ -421,6 +421,15 @@ export const PILLARS = {
     worldly: 'PILLARS.Worldly',
   },
 
+  languageProficiencies :  {
+    none : "PILLARS.None",
+    rudimentary : "PILLARS.Rudimentary",
+    basic : "PILLARS.Basic",
+    conversational : "PILLARS.Conversational",
+    fluent : "PILLARS.Fluent",
+    native : "PILLARS.Native",
+  },
+
   suitabilities: {
     none: 'PILLARS.NoSuitability',
     good: 'PILLARS.GoodSuitability',

@@ -1,13 +1,15 @@
 import { getGame } from '../../../pillars';
 import { SeasonalActivityData, SeasonalActivityResolve, SeasonalActivityResult } from '../../../types/seasonal-activities';
 import { PillarsActor } from '../../actor/actor-pillars';
-import BookOfSeasons from '../book-of-seasons';
 
 export default class SeasonalActivity extends Application {
 
   actor: PillarsActor;
   resolve? : SeasonalActivityResolve
 
+  ui : {
+    submitButton?: HTMLButtonElement;
+  } = {}
   
   static get defaultOptions() {
     let options = super.defaultOptions;
@@ -52,6 +54,42 @@ export default class SeasonalActivity extends Application {
   {
     if (alert)
       alert.style.display = "none"
+  }
+
+  checkData() : {errors : string[], message : string}{
+    return {
+      message : "",
+      errors: []
+    }
+  }
+
+
+
+  activateListeners(html: JQuery<HTMLElement>): void {
+    super.activateListeners(html)
+    
+    this.ui.submitButton = html.find<HTMLButtonElement>("button[type='submit']").on('click', (ev: JQuery.ClickEvent) => {
+      let game = getGame();
+
+      let state = this.checkData();
+
+      if (state.errors.length) {
+        Dialog.confirm({
+          title: game.i18n.localize('Error'),
+          content: state.message,
+          yes: () => {
+            this.submit();
+            this.close();
+          },
+          no: () => {},
+        });
+      } else {
+        this.submit();
+        this.close();
+      }
+    })[0];
+
+    this.checkData();
   }
 }
 

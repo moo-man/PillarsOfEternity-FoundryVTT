@@ -86,9 +86,16 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label>{{localize "PILLARS.Training"}}</label>
+                <div class="form-fields">
+                    <input type="number" name="data.training.value" value="{{data.training.value}}" data-dtype="Number">
+                </div>
+            </div>
+
 
             <div class="form-group">
-                <label>{{localize "PILLARS.Range"}}</label>
+                <label>{{localize "PILLARS.SkillRequirement"}}</label>
                 <div class="form-fields small">
                     <input class="array-edit" data-path="data.range" data-index="0" type="number" value="{{data.range.[0]}}" data-dtype="Number">
                     <input class="array-edit" data-path="data.range" data-index="1" type="number" value="{{data.range.[1]}}" data-dtype="Number">

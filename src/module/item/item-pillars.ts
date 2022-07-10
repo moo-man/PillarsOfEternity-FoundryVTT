@@ -585,6 +585,25 @@ export class PillarsItem extends Item {
     return (this.type == 'equipment' && (this.wearable?.value || this.category?.value == 'grimoire')) || this.type == 'weapon' || this.type == 'armor' || this.type == 'shield';
   }
 
+  get languageProficiency() : keyof typeof PILLARS.languageProficiencies {
+    if (this.data.type == "skill" && this.data.data.category.value == "language")
+    {
+      let rank = this.xp?.rank || 0
+      if (rank >= 9)
+        return "native"
+      else if (rank >= 7)
+        return "fluent"
+      else if (rank >= 5)
+        return "conversational"
+      else if (rank >= 3)
+        return "basic"
+      else if (rank >= 1)
+        return "rudimentary"
+      else return "none"
+    }
+    else return "none"
+  }
+
   // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
 
   get Category() {

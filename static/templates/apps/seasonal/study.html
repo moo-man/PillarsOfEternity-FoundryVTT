@@ -1,0 +1,60 @@
+<div class="study">
+
+    <nav class="sheet-tabs tabs">
+        <a  class="tab-select item active" data-tab="text">{{localize "PILLARS.TextStudy"}}</a>
+        <a  class="tab-select item" data-tab="teacher">{{localize "PILLARS.Teacher"}}</a>
+    </nav>
+    <div class="tab-content">
+        <div class="tab text" data-tab="text">
+            <header>
+                <h3>Drag and drop the Book you wish to study</h3>
+            </header>
+        
+            <div class="item-drag-container">
+                <div class="item-header">
+                    <h3 class="item-name"></h3>
+                </div>
+                <div class="item-drag">
+                    <div class="dragarea">
+                        <img src="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-details">
+                <div class="language">
+                    <label>
+                        {{localize "PILLARS.Language"}} 
+                        <a class="pass" style="display: none"><i class="fas fa-check"></i></a>
+                        <a class="warn" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                        <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                    </label>
+                    <span class="status"></span>
+                   
+                </div>
+                <div class="subject">
+                    <label>{{localize "PILLARS.Subject"}}</label>
+                    <span class="status"></span>
+                </div>
+                <div class="req">
+                    <label>
+                        {{localize "PILLARS.SkillRequirement"}}
+                        <a class="pass" style="display: none"><i class="fas fa-check"></i></a>
+                        <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                    </label>
+                    <span class="status"></span>
+                </div>
+
+            </div>
+        
+            <div class="xp">
+                XP Received: 
+                <input type="number">
+            </div>
+        </div>
+        <div class="tab teacher" data-tab="teacher">
+            teacher
+        </div>
+    </div>
+    <button type="submit">{{localize "Submit"}}</button>
+</div>

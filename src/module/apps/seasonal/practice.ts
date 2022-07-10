@@ -7,12 +7,11 @@ import SeasonalActivity from './seasonal-activity';
 export default class PracticeSeasonalActivity extends SeasonalActivity {
   ui: {
     xp?: HTMLInputElement;
-    submitButton?: HTMLButtonElement;
     skillSelect?: HTMLSelectElement;
     skillDrag?: HTMLDivElement;
     skillImg?: HTMLImageElement;
     skillName?: HTMLHeadingElement;
-  } = {};
+  } & SeasonalActivity["ui"] = {};
 
   alerts: {
     skillAlert?: HTMLAnchorElement;
@@ -139,7 +138,7 @@ export default class PracticeSeasonalActivity extends SeasonalActivity {
     dragDrop.bind(html[0]!)
 
     super.activateListeners(html);
-    this.alerts.skillAlert = html.find<HTMLAnchorElement>('.skill-header .alert')[0];
+    this.alerts.skillAlert = html.find<HTMLAnchorElement>('.item-header .alert')[0];
     this.ui.skillSelect = html.find<HTMLSelectElement>(".skill select").on("change", (ev : JQuery.ChangeEvent) => {
       let id = ev.currentTarget.value;
       let item = getGame().items!.get(id)
@@ -148,7 +147,7 @@ export default class PracticeSeasonalActivity extends SeasonalActivity {
     })[0]
     this.ui.skillDrag = html.find<HTMLDivElement>(".dragarea")[0]
     this.ui.skillImg = html.find<HTMLImageElement>(".dragarea img")[0]
-    this.ui.skillName = html.find<HTMLImageElement>(".skill-name")[0]
+    this.ui.skillName = html.find<HTMLImageElement>(".item-name")[0]
     this.ui.xp = html.find<HTMLInputElement>(".xp input")[0]
 
     this.ui.skillDrag?.addEventListener("dragenter", (ev : DragEvent) => {
@@ -157,49 +156,26 @@ export default class PracticeSeasonalActivity extends SeasonalActivity {
     this.ui.skillDrag?.addEventListener("dragleave", (ev : DragEvent) => {
       (ev.target as HTMLElement).classList.remove("hover")
     })
-
-
-    //TODO:  Lift this to the base class
-    this.ui.submitButton = html.find<HTMLButtonElement>("button[type='submit']").on('click', (ev: JQuery.ClickEvent) => {
-      let game = getGame();
-
-      let errors = this.checkData();
-
-      if (errors?.length) {
-        Dialog.confirm({
-          title: game.i18n.localize('Error'),
-          content: game.i18n.format('PILLARS.PracticeErrors', { errors: `<ul>${'<li>' + errors.join('</li><li>') + '</li>'}</ul>` }),
-
-          yes: () => {
-            this.submit();
-            this.close();
-          },
-          no: () => {},
-        });
-      } else {
-        this.submit();
-        this.close();
-      }
-    })[0];
-    this.checkData();
   }
 
-  checkData() {
-    let errors : string[] = [];
+  checkData() : {errors : string[], message : string}{
+    let state : {errors: string[], message : string}= {errors : [], message : ""};
 
     if (this.item)
     {
       if (["social", "academic"].includes(this.item.category?.value!))
       {
         this.showAlert(this.alerts.skillAlert)
-        errors.push(getGame().i18n.localize("PILLARS.CantPracticeSkill"))
+        state.errors.push(getGame().i18n.localize("PILLARS.CantPracticeSkill"))
       }
       else
       {
         this.hideAlert(this.alerts.skillAlert)
       }
     }
+    
+    state.message = getGame().i18n.format('PILLARS.PracticeErrors', { errors: `<ul>${'<li>' + state.errors.join('</li><li>') + '</li>'}</ul>` })
 
-    return errors;
+    return state;
   }
 }

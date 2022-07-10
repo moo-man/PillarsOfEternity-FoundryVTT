@@ -17,47 +17,28 @@
 
 .seasonal-activity {
 
+  nav {
+    border : 3px groove 
+  }
+
+  .tab-content {
+    width: 100%
+  }
+
+  .study .text,
   .practice {
     display :flex;
     flex-direction: column;
     align-items: center;
 
-    height: 500px;
 
-    .skill-header {
+    .item-header {
       display: flex;
       align-items: center;
       h3 {
         margin:0px
       }
     }
-
-    .item-drag-container {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      width: 100%;
-      align-items: center;
-
-        .item-drag {
-          flex: 1;
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          .dragarea {
-            margin: 5px 20px;
-            border: 1px dotted black;
-            height: 200px;
-            width: 200px;
-          }
-
-          .dragarea.hover {
-            box-shadow: 0 0 10px inset;
-          }
-        }
-      }
-
       select {
         width: fit-content
       }
@@ -70,6 +51,33 @@
       }
     }
   }
+
+  
+  .item-drag-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    align-items: center;
+
+      .item-drag {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .dragarea {
+          margin: 5px 20px;
+          border: 1px dotted black;
+          height: 200px;
+          width: 200px;
+        }
+
+        .dragarea.hover {
+          box-shadow: 0 0 10px inset;
+        }
+      }
+    }
 
   .directory {
     overflow: auto;
@@ -87,6 +95,10 @@
     color: red;
   }
 
+  .warn {
+    color : orange
+  }
+  
   .pass {
     color: green
   }
@@ -151,6 +163,17 @@
   .disabled {
     pointer-events: none;
     opacity: 0.5;
+  }
+
+  .book-details {
+    display: flex;
+    width: 100%;
+    > * {
+      flex: 1;
+      display : flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
 }

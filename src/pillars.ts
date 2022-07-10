@@ -41,6 +41,7 @@ import TimeTracker from "./module/apps/time-tracker";
 import AdventureSeasonalActivity from "./module/apps/seasonal/adventure";
 import SocializingSeasonalActivity from "./module/apps/seasonal/socializing";
 import PracticeSeasonalActivity from "./module/apps/seasonal/practice";
+import StudySeasonalActivity from "./module/apps/seasonal/study";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -90,7 +91,8 @@ Hooks.on("init", () => {
     seasonalActivities : [
       AdventureSeasonalActivity,
       SocializingSeasonalActivity,
-      PracticeSeasonalActivity
+      PracticeSeasonalActivity,
+      StudySeasonalActivity
     ],
     DamageRoll : DamageRoll,
     migration : Migration,
