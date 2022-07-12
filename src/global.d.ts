@@ -408,7 +408,7 @@ export interface PowerSource {
   type: 'power';
   data: PowerSourceData;
   ownedId?: string
-  groups : PowerGroups
+  groups? : PowerGroups
   display? : PowerGroup
 }
 

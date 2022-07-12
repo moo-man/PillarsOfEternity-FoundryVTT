@@ -437,6 +437,97 @@ export const PILLARS = {
     poor: 'PILLARS.PoorSuitability',
   },
 
+  qualities : {
+    terrible : 'PILLARS.TerribleQuality',
+    poor : 'PILLARS.PoorQuality',
+    standard : 'PILLARS.StandardQuality',
+    fine : 'PILLARS.FineQuality',
+    exceptional : 'PILLARS.ExceptionalQuality',
+    superb : 'PILLARS.SuperbQuality',
+    legendary : 'PILLARS.LegendaryQuality'
+  },
+
+  embellishmentQualities : ["fine", "exceptional", "superb", "legendary"],
+  
+  qualityData : {
+    fine : {
+      difficulty : 25,
+      enchantMultiplier : 2,
+      seasons : 1,
+      cost : 500,
+      soak : 1,
+      accuracy : 1
+    },
+    exceptional : {
+      difficulty : 30,
+      enchantMultiplier : 3,
+      seasons : 2,
+      cost : 1000,
+      soak : 2,
+      accuracy : 2
+    },
+    superb : {
+      difficulty : 35,
+      enchantMultiplier : 4,
+      seasons : 4,
+      cost : 2000,
+      soak : 3,
+      accuracy : 3
+    },
+    legendary : {
+      difficulty : 40,
+      enchantMultiplier : 5,
+      seasons : 8,
+      cost : 4000,
+      soak : 4,
+      accuracy : 4
+    },
+    mythic : {
+      soak : 5,
+      accuracy : 5
+    },
+  },
+
+  refinementData : {
+    2 : {
+      difficulty: 15,
+      cost : 1000
+    },
+    3 : {
+      difficulty : 21,
+      cost : 2000
+    },
+    4 : {
+      difficulty : 30,
+      cost: 4000
+    }
+  },
+
+  itemSizeMultiplier : {
+    tiny : 0.25,
+    small : 0.5,
+    average : 1,
+    large : 1.5,
+    huge : 4,
+  },
+
+  itemSizeMaxEffectLevels : {
+    tiny : 10,
+    small : 15,
+    average : 20,
+    large : 25,
+    huge : 30,
+  },
+
+
+  itemSizes : {
+    tiny : "PILLARS.ItemSizeTiny",
+    small : "PILLARS.ItemSizeSmall",
+    average : "PILLARS.ItemSizeAverage",
+    large : "PILLARS.ItemSizeLarge",
+    huge : "PILLARS.ItemSizeHuge"
+  },
+
   actorSizes: [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
 
   allowEmbeddedPowers: ['attribute', 'weapon', 'armor', 'shield', 'equipment', 'species', 'stock', 'godlike'],

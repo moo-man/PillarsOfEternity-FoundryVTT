@@ -10,7 +10,7 @@ export type SeasonalActivityResolve = (value :  SeasonalActivityResult) => void
 
 export interface SeasonalActivityResult {
     text : string, 
-    data : ActorDataConstructorData
+    data : Partial<ActorDataConstructorData>
 }
 
 export interface XPAllocationData extends SeasonalActivityData {
@@ -26,3 +26,8 @@ export interface XPAllocationTemplateData {
 export interface PracticeTemplateData {
     skills : PillarsItem[]
 }
+
+
+export enum ENCHANTMENT_STATE {NOT_STARTED, IN_PROGRESS, FINISHED}
+
+

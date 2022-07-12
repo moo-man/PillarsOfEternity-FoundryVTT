@@ -6,7 +6,7 @@ import { PowerSource } from '../../global';
 import { getGame } from '../../pillars';
 import { DamageType, Defense, hasCategory, hasEmbeddedPowers, hasXP, isEquippable, isPhysical, isUsableItem, ItemType } from '../../types/common';
 import { ItemChatData,  WeaponSpecialData } from '../../types/items';
-import { PowerBaseEffect, PowerDamage, PowerDisplay, PowerDuration, PowerGroup, PowerGroups, PowerHealing, PowerMisc, PowerRange, PowersConstructorContext, PowerTarget } from '../../types/powers';
+import { EmbeddedPower, PowerBaseEffect, PowerDamage, PowerDisplay, PowerDuration, PowerGroup, PowerGroups, PowerHealing, PowerMisc, PowerRange, PowersConstructorContext, PowerTarget } from '../../types/powers';
 import { PILLARS } from '../system/config';
 import PILLARS_UTILITY from '../system/utility';
 /**
@@ -479,6 +479,30 @@ export class PillarsItem extends Item {
     }
   }
 
+  async addEmbeddedPower(power : EmbeddedPower)
+  {
+    if (this.type == 'equipment' && this.category?.value == 'grimoire' && power.data.source.value != 'arcana')
+      return ui.notifications?.error(getGame().i18n.localize("PILLARS.OnlyArcanaInGrimoire"))
+    if (this.type == 'equipment' && this.category?.value == 'grimoire') power.data.embedded.spendType = 'source';
+
+    // If drag item was an owned power already, add embedded data to it
+    let ownedPower: PillarsItem | undefined;
+    if (this.isOwned && this.actor!.items.get(power._id!)) {
+      ownedPower = this.actor!.items.get(power._id!);
+      power.ownedId = ownedPower?.id!;
+    } else if (this.isOwned) {
+      // If drag item was not owned, but the drop item is, add the drag item to the actor
+      ownedPower = (await this.actor!.createEmbeddedDocuments('Item', [{ ...power }]))[0] as PillarsItem;
+      power.ownedId = ownedPower?.id!;
+    }
+
+    let powers = foundry.utils.deepClone(this.powers) || []; // TODO test this
+    powers.push(power);
+    return this.update({ 'data.powers': powers }).then((item) => {
+      if (ownedPower) ownedPower.update({ 'data.embedded.item': item?.id, 'data.embedded.spendType': 'source' });
+    });
+  }
+
   async _checkGrimoirePowers() {
     let powers = duplicate(this.powers || []);
 
@@ -700,17 +724,17 @@ export class PillarsItem extends Item {
       if (this.data.type == 'power') {
         let groupIndex: number = this.getFlag('pillars-of-eternity', 'displayGroup') as number;
 
-        let group = Object.keys(this.data.groups)[groupIndex];
-        let first = Object.keys(this.data.groups)
+        let group = Object.keys(this.data.groups!)[groupIndex];
+        let first = Object.keys(this.data.groups!)
           .filter((i) => i)
           .sort((a, b): number => (a > b ? 1 : -1))[0];
 
         if (type && group) {
-          if (group && this.data.groups[group] && (this.data.groups[group]![type] as Array<unknown>).length) return group;
-          else if (first && this.data.groups[first] && (this.data.groups[first]![type] as Array<unknown>).length) return first;
+          if (group && this.data.groups![group] && (this.data.groups![group]![type] as Array<unknown>).length) return group;
+          else if (first && this.data.groups![first] && (this.data.groups![first]![type] as Array<unknown>).length) return first;
           else return '';
         } else {
-          if (group && Object.keys(this.data.groups[group] || {}).length) return group;
+          if (group && Object.keys(this.data.groups![group] || {}).length) return group;
           else return first;
         }
       }
@@ -725,7 +749,7 @@ export class PillarsItem extends Item {
     try {
       if (this.data.type == 'power') {
         let groupIndex: number = this.getFlag('pillars-of-eternity', 'displayGroup') as number;
-        let group = Object.keys(this.data.groups)[groupIndex];
+        let group = Object.keys(this.data.groups!)[groupIndex];
         return group;
       }
     } catch (e) {

@@ -122,26 +122,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
   }
 
   async handleEmbeddedPowerDrop(power: EmbeddedPower) {
-    if (this.item.type == 'equipment' && this.item.category?.value == 'grimoire' && power.data.source.value != 'arcana')
-      return ui.notifications?.error(getGame().i18n.localize("PILLARS.OnlyArcanaInGrimoire"))
-    if (this.item.type == 'equipment' && this.item.category?.value == 'grimoire') power.data.embedded.spendType = 'source';
-
-    // If drag item was an owned power already, add embedded data to it
-    let ownedPower: PillarsItem | undefined;
-    if (this.item.isOwned && this.actor!.items.get(power._id!)) {
-      ownedPower = this.actor!.items.get(power._id!);
-      power.ownedId = ownedPower?.id!;
-    } else if (this.item.isOwned) {
-      // If drag item was not owned, but the drop item is, add the drag item to the actor
-      ownedPower = (await this.actor!.createEmbeddedDocuments('Item', [{ ...power }]))[0] as PillarsItem;
-      power.ownedId = ownedPower?.id!;
-    }
-
-    let powers = foundry.utils.deepClone(this.item.powers) || []; // TODO test this
-    powers.push(power);
-    this.item.update({ 'data.powers': powers }).then((item) => {
-      if (ownedPower) ownedPower.update({ 'data.embedded.item': item?.id, 'data.embedded.spendType': 'source' });
-    });
+    this.item.addEmbeddedPower(power)
   }
 
   handleSummonedItem(itemData: ItemDataConstructorData) {

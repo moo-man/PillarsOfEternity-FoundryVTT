@@ -1,0 +1,120 @@
+<div class="enchantment">
+
+    <nav class="sheet-tabs tabs">
+        <a  class="tab-select item active" data-tab="imbuement">{{localize "PILLARS.Imbuement"}}</a>
+        <a  class="tab-select item" data-tab="embellishment">{{localize "PILLARS.Embellishment"}}</a>
+        <a  class="tab-select item" data-tab="refinement">{{localize "PILLARS.Refinement"}}</a>
+    </nav>
+    <div class="tab-content">
+        <div class="tab imbuement" data-tab="text">
+            <div class="item-drag-container">
+    
+                <div class="item-drag">
+                    <div class="item-header">
+                        <h3 class="item-name">{{localize "Item"}}</h3>
+                    </div>
+                    <div class="dragarea" data-type="item">
+                        {{#if item}}
+                        <img src="{{item.data.img}}">
+                        {{/if}}
+                    </div>
+                </div>
+
+     
+                <div class="item-drag">
+                    <div class="item-header">
+                        <h3 class="item-name">{{localize "PILLARS.Power"}}</h3>
+                    </div>
+                    <div class="dragarea" data-type="power">
+                        {{#if power}}
+                        <img src="{{power.data.img}}">
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            <div class="details">
+                <div class="resonance">
+                    <label>{{localize "PILLARS.Resonance"}}</label>
+                    <input type="checkbox" class="update-enchantment" data-path="resonance" {{#if imbuement.progress.started}}disabled{{/if}} {{checked imbuement.data.resonance}}>
+                </div>
+                <div class="exclusion">
+                    <label>{{localize "PILLARS.UseExclusion"}}</label>
+                    <input type="checkbox" class="update-enchantment" data-path="exclusion" {{#if imbuement.progress.started}}disabled{{/if}} {{checked imbuement.data.exclusion}}>
+                </div>
+                <div class="trigger">
+                    <label>{{localize "PILLARS.SituationalTrigger"}}</label>
+                    <input type="checkbox" class="update-enchantment" data-path="trigger" {{#if imbuement.progress.started}}disabled{{/if}} {{checked imbuement.data.trigger}}>
+                </div>
+                <div class="frequency">
+                    <label>{{localize "PILLARS.Frequency"}}</label>
+                    <select {{#if imbuement.progress.started}}disabled{{/if}} class="update-enchantment" data-path="frequency" >
+                        {{#select imbuement.data.frequency}}
+                        <option value="1">
+                            1 per Day
+                        </option>
+                        <option value="2">
+                            2 per Day
+                        </option>
+                        <option value="3">
+                            3 per Day
+                        </option>
+                        {{/select}}
+                    </select>
+                </div>
+                <div class="sealed">
+                    <label>{{localize "PILLARS.Sealed"}}</label>
+                    <input type="checkbox" class="update-enchantment" data-path="sealed" {{#unless imbuement.progress.done}}disabled{{/unless}} {{checked imbuement.data.sealed}}>
+                </div>
+            </div>
+            <div class="maedrs">
+                <h3>{{localize "PILLARS.Maedrs"}}</h3>
+                {{#if imbuement.progress}}
+                <h4>{{maedrs.length}} / {{imbuement.progress.cost}}</h4>
+                {{/if}}
+                <div class="dragarea" data-type="maedr">
+                    <div class="maedr-list">
+                        {{#each maedrs as |maedr index|}}
+                        <div class="maedr">
+                            <img src="{{maedr.data.img}}">
+                            <div class="potency">
+                                <a data-potency="lesser" class="active">L</a>
+                                <a data-potency="greater">G</a>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            <div class="progress">
+                {{#if imbuement.progress}}
+                <h3>{{localize "PILLARS.Progress"}}</h3>
+                <h4>{{imbuement.progress.current}} / {{imbuement.progress.total}}</h4>
+                <div class="progress-bar">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: {{pct imbuement.progress.current imbuement.progress.total}}%">
+
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+        <div class="tab embellishment" data-tab="embellishment">
+            embellishment
+        </div>
+        <div class="tab refinement" data-tab="refinement">
+            refinement
+        </div>
+    </div>
+    {{log this}}
+    {{#if (eq imbuement.progress.state "0")}} <!-- ENCHANTMENT_STATE.NOT_STARTED -->
+    <button type="submit">{{localize "PILLARS.EnchantmentStart"}}</button>
+    {{else if (eq imbuement.progress.state "1")}} <!-- ENCHANTMENT_STATE.IN_PROGRESS -->
+    <button type="submit">{{localize "PILLARS.EnchantmentContinue"}}</button>
+    {{else if (eq imbuement.progress.state "2")}} <!-- ENCHANTMENT_STATE.FINISHED -->
+    <button type="submit">{{localize "PILLARS.EnchantmentFinish"}}</button>
+    {{else}}
+    <button type="submit">{{localize "PILLARS.EnchantmentStart"}}</button>
+    {{/if}}
+
+</div>

@@ -1,3 +1,4 @@
+import { ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
 import { getGame } from "../../../pillars";
 import { SeasonalActivityResult } from "../../../types/seasonal-activities";
 import { PillarsActor } from "../../actor/actor-pillars";
@@ -35,6 +36,17 @@ export default class SeasonalActivityMenu extends FormApplication<FormApplicatio
       let promise = await this.object.actor?.updateSeasonIndex(this.object.index, this.object.season, formData!["activity"] || "")
       if (this.resultData)
       {
+
+        // Need to separate out items because https://github.com/foundryvtt/foundryvtt/issues/5241
+        // Enchantment adds embedded powers, which needs to go through _onCreate to add to the actor, 
+        // which meants createEmbeddedDocuments needs to be called as actor.update({items : [...]}) won't call _onCreate
+        let createdItems = (this.resultData.data.items || []).filter(i => !this.object.actor.items.has(i?._id!)) as ItemDataConstructorData[]
+        let updatedItems = (this.resultData.data.items || []).filter(i => this.object.actor.items.has(i?._id!)) as ItemDataConstructorData[]
+        if (createdItems.length)
+          await this.object.actor.createEmbeddedDocuments("Item", createdItems as any)
+        if(updatedItems.length)
+          await this.object.actor.updateEmbeddedDocuments("Item", updatedItems as any);
+        delete this.resultData.data.items
         await this.object.actor.update(this.resultData.data);
         await this.object.actor.clearUsed();
       }
@@ -45,7 +57,7 @@ export default class SeasonalActivityMenu extends FormApplication<FormApplicatio
   activateListeners(html: JQuery<HTMLElement>): void {
       super.activateListeners(html)
 
-      html.find(".activity-select").on("change", async (ev : JQuery.ChangeEvent)=> {
+      html.find(".activity-buttons button").on("click", async (ev : JQuery.ClickEvent)=> {
         if (!ev.currentTarget.value)
           return
         let index = Number(ev.currentTarget.value);

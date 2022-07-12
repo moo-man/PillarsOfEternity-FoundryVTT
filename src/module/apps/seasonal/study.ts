@@ -36,7 +36,7 @@ export default class StudySeasonalActivity extends SeasonalActivity {
   static get defaultOptions() {
     let options = super.defaultOptions;
     options.width = 600;
-    options.height = 400;
+    options.height = "auto";
     options.tabs = [{ navSelector: '.sheet-tabs', contentSelector: '.tab-content', initial: 'text' }];
     return options;
   }
@@ -51,11 +51,6 @@ export default class StudySeasonalActivity extends SeasonalActivity {
 
   static get label(): string {
     return getGame().i18n.localize('PILLARS.Study');
-  }
-
-  async getData(): Promise<PracticeTemplateData> {
-    let data = (await super.getData()) as PracticeTemplateData;
-    return data;
   }
 
   submit(): SeasonalActivityResult {
@@ -93,22 +88,11 @@ export default class StudySeasonalActivity extends SeasonalActivity {
 
     return result;
   }
-  _onDragDrop(ev: DragEvent) {
+  async _onDragDrop(ev: DragEvent) {
     this.ui.itemDrag?.classList.remove('hover');
-    let game = getGame();
     let dragData = JSON.parse(ev.dataTransfer?.getData('text/plain') || '');
-    let item: PillarsItem | undefined;
-    if (dragData) {
-      if (dragData.type == 'Item') {
-        if (dragData.id) {
-          // World Item
-          item = game.items?.get(dragData.id);
-        } else if (dragData.data) {
-          // Owned Item
-          item = this.actor.items.get(dragData.data._id);
-        }
-      }
-    }
+    let item : PillarsItem | undefined = await Item.fromDropData(dragData);
+
     this.setItem(item);
   }
 
@@ -277,7 +261,7 @@ export default class StudySeasonalActivity extends SeasonalActivity {
 
     this.ui.itemDrag = html.find<HTMLDivElement>('.dragarea')[0];
     this.ui.itemImg = html.find<HTMLImageElement>('.dragarea img')[0];
-    this.ui.itemName = html.find<HTMLImageElement>('.item-name')[0];
+    this.ui.itemName = html.find<HTMLImageElement>('header h3')[0];
     this.ui.itemDetails = html.find<HTMLDivElement>('.book-details')[0];
     this.ui.xp = html.find<HTMLInputElement>('.xp input')[0];
 

@@ -186,7 +186,7 @@ export interface PowerDisplay {
 
 export interface EmbeddedPower extends PowerSource
 {
-    name? : string
+    name? : string 
     _id? : string
 
 }

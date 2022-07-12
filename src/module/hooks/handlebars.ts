@@ -30,6 +30,10 @@ export default function () {
                 return array.join(", ")
         })
 
+        Handlebars.registerHelper("pct", function(part :number , whole: number) {
+            return (part / whole) * 100
+        })
+
         Handlebars.registerHelper("enrich", function (string : string) {
             return TextEditor.enrichHTML(string)
         })

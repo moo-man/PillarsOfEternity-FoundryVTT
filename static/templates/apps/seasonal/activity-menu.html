@@ -1,17 +1,11 @@
 <form autocomplete="off">
-    <div class="form-group">
-        <label>{{localize "PILLARS.Activity"}}</label>
-        <div class="form-fields">
-            <select class="activity-select">
-                <option value=""></option>
-                {{#each activities as |activity index|}}
-                <option value="{{index}}">{{activity}}</option> 
-                {{/each}}
-            </select> 
-            
-            <input type="text" name="activity">
+    <div>
+        <div class="activity-buttons">
+            {{#each activities as |activity index|}}
+            <button type="button" value="{{index}}">{{activity}}</option>
+            {{/each}}
         </div>
+        <input type="text" name="activity">
     </div>
-
     <button type="submit">{{localize "Submit"}}</button>
 </form>

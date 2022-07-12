@@ -68,27 +68,13 @@ export default class PracticeSeasonalActivity extends SeasonalActivity {
     return result;
   }
 
-  _onDragDrop(ev : DragEvent)
+  async _onDragDrop(ev : DragEvent)
   {
 
     this.ui.skillDrag?.classList.remove("hover")
-    let game = getGame()
     let dragData = JSON.parse(ev.dataTransfer?.getData('text/plain') || '');
-    let item : PillarsItem | undefined;
-    if (dragData)
-    {
-      if (dragData.type == "Item")
-      {
-        if (dragData.id) // World Item
-        {
-          item = game.items?.get(dragData.id)
-        }
-        else if (dragData.data) // Owned Item
-        {
-          item = this.actor.items.get(dragData.data._id)
-        }
-      }
-    }
+    let item : PillarsItem | undefined = await Item.fromDropData(dragData);
+
     this.setSkill(item);
   }
 
