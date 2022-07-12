@@ -30,7 +30,7 @@ export default function () {
             })
 
 
-            if (!game.user!.isGM && game.user!.character)
+            if (!game.user!.isGM && game.user!.character && (setting.value as ClientSettings.Values["pillars-of-eternity.season"]).context?.latest)
             {
                 game.user?.character.handleSeasonChange();
             }

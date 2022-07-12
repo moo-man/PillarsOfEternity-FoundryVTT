@@ -27,7 +27,15 @@ export default function () {
             hint: "PILLARS.SettingHintSeason",
             scope: "world",
             config: false,
-            default: { season: 1, year: 2830}
+            default: { season: 1, year: -1}
+        });
+
+        game.settings.register("pillars-of-eternity", "latestSeason", {
+            name: "PILLARS.SettingSeason",
+            hint: "PILLARS.SettingHintSeason",
+            scope: "world",
+            config: false,
+            default: { season: 0, year: 0}
         });
 
         game.settings.register("pillars-of-eternity", "seasonPosition", {

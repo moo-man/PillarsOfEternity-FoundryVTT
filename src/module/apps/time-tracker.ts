@@ -1,5 +1,5 @@
 import { getGame } from '../../pillars';
-import { Season } from '../../types/common';
+import { Season, SeasonContextData, Time } from '../../types/common';
 import { PILLARS } from '../system/config';
 
 export default class TimeTracker extends Application<ApplicationOptions> {
@@ -52,11 +52,6 @@ export default class TimeTracker extends Application<ApplicationOptions> {
   }
 
   _onForwardClick(ev: JQuery.ClickEvent) {
-    
-    if (!ev.shiftKey)
-    {
-
-    }
     this.changeTime(1);
   }
 
@@ -64,23 +59,127 @@ export default class TimeTracker extends Application<ApplicationOptions> {
     this.changeTime(-1);
   }
 
-  changeTime(season: number, year: number = 0) {
+  async changeTime(season: number, year: number = 0) {
     let game = getGame();
-    let currentTime = game.settings.get('pillars-of-eternity', 'season');
+    let current = game.settings.get('pillars-of-eternity', 'season');
+    let next = duplicate(current)
+    let latest = game.settings.get('pillars-of-eternity', 'latestSeason');
 
     let yearChange = 0;
 
-    yearChange = year + Math.floor((currentTime.season + season)/ 4);
-    currentTime.season = (currentTime.season + season) % 4;
-    if (currentTime.season < 0) currentTime.season += 4;
+    yearChange = year + Math.floor((next.season + season)/ 4);
+    next.season = (next.season + season) % 4;
+    if (next.season < 0) next.season += 4;
 
-    currentTime.year += yearChange;
-    game.settings.set('pillars-of-eternity', 'season', currentTime).then(() => {
+    next.year += yearChange;
+
+    next.context = {}
+
+    if (TimeTracker.isLaterDate(next, latest))
+    {
+      next.context.latest = true;
+      await game.settings.set("pillars-of-eternity", "latestSeason", next)
+      await this.promptSeasonContext(next)
+    }
+    else next.context.latest = false;
+
+    game.settings.set('pillars-of-eternity', 'season', next).then(() => {
       this.render(true);
     });
   }
 
+  promptSeasonContext(time : { season: Season; year: number; context? : SeasonContextData}) {
+    
+    let game = getGame()
+    let current = game.settings.get('pillars-of-eternity', 'season');
+    if (TimeTracker.isLaterDate(time, current))
+    {
+      return new Promise((resolve : (value : ClientSettings.Values["pillars-of-eternity.season"]) => void) => {
+        new Dialog({
+          title : game.i18n.localize("PILLARS.SeasonContext"),
+          content : `
+          <p>${game.i18n.localize("PILLARS.SeasonContextData")}</p>
+          <div class="form-group">
+            <label>${game.i18n.localize("PILLARS.SeasonContextAdventure")}</label>
+            <div class="form-fields">
+              <input class="adventure-name" type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>${game.i18n.localize("PILLARS.SeasonContextXP")}</label>
+            <div class="form-fields">
+              <input class="adventure-xp" type="number">
+            </div>
+          </div>
+          `,
+          buttons: {
+            confirm : {
+              label : game.i18n.localize("Confirm"),
+              callback : (dlg) => {
+                dlg = $(dlg);
+                let adventureName = dlg.find<HTMLInputElement>(".adventure-name")[0]?.value || ""
+                let xp = Number(dlg.find<HTMLInputElement>(".adventure-xp")[0]?.value) || 0;
+                time.context!.adventure = {
+                    name: adventureName,
+                    experience : xp
+                  }
+                resolve(time);
+              }
+            },
+            skip : {
+              label : game.i18n.localize("PILLARS.Skip"),
+              callback : (dlg) => resolve(time),
+            }
+          }
+        }).render(true)
+      })
+    }
+  }
+
+  /**
+   * 
+   * Returns true if dateA is later than dateB
+   * 
+   * @param dateA year and season
+   * @param dateB year and season
+   */
+  static isLaterDate(dateA : Time, dateB : Time)
+  {
+    if (dateA.year > dateB.year)
+      return true;
+    else if (dateA.year < dateB.year)
+      return false
+    else if (dateA.year == dateB.year)
+      return dateA.season > dateB.season
+  }
+
   static formatSeasonData(data: { season: Season; year: number }): { season: string; year: number } {
     return { season: PILLARS.seasons[data.season], year: data.year };
+  }
+
+
+  checkFirstTimeStartup() {
+    let game = getGame()
+    if (game.user?.isGM)
+    {
+      let currentTime = game.settings.get('pillars-of-eternity', 'season');
+      if (currentTime.year == -1)
+      {
+        new Dialog({
+          title : "PILLARS.SetStartingYear",
+          content : `<p>${game.i18n.localize("PILLARS.SetStartingYearPrompt")}: </p><input type='number'>`,
+          buttons: {
+            confirm : {
+              label : game.i18n.localize("Confirm"),
+              callback : (dlg) => {
+                dlg = $(dlg);
+                let year = Number(dlg.find<HTMLInputElement>("input")[0]?.value) || 0;
+                game.settings.set('pillars-of-eternity', 'season', {year, season: currentTime.season})
+              }
+            }
+          }
+        }).render(true)
+      }
+    }
   }
 }

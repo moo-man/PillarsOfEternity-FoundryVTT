@@ -149,6 +149,14 @@ export interface Time {
   year : number
 }
 
+export interface SeasonContextData {
+  latest? : boolean
+  adventure? : {
+    name? : string,
+    experience? : number
+  }
+}
+
 export interface ItemDialogData {
   filters : ItemFilter[],
   text : string,

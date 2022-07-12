@@ -154,7 +154,7 @@ export default class StudySeasonalActivity extends SeasonalActivity {
       else if (rank < range[0]!)
       {
         this.status.range = "low"
-        rangeText += ` (${game.i18n.localize("PILLARS.SkillToLow")})`
+        rangeText += ` (${game.i18n.localize("PILLARS.SkillTooLow")})`
       }
       else if (rank > range[1]!)
       {

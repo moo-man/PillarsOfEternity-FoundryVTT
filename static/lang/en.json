@@ -460,7 +460,7 @@
     "PILLARS.Skill": "Skill",
     "PILLARS.Skills": "Skills",
     "PILLARS.SkillRequirement" : "Skill Requirement",
-    "PILLARS.SkilTooLow" : "Skill too low!",
+    "PILLARS.SkillTooLow" : "Skill too low!",
     "PILLARS.SkillTooHigh" : "Skill too high",
     "PILLARS.Skip": "Skip",
     "PILLARS.Slow": "Slow",
@@ -613,5 +613,11 @@
     "PILLARS.Progress" : "Progress",
     "PILLARS.EnchantmentStart" : "Start",
     "PILLARS.EnchantmentContinue" : "Continue",
-    "PILLARS.EnchantmentFinish" : "Finish"
+    "PILLARS.EnchantmentFinish" : "Finish",
+    "PILLARS.SetStartingYear" : "Set Starting Year",
+    "PILLARS.SetStartingYearPrompt" : "Set the starting year",
+    "PILLARS.SeasonContext" : "Season Context",
+    "PILLARS.SeasonContextData" : "Add Season Context data?",
+    "PILLARS.SeasonContextAdventure" : "Adventure Name",
+    "PILLARS.SeasonContextXP" : "Adventure XP"
 }

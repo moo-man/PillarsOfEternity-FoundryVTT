@@ -973,7 +973,9 @@ export class PillarsActor extends Actor {
 
       if (season) {
         setProperty(season, type, message);
-        return this.update({ 'data.seasons': seasons });
+        return this.update({ 'data.seasons': seasons }).then(() => {
+          this.book.render(true)
+        });
       } else throw new Error(getGame().i18n.format('PILLARS.ErrorSeasonIndex', { index }));
     }
   }
@@ -1092,14 +1094,14 @@ export class PillarsActor extends Actor {
     if (this.seasons) {
       this.seasons.forEach((s, i) => {
         if (Number.isNumeric(s.year)) {
-          if (!s.autumn && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.AUTUMN, year: s.year })) {
-            needsUpdating[`${i}-autumn`] = true;
-          }
           if (!s.spring && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SPRING, year: s.year })) {
             needsUpdating[`${i}-spring`] = true;
           }
           if (!s.summer && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SUMMER, year: s.year })) {
             needsUpdating[`${i}-summer`] = true;
+          }
+          if (!s.autumn && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.AUTUMN, year: s.year })) {
+            needsUpdating[`${i}-autumn`] = true;
           }
           if (!s.winter && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.WINTER, year: s.year })) {
             needsUpdating[`${i}-winter`] = true;

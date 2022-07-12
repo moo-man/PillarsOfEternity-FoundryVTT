@@ -1,5 +1,5 @@
 import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
-import { Defense, LifePhase, Season, SeasonData } from './types/common';
+import { Defense, LifePhase, Season, SeasonContextData, SeasonData } from './types/common';
 import {
   EmbeddedPower,
   PowerBaseEffect,
@@ -852,7 +852,8 @@ declare global {
     interface Values {
       'pillars-of-eternity.playerApplyDamage': boolean;
       'pillars-of-eternity.systemMigrationVersion': string;
-      'pillars-of-eternity.season': {season: Season, year : number};
+      'pillars-of-eternity.season': {season: Season, year : number, context? : SeasonContextData};
+      'pillars-of-eternity.latestSeason': {season: Season, year : number};
       'pillars-of-eternity.seasonPosition': {left: number, top : number};
     }
   }
