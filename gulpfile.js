@@ -3,15 +3,15 @@ const gulpEsbuild = require('gulp-esbuild')
 const esbuild = require('esbuild')
 
 const sass = require('gulp-sass')(require('sass'));
-const esCopy = require("esbuild-plugin-copy")
 const foundryPath = require("./foundry-path.js")
 const esBuildConfig = require("./esbuild.config");
-let buildPath = foundryPath.systemPath
+
+console.log(foundryPath.systemPath())
 
 gulp.task('sass', function () {
   return gulp.src('src/styles/pillars.scss')
     .pipe(sass()) // Converts Sass to CSS with gulp-sass
-    .pipe(gulp.dest(foundryPath.systemPath))
+    .pipe(gulp.dest(foundryPath.systemPath()))
 });
 
 gulp.task('watch', function () {
@@ -25,6 +25,11 @@ gulp.task('watch', function () {
 gulp.task("build", function()
 {
   gulp.series("src", "sass", "watch")();
+})
+
+gulp.task("release", function()
+{
+  gulp.series("src", "sass")();
 })
 
 gulp.task("src", function (resolve) {

@@ -1,4 +1,3 @@
 {
-    "foundryDataPath" : "path/to/your/foundry/data/folder",
-    "systemName" : "pillars-of-eternity"
+    "path" : "path/to/your/foundry/data/folder"
 }

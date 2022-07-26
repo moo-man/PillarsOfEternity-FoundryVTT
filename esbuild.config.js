@@ -3,7 +3,7 @@ const foundryPath = require("./foundry-path.js")
 const esCopy = require("esbuild-plugin-copy")
 //import { copy } from 'esbuild-plugin-copy';
 
-let buildPath = foundryPath.systemPath
+let buildPath = foundryPath.systemPath()
 
 
 let config = {
