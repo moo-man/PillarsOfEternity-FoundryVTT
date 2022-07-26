@@ -49,7 +49,7 @@ export default class EnchantmentSeasonalActivity extends SeasonalActivity {
     this.checkData();
   }
 
-  submit(): SeasonalActivityResult {
+  async submit(): Promise<SeasonalActivityResult> {
     let result = <SeasonalActivityResult>{};
 
     if (!this.imbuement)
@@ -201,7 +201,7 @@ export default class EnchantmentSeasonalActivity extends SeasonalActivity {
     });
   }
 
-  checkData(): { errors: string[]; message: string } {
+  async checkData(): Promise<{ errors: string[]; message: string }> {
     let state: { errors: string[]; message: string } = { errors: [], message: '' };
     let game = getGame();
 

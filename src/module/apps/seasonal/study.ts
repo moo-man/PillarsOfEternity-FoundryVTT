@@ -53,7 +53,7 @@ export default class StudySeasonalActivity extends SeasonalActivity {
     return getGame().i18n.localize('PILLARS.Study');
   }
 
-  submit(): SeasonalActivityResult {
+  async submit(): Promise<SeasonalActivityResult> {
     let result = <SeasonalActivityResult>{};
 
     let game = getGame();
@@ -273,7 +273,7 @@ export default class StudySeasonalActivity extends SeasonalActivity {
     });
   }
 
-  checkData(): { errors: string[]; message: string } {
+  async checkData(): Promise<{ errors: string[]; message: string }> {
     let state: { errors: string[]; message: string } = { errors: [], message: '' };
     let game = getGame()
     if (this.status.range != "ok")

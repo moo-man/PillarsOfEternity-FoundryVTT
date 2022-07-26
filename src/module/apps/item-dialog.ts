@@ -90,7 +90,7 @@ export default class ItemDialog extends Dialog {
         {
           items = items.filter(i => {
             let propertyValue = getProperty(i.data, filter.target)
-            return eval(`"${propertyValue}" ${filter.test} "${filter.value}"`)
+            return (0, eval)(`"${propertyValue}" ${filter.test} "${filter.value}"`)
           })
         }
         else if (filter.type == "regex")

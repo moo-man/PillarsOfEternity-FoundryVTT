@@ -13,6 +13,7 @@ export default class SocializingSeasonalActivity extends XPAllocationActivity {
     return getGame().i18n.localize('PILLARS.Socializing');
   }
 
+  
   async getData() : Promise<XPAllocationTemplateData> {
     let data = await super.getData() as XPAllocationTemplateData;
     let game = getGame();
@@ -25,8 +26,8 @@ export default class SocializingSeasonalActivity extends XPAllocationActivity {
     return data
 }
 
-  submit(): SeasonalActivityResult {
-    let result = super.submit();
+  async submit(): Promise<SeasonalActivityResult> {
+    let result = await super.submit();
     result.text = "Socializing: " + result.text
 
     if (this.resolve)

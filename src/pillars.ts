@@ -43,6 +43,7 @@ import SocializingSeasonalActivity from "./module/apps/seasonal/socializing";
 import PracticeSeasonalActivity from "./module/apps/seasonal/practice";
 import StudySeasonalActivity from "./module/apps/seasonal/study";
 import EnchantmentSeasonalActivity from "./module/apps/seasonal/enchantment";
+import LivingOffLandSeasonalActivity from "./module/apps/seasonal/living-off-land";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -94,7 +95,8 @@ Hooks.on("init", () => {
       SocializingSeasonalActivity,
       PracticeSeasonalActivity,
       StudySeasonalActivity,
-      EnchantmentSeasonalActivity
+      EnchantmentSeasonalActivity,
+      LivingOffLandSeasonalActivity
     ],
     DamageRoll : DamageRoll,
     migration : Migration,

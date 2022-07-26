@@ -1,12 +1,13 @@
 import { getGame } from '../../../pillars';
 import { XPAllocationData, XPAllocationTemplateData, SeasonalActivityResult, SeasonalActivityResolve } from '../../../types/seasonal-activities';
+import { PillarsItem } from '../../item/item-pillars';
 import SeasonalActivity from './seasonal-activity';
 
 export default class XPAllocationActivity extends SeasonalActivity {
   experience: number | undefined;
 
   editableExperience: boolean;
-
+  items : Collection<PillarsItem> | Promise<Collection<PillarsItem>>
   ui: {
     threeIntoThreeText?: HTMLSpanElement;
     availableExperience?: HTMLInputElement;
@@ -18,6 +19,7 @@ export default class XPAllocationActivity extends SeasonalActivity {
     threeIntoThreeAlert?: HTMLAnchorElement;
     threeIntoThreePass?: HTMLAnchorElement;
     experience?: HTMLAnchorElement;
+    general?: HTMLAnchorElement;
   } = {};
 
 
@@ -33,11 +35,17 @@ export default class XPAllocationActivity extends SeasonalActivity {
     super(data, resolve, options);
     this.experience = data.experience;
     this.editableExperience = !data.experience;
+    this.items = this.setItems()
   }
 
   get template() {
     return 'systems/pillars-of-eternity/templates/apps/seasonal/xp-allocation.html';
   }
+
+  async setItems(): Promise<Collection<PillarsItem>> {
+    return new Collection(this.actor.items.contents.map(i => [i.id!, i]))
+  }
+
 
   async getData(): Promise<XPAllocationTemplateData> {
     let data = (await super.getData()) as XPAllocationTemplateData;
@@ -47,16 +55,16 @@ export default class XPAllocationActivity extends SeasonalActivity {
     return data;
   }
 
-  submit(): SeasonalActivityResult {
+  async submit(): Promise<SeasonalActivityResult> {
     let result = <SeasonalActivityResult>{};
-
+    let items = await this.items;
     let experienceList: string[] = [];
     // get all items with experience allocated
     let itemData = Array.from(this.ui.itemLists?.querySelectorAll<HTMLInputElement>('.item-experience')!)
       .filter((i) => (i.value || 0) > 0)
       .map((i) => {
         let id = i.parentElement?.dataset.id;
-        let item = this.actor.items.get(id!);
+        let item = items.get(id!);
         experienceList.push(`+${i.value} ${item?.name}`);
         if (item)
           return {
@@ -86,6 +94,7 @@ export default class XPAllocationActivity extends SeasonalActivity {
       this.checkData();
     });
 
+    this.alerts.general = html.find<HTMLAnchorElement>('.general.alert')[0];
     this.alerts.threeIntoThreeAlert = html.find<HTMLAnchorElement>('.3into3 .alert')[0];
     this.alerts.threeIntoThreePass = html.find<HTMLAnchorElement>('.3into3 .pass')[0];
     this.alerts.experience = html.find<HTMLAnchorElement>('.experience .alert')[0];
@@ -93,7 +102,7 @@ export default class XPAllocationActivity extends SeasonalActivity {
     this.checkData()
   }
 
-  checkData() : {errors : string[], message : string}{
+  async checkData(): Promise<{ errors: string[]; message: string }> {
 
     let state : {errors: string[], message : string}= {errors : [], message : ""};
  

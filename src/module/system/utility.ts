@@ -1,7 +1,8 @@
 import { ChatSpeakerDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData"
 import { getGame } from "../../pillars"
-import { Time } from "../../types/common"
+import { ItemType, Time } from "../../types/common"
 import { PillarsActor } from "../actor/actor-pillars"
+import { PillarsItem } from "../item/item-pillars"
 import { PILLARS } from "./config"
 
 export default class PILLARS_UTILITY {
@@ -88,6 +89,36 @@ export default class PILLARS_UTILITY {
             return timeA.season > timeB.season
         }
     }
+
+
+    static async findSkillName(name : string, actor? : PillarsActor) : Promise<PillarsItem | undefined>
+    {
+        let skill
+        let game = getGame();
+        if (actor) 
+        {
+            let skill = actor.getItemTypes(ItemType.skill).find(i => i.name == name)
+            if (skill)
+                return skill
+        }   
+
+        skill = game.items!.find(i => i.type == "skill" && i.name == name)
+        if (skill) 
+            return skill
+
+        for (let pack of game.packs)
+        {
+            if (!pack.indexed)
+                await pack.getIndex()
+            
+            let skillIndex = pack.index.find(i => i.name == name)
+            if (skillIndex)
+            {
+                return pack.getDocument(skillIndex._id) as unknown as PillarsItem
+            }
+        }
+    }
+
 }
 
 export function stringToElement(html : string) 

@@ -46,7 +46,7 @@ export default class PracticeSeasonalActivity extends SeasonalActivity {
     return data;
   }
 
-  submit(): SeasonalActivityResult {
+  async submit(): Promise<SeasonalActivityResult> {
     let result = <SeasonalActivityResult>{};
 
     let xp = Number(this.ui.xp?.value)
@@ -144,7 +144,7 @@ export default class PracticeSeasonalActivity extends SeasonalActivity {
     })
   }
 
-  checkData() : {errors : string[], message : string}{
+  async checkData(): Promise<{ errors: string[]; message: string }> {
     let state : {errors: string[], message : string}= {errors : [], message : ""};
 
     if (this.item)

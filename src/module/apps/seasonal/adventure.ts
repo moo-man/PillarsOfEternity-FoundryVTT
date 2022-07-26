@@ -13,6 +13,7 @@ export default class AdventureSeasonalActivity extends XPAllocationActivity {
     return getGame().i18n.localize('PILLARS.Adventure');
   }
 
+
   async getData() : Promise<XPAllocationTemplateData> {
     let data = await super.getData() as XPAllocationTemplateData;
     let game = getGame();
@@ -29,8 +30,8 @@ export default class AdventureSeasonalActivity extends XPAllocationActivity {
     return data
 }
 
-  submit(): SeasonalActivityResult {
-    let result = super.submit();
+    async submit(): Promise<SeasonalActivityResult> {
+    let result = await super.submit();
     result.text = "Adventure: " + result.text
 
     if (this.resolve)

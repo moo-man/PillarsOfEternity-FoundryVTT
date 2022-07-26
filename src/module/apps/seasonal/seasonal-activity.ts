@@ -38,7 +38,7 @@ export default class SeasonalActivity extends Application {
     })
   }
 
-  submit(): SeasonalActivityResult {
+  async submit(): Promise<SeasonalActivityResult> {
     if (this.resolve)
       this.resolve({text : "", data : this.actor.toObject()})
     return {text : "", data : this.actor.toObject()}
@@ -56,7 +56,7 @@ export default class SeasonalActivity extends Application {
       alert.style.display = "none"
   }
 
-  checkData() : {errors : string[], message : string}{
+  async checkData() : Promise<{errors : string[], message : string}>{
     return {
       message : "",
       errors: []
@@ -68,10 +68,10 @@ export default class SeasonalActivity extends Application {
   activateListeners(html: JQuery<HTMLElement>): void {
     super.activateListeners(html)
     
-    this.ui.submitButton = html.find<HTMLButtonElement>("button[type='submit']").on('click', (ev: JQuery.ClickEvent) => {
+    this.ui.submitButton = html.find<HTMLButtonElement>("button[type='submit']").on('click', async (ev: JQuery.ClickEvent) => {
       let game = getGame();
 
-      let state = this.checkData();
+      let state = await this.checkData();
 
       if (state.errors.length) {
         Dialog.confirm({
