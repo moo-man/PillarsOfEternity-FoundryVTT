@@ -14,8 +14,7 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
     xp?: HTMLInputElement;
     itemDrag?: HTMLDivElement;
 
-    teachingSkill? : HTMLSpanElement;
-    teachingMinimum? : HTMLSpanElement
+    // teachingSkill? : HTMLSpanElement;
 
     actorDrag?  : HTMLDivElement,
   } & SeasonalActivityApplication['ui'] = {};
@@ -24,7 +23,8 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
     languagePass?: HTMLAnchorElement;
     languageWarn?: HTMLAnchorElement;
     languageAlert?: HTMLAnchorElement;
-
+    skillMinimum? : HTMLAnchorElement
+    skillMaximum? : HTMLAnchorElement
     reqPass?: HTMLAnchorElement;
     reqAlert?: HTMLAnchorElement;
   } = {};
@@ -153,8 +153,8 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
     this.ui.actorDrag = html.find<HTMLDivElement>('.dragarea')[0];
     this.ui.itemDrag = html.find<HTMLDivElement>('.dragarea.item')[0];
     this.ui.xp = html.find<HTMLInputElement>('.xp input')[0];
-    this.ui.teachingSkill = html.find<HTMLSpanElement>(".teaching-skill span")[0];
-    this.ui.teachingMinimum = html.find<HTMLSpanElement>(".teaching-minimum span")[0];
+    this.alerts.skillMaximum = html.find<HTMLAnchorElement>(".skill-maximum .alert")[0];
+    this.alerts.skillMinimum = html.find<HTMLAnchorElement>(".teaching-minimum .alert")[0];
 
     html.find(".skill-select").on("change", (ev : JQuery.ChangeEvent) => {
       let skill = ev.currentTarget.value
@@ -170,10 +170,10 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
       if (this.object instanceof StudyTeacherActivity)
       {
         this.object[property] = Number(ev.currentTarget.value);
-        let input = ev.currentTarget as HTMLInputElement;
+        // let input = ev.currentTarget as HTMLInputElement;
 
-        if (input.parentElement)
-          input.parentElement.querySelector<HTMLSpanElement>(".range-value")!.textContent = this.object[property].toString()
+        // if (input.parentElement)
+        //   input.parentElement.querySelector<HTMLSpanElement>(".range-value")!.textContent = this.object[property].toString()
 
         this.object.evaluate();
         this.render(true);
@@ -193,38 +193,36 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
     let state: { errors: string[]; message: string } = { errors: [], message: '' };
     let game = getGame()
 
-
-
     if (this.mode == "text")
     {
       if (this.object?.status.range && this.object?.status.range != "ok")
       {
         state.errors.push(game.i18n.localize("PILLARS.NotWithinBookSkillRange"))
-        this.showAlert(this.alerts.reqAlert)
+        this.showAlert(this.alerts.reqAlert, this.object.text.range)
         this.hideAlert(this.alerts.reqPass)
       }
       else if (this.object?.status.range == "ok")
       {
+        this.showAlert(this.alerts.reqPass, this.object.text.range)
         this.hideAlert(this.alerts.reqAlert)
-        this.showAlert(this.alerts.reqPass)
       }
       
       if (this.object?.status.language == "full")
       {
-        this.showAlert(this.alerts.languagePass)
+        this.showAlert(this.alerts.languagePass, this.object.text.language)
         this.hideAlert(this.alerts.languageWarn)
         this.hideAlert(this.alerts.languageAlert)
       }
       else if (this.object?.status.language == "half")
       {
-        this.showAlert(this.alerts.languageWarn)
+        this.showAlert(this.alerts.languageWarn, this.object.text.language)
         this.hideAlert(this.alerts.languagePass)
         this.hideAlert(this.alerts.languageAlert)
       }
       else if (this.object?.status.language == "none")
       {
         state.errors.push(game.i18n.localize("PILLARS.NotProficientBookLanguage"))
-        this.showAlert(this.alerts.languageAlert)
+        this.showAlert(this.alerts.languageAlert, this.object.text.language)
         this.hideAlert(this.alerts.languagePass)
         this.hideAlert(this.alerts.languageWarn)
       }
@@ -232,9 +230,21 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
 
     else (this.mode == "teacher")
     {
+      this.object?.text.skillMaximum 
+      ? this.showAlert(this.alerts.skillMaximum, this.object.text.skillMaximum) 
+      : this.hideAlert(this.alerts.skillMaximum)
 
+      this.object?.text.skillMinimum 
+      ? this.showAlert(this.alerts.skillMinimum, this.object.text.skillMinimum) 
+      : this.hideAlert(this.alerts.skillMinimum)
+      
+      state.errors.push(this.object?.text.skillMaximum || "")
+      state.errors.push(this.object?.text.skillMinimum || "")
+      state.errors = state.errors.filter(i => i)
     }
     
+
+
 
     state.message = getGame().i18n.format('PILLARS.StudyErrors', { errors: `<ul>${'<li>' + state.errors.join('</li><li>') + '</li>'}</ul>` })
 

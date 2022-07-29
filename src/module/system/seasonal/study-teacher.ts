@@ -11,13 +11,15 @@ export class StudyTeacherActivity extends StudyActivity{
   actor: PillarsActor;
   teacher : PillarsActor;
   skill? : string;
-
-  status: {
-  } = {
-  };
-
+  
+  status={};
+  
   text: {
+    skillMinimum: string,
+    skillMaximum: string,
   } = {
+    skillMinimum: "",
+    skillMaximum: ""
   };
 
   _raiseMinimum : number = 0; 
@@ -106,17 +108,16 @@ export class StudyTeacherActivity extends StudyActivity{
 
   evaluate() {
 
+    let game = getGame();
     let teacherSkill = this.teacherSkill;
-    let studentSkill = this.actor.getItemTypes(ItemType.skill).find(i => i.name == this.skill)
+    let studentSkill = this.actor.getItemTypes(ItemType.skill).find(i => i.name == this.skill)?.rank || 0
     let xp = 0;
 
     if (teacherSkill?.rank) {
       
       
-      if ((studentSkill?.rank || 0) < this.skillMinimum)
-      {
-        
-      }
+      this.text.skillMinimum = studentSkill < this.skillMinimum ? game.i18n.localize("PILLARS.SkillMinimumNotMet") : ""
+      this.text.skillMaximum =  studentSkill > this.skillMaximum ? game.i18n.localize("PILLARS.SkillMaximumExceeded") : ""
 
       if (this.students <= 10)
         xp += 3

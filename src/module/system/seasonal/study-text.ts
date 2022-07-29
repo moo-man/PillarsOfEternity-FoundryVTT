@@ -92,15 +92,14 @@ export class StudyTextActivity extends StudyActivity {
       let rank = 0;
       if (ownedSkill) rank = ownedSkill.xp?.rank || 0;
 
-      rangeText = `${range[0]} - ${range[1]}`;
       if (rank >= range[0]! && rank <= range[1]!) {
         this.status.range = 'ok';
       } else if (rank < range[0]!) {
         this.status.range = 'low';
-        rangeText += ` (${game.i18n.localize('PILLARS.SkillTooLow')})`;
+        rangeText = game.i18n.localize('PILLARS.SkillTooLow');
       } else if (rank > range[1]!) {
         this.status.range = 'high';
-        rangeText += ` (${game.i18n.localize('PILLARS.SkillTooHigh')})`;
+        rangeText = game.i18n.localize('PILLARS.SkillTooHigh');
       }
     }
     return rangeText;
@@ -169,11 +168,7 @@ export class StudyTextActivity extends StudyActivity {
         this.status.language = 'none';
       }
 
-      languageText = game.i18n.format('PILLARS.BookLanguageXP', {
-        language,
-        proficiency: PILLARS.languageProficiencies[languageProficiency],
-        xp: game.i18n.localize(xpText),
-      });
+      languageText = `${PILLARS.languageProficiencies[languageProficiency]}, ${game.i18n.localize(xpText)}`
     }
     return languageText;
   }

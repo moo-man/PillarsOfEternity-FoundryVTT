@@ -31,7 +31,7 @@
                         <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
                     </label>
                     <span class="status">
-                        {{object.text.language}}
+                        {{object.item.data.data.language.value}}
                     </span>
 
                 </div>
@@ -49,8 +49,9 @@
                         <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
                     </label>
                     <span class="status">
-                        {{object.text.range}}
-
+                        {{object.item.data.data.range.[0]}}
+                        -
+                        {{object.item.data.data.range.[1]}}
                     </span>
                 </div>
 
@@ -98,6 +99,7 @@
                     Student Skill Minimum: 
                     <span>
                         {{this.object.skillMinimum}}
+                    <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
                     </span>
                 </div>
             </div>
@@ -117,6 +119,7 @@
                 <div class="skill-maximum">
                     <label>
                         {{localize "PILLARS.SkillMaximum"}}
+                        <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
                     </label>
                     <div class="range-container">
                         {{rangePicker name="skillMaximum" value=object.skillMaximum min=1

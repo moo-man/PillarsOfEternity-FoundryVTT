@@ -44,10 +44,14 @@ export default class SeasonalActivityApplication extends Application {
     return {text : "", data : this.actor.toObject()}
   };
 
-  showAlert(alert : HTMLAnchorElement | undefined)
+  showAlert(alert : HTMLAnchorElement | undefined, tooltip="")
   {
     if (alert)
+    {
       alert.style.display = ""
+      alert.title = tooltip
+    }
+
   }
 
   hideAlert(alert : HTMLAnchorElement | undefined)
