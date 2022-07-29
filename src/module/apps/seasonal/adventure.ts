@@ -1,9 +1,9 @@
 import { getGame } from '../../../pillars';
 import { ItemType } from '../../../types/common';
 import { XPAllocationTemplateData, SeasonalActivityResult } from '../../../types/seasonal-activities';
-import XPAllocationActivity from './xp-allocation';
+import XPAllocationActivityApplication from './xp-allocation';
 
-export default class AdventureSeasonalActivity extends XPAllocationActivity {
+export default class AdventureSeasonalActivityApplication extends XPAllocationActivityApplication {
 
   get title() {
     return "Allocate Experience"

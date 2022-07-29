@@ -1,9 +1,9 @@
 import { getGame } from '../../../pillars';
 import { XPAllocationData, XPAllocationTemplateData, SeasonalActivityResult, SeasonalActivityResolve } from '../../../types/seasonal-activities';
 import { PillarsItem } from '../../item/item-pillars';
-import SeasonalActivity from './seasonal-activity';
+import SeasonalActivityApplication from './seasonal-activity';
 
-export default class XPAllocationActivity extends SeasonalActivity {
+export default class XPAllocationActivityApplication extends SeasonalActivityApplication {
   experience: number | undefined;
 
   editableExperience: boolean;
@@ -13,7 +13,7 @@ export default class XPAllocationActivity extends SeasonalActivity {
     availableExperience?: HTMLInputElement;
     totalExp?: HTMLInputElement;
     itemLists?: HTMLDivElement;
-  } & SeasonalActivity["ui"]= {};
+  } & SeasonalActivityApplication["ui"]= {};
 
   alerts: {
     threeIntoThreeAlert?: HTMLAnchorElement;

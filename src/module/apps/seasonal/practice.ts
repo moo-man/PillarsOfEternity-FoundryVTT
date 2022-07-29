@@ -2,16 +2,16 @@ import { getGame } from '../../../pillars';
 import { hasXP, hasXPData } from '../../../types/common';
 import {SeasonalActivityResult, PracticeTemplateData } from '../../../types/seasonal-activities';
 import { PillarsItem } from '../../item/item-pillars';
-import SeasonalActivity from './seasonal-activity';
+import SeasonalActivityApplication from './seasonal-activity';
 
-export default class PracticeSeasonalActivity extends SeasonalActivity {
+export default class PracticeSeasonalActivityApplication extends SeasonalActivityApplication {
   ui: {
     xp?: HTMLInputElement;
     skillSelect?: HTMLSelectElement;
     skillDrag?: HTMLDivElement;
     skillImg?: HTMLImageElement;
     skillName?: HTMLHeadingElement;
-  } & SeasonalActivity["ui"] = {};
+  } & SeasonalActivityApplication["ui"] = {};
 
   alerts: {
     skillAlert?: HTMLAnchorElement;

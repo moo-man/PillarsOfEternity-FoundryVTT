@@ -3,7 +3,7 @@ import { SeasonData } from '../../types/common';
 import { PillarsActor } from '../actor/actor-pillars';
 import { PILLARS } from '../system/config';
 import SeasonalActivityMenu from './seasonal/activity-menu';
-import SeasonalActivity from './seasonal/seasonal-activity';
+import SeasonalActivityApplication from './seasonal/seasonal-activity';
 
 export default class BookOfSeasons extends Application {
   actor?: PillarsActor;

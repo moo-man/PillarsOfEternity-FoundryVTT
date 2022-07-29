@@ -1,14 +1,14 @@
 import { IndexTypeForMetadata } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/collections/compendium";
 import { ActorDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData";
 import { ItemData, ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
-import { EquipmentSource, PowerSource } from "../../global";
-import { getGame } from "../../pillars";
-import { hasEmbeddedPowers } from "../../types/common";
-import { EmbeddedPower } from "../../types/powers";
-import { ENCHANTMENT_STATE } from "../../types/seasonal-activities";
-import { PillarsActor } from "../actor/actor-pillars";
-import { PillarsItem } from "../item/item-pillars";
-import { PILLARS } from "./config";
+import { EquipmentSource, PowerSource } from "../../../global";
+import { getGame } from "../../../pillars";
+import { hasEmbeddedPowers } from "../../../types/common";
+import { EmbeddedPower } from "../../../types/powers";
+import { ENCHANTMENT_STATE } from "../../../types/seasonal-activities";
+import { PillarsActor } from "../../actor/actor-pillars";
+import { PillarsItem } from "../../item/item-pillars";
+import { PILLARS } from "../config";
 
 
 export class Imbuement {

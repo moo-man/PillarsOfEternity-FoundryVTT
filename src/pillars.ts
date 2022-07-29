@@ -38,12 +38,12 @@ import FoundryOverrides from "./module/system/overrides.js"
 //@ts-ignore
 import PillarsExplode from "./module/system/explode.js"
 import TimeTracker from "./module/apps/time-tracker";
-import AdventureSeasonalActivity from "./module/apps/seasonal/adventure";
-import SocializingSeasonalActivity from "./module/apps/seasonal/socializing";
-import PracticeSeasonalActivity from "./module/apps/seasonal/practice";
-import StudySeasonalActivity from "./module/apps/seasonal/study";
-import EnchantmentSeasonalActivity from "./module/apps/seasonal/enchantment";
-import LivingOffLandSeasonalActivity from "./module/apps/seasonal/living-off-land";
+import AdventureSeasonalActivityApplication from "./module/apps/seasonal/adventure";
+import SocializingSeasonalActivityApplication from "./module/apps/seasonal/socializing";
+import PracticeSeasonalActivityApplication from "./module/apps/seasonal/practice";
+import StudySeasonalActivityApplication from "./module/apps/seasonal/study";
+import EnchantmentSeasonalActivityApplication from "./module/apps/seasonal/enchantment";
+import LivingOffLandSeasonalActivityApplication from "./module/apps/seasonal/living-off-land";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -91,12 +91,12 @@ Hooks.on("init", () => {
       PowerCheck,
     },
     seasonalActivities : [
-      AdventureSeasonalActivity,
-      SocializingSeasonalActivity,
-      PracticeSeasonalActivity,
-      StudySeasonalActivity,
-      EnchantmentSeasonalActivity,
-      LivingOffLandSeasonalActivity
+      AdventureSeasonalActivityApplication,
+      SocializingSeasonalActivityApplication,
+      PracticeSeasonalActivityApplication,
+      StudySeasonalActivityApplication,
+      EnchantmentSeasonalActivityApplication,
+      LivingOffLandSeasonalActivityApplication
     ],
     DamageRoll : DamageRoll,
     migration : Migration,

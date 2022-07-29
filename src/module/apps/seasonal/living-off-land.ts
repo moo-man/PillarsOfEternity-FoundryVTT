@@ -3,9 +3,9 @@ import { ItemType } from '../../../types/common';
 import { XPAllocationTemplateData, SeasonalActivityResult } from '../../../types/seasonal-activities';
 import { PillarsItem } from '../../item/item-pillars';
 import PILLARS_UTILITY from '../../system/utility';
-import XPAllocationActivity from './xp-allocation';
+import XPAllocationActivityApplication from './xp-allocation';
 
-export default class LivingOffLandSeasonalActivity extends XPAllocationActivity {
+export default class LivingOffLandSeasonalActivityApplication extends XPAllocationActivityApplication {
 
 
   get skills() {return ["Athletics", "Stealth", "Awareness", "Swimming", "Survival", "Navigation", "Cooking", "Herbalism", "Fishing", "Hunting", "Trapping"]}

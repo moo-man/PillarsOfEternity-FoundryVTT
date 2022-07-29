@@ -2,7 +2,7 @@ import { getGame } from '../../../pillars';
 import { SeasonalActivityData, SeasonalActivityResolve, SeasonalActivityResult } from '../../../types/seasonal-activities';
 import { PillarsActor } from '../../actor/actor-pillars';
 
-export default class SeasonalActivity extends Application {
+export default class SeasonalActivityApplication extends Application {
 
   actor: PillarsActor;
   resolve? : SeasonalActivityResolve

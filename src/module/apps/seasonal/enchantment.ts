@@ -4,13 +4,13 @@ import { SeasonalActivityResult, PracticeTemplateData, ENCHANTMENT_STATE } from 
 import { PillarsActor } from '../../actor/actor-pillars';
 import { PillarsItem } from '../../item/item-pillars';
 import { PILLARS } from '../../system/config';
-import { Imbuement } from '../../system/enchantment';
-import SeasonalActivity from './seasonal-activity';
+import { Imbuement } from '../../system/seasonal/enchantment';
+import SeasonalActivityApplication from './seasonal-activity';
 
-export default class EnchantmentSeasonalActivity extends SeasonalActivity {
+export default class EnchantmentSeasonalActivityApplication extends SeasonalActivityApplication {
   ui: {
     itemDrag?: HTMLDivElement;
-  } & SeasonalActivity['ui'] = {};
+  } & SeasonalActivityApplication['ui'] = {};
 
   alerts: {} = {};
 

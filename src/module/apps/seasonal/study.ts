@@ -1,18 +1,24 @@
 import { getGame } from '../../../pillars';
 import { hasXP, hasXPData, ItemType } from '../../../types/common';
 import { SeasonalActivityResult, PracticeTemplateData } from '../../../types/seasonal-activities';
+import { PillarsActor } from '../../actor/actor-pillars';
 import { PillarsItem } from '../../item/item-pillars';
 import { PILLARS } from '../../system/config';
-import SeasonalActivity from './seasonal-activity';
+import { StudyActivity } from '../../system/seasonal/study';
+import { StudyTeacherActivity } from '../../system/seasonal/study-teacher';
+import { StudyTextActivity } from '../../system/seasonal/study-text';
+import SeasonalActivityApplication from './seasonal-activity';
 
-export default class StudySeasonalActivity extends SeasonalActivity {
+export default class StudySeasonalActivityApplication extends SeasonalActivityApplication {
   ui: {
     xp?: HTMLInputElement;
     itemDrag?: HTMLDivElement;
-    itemImg?: HTMLImageElement;
-    itemName?: HTMLHeadingElement;
-    itemDetails?: HTMLDivElement;
-  } & SeasonalActivity['ui'] = {};
+
+    teachingSkill? : HTMLSpanElement;
+    teachingMinimum? : HTMLSpanElement
+
+    actorDrag?  : HTMLDivElement,
+  } & SeasonalActivityApplication['ui'] = {};
 
   alerts: {
     languagePass?: HTMLAnchorElement;
@@ -23,15 +29,9 @@ export default class StudySeasonalActivity extends SeasonalActivity {
     reqAlert?: HTMLAnchorElement;
   } = {};
 
-  item?: PillarsItem;
+  object? : StudyActivity
 
-  status : {
-    language : "none" | "half" | "full" | ""
-    range : "ok" | "low" | "high" | ""
-  } = {
-    language : "",
-    range : ""
-  }
+  mode : "text" | "teacher" = "text"
 
   static get defaultOptions() {
     let options = super.defaultOptions;
@@ -53,35 +53,28 @@ export default class StudySeasonalActivity extends SeasonalActivity {
     return getGame().i18n.localize('PILLARS.Study');
   }
 
+  
+  async _render(...args : Parameters<Application["_render"]>)
+  {
+    await super._render(...args)
+    this.checkData();
+  }
+
+  async getData(options?: Partial<ApplicationOptions> | undefined){
+    return {
+      object : this.object,
+      skills : this.object instanceof StudyTeacherActivity 
+      ? this.object.teacher.getItemTypes(ItemType.skill).filter(i => (i.rank || 0) > 0) 
+      : []
+    }
+  }
+
   async submit(): Promise<SeasonalActivityResult> {
     let result = <SeasonalActivityResult>{};
 
-    let game = getGame();
     let xp = Number(this.ui.xp?.value)
 
-    if (xp > 0 && this.item && this.item.data.type == "equipment")
-    {
-      let subject = this.item.data.data.subject.value;
-
-      let studyItem = this.actor.items
-      .filter((i) => (i.data.type == 'skill' || i.data.type == "powerSource"))
-      .find((i) => i.name == subject);
-
-      if (!studyItem)
-      {
-        studyItem = game.items!
-        .filter((i) => (i.data.type == 'skill' || i.data.type == "powerSource"))
-        .find((i) => i.name == subject);
-      }
-
-      let itemData = studyItem?.toObject();
-      if(hasXPData(itemData))
-      {
-        itemData.data.xp.value += xp
-        result.data = {items : [itemData], name : this.actor.name!, type : this.actor.type}
-        result.text = `Study (${this.item.name}): +${xp} ${itemData.name}`
-      }
-    }
+    result = await this.object?.getSubmitData(xp) || result
 
     if (this.resolve)
       this.resolve(result);
@@ -91,9 +84,17 @@ export default class StudySeasonalActivity extends SeasonalActivity {
   async _onDragDrop(ev: DragEvent) {
     this.ui.itemDrag?.classList.remove('hover');
     let dragData = JSON.parse(ev.dataTransfer?.getData('text/plain') || '');
-    let item : PillarsItem | undefined = await Item.fromDropData(dragData);
 
-    this.setItem(item);
+    if (dragData.type == "Item")
+    {
+      let item : PillarsItem | undefined = await Item.fromDropData(dragData);
+      this.setItem(item);
+    }
+    else if (dragData.type == "Actor")
+    {
+      let actor = await Actor.fromDropData(dragData)
+      this.setActor(actor)
+    }
   }
 
   setItem(item: PillarsItem | undefined) {
@@ -104,142 +105,33 @@ export default class StudySeasonalActivity extends SeasonalActivity {
     if (item.data.type != 'equipment' || (item.data.type == 'equipment' && item.data.data.category.value != 'book'))
       return ui.notifications!.error(game.i18n.localize('PILLARS.ErrorPracticeSkillsOnly'));
 
-    this.item = item;
-    this.ui.itemImg!.src = item.data.img!;
-    this.ui.itemName!.textContent = item.name;
+    if (this.mode == "text")
+    {
+      this.object = new StudyTextActivity(this.actor, item)
+      this.render(true);
+    }
+  }
 
-    let languageText = this.getLanguageText(item);
-    let rangeText = this.getRangeText(item);
+  setActor(actor : PillarsActor | undefined)
+  {
+    let game = getGame()
+    if (!actor) return ui.notifications!.error(game.i18n.localize('PILLARS.ErrorCannotFindActor'));
 
-    this.ui.itemDetails!.querySelector('.language .status')!.textContent = languageText;
-    this.ui.itemDetails!.querySelector('.req .status')!.textContent = rangeText;
-    this.ui.itemDetails!.querySelector('.subject .status')!.textContent = item.data.data.subject.value;
 
-    let xp = item.data.data.training.value;
+    if (this.mode == "teacher")
+    {
+      this.object = new StudyTeacherActivity(this.actor, actor)
+      this.render(true);
+    }
 
-    if (this.status.range != "ok")
-      xp = 0;
-
-    if (this.status.language == "half")
-      xp = xp / 2
-
-    else if (this.status.language == "none")
-      xp = 0
-    
-
-    this.ui.xp!.value = xp.toString()
 
     this.checkData();
   }
 
 
-  // Determine if skill being read on is within the skill requirements of the book
-  getRangeText(item: PillarsItem) {
-    let rangeText = ""
-    if (item.data.type == 'equipment') 
-    {
-      let game = getGame();
-      let subject = item.data.data.subject.value
-      let range = item.data.data.range;
-      let ownedSkill = this.actor.getItemTypes(ItemType.skill).find(i => i.name == subject)
-      let rank = 0;
-      if (ownedSkill)
-        rank = ownedSkill.xp?.rank || 0;
-
-      rangeText = `${range[0]} - ${range[1]}`
-      if (rank >= range[0]! && rank <= range[1]!)
-      {
-        this.status.range = "ok"
-      }
-      else if (rank < range[0]!)
-      {
-        this.status.range = "low"
-        rangeText += ` (${game.i18n.localize("PILLARS.SkillTooLow")})`
-      }
-      else if (rank > range[1]!)
-      {
-        this.status.range = "high"
-        rangeText += ` (${game.i18n.localize("PILLARS.SkillTooHigh")})`
-      }
-    }
-    return rangeText
-  }
-
-  /**
-   * Determines how much XP is received based on language proficiency
-   * 
-   * @param item Book being read
-   * @returns 
-   */
-  getLanguageText(item: PillarsItem) {
-    let languageText = ""
-    if (item.data.type == 'equipment') {
-      let game = getGame();
-      let range = item.data.data.range;
-      let language = item.data.data.language.value;
-
-      let languageSkill = this.actor
-        .getItemTypes(ItemType.skill)
-        .filter((i) => {
-          if (i.data.type == 'skill') {
-            return i.data.data.category.value == 'language';
-          }
-        })
-        .find((skill) => skill.name == language);
-
-      let languageProficiency = languageSkill?.languageProficiency || 'none';
-
-      let rank = languageSkill?.xp?.rank || 0;
-      let xpText: string = '';
-      if (rank >= 7) { // Fluent - Full XP
-        {
-          xpText = 'PILLARS.FullXP';
-          this.status.language = "full"
-
-        }
-      } else if (rank >= 5) {
-        // Conversational
-        if ((range[0] || 0) == 0) // Full XP
-        {
-          xpText = 'PILLARS.FullXP';
-          this.status.language = "full"
-        }
-        else if (range[0]! <= 5) // Half XP
-        {
-          xpText = 'PILLARS.HalfXP';
-          this.status.language = "half"
-        }
-        else if (range[0]! >= 6) // No XP
-        {
-          xpText = 'PILLARS.NoXP';
-          this.status.language = "none"
-        }
-      } 
-      else if (rank >= 3) // Basic
-      {
-        if ((range[0] || 0) == 0) // Half XP
-        {
-          xpText = 'PILLARS.HalfXP';
-          this.status.language = "half"
-        }
-        else 
-        {
-          xpText = 'PILLARS.NoXP'; // No XP
-          this.status.language = "none"
-        }
-      }
-      else { // Catchall
-          xpText = 'PILLARS.NoXP'; // No XP
-          this.status.language = "none"
-      }
-
-      languageText = game.i18n.format('PILLARS.BookLanguageXP', {
-        language,
-        proficiency: PILLARS.languageProficiencies[languageProficiency],
-        xp: game.i18n.localize(xpText),
-      });
-    }
-    return languageText
+  _onChangeTab(event: MouseEvent | null, tabs: Tabs, active: string): void {
+    super._onChangeTab(event, tabs, active);
+    this.mode = active as "text" | "teacher"
   }
 
   activateListeners(html: JQuery<HTMLElement>): void {
@@ -258,12 +150,36 @@ export default class StudySeasonalActivity extends SeasonalActivity {
     this.alerts.languageAlert = html.find<HTMLAnchorElement>('.language .alert')[0];
     this.alerts.reqPass = html.find<HTMLAnchorElement>('.req .pass')[0];
     this.alerts.reqAlert = html.find<HTMLAnchorElement>('.req .alert')[0];
-
-    this.ui.itemDrag = html.find<HTMLDivElement>('.dragarea')[0];
-    this.ui.itemImg = html.find<HTMLImageElement>('.dragarea img')[0];
-    this.ui.itemName = html.find<HTMLImageElement>('header h3')[0];
-    this.ui.itemDetails = html.find<HTMLDivElement>('.book-details')[0];
+    this.ui.actorDrag = html.find<HTMLDivElement>('.dragarea')[0];
+    this.ui.itemDrag = html.find<HTMLDivElement>('.dragarea.item')[0];
     this.ui.xp = html.find<HTMLInputElement>('.xp input')[0];
+    this.ui.teachingSkill = html.find<HTMLSpanElement>(".teaching-skill span")[0];
+    this.ui.teachingMinimum = html.find<HTMLSpanElement>(".teaching-minimum span")[0];
+
+    html.find(".skill-select").on("change", (ev : JQuery.ChangeEvent) => {
+      let skill = ev.currentTarget.value
+      if (this.object instanceof StudyTeacherActivity)
+      {
+        this.object.setSkill(skill);
+        this.render(true);
+      }
+    })
+
+    html.find<HTMLInputElement>("[name='skillMaximum'],[name='raiseMinimum'],[name='students']").on("change", (ev : JQuery.ChangeEvent) => {
+      let property = ev.currentTarget.name as "students" | "raiseMinimum" | "skillMaximum";
+      if (this.object instanceof StudyTeacherActivity)
+      {
+        this.object[property] = Number(ev.currentTarget.value);
+        let input = ev.currentTarget as HTMLInputElement;
+
+        if (input.parentElement)
+          input.parentElement.querySelector<HTMLSpanElement>(".range-value")!.textContent = this.object[property].toString()
+
+        this.object.evaluate();
+        this.render(true);
+
+      }
+    })
 
     this.ui.itemDrag?.addEventListener('dragenter', (ev: DragEvent) => {
       (ev.target as HTMLElement).classList.add('hover');
@@ -276,38 +192,49 @@ export default class StudySeasonalActivity extends SeasonalActivity {
   async checkData(): Promise<{ errors: string[]; message: string }> {
     let state: { errors: string[]; message: string } = { errors: [], message: '' };
     let game = getGame()
-    if (this.status.range != "ok")
+
+
+
+    if (this.mode == "text")
     {
-      state.errors.push(game.i18n.localize("PILLARS.NotWithinBookSkillRange"))
-      this.showAlert(this.alerts.reqAlert)
-      this.hideAlert(this.alerts.reqPass)
-    }
-    else if (this.status.range == "ok")
-    {
-      this.hideAlert(this.alerts.reqAlert)
-      this.showAlert(this.alerts.reqPass)
+      if (this.object?.status.range && this.object?.status.range != "ok")
+      {
+        state.errors.push(game.i18n.localize("PILLARS.NotWithinBookSkillRange"))
+        this.showAlert(this.alerts.reqAlert)
+        this.hideAlert(this.alerts.reqPass)
+      }
+      else if (this.object?.status.range == "ok")
+      {
+        this.hideAlert(this.alerts.reqAlert)
+        this.showAlert(this.alerts.reqPass)
+      }
+      
+      if (this.object?.status.language == "full")
+      {
+        this.showAlert(this.alerts.languagePass)
+        this.hideAlert(this.alerts.languageWarn)
+        this.hideAlert(this.alerts.languageAlert)
+      }
+      else if (this.object?.status.language == "half")
+      {
+        this.showAlert(this.alerts.languageWarn)
+        this.hideAlert(this.alerts.languagePass)
+        this.hideAlert(this.alerts.languageAlert)
+      }
+      else if (this.object?.status.language == "none")
+      {
+        state.errors.push(game.i18n.localize("PILLARS.NotProficientBookLanguage"))
+        this.showAlert(this.alerts.languageAlert)
+        this.hideAlert(this.alerts.languagePass)
+        this.hideAlert(this.alerts.languageWarn)
+      }
     }
 
-    if (this.status.language == "full")
+    else (this.mode == "teacher")
     {
-      this.showAlert(this.alerts.languagePass)
-      this.hideAlert(this.alerts.languageWarn)
-      this.hideAlert(this.alerts.languageAlert)
-    }
-    else if (this.status.language == "half")
-    {
-      this.showAlert(this.alerts.languageWarn)
-      this.hideAlert(this.alerts.languagePass)
-      this.hideAlert(this.alerts.languageAlert)
-    }
-    else if (this.status.language == "none")
-    {
-      state.errors.push(game.i18n.localize("PILLARS.NotProficientBookLanguage"))
-      this.showAlert(this.alerts.languageAlert)
-      this.hideAlert(this.alerts.languagePass)
-      this.hideAlert(this.alerts.languageWarn)
-    }
 
+    }
+    
 
     state.message = getGame().i18n.format('PILLARS.StudyErrors', { errors: `<ul>${'<li>' + state.errors.join('</li><li>') + '</li>'}</ul>` })
 

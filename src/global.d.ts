@@ -31,7 +31,7 @@ import PILLARS_UTILITY from './module/system/utility';
 import { PillarsChat } from './module/system/chat';
 import PowerTemplate from './module/system/power-template';
 import TimeTracker from './module/apps/time-tracker';
-import SeasonalActivity from './module/apps/seasonal/seasonal-activity';
+import SeasonalActivityApplication from './module/apps/seasonal/seasonal-activity';
 
 //#region Actor
 
@@ -811,7 +811,7 @@ declare global {
         WeaponCheck : typeof WeaponCheck,
         PowerCheck : typeof PowerCheck,
       },
-      seasonalActivities : typeof SeasonalActivity[]
+      seasonalActivities : typeof SeasonalActivityApplication[]
       DamageRoll : typeof DamageRoll
       migration : typeof Migration,
       utility: typeof PILLARS_UTILITY,

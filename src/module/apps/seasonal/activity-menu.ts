@@ -3,11 +3,11 @@ import { getGame } from "../../../pillars";
 import { SeasonalActivityResult } from "../../../types/seasonal-activities";
 import { PillarsActor } from "../../actor/actor-pillars";
 import BookOfSeasons from "../book-of-seasons";
-import SeasonalActivity from "./seasonal-activity";
+import SeasonalActivityApplication from "./seasonal-activity";
 
 export default class SeasonalActivityMenu extends FormApplication<FormApplicationOptions, {activities : string[]}, {actor : PillarsActor, index : number, season: string}> {
 
-  activities : typeof SeasonalActivity[] = []
+  activities : typeof SeasonalActivityApplication[] = []
 
   resultData? : SeasonalActivityResult
 
