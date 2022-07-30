@@ -11,8 +11,23 @@
     <section class="content">
         {{> systems/pillars-of-eternity/templates/item/item-description.html}}
 
-
         <div class="tab details active" data-tab="details"> 
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Size"}}</label>
+                <div class="form-fields">
+                    <select name="data.size.value">
+                        {{#select data.size.value}}
+                        <option value=""></option>
+                        {{#each (config "itemSizes") as |value k|}}
+                        <option value="{{k}}">{{value}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+
+            
             <div class="form-group">
                 <label>{{localize "PILLARS.Type"}}</label>
                 <div class="form-fields">
@@ -46,6 +61,7 @@
                     </select>
                 </div>
             </div>
+
             {{else if (eq data.category.value "gear")}}
             
             <div class="form-group">

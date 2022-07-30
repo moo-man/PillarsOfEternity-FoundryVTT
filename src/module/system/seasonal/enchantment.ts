@@ -17,10 +17,10 @@ export class Imbuement {
     actor : PillarsActor
     maedrs : PillarsItem[];
 
-    id : string = randomID()
 
-    // Saved data
     data : {
+        // Saved data
+        id : string
         actorId : string,
         itemData : ItemDataConstructorData | ActorDataConstructorData,
         powerData : ItemDataConstructorData,
@@ -34,6 +34,7 @@ export class Imbuement {
         progress : {
             state : ENCHANTMENT_STATE,
             current : number,
+            total? : number
         }
     }
 
@@ -56,6 +57,7 @@ export class Imbuement {
 
         this.data = {
             actorId : actor.id!,
+            id : randomID(),
             itemData : item.toObject(),
             powerData : power.toObject(),
             maedrs : maedrs.map(i => i.toObject()),
@@ -84,10 +86,11 @@ export class Imbuement {
         let actor = game.actors!.get(data.actorId);
         let item =  data.form == "item" ? new PillarsItem(data.itemData as ItemDataConstructorData) : new PillarsActor(data.itemData as ActorDataConstructorData);
         let power = new PillarsItem(data.powerData);
+        let maedrs = data.maedrs.map(i => new PillarsItem(i))
 
         if (item && power && actor)
         {
-            let imbuement = new this(item, power, actor)
+            let imbuement = new this(item, power, actor, maedrs)
             imbuement.data = data;
             imbuement.computeProgress();
             return imbuement
@@ -98,6 +101,11 @@ export class Imbuement {
     async save() {
         this.computeProgress();
         return this.actor.setFlag("pillars-of-eternity", `enchantments.${this.id}`, this.data)
+    }
+
+
+    get id() {
+        return this.data.id
     }
 
     getSaveData() {
@@ -129,7 +137,7 @@ export class Imbuement {
                 finishedItem.data.update(this.getSaveData())
             }
         }
-        return {items : [finishedItem.toObject()]}
+        return {items : [finishedItem.toObject()], [`flags.pillars-of-eternity.enchantments.-=${this.id}`] : null}
     }
     
 
@@ -166,7 +174,9 @@ export class Imbuement {
         if (this.data.resonance)
             this.progress.total /= 2
 
-        this.progress.cost  = Math.floor(this.progress.total / 2);
+        this.progress.total = Math.ceil(this.progress.total)
+
+        this.progress.cost  = Math.ceil(this.progress.total / 2);
 
         if (this.progress.current >= this.progress.total)
             this.progress.state = ENCHANTMENT_STATE.FINISHED

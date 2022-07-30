@@ -2,7 +2,7 @@ import { getGame } from '../../../pillars';
 import { SeasonalActivityData, SeasonalActivityResolve, SeasonalActivityResult } from '../../../types/seasonal-activities';
 import { PillarsActor } from '../../actor/actor-pillars';
 
-export default class SeasonalActivityApplication extends Application {
+export default class SeasonalActivityApplication extends Application<{closeOnSubmit : boolean} & ApplicationOptions> {
 
   actor: PillarsActor;
   resolve? : SeasonalActivityResolve
@@ -12,9 +12,10 @@ export default class SeasonalActivityApplication extends Application {
   } = {}
   
   static get defaultOptions() {
-    let options = super.defaultOptions;
+    let options = super.defaultOptions as ApplicationOptions & {closeOnSubmit : boolean};
     options.classes.push("seasonal-activity")
     options.resizable = true;
+    options.closeOnSubmit = true;
     return options
   }
 
@@ -83,13 +84,15 @@ export default class SeasonalActivityApplication extends Application {
           content: state.message,
           yes: () => {
             this.submit();
-            this.close();
+            if (this.options.closeOnSubmit)
+              this.close();
           },
           no: () => {},
         });
       } else {
-        this.submit();
-        this.close();
+          this.submit();
+          if (this.options.closeOnSubmit)
+            this.close();
       }
     })[0];
 

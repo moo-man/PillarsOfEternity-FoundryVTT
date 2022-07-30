@@ -1,6 +1,6 @@
 <div class="enchantment">
 
-    <nav class="sheet-tabs tabs">
+    <nav class="sheet-tabs tabs {{#if imbuement.progress}}disabled{{/if}}">
         <a  class="tab-select item active" data-tab="imbuement">{{localize "PILLARS.Imbuement"}}</a>
         <a  class="tab-select item" data-tab="embellishment">{{localize "PILLARS.Embellishment"}}</a>
         <a  class="tab-select item" data-tab="refinement">{{localize "PILLARS.Refinement"}}</a>
@@ -35,19 +35,19 @@
             <div class="details">
                 <div class="resonance">
                     <label>{{localize "PILLARS.Resonance"}}</label>
-                    <input type="checkbox" class="update-enchantment" data-path="resonance" {{#if imbuement.progress.started}}disabled{{/if}} {{checked imbuement.data.resonance}}>
+                    <input type="checkbox" class="update-enchantment" data-path="resonance" {{#if (ne imbuement.progress.state 0) }}disabled{{/if}} {{checked imbuement.data.resonance}}>
                 </div>
                 <div class="exclusion">
                     <label>{{localize "PILLARS.UseExclusion"}}</label>
-                    <input type="checkbox" class="update-enchantment" data-path="exclusion" {{#if imbuement.progress.started}}disabled{{/if}} {{checked imbuement.data.exclusion}}>
+                    <input type="checkbox" class="update-enchantment" data-path="exclusion" {{#if (ne imbuement.progress.state 0) }}disabled{{/if}} {{checked imbuement.data.exclusion}}>
                 </div>
                 <div class="trigger">
                     <label>{{localize "PILLARS.SituationalTrigger"}}</label>
-                    <input type="checkbox" class="update-enchantment" data-path="trigger" {{#if imbuement.progress.started}}disabled{{/if}} {{checked imbuement.data.trigger}}>
+                    <input type="checkbox" class="update-enchantment" data-path="trigger" {{#if (ne imbuement.progress.state 0) }}disabled{{/if}} {{checked imbuement.data.trigger}}>
                 </div>
                 <div class="frequency">
                     <label>{{localize "PILLARS.Frequency"}}</label>
-                    <select {{#if imbuement.progress.started}}disabled{{/if}} class="update-enchantment" data-path="frequency" >
+                    <select {{#if (ne imbuement.progress.state 0) }}disabled{{/if}} class="update-enchantment" data-path="frequency" >
                         {{#select imbuement.data.frequency}}
                         <option value="1">
                             1 per Day
@@ -63,10 +63,10 @@
                 </div>
                 <div class="sealed">
                     <label>{{localize "PILLARS.Sealed"}}</label>
-                    <input type="checkbox" class="update-enchantment" data-path="sealed" {{#unless imbuement.progress.done}}disabled{{/unless}} {{checked imbuement.data.sealed}}>
+                    <input type="checkbox" class="update-enchantment" data-path="sealed" {{#unless (eq imbuement.progress.state 2) }}disabled{{/unless}} {{checked imbuement.data.sealed}}>
                 </div>
             </div>
-            <div class="maedrs">
+            <div class="maedrs" {{#if (ne imbuement.progress.state 0) }}disabled{{/if}} }}>
                 <h3>{{localize "PILLARS.Maedrs"}}</h3>
                 {{#if imbuement.progress}}
                 <h4>{{maedrs.length}} / {{imbuement.progress.cost}}</h4>
@@ -107,14 +107,7 @@
         </div>
     </div>
     {{log this}}
-    {{#if (eq imbuement.progress.state "0")}} <!-- ENCHANTMENT_STATE.NOT_STARTED -->
-    <button type="submit">{{localize "PILLARS.EnchantmentStart"}}</button>
-    {{else if (eq imbuement.progress.state "1")}} <!-- ENCHANTMENT_STATE.IN_PROGRESS -->
-    <button type="submit">{{localize "PILLARS.EnchantmentContinue"}}</button>
-    {{else if (eq imbuement.progress.state "2")}} <!-- ENCHANTMENT_STATE.FINISHED -->
-    <button type="submit">{{localize "PILLARS.EnchantmentFinish"}}</button>
-    {{else}}
-    <button type="submit">{{localize "PILLARS.EnchantmentStart"}}</button>
-    {{/if}}
+    
+    <button type="submit">{{localize submitButton}}</button>
 
 </div>
