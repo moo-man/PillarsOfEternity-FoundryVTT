@@ -341,6 +341,9 @@ export interface Physical {
   quantity: {
     value: number;
   };
+  size : {
+    value : keyof typeof PILLARS.itemSizes
+  }
 }
 export interface Used {
   used: {

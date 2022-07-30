@@ -231,7 +231,35 @@ export class PillarsItem extends Item {
     }
   }
 
-  prepareWeapon() {}
+  prepareWeapon() {
+
+    let category = this.category?.value || ""
+
+    if (isPhysical(this))
+    {
+
+      if (["smallMelee", "mediumMelee", "mediumRanged"].includes(category))
+        this.data.data.size.value = "small"
+      else if (["largeMelee", "largeRanged"].includes(category))
+        this.data.data.size.value = "average"
+      else if (category == "grenade")
+        this.data.data.size.value == "tiny"
+    }
+  }
+
+  prepareArmor() {
+    if (isPhysical(this))
+    {
+      this.data.data.size.value = "large"
+    }
+  }
+
+  prepareShield() {
+    if (isPhysical(this))
+    {
+      this.data.data.size.value = "small"
+    }
+  }
 
   prepareSkill() {}
 
@@ -894,6 +922,9 @@ export class PillarsItem extends Item {
   get size() {
     if (this.data.type == 'species') return this.data.data.size;
   }
+  get itemSize() {
+    if(isPhysical(this)) return this.data.data.size
+  }
   get species() {
     if (this.data.type == 'species') return this.data.data.species;
   }
@@ -946,6 +977,7 @@ export class PillarsItem extends Item {
   get phases() {
     if (this.data.type == "species") return this.data.data.phases
   }
+  
 
   // Processed data getters
   get rank() {

@@ -282,6 +282,9 @@
                 },
                 "quantity": {
                     "value": 1
+                },
+                "size" : {
+                    "value" : ""
                 }
             },
             "used": {
