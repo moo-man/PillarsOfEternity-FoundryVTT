@@ -4,7 +4,10 @@ import { SeasonalActivityResult, PracticeTemplateData, ENCHANTMENT_STATE, Season
 import { PillarsActor } from '../../actor/actor-pillars';
 import { PillarsItem } from '../../item/item-pillars';
 import { PILLARS } from '../../system/config';
-import { Imbuement } from '../../system/seasonal/enchantment';
+import { Embellishment } from '../../system/seasonal/embellishment';
+import { Enchantment } from '../../system/seasonal/enchantment';
+import { Imbuement } from '../../system/seasonal/imbuement';
+import { Refinement } from '../../system/seasonal/refinement';
 import SeasonalActivityApplication from './seasonal-activity';
 
 export default class EnchantmentSeasonalActivityApplication extends SeasonalActivityApplication {
@@ -18,7 +21,7 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
   power?: PillarsItem;
   maedrs: PillarsItem[] = [];
 
-  imbuement: Imbuement | undefined;
+  enchantment: Enchantment | undefined;
 
   submitted = false; // Keep track of this app's submission
 
@@ -45,22 +48,20 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
     return getGame().i18n.localize('PILLARS.Enchantment');
   }
 
-  
-
   static create(data: SeasonalActivityData): Promise<SeasonalActivityResult> {
-    let enchantments = data.actor.getFlag('pillars-of-eternity', 'enchantments') as Record<string, Imbuement["data"]> || {};
+    let enchantments = (data.actor.getFlag('pillars-of-eternity', 'enchantments') as Record<string, Enchantment['data']>) || {};
 
-    let options = [`<option value="new">New Enchantment</option>`]
-    Object.keys(enchantments).forEach(key => {
-      options.push(`<option value=${key}>${enchantments[key]?.itemData.name} - ${enchantments[key]?.powerData.name} (${enchantments[key]?.progress.current}/${enchantments[key]?.progress.total})</option>`)
-    })
+    let options = [`<option value="new">New Enchantment</option>`];
+    Object.keys(enchantments).forEach((key) => {
+      options.push(`<option value=${key}>${enchantments[key]?.itemData.name} (${enchantments[key]?.progress.current}/${enchantments[key]?.progress.total})</option>`);
+    });
 
     return new Promise<SeasonalActivityResult>(async (resolve) => {
       new Dialog({
         title: 'Choose Enchantment',
         content: `
         <select>
-        ${options.join("")}
+        ${options.join('')}
         </select>
         `,
         buttons: {
@@ -70,13 +71,24 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
               dlg = $(dlg);
               let value = dlg.find('select')[0]?.value;
               if (value) {
-                let app = new this(data, resolve)
-                if (value != "new")
-                {
-                  let imbuement = Imbuement.fromData(enchantments[value]!)
-                  app.imbuement = imbuement
+                let app = new this(data, resolve);
+                if (value != 'new') {
+                  let enchantment: Enchantment | undefined;
+
+                  switch (enchantments[value]?.type) {
+                    case 'imbuement':
+                      enchantment = Imbuement.fromData(enchantments[value]! as Imbuement['data']);
+                      break;
+                    case 'embellishment':
+                      enchantment = Embellishment.fromData(enchantments[value]! as Embellishment['data']);
+                      break;
+                    case 'refinement':
+                      enchantment = Imbuement.fromData(enchantments[value]! as Imbuement['data']);
+                      break;
+                  }
+                  app.enchantment = enchantment;
                 }
-                app.render(true)
+                app.render(true);
               }
             },
           },
@@ -87,55 +99,58 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
 
   render(...args: Parameters<Application['render']>) {
     super.render(...args);
+    if (this.enchantment)
+      this._tabs[0]?.activate(this.enchantment.data.type)
     this.checkData();
   }
 
   async submit(): Promise<SeasonalActivityResult> {
     let result = <SeasonalActivityResult>{};
 
-    if (!this.imbuement) throw new Error('No Enchantment');
+    if (!this.enchantment) throw new Error('No Enchantment');
+
+
+    this.checkData();
+
 
     // We don't want to close immediately because users want to see the new progress
     // Instead, change the submit button to a "close" button
-    if (this.submitted)
-    {
-      this.close()
-      return result
+    if (this.submitted) {
+      this.close();
+      return result;
     }
 
     try {
-      switch (this.imbuement.progress.state) {
+      switch (this.enchantment.progress.state) {
         case ENCHANTMENT_STATE.NOT_STARTED:
-          this.imbuement.start();
+          this.enchantment.start();
           break;
         case ENCHANTMENT_STATE.IN_PROGRESS:
-          this.imbuement.advanceProgress();
+          this.enchantment.advanceProgress();
           break;
         case ENCHANTMENT_STATE.FINISHED:
           if (this.resolve) {
-            this.resolve({ text: this.imbuement.getStateMessage(), data: this.imbuement.getFinishedData() });
+            this.resolve({ text: this.enchantment.getStateMessage(), data: this.enchantment.getFinishedData() });
             this.close();
           }
       }
 
       // Look at progress again after click
-      switch (this.imbuement.progress.state) {
+      switch (this.enchantment.progress.state) {
         case ENCHANTMENT_STATE.NOT_STARTED: // Should not happen
-          this.imbuement.start();
+          this.enchantment.start();
           break;
         case ENCHANTMENT_STATE.IN_PROGRESS:
-          if (this.resolve) this.resolve({ text: this.imbuement.getStateMessage(), data: this.imbuement.getSaveData() });
+          if (this.resolve) this.resolve({ text: this.enchantment.getStateMessage(), data: this.enchantment.getSaveData() });
           // ui.notifications!.notify("Book of Seasons Updated")
           break;
         case ENCHANTMENT_STATE.FINISHED:
-          if (this.resolve) this.resolve({ text: this.imbuement.getStateMessage(), data: this.imbuement.getFinishedData() });
-          // ui.notifications!.notify("Item Added and Book of Seasons Updated")
-
+          if (this.resolve) this.resolve({ text: this.enchantment.getStateMessage(), data: this.enchantment.getFinishedData() });
+        // ui.notifications!.notify("Item Added and Book of Seasons Updated")
       }
 
       this.submitted = true;
       await this._render(true);
-
     } catch (e) {
       ui.notifications!.error('Error Progressing Enchantment: ' + e);
       throw new Error('Error Progressing Enchantment: ' + e);
@@ -148,29 +163,43 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
   }
 
   async getData() {
-    let submitButton = "PILLARS.EnchantmentStart"
+    let submitButton = 'PILLARS.EnchantmentStart';
 
     // Priority to Finish, then if this enchantment has already been submitted, change to Close, otherwise, based on progress state
-    if (this.imbuement?.progress.state == ENCHANTMENT_STATE.FINISHED)
-      submitButton = "PILLARS.EnchantmentFinish"
-    
-    else if (this.submitted)
-      submitButton = "Close"
+    if (this.enchantment?.progress.state == ENCHANTMENT_STATE.FINISHED) submitButton = 'PILLARS.EnchantmentFinish';
+    else if (this.submitted) submitButton = 'Close';
+    else if (this.enchantment?.progress.state == ENCHANTMENT_STATE.IN_PROGRESS) submitButton = 'PILLARS.EnchantmentContinue';
+    else if (this.enchantment?.progress.state == ENCHANTMENT_STATE.NOT_STARTED) submitButton = 'PILLARS.EnchantmentStart';
 
-    else if (this.imbuement?.progress.state == ENCHANTMENT_STATE.IN_PROGRESS)
-      submitButton = "PILLARS.EnchantmentContinue"
-
-    else if (this.imbuement?.progress.state == ENCHANTMENT_STATE.NOT_STARTED)
-      submitButton = "PILLARS.EnchantmentStart"
-
-
-    return {
-      imbuement: this.imbuement,
-      item: this.imbuement?.item || this.item,
-      power: this.imbuement?.power || this.power,
-      maedrs: this.imbuement?.maedrs || this.maedrs,
-      submitButton
-    };
+    if (this.enchantment instanceof Imbuement)
+    {
+      return {
+        imbuement: this.enchantment,
+        item: this.enchantment?.item || this.item,
+        power: this.enchantment?.power || this.power,
+        maedrs: this.enchantment?.maedrs || this.maedrs,
+        submitButton,
+      };
+    }
+    else if (this.enchantment instanceof Embellishment)
+    {
+      return {
+        imbuement: this.enchantment,
+        item: this.enchantment?.item || this.item,
+        actor : this.enchantment?.actor || this.actor,
+        skills : this.actor.getItemTypes(ItemType.skill).filter(i => i.category?.value == "artisan"),
+        submitButton,
+      };
+    }
+    else if (this.enchantment instanceof Refinement)
+    {
+      return {
+        imbuement: this.enchantment,
+        item: this.enchantment?.item || this.item,
+        actor : this.enchantment?.actor || this.actor,
+        submitButton,
+      };
+    }
   }
 
   async _onDragDrop(ev: DragEvent) {
@@ -189,12 +218,12 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
         if (dragData.type == 'Item') item = await PillarsItem.fromDropData(dragData);
         else item = await PillarsActor.fromDropData(dragData);
 
-        this.setItem(target.dataset.type as 'power' | 'item', item);
+        this.setItem(target.dataset.type as 'power' | 'item', item, target.dataset.type);
       }
     }
   }
 
-  setItem(type: 'power' | 'item', item: PillarsItem | PillarsActor | undefined) {
+  setItem(type: 'power' | 'item', item: PillarsItem | PillarsActor | undefined, mode? : string) {
     if (type == 'item' && item?.documentName != 'Actor' && !hasEmbeddedPowers(item)) {
       throw ui.notifications?.error('Wrong Item Type');
     }
@@ -206,8 +235,10 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
     else if (type == 'power') this.power = item as PillarsItem;
 
     if (this.item && this.power) {
-      this.imbuement = new Imbuement(this.item, this.power, this.actor, this.maedrs);
+      this.enchantment = new Imbuement(this.item, this.power, this.actor, this.maedrs);
     }
+    if (item && mode == "embellishment")
+      this.enchantment = new Embellishment(item, this.actor)
 
     this.render(true);
     this.checkData();
@@ -215,8 +246,8 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
 
   // Add a maedr to this object if enchantment objct hasn't been created
   addMaedr(maedr: PillarsItem) {
-    if (maedr.category?.value == 'maedr') {
-      this.imbuement ? this.imbuement.addMaedr(maedr) : this.maedrs.push(maedr);
+    if (maedr.category?.value == 'maedr' && this.enchantment instanceof Imbuement) {
+      this.enchantment ? this.enchantment.addMaedr(maedr) : this.maedrs.push(maedr);
       this.render(true);
     }
   }
@@ -254,8 +285,8 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
       if (ev.target.checked == true) value = true;
       else if (ev.target.checked == false) value = false;
 
-      setProperty(this.imbuement?.data!, path, value);
-      this.imbuement?.computeProgress();
+      setProperty(this.enchantment?.data!, path, value);
+      this.enchantment?.computeProgress();
       this.render(true);
     });
   }
@@ -264,7 +295,9 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
     let state: { errors: string[]; message: string } = { errors: [], message: '' };
     let game = getGame();
 
-    state.message = getGame().i18n.format('PILLARS.StudyErrors', { errors: `<ul>${'<li>' + state.errors.join('</li><li>') + '</li>'}</ul>` });
+    this.enchantment?.validate();
+
+    state.message = game.i18n.format('PILLARS.EnchantmentErrors', { errors: `<ul>${'<li>' + state.errors.join('</li><li>') + '</li>'}</ul>` });
 
     return state;
   }
