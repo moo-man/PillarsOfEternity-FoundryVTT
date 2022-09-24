@@ -1,10 +1,6 @@
-import { IndexTypeForMetadata } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/collections/compendium";
 import { ActorDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData";
-import { ItemData, ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
-import { EquipmentSource, PowerSource } from "../../../global";
-import { getGame } from "../../../pillars";
-import { hasEmbeddedPowers } from "../../../types/common";
-import { EmbeddedPower } from "../../../types/powers";
+import { ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
+import { getGame } from "../../system/utility";
 import { ENCHANTMENT_STATE } from "../../../types/seasonal-activities";
 import { PillarsActor } from "../../actor/actor-pillars";
 import { PillarsItem } from "../../item/item-pillars";
@@ -86,7 +82,7 @@ export class Refinement extends Enchantment{
         switch(this.progress.state)
         {
             case ENCHANTMENT_STATE.FINISHED:
-                return `Refinement: ${this.item.name} - ${PILLARS.qualities[this.data.quality]}`
+                return `Refinement: ${this.item.name}`
             default: 
                 return ""
         }
@@ -97,7 +93,6 @@ export class Refinement extends Enchantment{
         
         let updateObject = {items : [], [`flags.pillars-of-eternity.enchantments.-=${this.id}`] : null}
 
-        if (this.data.progress.check && this.data.progress.check < this.data)
 
         return {items : [finishedItem.toObject()], [`flags.pillars-of-eternity.enchantments.-=${this.id}`] : null}
     }

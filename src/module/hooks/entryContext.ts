@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars";
+import { getGame } from "../system/utility";
 
 export default function () {
     Hooks.on("getChatLogEntryContext", addChatMessageContextOptions)

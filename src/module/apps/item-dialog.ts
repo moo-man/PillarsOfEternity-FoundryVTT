@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars";
+import { getGame } from "../system/utility";
 import { ItemDialogData } from "../../types/common";
 import { PillarsItem } from "../item/item-pillars";
 

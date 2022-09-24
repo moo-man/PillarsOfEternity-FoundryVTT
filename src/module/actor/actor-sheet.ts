@@ -5,8 +5,8 @@ import { PillarsItem } from '../item/item-pillars';
 import PillarsActiveEffect from '../system/pillars-effect';
 import { BasePreparedPillarsActorData, PreparedPillarsCharacterData } from '../../global';
 import { Defense, ItemType, SoakType } from '../../types/common';
-import { getGame } from '../../pillars';
-import PILLARS_UTILITY from '../system/utility';
+import { getGame } from "../system/utility"
+import { PILLARS_UTILITY } from '../system/utility';
 import { PowerGroups } from '../../types/powers';
 
 // Overwrite default ActorSheet.Data data property and replace it with system data
@@ -395,10 +395,10 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     sheetData.items.powers.forEach((p) => {
       if (p.data.type == "power")
       {
-        let lowestKey = Object.keys(p.data.groups)
+        let lowestKey = Object.keys(p.data.groups || {})
           .filter((i) => i)
           .sort((a, b) => a > b ? 1 : -1)[0] || game.i18n.localize("Default");
-        p.data.display = p.data.groups[lowestKey];
+        p.data.display = p.data.groups?.[lowestKey];
       }
     })
   }
@@ -980,7 +980,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     {
       if (!Number.isNumeric(groupIndex)) groupIndex = 0;
       else if (typeof groupIndex == 'number') groupIndex++;
-      if (groupIndex >= Object.keys(item.data.groups).length) groupIndex = getGame().i18n.localize('Default');
+      if (groupIndex >= Object.keys(item.data.groups || {}).length) groupIndex = getGame().i18n.localize('Default');
     }
 
     return item?.setFlag('pillars-of-eternity', 'displayGroup', groupIndex);

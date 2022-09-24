@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars"
+import { getGame } from "../system/utility"
 import { WeaponCheckDataFlattened, WeaponCheckData } from "../../types/checks"
 import SkillCheck from "./skill-check"
 

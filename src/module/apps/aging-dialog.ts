@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars"
+import { getGame } from "../system/utility"
 import { AgingCheckDataFlattened, AgingDialogData } from "../../types/checks"
 import { PillarsEffectChangeDataProperties } from "../../types/effects"
 

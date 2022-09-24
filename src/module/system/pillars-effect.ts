@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars"
+import { getGame } from "../system/utility"
 import { PillarsEffectChangeDataProperties } from "../../types/effects"
 import { PillarsActor } from "../actor/actor-pillars"
 import { PillarsItem } from "../item/item-pillars"

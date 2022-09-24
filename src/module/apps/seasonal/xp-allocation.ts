@@ -1,4 +1,4 @@
-import { getGame } from '../../../pillars';
+import { getGame } from "../../system/utility";
 import { XPAllocationData, XPAllocationTemplateData, SeasonalActivityResult, SeasonalActivityResolve } from '../../../types/seasonal-activities';
 import { PillarsItem } from '../../item/item-pillars';
 import SeasonalActivityApplication from './seasonal-activity';

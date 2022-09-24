@@ -24,10 +24,10 @@ import {
   PowerDialogData,
   DamageOptions,
 } from '../../types/checks.js';
-import { getGame } from '../../pillars';
+import { getGame } from "../system/utility"
 import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
 import { PillarsEffectChangeDataProperties } from '../../types/effects';
-import PILLARS_UTILITY from '../system/utility';
+import { PILLARS_UTILITY } from '../system/utility';
 import ItemDialog from '../apps/item-dialog';
 import BookOfSeasons from '../apps/book-of-seasons';
 import SeasonalActivityMenu from '../apps/seasonal/activity-menu';

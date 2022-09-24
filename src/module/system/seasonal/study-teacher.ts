@@ -1,10 +1,10 @@
-import { getGame } from '../../../pillars';
+import { getGame } from "../../system/utility";
 import { hasXPData, ItemType } from '../../../types/common';
 import { SeasonalActivityResult } from '../../../types/seasonal-activities';
 import { PillarsActor } from '../../actor/actor-pillars';
 import { PillarsItem } from '../../item/item-pillars';
 import { PILLARS } from '../config';
-import PILLARS_UTILITY from '../utility';
+import { PILLARS_UTILITY } from '../utility';
 import { StudyActivity } from './study';
 
 export class StudyTeacherActivity extends StudyActivity{

@@ -1,7 +1,7 @@
 import { ActiveEffectDataConstructorData, ActiveEffectDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
 import { ItemDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
 import {  PillarsItemSystemData } from '../../global';
-import { getGame } from '../../pillars';
+import { getGame } from "../system/utility"
 import { hasEmbeddedPowers, ItemType, LifePhase } from '../../types/common';
 import { BondTrait } from '../../types/items';
 import { EmbeddedPower, PowerBaseEffect, PowerDamage, PowerDuration, PowerHealing, PowerMisc, PowerRange, PowerSummon, PowerTarget } from '../../types/powers';

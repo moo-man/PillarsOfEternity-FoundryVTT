@@ -1,4 +1,4 @@
-import { getGame } from '../../pillars';
+import { getGame } from "../system/utility"
 import { SeasonData } from '../../types/common';
 import { PillarsActor } from '../actor/actor-pillars';
 import { PILLARS } from '../system/config';

@@ -10,7 +10,7 @@ import { PillarsActorSheet } from "./module/actor/actor-sheet";
 import { PillarsActor } from "./module/actor/actor-pillars";
 import { PillarsCombat } from "./module/system/combat";
 import { PILLARS } from "./module/system/config";
-import PILLARS_UTILITY from "./module/system/utility";
+import { PILLARS_UTILITY, getGame }from "./module/system/utility";
 import { PillarsChat } from "./module/system/chat";
 import hooks from "./module/hooks/hooks"
 import PowerTemplate from "./module/system/power-template";
@@ -116,14 +116,6 @@ Hooks.on("init", () => {
 
   //Register all other hooks
   hooks();
-
-export function getGame(): Game {
-  if(!(game instanceof Game)) {
-    throw new Error('game is not initialized yet!');
-  }
-  return game;
-}
-
 
 function localizeConfigObject(object : any)
 {

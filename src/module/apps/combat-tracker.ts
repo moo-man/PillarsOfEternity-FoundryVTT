@@ -1,4 +1,4 @@
-import { getGame } from '../../pillars';
+import { getGame } from "../system/utility"
 import { PillarsTurn } from '../../types/combat';
 import { PillarsCombat } from '../system/combat';
 import { PillarsCombatant } from '../system/combatant';

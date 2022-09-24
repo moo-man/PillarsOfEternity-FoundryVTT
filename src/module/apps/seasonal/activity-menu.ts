@@ -1,5 +1,5 @@
 import { ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
-import { getGame } from "../../../pillars";
+import { getGame } from "../../system/utility";
 import { SeasonalActivityResult } from "../../../types/seasonal-activities";
 import { PillarsActor } from "../../actor/actor-pillars";
 import BookOfSeasons from "../book-of-seasons";

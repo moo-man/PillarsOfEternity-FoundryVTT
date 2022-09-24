@@ -1,6 +1,6 @@
 import { Data } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/dice/roll";
 import { ActiveEffectDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
-import { getGame } from "../../pillars";
+import { getGame } from "../system/utility";
 import {  CheckAddData, CheckDataFlattened, DialogDamage, DialogHealing, SkillCheckData } from "../../types/checks";
 import { PowerBaseEffect } from "../../types/powers";
 import DamageDialog from "../apps/damage-dialog";
@@ -8,7 +8,7 @@ import HealingDialog from "../apps/healing-dialog";
 import { PillarsItem } from "../item/item-pillars";
 import DamageRoll from "../system/damage-roll";
 import PillarsActiveEffect from "./pillars-effect";
-import PILLARS_UTILITY from "./utility";
+import { PILLARS_UTILITY } from "./utility";
 
 export default class SkillCheck
 {

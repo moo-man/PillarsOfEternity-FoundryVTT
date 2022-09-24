@@ -1,6 +1,6 @@
-import { getGame } from '../../pillars';
+import { getGame } from "../system/utility"
 import { DamageRollData, SkillCheckData } from '../../types/checks';
-import PILLARS_UTILITY from '../system/utility';
+import { PILLARS_UTILITY } from '../system/utility';
 
 export default function () {
   Hooks.on('ready', () => {

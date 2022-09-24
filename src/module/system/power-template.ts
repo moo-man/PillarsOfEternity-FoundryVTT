@@ -1,4 +1,4 @@
-import { getGame } from '../../pillars';
+import { getGame } from "../system/utility"
 import { PowerGroups } from '../../types/powers';
 import { PillarsItem } from '../item/item-pillars';
 import { PILLARS } from './config';
@@ -11,7 +11,7 @@ export default class PowerTemplate extends MeasuredTemplate {
   static fromItem(item: PillarsItem, groupId: keyof PowerGroups, index = 0) {
     let game = getGame()
     if (item.data.type == 'power') {
-      let target = item.data.groups[groupId]?.target;
+      let target = item.data.groups?.[groupId]?.target;
       let type;
       let subtype;
       if (!target) {

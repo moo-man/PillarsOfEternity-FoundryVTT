@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars"
+import { getGame } from "../system/utility"
 import { PILLARS } from "../system/config"
 
 export default function () {

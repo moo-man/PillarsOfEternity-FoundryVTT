@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars"
+import { getGame } from "../system/utility"
 import { PowerCheckData, PowerCheckDataFlattened } from "../../types/checks"
 import { ItemType } from "../../types/common"
 import { PillarsItem } from "../item/item-pillars"
@@ -68,7 +68,7 @@ export default class PowerCheck extends SkillCheck
 
             if (this.power.data.type == "power")
             {
-                let {damage, effects} = (this.power.data.groups[rangeGroup] || this.power.data.groups[getGame().i18n.localize("Default")])!
+                let {damage, effects} = (this.power.data.groups?.[rangeGroup] || this.power.data.groups?.[getGame().i18n.localize("Default")])!
                 
                 let allEffects = this._toEffectObjects(effects);
                 

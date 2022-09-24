@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars";
+import { getGame } from "../system/utility";
 import { DialogHealing } from "../../types/checks";
 import { PillarsItem } from "../item/item-pillars";
 import SkillCheck from "../system/skill-check";

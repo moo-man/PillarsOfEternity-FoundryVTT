@@ -1,16 +1,13 @@
 const path = require('path');
 const fs = require('fs-extra');
 
-function foundryConfig() {
-
-
+function foundryConfig(systemId) {
   const configPath = path.resolve(process.cwd(), 'foundryconfig.json');
   let config;
 
   if (fs.existsSync(configPath)) {
       config = fs.readJSONSync(configPath);
   }
-  let manifest = JSON.parse(fs.readFileSync("./system.json"))
 
   let foundryPath
   if (process.env.NODE_ENV == "production")
@@ -19,7 +16,7 @@ function foundryConfig() {
   }
   else if (config?.path)
   {
-    foundryPath = path.join(config.path, "systems", manifest.name)
+    foundryPath = path.join(config.path, "systems", systemId)
   }
 
   console.log("Foundry Path: " + foundryPath)

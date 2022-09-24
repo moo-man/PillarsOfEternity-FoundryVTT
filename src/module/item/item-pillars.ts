@@ -3,12 +3,12 @@ import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/f
 import { ChatMessageDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatMessageData';
 import { ItemDataConstructorData, ItemDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
 import { PowerSource } from '../../global';
-import { getGame } from '../../pillars';
+import { getGame } from "../system/utility"
 import { DamageType, Defense, hasCategory, hasEmbeddedPowers, hasXP, isEquippable, isPhysical, isUsableItem, ItemType } from '../../types/common';
 import { ItemChatData,  WeaponSpecialData } from '../../types/items';
 import { EmbeddedPower, PowerBaseEffect, PowerDamage, PowerDisplay, PowerDuration, PowerGroup, PowerGroups, PowerHealing, PowerMisc, PowerRange, PowersConstructorContext, PowerTarget } from '../../types/powers';
 import { PILLARS } from '../system/config';
-import PILLARS_UTILITY from '../system/utility';
+import { PILLARS_UTILITY } from '../system/utility';
 /**
  * Extend the FVTT Item class for Pillars functionality
  * @extends {ItemSheet}

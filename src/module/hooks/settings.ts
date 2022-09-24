@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars"
+import { getGame } from "../system/utility"
 import { Time } from "../../types/common"
 import { PillarsActorSheet } from "../actor/actor-sheet"
 import BookOfSeasons from "../apps/book-of-seasons"

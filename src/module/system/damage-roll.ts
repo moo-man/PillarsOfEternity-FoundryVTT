@@ -1,5 +1,5 @@
 import { TokenDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData';
-import { getGame } from '../../pillars';
+import { getGame } from "../system/utility"
 import { DamageRollData, DialogDamage, ConsolidatedDamage, DialogHealing, DamageTarget, DamageTermOptions, DamageTermToolTip } from '../../types/checks';
 import { Defense } from '../../types/common';
 import { PILLARS } from './config';

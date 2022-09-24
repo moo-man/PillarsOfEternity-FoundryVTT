@@ -27,7 +27,7 @@ import HealingDialog from './module/apps/healing-dialog';
 import WeaponCheck from './module/system/weapon-check';
 import PowerCheck from './module/system/power-check';
 import Migration from './module/system/migrations';
-import PILLARS_UTILITY from './module/system/utility';
+import { PILLARS_UTILITY } from './module/system/utility';
 import { PillarsChat } from './module/system/chat';
 import PowerTemplate from './module/system/power-template';
 import TimeTracker from './module/apps/time-tracker';

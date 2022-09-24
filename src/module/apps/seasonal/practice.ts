@@ -1,4 +1,4 @@
-import { getGame } from '../../../pillars';
+import { getGame } from "../../system/utility";
 import { hasXP, hasXPData } from '../../../types/common';
 import {SeasonalActivityResult, PracticeTemplateData } from '../../../types/seasonal-activities';
 import { PillarsItem } from '../../item/item-pillars';

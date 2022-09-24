@@ -1,8 +1,8 @@
-import { getGame } from '../../../pillars';
+import { getGame } from "../../system/utility";
 import { ItemType } from '../../../types/common';
 import { XPAllocationTemplateData, SeasonalActivityResult } from '../../../types/seasonal-activities';
 import { PillarsItem } from '../../item/item-pillars';
-import PILLARS_UTILITY from '../../system/utility';
+import { PILLARS_UTILITY } from '../../system/utility';
 import XPAllocationActivityApplication from './xp-allocation';
 
 export default class LivingOffLandSeasonalActivityApplication extends XPAllocationActivityApplication {

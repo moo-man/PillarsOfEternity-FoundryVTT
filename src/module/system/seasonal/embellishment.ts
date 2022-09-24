@@ -2,7 +2,7 @@ import { IndexTypeForMetadata } from "@league-of-foundry-developers/foundry-vtt-
 import { ActorDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData";
 import { ItemData, ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
 import { EquipmentSource, PowerSource } from "../../../global";
-import { getGame } from "../../../pillars";
+import { getGame } from "../../system/utility";
 import { hasEmbeddedPowers } from "../../../types/common";
 import { EmbeddedPower } from "../../../types/powers";
 import { ENCHANTMENT_STATE } from "../../../types/seasonal-activities";

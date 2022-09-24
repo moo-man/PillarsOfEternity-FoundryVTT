@@ -1,5 +1,5 @@
 
-import { getGame } from "../../pillars";
+import { getGame } from "../system/utility";
 import EffectScriptConfig from "./effect-script"
 
 

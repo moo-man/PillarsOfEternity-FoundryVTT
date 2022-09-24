@@ -1,4 +1,4 @@
-import { getGame } from "../../pillars";
+import { getGame } from "../system/utility";
 import { WeaponSpecialData } from "../../types/items";
 import { PillarsItem } from "../item/item-pillars";
 
