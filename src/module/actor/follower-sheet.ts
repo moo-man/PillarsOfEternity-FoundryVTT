@@ -24,7 +24,7 @@ export class PillarsFollowerSheet extends PillarsActorSheet {
 
     checkAlerts(): void {
 
-        if (this.actor.data.type == "follower" && !this.actor.subtype!.value)
+        if (this.actor.data.type == "follower" && !this.actor.data.data.subtype!.value)
         {
             let typeSelect = this.element.find<HTMLSelectElement>(".subtype")[0]
             if (typeSelect)

@@ -104,7 +104,8 @@ Hooks.on("init", () => {
     config : PILLARS,
     chat : PillarsChat,
     templates : PowerTemplate,
-    TimeTracker : new TimeTracker()
+    TimeTracker : new TimeTracker(),
+    postReadyPrepare : []
   }
 })
 

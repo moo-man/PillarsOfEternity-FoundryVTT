@@ -143,6 +143,29 @@ export interface PillarsFollowerSourceSystemData
   }
 }
 
+export interface PillarsHeadquartersSourceSystemData {
+  residents : {
+    list : {id : string, count : number}[],
+    extra: 0
+  },
+  staff : {
+    list : {id : string, count : number}[],
+    extra : 0
+  },
+  size : number,
+  accommodations : {
+      prepared : number
+  },
+  library : {
+    [key: string] : unknown
+  },
+
+  disrepair: number,
+  log : {
+    [key: string] : unknown
+  }
+}
+
 interface CharacterDataSource {
   type: 'character';
   data: PillarsCharacterSourceSystemData;
@@ -158,8 +181,15 @@ interface FollowerDataSource {
   data: PillarsFollowerSourceSystemData;
 }
 
+interface HeadquartersDataSource {
+  type: 'headquarters';
+  data: PillarsHeadquartersSourceSystemData;
+}
 
-export type PillarsActorSourceData = CharacterDataSource | NPCDataSource | FollowerDataSource;
+
+export type PillarsActorSourceData = CharacterDataSource | NPCDataSource | FollowerDataSource | HeadquartersDataSource;
+
+export type PillarsNonHeadquartersActorSourceData = CharacterDataSource | NPCDataSource | FollowerDataSource
 
 //#endregion
 
@@ -272,6 +302,11 @@ export interface PreparedPillarsFollowerData
   }
 }
 
+
+export interface PreparedPillarsHeadquartersData extends PillarsHeadquartersSourceSystemData {
+
+}
+
 type PreparedPillarsNPC = {
   type: 'npc';
   data: BasePreparedPillarsActorData;
@@ -296,10 +331,23 @@ type PreparedPillarsCharacter = {
   };
 };
 
+type PreparedPillarsHeadquarters = {
+  type : "headquarters";
+  data : PreparedPillarsHeadquartersData
+}
+
 export type PreparedPillarsActorData =
   | PreparedPillarsCharacter
   | PreparedPillarsNPC
+  | PreparedPillarsFollower
+  | PreparedPillarsHeadquarters;
+  
+
+  export type PreparedPillarsNonHeadquartersActorData = 
+  | PreparedPillarsCharacter
+  | PreparedPillarsNPC
   | PreparedPillarsFollower;
+  
 
 //#endregion 
 
@@ -821,7 +869,8 @@ declare global {
       config : typeof PILLARS,
       chat : typeof PillarsChat,
       templates : typeof PowerTemplate,
-      TimeTracker : TimeTracker
+      TimeTracker : TimeTracker,
+      postReadyPrepare : Actor[]
     };
     dice3d : {
       DiceFactory : {

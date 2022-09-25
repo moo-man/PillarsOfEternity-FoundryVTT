@@ -271,7 +271,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   async getData(): Promise<PillarsActorSheetData> {
     const data = await super.getData();
 
-    data.data = (data as unknown as ActorSheet.Data).data.data
+    data.data = (data as unknown as ActorSheet.Data).data.data as (BasePreparedPillarsActorData)
 
     this.prepareSheetData(data);
     this.formatTooltips(data);
@@ -295,6 +295,8 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   }
 
   formatTooltips(data: PillarsActorSheetData) {
+    if (this.actor.data.type == "headquarters")
+      return
     let tooltips = foundry.utils.deepClone(this.actor.data.flags.tooltips);
     data.tooltips = foundry.utils.deepClone(this.actor.data.flags.tooltips) as unknown as typeof data.tooltips;
     for (let def in data.tooltips.defenses) data.tooltips.defenses[<Defense>def] = tooltips.defenses[<Defense>def].join(' + ').replaceAll('+ -', '- ');
@@ -439,7 +441,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
   _enrichKnownConnections(sheetData: PillarsActorSheetData) {
     if (sheetData.actor.data.type == 'character') {
-      let connections = sheetData.actor.knownConnections!.value;
+      let connections = sheetData.actor.data.data.knownConnections!.value;
       sheetData.KnownConnections = connections.map((i) => {
         let actor = getGame().actors!.getName(i.name);
         return {
@@ -783,7 +785,9 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   }
 
   _onCreateConnection(event: JQuery.ClickEvent) {
-    let connections = duplicate(this.actor.knownConnections?.value || []);
+    if (this.actor.data.type != "character")
+    return
+    let connections = duplicate(this.actor.data.data.knownConnections?.value || []);
     if (connections) {
       connections.push({ name: getGame().i18n.format("PILLARS.NewConnection")});
       this.actor.update({ 'data.knownConnections.value': connections });
@@ -791,8 +795,10 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   }
 
   _onEditConnection(event: JQuery.ClickEvent) {
+    if (this.actor.data.type != "character")
+    return
     let index: number = parseInt($(event.currentTarget!).parents('.item').attr('data-index') || '');
-    let connections = duplicate(this.actor.knownConnections?.value || []);
+    let connections = duplicate(this.actor.data.data.knownConnections?.value || []);
     let game = getGame()
     new Dialog({
       title: game.i18n.localize("PILLARS.ChangeConnection"),
@@ -817,8 +823,10 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   }
 
   _onDeleteConnection(event: JQuery.ClickEvent) {
+    if (this.actor.data.type != "character")
+    return
     let index = parseInt($(event.currentTarget!).parents('.item').attr('data-index') || '');
-    let connections = duplicate(this.actor.knownConnections?.value || []);
+    let connections = duplicate(this.actor.data.data.knownConnections?.value || []);
     connections.splice(index, 1);
     this.actor.update({ 'data.knownConnections.value': connections });
   }
@@ -846,8 +854,10 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   }
 
   _onWoundClick(event: JQuery.ClickEvent) {
+    if (this.actor.data.type == "headquarters")
+    return
     let multiplier = (<HTMLAnchorElement>event.currentTarget).classList.contains('add-wound') ? 1 : -1;
-    return this.actor.update({ 'data.health.wounds.value': this.actor.health.wounds.value + 1 * multiplier });
+    return this.actor.update({ 'data.health.wounds.value': this.actor.data.data.health.wounds.value + 1 * multiplier });
   }
 
   /* -------------------------------------------- */

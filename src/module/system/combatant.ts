@@ -28,15 +28,18 @@ export class PillarsCombatant extends Combatant {
     }
 
     get isRunning(): boolean {
-        return <number>this.getFlag("pillars-of-eternity", "moveCounter") > (this.actor?.stride?.value || 0);
+        if (this.actor?.data.type != "headquarters")
+            return <number>this.getFlag("pillars-of-eternity", "moveCounter") > (this.actor?.data.data.stride?.value || 0);
+        else return false
     }
 
     getMoveData() 
     {
+        if (this.actor?.data.type != "headquarters")
         return {
             running : this.isRunning,
             counter : this.getFlag("pillars-of-eternity", "moveCounter") as number,
-            stride : this.actor?.stride.value || 0,
+            stride : this.actor?.data.data.stride.value || 0,
         }
     }
 

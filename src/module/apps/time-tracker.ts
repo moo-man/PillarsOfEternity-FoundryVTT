@@ -166,7 +166,7 @@ export default class TimeTracker extends Application<ApplicationOptions> {
       if (currentTime.year == -1)
       {
         new Dialog({
-          title : "PILLARS.SetStartingYear",
+          title : game.i18n.localize("PILLARS.SetStartingYear"),
           content : `<p>${game.i18n.localize("PILLARS.SetStartingYearPrompt")}: </p><input type='number'>`,
           buttons: {
             confirm : {
@@ -174,7 +174,9 @@ export default class TimeTracker extends Application<ApplicationOptions> {
               callback : (dlg) => {
                 dlg = $(dlg);
                 let year = Number(dlg.find<HTMLInputElement>("input")[0]?.value) || 0;
-                game.settings.set('pillars-of-eternity', 'season', {year, season: currentTime.season})
+                game.settings.set('pillars-of-eternity', 'season', {year, season: currentTime.season}).then(() => {
+                  this.render(true); 
+                })
               }
             }
           }

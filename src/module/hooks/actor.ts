@@ -3,11 +3,13 @@ import { PillarsActor } from "../actor/actor-pillars"
 
 export default function () {
     Hooks.on("updateActor", async (actor : PillarsActor, data : Record<string, unknown>, options : unknown, userId: string) => {
+        if (actor.data.type == "headquarters")
+            return
         if (getGame().user?.id == userId)
         {
             if (hasProperty(data, "data.health") || hasProperty(data, "data.endurance"))
             {
-                if (actor.getFlag("pillars-of-eternity", "autoEffects") && actor.health.bloodied)
+                if (actor.getFlag("pillars-of-eternity", "autoEffects") && actor.data.data.health.bloodied)
                 {
                     let existing = actor.effects.find(e => e.getFlag("core", "statusId") == "bloodied")
                     if (!existing)
@@ -21,7 +23,7 @@ export default function () {
                     await actor.removeCondition("bloodied")
                 }
     
-                if (actor.getFlag("pillars-of-eternity", "autoEffects") && actor.endurance.winded)
+                if (actor.getFlag("pillars-of-eternity", "autoEffects") && actor.data.data.endurance.winded)
                 {
                     let existing = actor.hasCondition("winded")
                     if (!existing)
@@ -31,7 +33,7 @@ export default function () {
                     await actor.removeCondition("winded")
                 }
     
-                if (actor.getFlag("pillars-of-eternity", "autoEffects") && (actor.health.incap || actor.endurance.incap))
+                if (actor.getFlag("pillars-of-eternity", "autoEffects") && (actor.data.data.health.incap || actor.data.data.endurance.incap))
                 {
                     if (!actor.hasCondition("incapacitated"))
                         await actor.addCondition("incapacitated")
@@ -41,7 +43,7 @@ export default function () {
                 else if (actor.hasCondition("incapacitated"))
                     await actor.removeCondition("incapacitated")
     
-                if (actor.getFlag("pillars-of-eternity", "autoEffects") && (actor.health.dead))
+                if (actor.getFlag("pillars-of-eternity", "autoEffects") && (actor.data.data.health.dead))
                 {
                     await actor.addCondition("dead")
                 }
@@ -51,9 +53,9 @@ export default function () {
     
     
     
-                if (hasProperty(data, "data.health.wounds") && actor.health.value > actor.health.max)
+                if (hasProperty(data, "data.health.wounds") && actor.data.data.health.value > actor.data.data.health.max)
                 {
-                    actor.update({"data.health.value" : actor.health.max})
+                    actor.update({"data.health.value" : actor.data.data.health.max})
                 }
             }
         }

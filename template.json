@@ -11,28 +11,28 @@
                 "defenses": {
                     "deflection": {
                         "value": 10,
-                        "base" : 10,
+                        "base": 10,
                         "bonus": 0,
                         "penalty": 0,
                         "checked": false
                     },
                     "fortitude": {
                         "value": 10,
-                        "base" : 15,
+                        "base": 15,
                         "bonus": 0,
                         "penalty": 0,
                         "checked": false
                     },
                     "reflex": {
                         "value": 10,
-                        "base" : 15,
+                        "base": 15,
                         "bonus": 0,
                         "penalty": 0,
                         "checked": false
                     },
                     "will": {
                         "value": 10,
-                        "base" : 15,
+                        "base": 15,
                         "bonus": 0,
                         "penalty": 0,
                         "checked": false
@@ -43,16 +43,16 @@
                 "health": {
                     "max": 9,
                     "value": 0,
-                    "modifier" : 0,
-                    "death" : {
-                        "modifier" :  0
+                    "modifier": 0,
+                    "death": {
+                        "modifier": 0
                     },
                     "threshold": {
-                        "bloodied" : 3,
-                        "incap" : 6
+                        "bloodied": 3,
+                        "incap": 6
                     },
                     "wounds": {
-                        "value" : 0
+                        "value": 0
                     }
                 }
             },
@@ -60,41 +60,41 @@
                 "endurance": {
                     "max": 8,
                     "value": 0,
-                    "bonus" : 0,
-                    "penalty" : 0,
+                    "bonus": 0,
+                    "penalty": 0,
                     "threshold": {
-                        "winded" : 5
+                        "winded": 5
                     }
                 }
             },
-            "soak" : {
-                "soak" : {
-                    "base" : 0,
-                    "shield" : 0,
-                    "physical" : 0,
-                    "burn" : 0,
-                    "freeze" : 0,
-                    "raw" : 0,
-                    "corrode" : 0,
-                    "shock" : 0
+            "soak": {
+                "soak": {
+                    "base": 0,
+                    "shield": 0,
+                    "physical": 0,
+                    "burn": 0,
+                    "freeze": 0,
+                    "raw": 0,
+                    "corrode": 0,
+                    "shock": 0
                 }
             },
-            "toughness" : {
-                "toughness" : {
-                    "value" : 1
+            "toughness": {
+                "toughness": {
+                    "value": 1
                 }
             },
-            "species" : {
-                "details" : {
+            "species": {
+                "details": {
                     "culture": "",
                     "species": "",
                     "stock": "",
                     "godlike": ""
-            }
+                }
             },
-            "damageIncrement" : {
-                "damageIncrement" : {
-                    "value" : 1
+            "damageIncrement": {
+                "damageIncrement": {
+                    "value": 1
                 }
             },
             "size": {
@@ -106,8 +106,8 @@
                 "stride": {
                     "value": 0
                 },
-                "run" : {
-                    "value" : 0
+                "run": {
+                    "value": 0
                 }
             },
             "initiative": {
@@ -212,19 +212,33 @@
                 "stride",
                 "notes"
             ],
-            "life" : {
-                "birthYear" : null,
-                "phase" : "",
-                "startYear" : null
+            "life": {
+                "birthYear": null,
+                "phase": "",
+                "startYear": null
             },
-            "subtype" : {
-                "value" : ""
+            "subtype": {
+                "value": ""
             },
-            "loyalty" : {
-                "value" : 5
+            "loyalty": {
+                "value": 5
             },
-            "upkeep" : {
-                "value" : 1
+            "upkeep": {
+                "value": 1
+            }
+        },
+        "headquarters": {
+            "residents" : [],
+            "hirelings" : 0,
+            "size" : 15,
+            "accommodations" : {
+                "prepared" : 15
+            },
+            "library" : [],
+
+            "disrepair": 0,
+            "log" : {
+
             }
         }
     },
@@ -248,7 +262,9 @@
             "godlike",
             "reputation",
             "injury",
-            "bond"
+            "bond",
+            "space",
+            "defense"
         ],
         "templates": {
             "category": {
@@ -283,8 +299,8 @@
                 "quantity": {
                     "value": 1
                 },
-                "size" : {
-                    "value" : ""
+                "size": {
+                    "value": ""
                 }
             },
             "used": {
@@ -297,12 +313,12 @@
                     "value": false
                 }
             },
-            "powers" : {
-                "powers" : [],
-                "powerRecharge" : "",
-                "powerCharges" : {
-                    "value" : 0,
-                    "max" : 0
+            "powers": {
+                "powers": [],
+                "powerRecharge": "",
+                "powerCharges": {
+                    "value": 0,
+                    "max": 0
                 }
             }
         },
@@ -347,21 +363,21 @@
             "source": {
                 "value": ""
             },
-            "roll" : {
-                "value" : true
+            "roll": {
+                "value": true
             },
             "base": {
-                "effects" : [],
+                "effects": [],
                 "cost": 0
             },
-            "embedded" : {
-                "item" : "",
-                "spendType" : "source",
-                "uses" : {
-                    "value" : 0,
-                    "max" : 0
+            "embedded": {
+                "item": "",
+                "spendType": "source",
+                "uses": {
+                    "value": 0,
+                    "max": 0
                 },
-                "chargeCost" : 0
+                "chargeCost": 0
             },
             "damage": {
                 "value": []
@@ -369,38 +385,37 @@
             "healing": [],
             "range": [
                 {
-                    "group" : "",
-                    "value" : "none"
+                    "group": "",
+                    "value": "none"
                 }
             ],
-            "target":[
+            "target": [
                 {
-                    "group" : "",
+                    "group": "",
                     "value": "target",
                     "subtype": "self",
                     "targeted": false,
-                    "exclusion" : "none"
+                    "exclusion": "none"
                 }
             ],
             "duration": [
                 {
-                    "group" : "",
-                    "value" : "momentary"
+                    "group": "",
+                    "value": "momentary"
                 }
             ],
-            "summons" : [],
+            "summons": [],
             "misc": [],
-
             "speed": {
                 "value": "slow",
-                "text" :  ""
+                "text": ""
             },
             "limitations": {
-                "group" : "",
+                "group": "",
                 "value": ""
             },
-            "improvised" : {
-                "value" : false
+            "improvised": {
+                "value": false
             }
         },
         "powerSource": {
@@ -514,26 +529,29 @@
                 "value": "",
                 "suitability": "none"
             },
-            "subtype" : {
-                "value" : ""
+            "subtype": {
+                "value": ""
             },
-            "subject" : {
-                "value" : ""
+            "subject": {
+                "value": ""
             },
-            "range" : [null, null],
-            "training" : {
-                "value" : 0
+            "range": [
+                null,
+                null
+            ],
+            "training": {
+                "value": 0
             },
-            "language" : {
-                "value" : ""
+            "language": {
+                "value": ""
             },
             "wearable": {
                 "value": false
             },
-            "qualities" : {
-                "greater" : "",
-                "lesser" : ""
-              }
+            "qualities": {
+                "greater": "",
+                "lesser": ""
+            }
         },
         "connection": {
             "templates": [
@@ -547,117 +565,120 @@
                 "value": 0
             }
         },
-    "culture": {
-        "templates": [
-            "description"
-        ],
-        "languages": {
-            "native": [],
-            "local": []
+        "culture": {
+            "templates": [
+                "description"
+            ],
+            "languages": {
+                "native": [],
+                "local": []
+            },
+            "skills": {
+                "value": []
+            }
         },
-        "skills": {
-            "value": []
-        }
-    },
-    "background": {
-        "templates": [
-            "description"
-        ],
+        "background": {
+            "templates": [
+                "description"
+            ],
+            "setting": {
+                "value": "",
+                "id": ""
+            },
+            "skills": {
+                "value": []
+            },
+            "years": {
+                "value": 0
+            }
+        },
         "setting": {
-            "value": "",
-            "id": ""
-        },
-        "skills": {
-            "value": []
-        },
-        "years": {
-            "value": 0
-        }
-    },
-    "setting": {
-        "templates": [
-            "description"
-        ],
-        "xp": {
-            "free": 0,
-            "connections": 0
-        },
-        "cp": {
-            "value": 0
-        },
-        "transition": {
-            "value": 0
-        }
-    },
-    "species": {
-        "templates": [
-            "description",
-            "powers"
-        ],
-        "size": {
-            "value": 0
-        },
-        "stride": {
-            "value": 6
-        },
-        "phases" : {
-            "childhood" : [0],
-            "adolescence" : [],
-            "youngAdult" : [],
-            "adult" : [],
-            "middleAge" : [],
-            "old" : [],
-            "venerable" : []
+            "templates": [
+                "description"
+            ],
+            "xp": {
+                "free": 0,
+                "connections": 0
+            },
+            "cp": {
+                "value": 0
+            },
+            "transition": {
+                "value": 0
+            }
         },
         "species": {
-            "value": ""
-        }
-    },
-    "stock": {
-        "templates": [
-            "description",
-            "powers"
-        ]
-    },
-    "godlike": {
-        "templates": [
-            "description",
-            "powers"
-        ]
-    },
-    "attribute": {
-        "templates": [
-            "description",
-            "powers"
-        ],
-        "category": {
-            "value": "benefit"
-        }
-    },
-    "reputation": {
-        "templates": [
-            "description",
-            "xp"
-        ],
-        "group": {
-            "value": ""
+            "templates": [
+                "description",
+                "powers"
+            ],
+            "size": {
+                "value": 0
+            },
+            "stride": {
+                "value": 6
+            },
+            "phases": {
+                "childhood": [
+                    0
+                ],
+                "adolescence": [],
+                "youngAdult": [],
+                "adult": [],
+                "middleAge": [],
+                "old": [],
+                "venerable": []
+            },
+            "species": {
+                "value": ""
+            }
         },
-        "modifier": {
-            "value": 0
-        }
-    },
-    "injury" : {
-        "templates" : [
-            "description"
-        ]
-    },
-    "bond" : {
-        "templates" : [
-            "description",
-            "xp"
-        ],
-        "partner" : "",
-        "traits" : []
+        "stock": {
+            "templates": [
+                "description",
+                "powers"
+            ]
+        },
+        "godlike": {
+            "templates": [
+                "description",
+                "powers"
+            ]
+        },
+        "attribute": {
+            "templates": [
+                "description",
+                "powers"
+            ],
+            "category": {
+                "value": "benefit"
+            }
+        },
+        "reputation": {
+            "templates": [
+                "description",
+                "xp"
+            ],
+            "group": {
+                "value": ""
+            },
+            "modifier": {
+                "value": 0
+            }
+        },
+        "injury": {
+            "templates": [
+                "description"
+            ]
+        },
+        "bond": {
+            "templates": [
+                "description",
+                "xp"
+            ],
+            "partner": "",
+            "traits": []
+        },
+
     }
-}
 }

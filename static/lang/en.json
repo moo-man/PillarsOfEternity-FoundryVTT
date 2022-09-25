@@ -114,7 +114,7 @@
     "PILLARS.Artistic": "Artistic",
     "PILLARS.Assistance": "Assistance",
     "PILLARS.Attack": "Attack",
-    "PILLARS.Attacktitle": "{name} Attack",
+    "PILLARS.AttackTitle": "{name} Attack",
     "PILLARS.Aura": "Aura",
     "PILLARS.AutomaticEffects": "Automatic Effects",
     "PILLARS.AutomaticEffectsHint": "Automatically add Bloodied/Winded when below respective thresholds",

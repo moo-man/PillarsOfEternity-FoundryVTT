@@ -622,6 +622,20 @@ export const PILLARS = {
     },
   },
 
+  sizeAccommodations: {
+    '-5': 0,
+    '-4': 0.1,
+    '-3': 0.25,
+    '-2': 0.5,
+    '-1': 1,
+    '0': 1,
+    '1': 1,
+    '2': 3,
+    '3': 6,
+    '4': 10,
+    '5': 15,
+  },
+
   meleeSpecials: {
     battering: {
       label: 'PILLARS.SpecialName.Battering',
