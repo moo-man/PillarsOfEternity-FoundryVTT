@@ -187,7 +187,7 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
         imbuement: this.enchantment,
         item: this.enchantment?.item || this.item,
         actor : this.enchantment?.actor || this.actor,
-        skills : this.actor.getItemTypes(ItemType.skill).filter(i => i.category?.value == "artisan"),
+        skills : this.actor.getItemTypes(ItemType.skill).filter(i => i.system.category?.value == "artisan"),
         submitButton,
       };
     }
@@ -246,7 +246,7 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
 
   // Add a maedr to this object if enchantment objct hasn't been created
   addMaedr(maedr: PillarsItem) {
-    if (maedr.category?.value == 'maedr' && this.enchantment instanceof Imbuement) {
+    if (maedr.system.category?.value == 'maedr' && this.enchantment instanceof Imbuement) {
       this.enchantment ? this.enchantment.addMaedr(maedr) : this.maedrs.push(maedr);
       this.render(true);
     }

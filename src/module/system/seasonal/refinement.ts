@@ -107,7 +107,7 @@ export class Refinement extends Enchantment{
     computeProgress() {
         this.progress = this.data.progress as typeof this.progress;
 
-        let size = (this.item instanceof PillarsItem ? this.item.itemSize?.value : "average" )|| "average"
+        let size = (this.item instanceof PillarsItem ? this.item.system.itemSize?.value : "average" )|| "average"
 
         if (this.progress.current)
             this.progress.state = ENCHANTMENT_STATE.FINISHED

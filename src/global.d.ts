@@ -305,11 +305,13 @@ export interface PreparedPillarsFollowerData
 
 export interface PreparedPillarsHeadquartersData extends PillarsHeadquartersSourceSystemData {
 
+
 }
 
 type PreparedPillarsNPC = {
   type: 'npc';
   data: BasePreparedPillarsActorData;
+  system: BasePreparedPillarsActorData;
   flags: {
     tooltips: PillarsActorTooltips;
   };
@@ -318,6 +320,7 @@ type PreparedPillarsNPC = {
 type PreparedPillarsFollower = {
   type: 'follower';
   data: PreparedPillarsFollowerData;
+  system: PreparedPillarsFollowerData;
   flags: {
     tooltips: PillarsActorTooltips;
   };
@@ -326,6 +329,7 @@ type PreparedPillarsFollower = {
 type PreparedPillarsCharacter = {
   type: 'character';
   data: PreparedPillarsCharacterData;
+  system: PreparedPillarsCharacterData;
   flags: {
     tooltips: PillarsActorTooltips;
   };
@@ -333,7 +337,7 @@ type PreparedPillarsCharacter = {
 
 type PreparedPillarsHeadquarters = {
   type : "headquarters";
-  data : PreparedPillarsHeadquartersData
+  system : PreparedPillarsHeadquartersData
 }
 
 export type PreparedPillarsActorData =
@@ -843,6 +847,27 @@ ReputationSourceData |
 InjurySourceData |
 BondSourceData
 
+export type PillarsItemSystemDataTemp =
+AttributeSourceData &
+SkillSourceData &
+TraitSourceData &
+PowerSourceData &
+PowerSourceSourceData &
+WeaponSourceData &
+ArmorSourceData &
+ShieldSourceData &
+EquipmentSourceData &
+ConnectionSourceData &
+CultureSourceData &
+BackgroundSourceData &
+SettingSourceData &
+SpeciesSourceData &
+StockSourceData &
+GodlikeSourceData &
+ReputationSourceData &
+InjurySourceData &
+BondSourceData
+
 //#endregion
 
 declare global {
@@ -909,8 +934,17 @@ declare global {
       'pillars-of-eternity.seasonPosition': {left: number, top : number};
     }
   }
-}
 
+
+  // V10
+  interface ActiveEffect {
+    label : string
+  }
+
+  interface Actor {
+    updateSource : any
+  }
+}
 
 
 // Below this line does not work

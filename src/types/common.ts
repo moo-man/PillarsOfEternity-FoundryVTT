@@ -177,7 +177,7 @@ export function isUsable(item: any): item is Useable {
 }
 
 export function isUsableItem(item: any): item is UsableItem {
-  return item.data.data.used
+  return item.system.used
 }
 
 export function hasEmbeddedPowers(item: any): item is EmbeddedPowersItem {
@@ -190,7 +190,7 @@ export function hasCategory(item: any) : item is CategoryItem {
 
 export function isEquippable(item : any) : item is EquippableItem
 {
-  return item.data.data.equipped != undefined
+  return item.system.equipped != undefined
 }
 
 export function isEquippableData(item : any) : item is EquippableData
@@ -200,12 +200,12 @@ export function isEquippableData(item : any) : item is EquippableData
 
 export function isPhysical(item : any) : item is PhysicalItem
 {
-  return item.data.data.weight != undefined && item.data.data.quantiy != undefined && item.data.data.cost != undefined
+  return item.system.weight != undefined && item.system.quantiy != undefined && item.system.cost != undefined
 }
 
 export function hasXP(item : any) : item is XPItem
 {
-  return item.data.data.xp
+  return item.system.xp
 }
 
 export function hasXPData(item : any) : item is XPData

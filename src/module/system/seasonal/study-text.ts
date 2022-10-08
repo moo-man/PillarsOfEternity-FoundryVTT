@@ -40,7 +40,7 @@ export class StudyTextActivity extends StudyActivity {
     if (this.item && this.item.data.type == 'equipment') {
       xp = xp || this.xp;
 
-      let subject = this.item.data.data.subject.value;
+      let subject = this.item.system.subject.value;
 
       let studyItem = this.actor.items.filter((i) => i.data.type == 'skill' || i.data.type == 'powerSource').find((i) => i.name == subject);
 
@@ -64,7 +64,7 @@ export class StudyTextActivity extends StudyActivity {
 
     if (this.item.data.type == 'equipment')
     {
-      let xp = this.item.data.data.training.value;
+      let xp = this.item.system.training.value;
       
       if (this.status.range != "ok")
       xp = 0;
@@ -86,11 +86,11 @@ export class StudyTextActivity extends StudyActivity {
     let rangeText = '';
     if (this.item.data.type == 'equipment') {
       let game = getGame();
-      let subject = this.item.data.data.subject.value;
-      let range = this.item.data.data.range;
+      let subject = this.item.system.subject.value;
+      let range = this.item.system.range;
       let ownedSkill = this.actor.getItemTypes(ItemType.skill).find((i) => i.name == subject);
       let rank = 0;
-      if (ownedSkill) rank = ownedSkill.xp?.rank || 0;
+      if (ownedSkill) rank = ownedSkill.system.xp?.rank || 0;
 
       if (rank >= range[0]! && rank <= range[1]!) {
         this.status.range = 'ok';
@@ -115,21 +115,21 @@ export class StudyTextActivity extends StudyActivity {
     let languageText = '';
     if (this.item.data.type == 'equipment') {
       let game = getGame();
-      let range = this.item.data.data.range;
-      let language = this.item.data.data.language.value;
+      let range = this.item.system.range;
+      let language = this.item.system.language.value;
 
       let languageSkill = this.actor
         .getItemTypes(ItemType.skill)
         .filter((i) => {
           if (i.data.type == 'skill') {
-            return i.data.data.category.value == 'language';
+            return i.system.category.value == 'language';
           }
         })
         .find((skill) => skill.name == language);
 
       let languageProficiency = languageSkill?.languageProficiency || 'none';
 
-      let rank = languageSkill?.xp?.rank || 0;
+      let rank = languageSkill?.system.xp?.rank || 0;
       let xpText: string = '';
       if (rank >= 7) {
         // Fluent - Full XP

@@ -4,7 +4,6 @@ import copy from 'rollup-plugin-copy-watch'
 import jscc from 'rollup-plugin-jscc'
 import typescript from "rollup-plugin-typescript2"
 import postcss from "rollup-plugin-postcss"
-import sass from "@csstools/postcss-sass"
 
 
 let manifest = JSON.parse(fs.readFileSync("./system.json"))
@@ -33,7 +32,7 @@ export default {
       watch: ["./static/**/*", "system.json", "template.json"]
     }),
     postcss({
-      extract : systemPath + "/pillars.css",
+      extract : "pillars.css",
       plugins: []
     })
   ]

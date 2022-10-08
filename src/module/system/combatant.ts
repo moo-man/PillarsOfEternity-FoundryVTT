@@ -29,7 +29,7 @@ export class PillarsCombatant extends Combatant {
 
     get isRunning(): boolean {
         if (this.actor?.data.type != "headquarters")
-            return <number>this.getFlag("pillars-of-eternity", "moveCounter") > (this.actor?.data.data.stride?.value || 0);
+            return <number>this.getFlag("pillars-of-eternity", "moveCounter") > (this.actor?.system.stride?.value || 0);
         else return false
     }
 
@@ -39,7 +39,7 @@ export class PillarsCombatant extends Combatant {
         return {
             running : this.isRunning,
             counter : this.getFlag("pillars-of-eternity", "moveCounter") as number,
-            stride : this.actor?.data.data.stride.value || 0,
+            stride : this.actor?.system.stride.value || 0,
         }
     }
 

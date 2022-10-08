@@ -153,11 +153,12 @@
                 "notes"
             ],
             "life": {
-                "age": 0,
+                "birthYear": null,
                 "apparentAge": 0,
                 "phase": "",
                 "agingPoints": 0,
-                "march": 0
+                "march": 0,
+                "childhood" : ""
             },
             "details": {
                 "cause": "",
@@ -678,7 +679,7 @@
             ],
             "partner": "",
             "traits": []
-        },
+        }
 
     }
 }

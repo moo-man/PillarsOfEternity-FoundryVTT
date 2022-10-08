@@ -1,5 +1,5 @@
 import { getGame } from "../system/utility"
-import { PowerGroups } from '../../types/powers';
+import { PowerGroups, PowerTarget } from '../../types/powers';
 import { PillarsItem } from '../item/item-pillars';
 import { PILLARS } from './config';
 
@@ -15,7 +15,7 @@ export default class PowerTemplate extends MeasuredTemplate {
       let type;
       let subtype;
       if (!target) {
-        let target = item.target?.find((i) => !i.group);
+        let target = item.system.target?.find((i : PowerTarget) => !i.group);
         type = target?.value;
         subtype = target?.subtype;
       } else {

@@ -104,7 +104,7 @@ export default class PracticeSeasonalActivityApplication extends SeasonalActivit
 
     this.ui.skillName!.textContent = item.name;
 
-    if (item.type == "powerSource" || ["artistic", "martial"].includes(item.category?.value || ""))
+    if (item.type == "powerSource" || ["artistic", "martial"].includes(item.system.category?.value || ""))
       this.ui.xp!.value = "5";
     else 
       this.ui.xp!.value = "10";
@@ -149,7 +149,7 @@ export default class PracticeSeasonalActivityApplication extends SeasonalActivit
 
     if (this.item)
     {
-      if (["social", "academic"].includes(this.item.category?.value!))
+      if (["social", "academic"].includes(this.item.system.category?.value!))
       {
         this.showAlert(this.alerts.skillAlert)
         state.errors.push(getGame().i18n.localize("PILLARS.CantPracticeSkill"))

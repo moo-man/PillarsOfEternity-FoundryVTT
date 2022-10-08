@@ -147,7 +147,7 @@ export class PillarsChat {
         let index = Number(ev.currentTarget.dataset.index);
         if (item && item.data.type == "power")
         {
-            let itemData = foundry.utils.deepClone(item.summons![index]?.data);
+            let itemData = foundry.utils.deepClone(item.system.summons![index]?.data);
 
             if (isEquippableData(itemData))
             {

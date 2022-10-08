@@ -8,7 +8,7 @@ import AgingRoll from '../system/aging-roll';
 import { PillarsItem } from '../item/item-pillars';
 import { ActorDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData';
 import { DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
-import { PillarsNonHeadquartersActorSourceData, PreparedPillarsCharacterData, PreparedPillarsFollowerData, PreparedPillarsNonHeadquartersActorData } from '../../global';
+import { PillarsNonHeadquartersActorSourceData, PreparedPillarsActorData, PreparedPillarsCharacterData, PreparedPillarsFollowerData, PreparedPillarsHeadquartersData, PreparedPillarsNonHeadquartersActorData } from '../../global';
 import { Defense, isUsable, ItemDialogData, ItemType, LifePhase, Season, SeasonData, Tier } from '../../types/common';
 import { PILLARS } from '../system/config';
 import {
@@ -44,6 +44,13 @@ declare global {
  * @extends {Actor}
  */
 export class PillarsActor extends Actor {
+  // system : DeepPartial<PreparedPillarsCharacterData & PreparedPillarsFollowerData & PreparedPillarsHeadquartersData & {
+  //   computeBase : any,
+  //   computeDerived : any
+  // }> = {}
+
+  system : any
+
   itemCategories: Record<keyof typeof ItemType, PillarsItem[]> | undefined;
 
   async _preCreate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: User) {
@@ -81,9 +88,9 @@ export class PillarsActor extends Actor {
 
     if (speciesItem?.name && (this.type == 'character' || this.type == 'follower')) {
       data.details.species = speciesItem.name;
-      data.stride.value = speciesItem.stride!.value;
-      this.data.flags.tooltips.stride.value.push(`${speciesItem.stride!.value} (${speciesItem.name})`);
-      data.size.value = speciesItem.size!.value;
+      data.stride.value = speciesItem.system.stride!.value;
+      this.data.flags.tooltips.stride.value.push(`${speciesItem.system.stride!.value} (${speciesItem.name})`);
+      data.size.value = speciesItem.system.size!.value;
       this.setSizeData(data);
     } else if (Number.isNumeric(data.size.value)) {
       this.setSizeData(data);
@@ -99,7 +106,7 @@ export class PillarsActor extends Actor {
     if (this.data.type == 'headquarters') return;
     let game = getGame();
     if (this.type == 'character') {
-      let tier = this.data.data.tier!.value || Tier.NOVICE;
+      let tier = this.system.tier!.value || Tier.NOVICE;
 
       type Size = keyof typeof PILLARS.sizeAttributes;
 
@@ -115,12 +122,12 @@ export class PillarsActor extends Actor {
     data.defenses.will.value = data.defenses.will.base || 15;
 
     this.data.flags.tooltips.endurance.threshold.winded.push(
-      game.i18n.format('PILLARS.Tooltip', { value: this.data.data.endurance.threshold.winded, source: game.i18n.localize('PILLARS.TooltipBase') })
+      game.i18n.format('PILLARS.Tooltip', { value: this.system.endurance.threshold.winded, source: game.i18n.localize('PILLARS.TooltipBase') })
     );
     this.data.flags.tooltips.health.threshold.bloodied.push(
-      game.i18n.format('PILLARS.Tooltip', { value: this.data.data.health.threshold.bloodied, source: game.i18n.localize('PILLARS.TooltipBase') })
+      game.i18n.format('PILLARS.Tooltip', { value: this.system.health.threshold.bloodied, source: game.i18n.localize('PILLARS.TooltipBase') })
     );
-    this.data.flags.tooltips.health.threshold.incap.push(game.i18n.format('PILLARS.Tooltip', { value: this.data.data.health.threshold.incap, source: game.i18n.localize('PILLARS.TooltipBase') }));
+    this.data.flags.tooltips.health.threshold.incap.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.health.threshold.incap, source: game.i18n.localize('PILLARS.TooltipBase') }));
 
     this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.deflection.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
     this.data.flags.tooltips.defenses.reflex.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.reflex.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
@@ -133,160 +140,162 @@ export class PillarsActor extends Actor {
   }
 
   prepareBaseData() {
-    if (this.data.type == 'headquarters') return;
+    this.system.computeBase(this.itemCategories)
+    // if (this.data.type == 'headquarters') return;
 
-    this.data.flags.tooltips = {
-      defenses: {
-        deflection: [],
-        reflex: [],
-        fortitude: [],
-        will: [],
-      },
-      health: {
-        max: [],
-        threshold: {
-          bloodied: [],
-          incap: [],
-        },
-      },
-      endurance: {
-        max: [],
-        threshold: {
-          winded: [],
-        },
-      },
-      initiative: {
-        value: [],
-      },
-      soak: {
-        base: [],
-        shield: [],
-        physical: [],
-        burn: [],
-        freeze: [],
-        raw: [],
-        corrode: [],
-        shock: [],
-      },
-      stride: {
-        value: [],
-      },
-      run: {
-        value: [],
-      },
-      toughness: {
-        value: [],
-      },
-      damageIncrement: {
-        value: [],
-      },
-    };
+    // this.data.flags.tooltips = {
+    //   defenses: {
+    //     deflection: [],
+    //     reflex: [],
+    //     fortitude: [],
+    //     will: [],
+    //   },
+    //   health: {
+    //     max: [],
+    //     threshold: {
+    //       bloodied: [],
+    //       incap: [],
+    //     },
+    //   },
+    //   endurance: {
+    //     max: [],
+    //     threshold: {
+    //       winded: [],
+    //     },
+    //   },
+    //   initiative: {
+    //     value: [],
+    //   },
+    //   soak: {
+    //     base: [],
+    //     shield: [],
+    //     physical: [],
+    //     burn: [],
+    //     freeze: [],
+    //     raw: [],
+    //     corrode: [],
+    //     shock: [],
+    //   },
+    //   stride: {
+    //     value: [],
+    //   },
+    //   run: {
+    //     value: [],
+    //   },
+    //   toughness: {
+    //     value: [],
+    //   },
+    //   damageIncrement: {
+    //     value: [],
+    //   },
+    // };
 
-    let game = getGame();
+    // let game = getGame();
 
-    this.data.data.run.value = 0; // Set run to 0 so active effects can still be applied to the the derived value
-    if (this.data.type == 'character' || this.data.type == 'follower') this.setSpeciesData(this.data.data);
+    // this.system.run.value = 0; // Set run to 0 so active effects can still be applied to the the derived value
+    // if (this.data.type == 'character' || this.data.type == 'follower') this.setSpeciesData(this.data.data);
 
-    this.data.flags.tooltips.run.value.push(game.i18n.format('PILLARS.Tooltip', { value: 'Stride x 2', source: game.i18n.localize('PILLARS.TooltipBase') }));
+    // this.data.flags.tooltips.run.value.push(game.i18n.format('PILLARS.Tooltip', { value: 'Stride x 2', source: game.i18n.localize('PILLARS.TooltipBase') }));
 
-    if (this.data.data.tier) {
-      let tierBonus = PILLARS.tierBonus[<Tier>this.data.data.tier.value];
-      if (tierBonus) {
-        for (let defense in this.data.data.defenses) {
-          this.data.data.defenses[<Defense>defense].value += tierBonus.def;
-          this.data.flags.tooltips.defenses[<Defense>defense].push(game.i18n.format('PILLARS.Tooltip', { value: tierBonus.def, source: game.i18n.localize('PILLARS.TooltipTier') }));
-        }
-      }
-    }
+    // if (this.system.tier) {
+    //   let tierBonus = PILLARS.tierBonus[<Tier>this.system.tier.value];
+    //   if (tierBonus) {
+    //     for (let defense in this.system.defenses) {
+    //       this.system.defenses[<Defense>defense].value += tierBonus.def;
+    //       this.data.flags.tooltips.defenses[<Defense>defense].push(game.i18n.format('PILLARS.Tooltip', { value: tierBonus.def, source: game.i18n.localize('PILLARS.TooltipTier') }));
+    //     }
+    //   }
+    // }
 
-    let checkedCount = 0;
-    for (let defense in this.data.data.defenses) checkedCount += this.data.data.defenses[<Defense>defense].checked ? 1 : 0;
+    // let checkedCount = 0;
+    // for (let defense in this.system.defenses) checkedCount += this.system.defenses[<Defense>defense].checked ? 1 : 0;
 
-    if (checkedCount > 0) {
-      let bonus = 5 - checkedCount;
-      for (let defense in this.data.data.defenses)
-        if (this.data.data.defenses[<Defense>defense].checked) {
-          this.data.data.defenses[<Defense>defense].value += bonus;
-          this.data.flags.tooltips.defenses[<Defense>defense].push(game.i18n.format('PILLARS.Tooltip', { value: bonus, source: game.i18n.localize('PILLARS.TooltipCheckedBonus') }));
-        }
-    }
+    // if (checkedCount > 0) {
+    //   let bonus = 5 - checkedCount;
+    //   for (let defense in this.system.defenses)
+    //     if (this.system.defenses[<Defense>defense].checked) {
+    //       this.system.defenses[<Defense>defense].value += bonus;
+    //       this.data.flags.tooltips.defenses[<Defense>defense].push(game.i18n.format('PILLARS.Tooltip', { value: bonus, source: game.i18n.localize('PILLARS.TooltipCheckedBonus') }));
+    //     }
+    // }
   }
 
   prepareDerivedData() {
-    if (this.data.type == 'headquarters') return;
+    this.system.computeDerived(this.itemCategories)
+    // if (this.data.type == 'headquarters') return;
 
-    let equippedArmor = this.equippedArmor;
-    let equippedShield = this.equippedShield;
+    // let equippedArmor = this.equippedArmor;
+    // let equippedShield = this.equippedShield;
 
-    this.data.data.run.value += this.data.data.stride.value * 2;
-    let game = getGame();
+    // this.system.run.value += this.system.stride.value * 2;
+    // let game = getGame();
 
-    this.data.data.health.threshold.bloodied += this.data.data.health.modifier;
-    this.data.data.health.threshold.incap += this.data.data.health.modifier;
-    this.data.data.endurance.threshold.winded += this.data.data.endurance.bonus;
-    if (equippedArmor) {
-      this.data.data.endurance.threshold.winded += equippedArmor?.winded?.value || 0;
-      this.data.flags.tooltips.endurance.threshold.winded.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor?.winded?.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-    }
-    if (equippedShield) {
-      this.data.data.endurance.threshold.winded += equippedShield?.winded?.value || 0;
-      this.data.flags.tooltips.endurance.threshold.winded.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield?.winded?.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
-    }
+    // this.system.health.threshold.bloodied += this.system.health.modifier;
+    // this.system.health.threshold.incap += this.system.health.modifier;
+    // this.system.endurance.threshold.winded += this.system.endurance.bonus;
+    // if (equippedArmor) {
+    //   this.system.endurance.threshold.winded += equippedArmor?.winded?.value || 0;
+    //   this.data.flags.tooltips.endurance.threshold.winded.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor?.winded?.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+    // }
+    // if (equippedShield) {
+    //   this.system.endurance.threshold.winded += equippedShield?.winded?.value || 0;
+    //   this.data.flags.tooltips.endurance.threshold.winded.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield?.winded?.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
+    // }
 
-    this.data.data.health.bloodied = this.data.data.health.value > this.data.data.health.threshold.bloodied;
-    this.data.data.endurance.winded = this.data.data.endurance.value > this.data.data.endurance.threshold.winded;
-    this.data.data.health.incap = this.data.data.health.value > this.data.data.health.threshold.incap;
-    this.data.data.endurance.incap = this.data.data.endurance.value >= this.data.data.endurance.max + this.data.data.endurance.bonus;
-    this.data.data.health.dead = this.data.data.health.value >= this.data.data.health.max + this.data.data.health.death.modifier;
+    // this.system.health.bloodied = this.system.health.value > this.system.health.threshold.bloodied;
+    // this.system.endurance.winded = this.system.endurance.value > this.system.endurance.threshold.winded;
+    // this.system.health.incap = this.system.health.value > this.system.health.threshold.incap;
+    // this.system.endurance.incap = this.system.endurance.value >= this.system.endurance.max + this.system.endurance.bonus;
+    // this.system.health.dead = this.system.health.value >= this.system.health.max + this.system.health.death.modifier;
 
-    this.data.data.health.value = Math.max(this.data.data.health.value, this.data.data.health.wounds.value);
+    // this.system.health.value = Math.max(this.system.health.value, this.system.health.wounds.value);
 
-    if (this.data.type == 'character' || this.data.type == 'follower') {
-      if (this.data.type == 'character') {
-        let thresholds = PILLARS.agePointsDeathRank;
-        for (let pointThreshold in thresholds) {
-          if (this.data.data.life.agingPoints < parseInt(pointThreshold)) {
-            this.data.data.life.march = thresholds[<keyof typeof thresholds>parseInt(pointThreshold)];
-            break;
-          }
-        }
-        this.data.data.life.march -= 1;
-      }
+    // if (this.data.type == 'character' || this.data.type == 'follower') {
+    //   if (this.data.type == 'character') {
+    //     let thresholds = PILLARS.agePointsDeathRank;
+    //     for (let pointThreshold in thresholds) {
+    //       if (this.system.life.agingPoints < parseInt(pointThreshold)) {
+    //         this.system.life.march = thresholds[<keyof typeof thresholds>parseInt(pointThreshold)];
+    //         break;
+    //       }
+    //     }
+    //     this.system.life.march -= 1;
+    //   }
 
-      let age = 0;
+    //   let age = 0;
 
-      // TODO don't like the different paths here
-      if (this.data.type == 'character') age = this.data.data.life.age;
-      else if (this.data.type == 'follower') age = game.settings.get('pillars-of-eternity', 'season').year - this.data.data.life.birthYear;
+    //   // TODO don't like the different paths here
+    //   if (this.data.type == 'character') age = this.system.life.age;
+    //   else if (this.data.type == 'follower') age = game.settings.get('pillars-of-eternity', 'season').year - this.system.life.birthYear;
 
-      let currentPhase = '';
-      let species = this.getItemTypes(ItemType.species)[0];
-      if (species) {
-        for (let phase in species.phases) {
-          let range = species.phases[phase as LifePhase];
-          if (age >= range[0]! && age <= range[1]!) {
-            currentPhase = phase;
-            break;
-          }
-        }
-        this.data.data.life!.phase = currentPhase as LifePhase;
-        if (this.data.type == 'follower') this.data.data.life.age = age;
-      }
-    }
+    //   let currentPhase = '';
+    //   let species = this.getItemTypes(ItemType.species)[0];
+    //   if (species) {
+    //     for (let phase in species.phases) {
+    //       let range = species.phases[phase as LifePhase];
+    //       if (age >= range[0]! && age <= range[1]!) {
+    //         currentPhase = phase;
+    //         break;
+    //       }
+    //     }
+    //     this.system.life!.phase = currentPhase as LifePhase;
+    //     if (this.data.type == 'follower') this.system.life.age = age;
+    //   }
+    // }
   }
 
   //#region Data Preparation
   prepareData() {
     try {
+      this.itemCategories = this.itemTypes;
+      //for (let type in this.itemCategories) this.itemCategories[<ItemType>type] = this.itemCategories[<ItemType>type]!.sort((a, b) => (a.data.sort > b.data.sort ? 1 : -1));
       super.prepareData();
 
-      this.itemCategories = this.itemTypes;
-      for (let type in this.itemCategories) this.itemCategories[<ItemType>type] = this.itemCategories[<ItemType>type]!.sort((a, b) => (a.data.sort > b.data.sort ? 1 : -1));
 
       this.prepareItems();
       this.prepareHeadquarters();
-      this.prepareCombat();
-      this.prepareEffectTooltips();
+      // this.prepareCombat();
+      // this.prepareEffectTooltips();
     } catch (e) {
       console.error(e);
     }
@@ -298,9 +307,9 @@ export class PillarsActor extends Actor {
     let weight = 0;
     for (let i of this.items) {
       i.prepareOwnedData();
-      if (i.weight) weight += i.weight.value;
+      if (i.system.weight) weight += i.system.weight.value;
     }
-    this.data.data.weight = weight;
+    this.system.weight = weight;
   }
 
   prepareHeadquarters() {
@@ -308,6 +317,7 @@ export class PillarsActor extends Actor {
       let game = getGame();
       if (!game.ready) game.pillars.postReadyPrepare.push(this);
       else {
+        
       }
     }
   }
@@ -316,7 +326,7 @@ export class PillarsActor extends Actor {
     if (this.data.type == 'headquarters') return;
     let equippedArmor = this.equippedArmor;
     let equippedShield = this.equippedShield;
-    let equippedWeapons = this.getItemTypes(ItemType.weapon).filter((i) => i.equipped?.value);
+    let equippedWeapons = this.getItemTypes(ItemType.weapon).filter((i) => i.system.equipped?.value);
     let game = getGame();
 
     let weaponDeflectionBonus = 0;
@@ -329,37 +339,37 @@ export class PillarsActor extends Actor {
     }
 
     if (weaponDeflectionBonus > 0) {
-      this.data.data.defenses.deflection.value += weaponDeflectionBonus;
+      this.system.defenses.deflection.value += weaponDeflectionBonus;
       this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: weaponDeflectionBonus, source: game.i18n.localize('PILLARS.TooltipWeaponDeflectionBonus') }));
     }
 
     if (equippedArmor) {
-      this.data.data.soak.base += equippedArmor.soak!.value || 0;
-      this.data.data.initiative.value += equippedArmor.initiative!.value;
-      this.data.data.toughness.value += equippedArmor.toughness!.value;
-      this.data.data.stride.value += equippedArmor.stride!.value;
-      this.data.data.run.value += equippedArmor.run!.value;
+      this.system.soak.base += equippedArmor.system.soak!.value || 0;
+      this.system.initiative.value += equippedArmor.system.initiative!.value;
+      this.system.toughness.value += equippedArmor.system.toughness!.value;
+      this.system.stride.value += equippedArmor.system.stride!.value;
+      this.system.run.value += equippedArmor.system.run!.value;
 
-      this.data.flags.tooltips.soak.base.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.soak!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-      this.data.flags.tooltips.initiative.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.initiative!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-      this.data.flags.tooltips.toughness.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.toughness!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-      this.data.flags.tooltips.stride.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.stride!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-      this.data.flags.tooltips.run.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.run!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+      this.data.flags.tooltips.soak.base.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.soak!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+      this.data.flags.tooltips.initiative.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.initiative!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+      this.data.flags.tooltips.toughness.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.toughness!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+      this.data.flags.tooltips.stride.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.stride!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+      this.data.flags.tooltips.run.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.run!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
     }
     if (equippedShield) {
-      this.data.data.soak.shield = this.data.data.soak.base + (equippedShield.soak!.value || 0);
+      this.system.soak.shield = this.system.soak.base + (equippedShield.system.soak!.value || 0);
       this.data.flags.tooltips.soak.shield = this.data.flags.tooltips.soak.shield.concat(this.data.flags.tooltips.soak.base);
-      this.data.flags.tooltips.soak.shield.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield.soak!.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
-      this.data.data.defenses.deflection.value += equippedShield.deflection!.value;
-      this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield.deflection!.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
+      this.data.flags.tooltips.soak.shield.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield.system.soak!.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
+      this.system.defenses.deflection.value += equippedShield.system.deflection!.value;
+      this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield.system.deflection!.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
     }
 
-    this.data.flags.tooltips.soak.physical.push(game.i18n.format('PILLARS.Tooltip', { value: this.data.data.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.burn.push(game.i18n.format('PILLARS.Tooltip', { value: this.data.data.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.freeze.push(game.i18n.format('PILLARS.Tooltip', { value: this.data.data.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.raw.push(game.i18n.format('PILLARS.Tooltip', { value: this.data.data.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.corrode.push(game.i18n.format('PILLARS.Tooltip', { value: this.data.data.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.shock.push(game.i18n.format('PILLARS.Tooltip', { value: this.data.data.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+    this.data.flags.tooltips.soak.physical.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+    this.data.flags.tooltips.soak.burn.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+    this.data.flags.tooltips.soak.freeze.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+    this.data.flags.tooltips.soak.raw.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+    this.data.flags.tooltips.soak.corrode.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+    this.data.flags.tooltips.soak.shock.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
   }
 
   prepareEffectTooltips() {
@@ -410,14 +420,14 @@ export class PillarsActor extends Actor {
 
     if (!weaponItem) throw ui!.notifications!.error(game.i18n.localize('PILLARS.ErrorNoWeaponFound'));
 
-    if (!weaponItem?.skill?.value) throw ui!.notifications!.error(game.i18n.localize('PILLARS.ErrorNoSkillAssigned'));
+    if (!weaponItem?.system.skill?.value) throw ui!.notifications!.error(game.i18n.localize('PILLARS.ErrorNoSkillAssigned'));
 
     let data = this.getWeaponDialogData('weapon', weaponItem);
     let checkData: WeaponCheckDataFlattened = <WeaponCheckDataFlattened>await RollDialog.create(data);
     checkData.add = options.add || {}; // Properties added via options (right now only from equipped weapon powers)
     checkData.title = data.title;
     checkData.skillId = weaponItem.Skill?.id || '';
-    checkData.skillName = weaponItem.skill.value;
+    checkData.skillName = weaponItem.system.skill.value;
     checkData.itemId = weaponItem.id!;
     checkData.speaker = this.speakerData();
     checkData.targetSpeakers = this.targetSpeakerData();
@@ -435,7 +445,7 @@ export class PillarsActor extends Actor {
 
     let data = this.getPowerDialogData('power', powerItem!);
     let checkData: PowerCheckDataFlattened = <PowerCheckDataFlattened>{};
-    if (powerItem!.roll?.value) checkData = <PowerCheckDataFlattened>await RollDialog.create(data);
+    if (powerItem!.system.roll?.value) checkData = <PowerCheckDataFlattened>await RollDialog.create(data);
 
     checkData.title = data.title;
     checkData.sourceId = powerItem!.SourceItem?.id || '';
@@ -448,10 +458,10 @@ export class PillarsActor extends Actor {
   async setupAgingRoll(year?: number) {
     if (this.data.type == 'character') {
       let dialogData = {
-        modifier: PILLARS.lifePhaseModifier[this.data.data.life!.phase] || 0,
+        modifier: PILLARS.lifePhaseModifier[this.system.life!.phase as LifePhase] || 0,
         changeList: this.getDialogChanges({ condense: true }),
         changes: this.getDialogChanges(),
-        years: this.data.data.seasons?.filter((i) => !i.aging).map((i) => i.year) || [],
+        years: this.system.seasons?.filter((i : SeasonData) => !i.aging).map((i : SeasonData) => i.year) || [],
         defaultYear: year,
       };
       let checkData: AgingCheckDataFlattened = <AgingCheckDataFlattened>await AgingDialog.create(dialogData);
@@ -471,17 +481,17 @@ export class PillarsActor extends Actor {
     let game = getGame();
 
     if (power.data.type == 'power') {
-      if (!power.SourceItem) throw ui.notifications!.error(game.i18n.format('PILLARS.ErrorNoPowerSourceFound', { value: power.data.data.source.value }));
+      if (!power.SourceItem) throw ui.notifications!.error(game.i18n.format('PILLARS.ErrorNoPowerSourceFound', { value: power.system.source.value }));
 
-      let embeddedParent = power.EmbeddedPowerParent;
+      let embeddedParent = power.system.EmbeddedPowerParent;
       if (embeddedParent && embeddedParent.category?.value != 'grimoire') {
-        if (['longRest', 'encounter'].includes(power.embedded?.spendType || '')) {
-          if (power.embedded!.uses.value <= 0) throw ui.notifications!.error(game.i18n.localize('PILLARS.NoMoreUses'));
-        } else if (power.embedded!.spendType == 'charges') {
-          if (power.embedded!.chargeCost > embeddedParent.powerCharges!.value) throw ui.notifications!.error(game.i18n.localize('PILLARS.NotEnoughCharges'));
+        if (['longRest', 'encounter'].includes(power.system.embedded?.spendType || '')) {
+          if (power.system.embedded!.uses.value <= 0) throw ui.notifications!.error(game.i18n.localize('PILLARS.NoMoreUses'));
+        } else if (power.system.embedded!.spendType == 'charges') {
+          if (power.system.embedded!.chargeCost > embeddedParent.powerCharges!.value) throw ui.notifications!.error(game.i18n.localize('PILLARS.NotEnoughCharges'));
         }
-      } else if (power.source?.value == 'spirits' && power.category?.value == 'phrase') return; // Phrases add 1 to power
-      else if (power.SourceItem?.pool!.current < power.level!.value) throw ui.notifications!.error(game.i18n.localize('PILLARS.NotEnoughPower'));
+      } else if (power.system.source?.value == 'spirits' && power.system.category?.value == 'phrase') return; // Phrases add 1 to power
+      else if (power.SourceItem?.system.pool!.current < power.system.level!.value) throw ui.notifications!.error(game.i18n.localize('PILLARS.NotEnoughPower'));
     }
   }
 
@@ -513,7 +523,7 @@ export class PillarsActor extends Actor {
   getSkillDialogData(type: string, item: PillarsItem, options: CheckOptions = {}) {
     let dialogData: SkillDialogData = <SkillDialogData>this.getDialogData(type, item, options);
     dialogData.assisters = this.constructAssisterList(item.data.name || options.name || '');
-    dialogData.hasRank = item ? !!item.xp!.rank : false;
+    dialogData.hasRank = item ? !!item.system.xp!.rank : false;
     dialogData.skill = item;
     return dialogData;
   }
@@ -522,7 +532,7 @@ export class PillarsActor extends Actor {
     let dialogData: WeaponDialogData = <WeaponDialogData>this.getDialogData(type, item, options);
     dialogData.title = getGame().i18n.format('PILLARS.AttackTitle', { name: item?.name || options.name });
     //dialogData.assisters = this.constructAssisterList(weapon.Skill)
-    dialogData.modifier = (((item.misc as { value: number })!.value || 0) + (item.accuracy!.value || 0)).toString();
+    dialogData.modifier = (((item.system.misc as { value: number })!.value || 0) + (item.system.accuracy!.value || 0)).toString();
     dialogData.hasRank = item.Skill ? !!item.Skill.rank : false;
     dialogData.skill = item.Skill;
     return dialogData;
@@ -530,7 +540,7 @@ export class PillarsActor extends Actor {
 
   getPowerDialogData(type: string, item: PillarsItem, options: CheckOptions = {}) {
     let dialogData: PowerDialogData = <PowerDialogData>this.getDialogData(type, item, options);
-    if (item.damage?.value.length) dialogData.title = getGame().i18n.format('PILLARS.Attacktitle', { name: item?.name || options.name });
+    if (item.system.damage?.value.length) dialogData.title = getGame().i18n.format('PILLARS.Attacktitle', { name: item?.name || options.name });
     else dialogData.title = item?.name || options.name || '';
     //dialogData.assisters = this.constructAssisterList(weapon.Skill)
     dialogData.modifier = (item.SourceItem?.attack || 0).toString();
@@ -633,23 +643,23 @@ export class PillarsActor extends Actor {
 
     // Short/Long rest both refill pools
     this.getItemTypes(ItemType.powerSource).forEach((p) => {
-      updates.items!.push({ name: p.name!, type: p.type, _id: p.id, data: { pool: { current: p.pool?.max } } });
+      updates.items!.push({ name: p.name!, type: p.type, _id: p.id, data: { pool: { current: p.system.pool?.max } } });
     });
 
     // Both rests reset encounter items
     this.items
-      .filter((i) => i.powerRecharge == 'encounter')
+      .filter((i) => i.system.powerRecharge == 'encounter')
       .forEach((i) => {
         updates.items!.push({
           name: i.name!,
           type: i.type,
           _id: i.id,
-          data: { powerCharges: { value: i.powerCharges?.max } },
+          data: { powerCharges: { value: i.system.powerCharges?.max } },
         });
       });
 
     this.items
-      .filter((i) => i.type == 'power' && i.embedded?.spendType == 'encounter')
+      .filter((i) => i.type == 'power' && i.system.embedded?.spendType == 'encounter')
       .forEach((i) => {
         updates.items!.push({
           name: i.name!,
@@ -658,7 +668,7 @@ export class PillarsActor extends Actor {
           data: {
             embedded: {
               uses: {
-                value: i.embedded?.uses.max,
+                value: i.system.embedded?.uses.max,
               },
             },
           },
@@ -677,20 +687,20 @@ export class PillarsActor extends Actor {
     updates.data!.endurance = { value: 0 };
 
     this.items
-      .filter((i) => i.powerRecharge == 'longRest')
+      .filter((i) => i.system.powerRecharge == 'longRest')
       .forEach((i) => {
         updates.items!.push({
           name: i.name!,
           type: i.type,
           _id: i.id,
           data: {
-            powerCharges: { value: i.powerCharges?.max },
+            powerCharges: { value: i.system.powerCharges?.max },
           },
         });
       });
 
     this.items
-      .filter((i) => i.type == 'power' && i.embedded?.spendType == 'longRest')
+      .filter((i) => i.type == 'power' && i.system.embedded?.spendType == 'longRest')
       .forEach((i) => {
         updates.items!.push({
           name: i.name!,
@@ -699,7 +709,7 @@ export class PillarsActor extends Actor {
           data: {
             embedded: {
               uses: {
-                value: i.embedded?.uses.max,
+                value: i.system.embedded?.uses.max,
               },
             },
           },
@@ -714,7 +724,7 @@ export class PillarsActor extends Actor {
 
     let updates = this._baseRest() as DeepPartial<PreparedPillarsNonHeadquartersActorData> & { items: ItemDataConstructorData[] };
 
-    if (!this.data.data.health.incap && !this.data.data.endurance.incap) {
+    if (!this.system.health.incap && !this.system.endurance.incap) {
       updates.data!.health = { value: 0 };
       updates.data!.endurance = { value: 0 };
     }
@@ -728,12 +738,12 @@ export class PillarsActor extends Actor {
     let actionName;
     if (action == 'exert') {
       this.update({
-        'data.endurance.value': Math.min(this.data.data.endurance.max, this.data.data.endurance.value + 2),
+        'data.endurance.value': Math.min(this.system.endurance.max, this.system.endurance.value + 2),
       });
       actionName = game.i18n.localize('PILLARS.Exert');
     } else if (action == 'breath') {
       this.update({
-        'data.endurance.value': Math.max(0, this.data.data.endurance.value - 2),
+        'data.endurance.value': Math.max(0, this.system.endurance.value - 2),
       });
       actionName = game.i18n.localize('PILLARS.CatchBreath');
     }
@@ -776,7 +786,7 @@ export class PillarsActor extends Actor {
 
       if (combatant)
         return combatant.update({
-          defeated: this.data.data.health.incap || this.data.data.endurance.incap,
+          defeated: this.system.health.incap || this.system.endurance.incap,
         });
     }
   }
@@ -784,9 +794,9 @@ export class PillarsActor extends Actor {
   handleScrollingText(data: ActorDataConstructorData) {
     if (this.data.type == 'headquarters') return;
     try {
-      if (hasProperty(data, 'data.health.value')) this._displayScrollingChange(getProperty(data, 'data.health.value') - this.data.data.health.value);
-      if (hasProperty(data, 'data.health.wounds.value')) this._displayScrollingChange(getProperty(data, 'data.health.wounds.value') - this.data.data.health.wounds.value, { text: 'Wound' });
-      if (hasProperty(data, 'data.endurance.value')) this._displayScrollingChange(getProperty(data, 'data.endurance.value') - this.data.data.endurance.value, { endurance: true });
+      if (hasProperty(data, 'data.health.value')) this._displayScrollingChange(getProperty(data, 'data.health.value') - this.system.health.value);
+      if (hasProperty(data, 'data.health.wounds.value')) this._displayScrollingChange(getProperty(data, 'data.health.wounds.value') - this.system.health.wounds.value, { text: 'Wound' });
+      if (hasProperty(data, 'data.endurance.value')) this._displayScrollingChange(getProperty(data, 'data.endurance.value') - this.system.endurance.value, { endurance: true });
     } catch (e) {
       console.error(getGame().i18n.localize('PILLARS.ErrorScrollingText'), data, e);
     }
@@ -820,7 +830,7 @@ export class PillarsActor extends Actor {
     return this.getItemTypes(ItemType.power).filter((p) => {
       let parent = p.EmbeddedPowerParent;
       if (!parent) return false;
-      else if (parent.canEquip) return parent.equipped?.value;
+      else if (parent.canEquip) return parent.system.equipped?.value;
       else return true;
     });
   }
@@ -829,7 +839,7 @@ export class PillarsActor extends Actor {
     if (this.data.type == 'headquarters') return;
 
     let game = getGame();
-    if (damage < this.data.data.toughness.value) return game.i18n.localize('PILLARS.NoDamage');
+    if (damage < this.system.toughness.value) return game.i18n.localize('PILLARS.NoDamage');
 
     let updateObj: DeepPartial<PreparedPillarsNonHeadquartersActorData> & ActorDataConstructorData = {
       name: this.name!,
@@ -843,22 +853,22 @@ export class PillarsActor extends Actor {
       },
     };
 
-    let soak = this.data.data.soak.base;
+    let soak = this.system.soak.base;
     switch (type) {
       case 'physical':
-        soak += this.data.data.soak.physical;
+        soak += this.system.soak.physical;
         break;
       case 'burn':
-        soak += this.data.data.soak.burn;
+        soak += this.system.soak.burn;
         break;
       case 'freeze':
-        soak += this.data.data.soak.freeze;
+        soak += this.system.soak.freeze;
         break;
       case 'corrode':
-        soak += this.data.data.soak.corrode;
+        soak += this.system.soak.corrode;
         break;
       case 'shock':
-        soak += this.data.data.soak.shock;
+        soak += this.system.soak.shock;
         break;
       case 'raw':
         soak = 0;
@@ -874,19 +884,19 @@ export class PillarsActor extends Actor {
       updateObj.items = [this.calculateShieldDamage(this.equippedShield, damage)];
     }
 
-    if (damage > this.data.data.toughness.value) {
-      updateObj.data!.endurance!.value = this.data.data.endurance.value + 1;
+    if (damage > this.system.toughness.value) {
+      updateObj.data!.endurance!.value = this.system.endurance.value + 1;
       message += ` - ${game.i18n.format('PILLARS.ApplyEndurance', { value: 1 })}`;
     }
 
-    if (damage > this.data.data.toughness.value && damage > soak) {
+    if (damage > this.system.toughness.value && damage > soak) {
       let damageMinusSoak = damage - soak;
-      let pips = Math.floor(damageMinusSoak / this.data.data.damageIncrement.value);
-      updateObj.data!.health!.value = this.data.data.health.value + pips;
+      let pips = Math.floor(damageMinusSoak / this.system.damageIncrement.value);
+      updateObj.data!.health!.value = this.system.health.value + pips;
       message += ` - ${game.i18n.format('PILLARS.ApplyHealth', { value: pips })}`;
 
-      if (pips >= 3 && pips <= 4 && this.data.data.health.wounds.value < 3) {
-        updateObj.data!.health!.wounds!.value = this.data.data.health.wounds.value + 1;
+      if (pips >= 3 && pips <= 4 && this.system.health.wounds.value < 3) {
+        updateObj.data!.health!.wounds!.value = this.system.health.wounds.value + 1;
         message += ` - ${game.i18n.format('PILLARS.ApplyWounds', { value: 1 })}`;
       }
     }
@@ -921,13 +931,13 @@ export class PillarsActor extends Actor {
 
     let healthPips = 0;
     let endurancePips = 0;
-    let newHealth = this.data.data.health.value;
+    let newHealth = this.system.health.value;
 
     if (type == 'health') {
-      healthPips = Math.floor(healing / this.data.data.damageIncrement.value);
-      let remainder = healing % this.data.data.damageIncrement.value;
+      healthPips = Math.floor(healing / this.system.damageIncrement.value);
+      let remainder = healing % this.system.damageIncrement.value;
 
-      newHealth = this.data.data.health.value - healthPips - this.data.data.health.wounds.value; // Offset health wounds value so endurance remainder is accurate
+      newHealth = this.system.health.value - healthPips - this.system.health.wounds.value; // Offset health wounds value so endurance remainder is accurate
       if (newHealth < 0) {
         // Remainder of health pips go to endurance
         endurancePips = Math.abs(newHealth);
@@ -940,7 +950,7 @@ export class PillarsActor extends Actor {
       endurancePips = healing;
     }
 
-    let newEndurance = Math.max(0, this.data.data.endurance.value - endurancePips);
+    let newEndurance = Math.max(0, this.system.endurance.value - endurancePips);
 
     if (healthPips > 0) {
       updateObj.data!.health!.value = newHealth;
@@ -981,8 +991,8 @@ export class PillarsActor extends Actor {
    */
   updateSeasonYear(year: number, type: string, message: string) {
     if (this.data.type == "character") {
-      let seasons = duplicate(this.data.data.seasons);
-      let index = seasons.findIndex((s) => s.year == year);
+      let seasons = duplicate(this.system.seasons);
+      let index = seasons.findIndex((s : SeasonData) => s.year == year);
       return this.updateSeasonIndex(index, type, message);
     } else throw new Error(getGame().i18n.format('PILLARS.ErrorYearNotFound', { year }));
   }
@@ -997,7 +1007,7 @@ export class PillarsActor extends Actor {
    */
   updateSeasonIndex(index: number, type: string, message: string) {
     if (this.data.type == 'character') {
-      let seasons = duplicate(this.data.data.seasons);
+      let seasons = duplicate(this.system.seasons);
       let season = seasons[index];
 
       if (season) {
@@ -1045,7 +1055,7 @@ export class PillarsActor extends Actor {
    */
   async setFollowerType(followerType: keyof typeof PILLARS.followerTypes) {
     let game = getGame();
-    if (this.data.type != 'follower' || !this.data.data.subtype.value) {
+    if (this.data.type != 'follower' || !this.system.subtype.value) {
       // If already has a subtype, ignore change
       let filterData: ItemDialogData = <ItemDialogData>{
         filters: [
@@ -1086,7 +1096,7 @@ export class PillarsActor extends Actor {
     let game = getGame();
     let time = game.settings.get('pillars-of-eternity', 'season');
     let year = time.year;
-    let YA_age = speciesItem.phases!['youngAdult'][0]!;
+    let YA_age = speciesItem.system.phases!['youngAdult'][0]!;
     let age = YA_age + Math.ceil(CONFIG.Dice.randomUniform() * 6);
     let birthYear = year - age;
 
@@ -1097,7 +1107,7 @@ export class PillarsActor extends Actor {
    * Clears used items
    */
   clearUsed() {
-    let items = this.items.filter((i) => !!i.used?.value).map((i) => i.toObject());
+    let items = this.items.filter((i) => !!i.system.used?.value).map((i) => i.toObject());
 
     items.forEach((i) => {
       if (isUsable(i)) i.data.used.value = false;
@@ -1113,24 +1123,24 @@ export class PillarsActor extends Actor {
     let needsUpdating: Record<string, boolean> = {};
     let currentTime = getGame().settings.get('pillars-of-eternity', 'season');
     if (this.data.type == 'character') {
-      this.data.data.seasons.forEach((s, i) => {
-        if (Number.isNumeric(s.year)) {
-          if (!s.spring && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SPRING, year: s.year })) {
-            needsUpdating[`${i}-spring`] = true;
-          }
-          if (!s.summer && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SUMMER, year: s.year })) {
-            needsUpdating[`${i}-summer`] = true;
-          }
-          if (!s.autumn && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.AUTUMN, year: s.year })) {
-            needsUpdating[`${i}-autumn`] = true;
-          }
-          if (!s.winter && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.WINTER, year: s.year })) {
+      this.system.seasons!.forEach((s: SeasonData, i : Number) => {
+          if (Number.isNumeric(s.year)) {
+            if (!s.spring && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SPRING, year: s.year! })) {
+              needsUpdating[`${i}-spring`] = true;
+            }
+            if (!s.summer && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SUMMER, year: s.year! })) {
+              needsUpdating[`${i}-summer`] = true;
+            }
+            if (!s.autumn && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.AUTUMN, year: s.year! })) {
+              needsUpdating[`${i}-autumn`] = true;
+            }
+          if (!s.winter && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.WINTER, year: s.year! })) {
             needsUpdating[`${i}-winter`] = true;
           }
-          if (!s.aging && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.WINTER, year: s.year })) {
+          if (!s.aging && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.WINTER, year: s.year! })) {
             needsUpdating[`${i}-aging`] = true;
           }
-        }
+      }
       });
       return foundry.utils.isObjectEmpty(needsUpdating) ? false : needsUpdating;
     } else return false;
@@ -1138,7 +1148,7 @@ export class PillarsActor extends Actor {
 
   // addWound(type)
   // {
-  //     return this.update({[`data.health.wounds.${type}`] : this.data.data.health.wounds[type] + 1 })
+  //     return this.update({[`data.health.wounds.${type}`] : this.system.health.wounds[type] + 1 })
   // }
 
   //#region Getters
@@ -1146,11 +1156,11 @@ export class PillarsActor extends Actor {
   // get woundModifier() {
   //   let woundModifier = 0;
   //   woundModifier +=
-  //     this.data.data.health.wounds.light * (this.data.data.health.threshold.light / 2);
+  //     this.system.health.wounds.light * (this.system.health.threshold.light / 2);
   //   woundModifier +=
-  //     this.data.data.health.wounds.heavy * (this.data.data.health.threshold.heavy / 2);
+  //     this.system.health.wounds.heavy * (this.system.health.threshold.heavy / 2);
   //   woundModifier +=
-  //     this.data.data.health.wounds.severe * (this.data.data.health.threshold.severe / 2);
+  //     this.system.health.wounds.severe * (this.system.health.threshold.severe / 2);
   //   return woundModifier;
   // }
 
@@ -1163,72 +1173,11 @@ export class PillarsActor extends Actor {
   // @@@@@@@ ITEM GETTERS @@@@@@@@@
 
   get equippedShield() {
-    return this.getItemTypes(ItemType.shield).filter((i) => i.equipped?.value)[0];
+    return this.getItemTypes(ItemType.shield).filter((i) => i.system.equipped?.value)[0];
   }
 
   get equippedArmor() {
-    return this.getItemTypes(ItemType.armor).filter((i) => i.equipped?.value)[0];
+    return this.getItemTypes(ItemType.armor).filter((i) => i.system.equipped?.value)[0];
   }
-
-  // @@@@@@@@ DATA GETTERS @@@@@@@@@@
-
-  // get defenses() {
-  //   if (this.data.type != "headquarters")
-  //     return this.data.data.defenses;
-  // }
-  // get endurance() {
-  //   if (this.data.type != "headquarters")
-  //   return this.data.data.endurance;
-  // }
-  // get health() {
-  //   if (this.data.type != "headquarters")
-  //   return this.data.data.health;
-  // }
-  // get life() {
-  //   if (this.data.type == 'character' || this.data.type == 'follower') return this.data.data.life;
-  // }
-  // get size() {
-  //   return this.data.data.size;
-  // }
-  // get tier() {
-  //   if (this.data.type != "headquarters")
-  //   return this.data.data.tier;
-  // }
-  // get details() {
-  //   if (this.data.type == 'character' || this.data.type == 'follower') return this.data.data.details;
-  // }
-  // get knownConnections() {
-  //   if (this.data.type == 'character') return this.data.data.knownConnections;
-  // }
-  // get stride() {
-  //   if (this.data.type != "headquarters")
-  //   return this.data.data.stride;
-  // }
-  // get run() {
-  //   if (this.data.type != "headquarters")
-  //   return this.data.data.run;
-  // }
-  // get initiative() {
-  //   if (this.data.type != "headquarters")
-  //   return this.data.data.initiative;
-  // }
-  // get seasons() {
-  //   if (this.data.type == 'character') return this.data.data.seasons;
-  // }
-  // get soak() {
-  //   if (this.data.type != "headquarters")
-  //   return this.data.data.soak;
-  // }
-  // get toughness() {
-  //   if (this.data.type != "headquarters")
-  //   return this.data.data.toughness;
-  // }
-  // get damageIncrement() {
-  //   if (this.data.type != "headquarters")
-  //   return this.data.data.damageIncrement;
-  // }
-  // get subtype() {
-  //   if (this.data.type == 'follower') return this.data.data.subtype;
-  // }
 }
 //#endregion

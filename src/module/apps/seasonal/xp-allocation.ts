@@ -69,7 +69,7 @@ export default class XPAllocationActivityApplication extends SeasonalActivityApp
         if (item)
           return {
             _id: item!.id,
-            'data.xp.value': (item.xp?.value || 0) + Number(i.value),
+            'data.xp.value': (item.system.xp?.value || 0) + Number(i.value),
             type: item!.type,
             name: item!.name!,
           };

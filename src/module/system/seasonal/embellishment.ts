@@ -123,8 +123,8 @@ export class Embellishment extends Enchantment{
 
         let qualityData = PILLARS.qualityData[this.data.quality];
 
-        let size = (this.item instanceof PillarsItem ? this.item.itemSize?.value : "average" )|| "average"
-        this.progress.total = Math.ceil(qualityData.seasons * PILLARS.itemSizeMultiplier[size])
+        let size = (this.item instanceof PillarsItem ? this.item.system.itemSize?.value : "average" )|| "average"
+        this.progress.total = Math.ceil(qualityData.seasons * PILLARS.itemSizeMultiplier[size as keyof typeof PILLARS.itemSizeMultiplier])
 
         this.progress.total = Math.ceil(this.progress.total)
 

@@ -102,7 +102,7 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
 
     if (!item) return ui.notifications!.error(game.i18n.localize('PILLARS.ErrorCannotFindItem'));
 
-    if (item.data.type != 'equipment' || (item.data.type == 'equipment' && item.data.data.category.value != 'book'))
+    if (item.data.type != 'equipment' || (item.data.type == 'equipment' && item.system.category.value != 'book'))
       return ui.notifications!.error(game.i18n.localize('PILLARS.ErrorPracticeSkillsOnly'));
 
     if (this.mode == "text")

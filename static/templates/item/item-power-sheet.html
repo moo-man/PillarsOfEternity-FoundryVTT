@@ -294,7 +294,7 @@
             <div class="form-group power-group" data-property="summons">
                 <h3>{{localize "PILLARS.Summons"}}<a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
                 <div class="property-list">
-                    {{#each  item.summons as |summon i|}}
+                    {{#each  items.system.summons as |summon i|}}
                     <div class="property-inputs" data-index="{{i}}">
                         <input type="text" data-path="group" class="power-property group" title="Group" value="{{summon.group}}">
                         <div class="power-property summon">
@@ -327,7 +327,7 @@
             </div>
 
 
-            <h3>{{localize "PILLARS.Abstract"}}: {{item.data.data.pl}}</h3>
+            <h3>{{localize "PILLARS.Abstract"}}: {{item.system.pl}}</h3>
 
             <div class="power-groups">
                 {{#each item.groups as |group g|}}

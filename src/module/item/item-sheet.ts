@@ -72,15 +72,15 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
 
     data.data = (data as unknown as ItemSheet.Data).data.data;
 
-    if (this.item.type == 'power' && this.item.target?.length) {
-      this.item.target.forEach((target) => (target.subchoices = getProperty(getGame().pillars.config, `power${target.value[0]?.toUpperCase() + target.value.slice(1)}s`)))
+    if (this.item.type == 'power' && this.item.system.target?.length) {
+      this.item.system.target.forEach((target : PowerTarget) => (target.subchoices = getProperty(getGame().pillars.config, `power${target.value[0]?.toUpperCase() + target.value.slice(1)}s`)))
       data.powerEffects = { conditions: foundry.utils.deepClone(CONFIG.statusEffects), item : []};
       if (this.item.effects.size) data.powerEffects.item = Array.from(this.item.effects);
     }
 
     if (this.item.type == 'weapon') {
-      data.martialSkills = getGame().items!.contents.filter((i) => i.type == 'skill' && i.category?.value == 'martial');
-      if (this.item.isOwned) data.martialSkills = data.martialSkills.concat(this.item.actor!.getItemTypes(ItemType.skill).filter((i) => i.category?.value == 'martial'));
+      data.martialSkills = getGame().items!.contents.filter((i) => i.type == 'skill' && i.system.category?.value == 'martial');
+      if (this.item.isOwned) data.martialSkills = data.martialSkills.concat(this.item.actor!.getItemTypes(ItemType.skill).filter((i) => i.system.category?.value == 'martial'));
     }
 
     if (this.item.data.type == "bond")
@@ -88,14 +88,14 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
       data.matching = this.item.hasMatchingBond() || false
 
       data.possibleBonds = getGame().actors!.contents.filter((i) => (i.hasPlayerOwner || i.data.token.disposition > 0) && i.id != this.id);
-      data.traitsAllowed = Math.max((this.item.data.data.xp.rank || 0) - 5, 0)
-      data.traitsOwned = Math.max(this.item.data.data.traits.length - 3, 0) // Don't count default traits
+      data.traitsAllowed = Math.max((this.item.system.xp.rank || 0) - 5, 0)
+      data.traitsOwned = Math.max(this.item.system.traits.length - 3, 0) // Don't count default traits
       data.traitsAvailable = Math.max(data.traitsAllowed - data.traitsOwned, 0)
       data.traits = Object.values(PILLARS.bondTraits).map((t : BondTrait) => {
         if (this.item.data.type == "bond")
         {
-          t.active = this.item.data.data.traits.includes(t.key);
-          (<PillarsItemSheetData["traits"][0]> t ).disabled = (data.traitsAvailable <= 0 && !t.active) || this.item.data.data.xp.rank! < 5 
+          t.active = this.item.system.traits.includes(t.key);
+          (<PillarsItemSheetData["traits"][0]> t ).disabled = (data.traitsAvailable <= 0 && !t.active) || this.item.system.xp.rank! < 5 
         }
 
         return t as PillarsItemSheetData["traits"][0]
@@ -126,7 +126,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
   }
 
   handleSummonedItem(itemData: ItemDataConstructorData) {
-    let summons = foundry.utils.deepClone(this.item.summons); // TODO test this
+    let summons = foundry.utils.deepClone(this.item.system.summons); // TODO test this
     summons?.push({ group: '', data: itemData });
     this.item.update({ 'data.summons': summons });
   }
@@ -228,8 +228,8 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
   }
 
   _onAddDamage(ev: JQuery.ClickEvent) {
-    if (this.item.damage) {
-      let damage = foundry.utils.deepClone(this.item.damage.value);
+    if (this.item.system.damage) {
+      let damage = foundry.utils.deepClone(this.item.system.damage.value);
       damage.push(<PowerDamage>{
         label: '',
         base: '',
@@ -288,9 +288,9 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
 
   _onEditPower(ev: JQuery.ClickEvent) {
     let index = Number($(ev.currentTarget).parents('.item').attr('data-index'));
-    if (this.item.powers)
+    if (this.item.system.powers)
     {
-      let power = this.item.powers[index];
+      let power = this.item.system.powers[index];
       if (power?.ownedId) this.actor?.items.get(power.ownedId)?.sheet?.render(true);
       else new PillarsItemSheet(new PillarsItem(power as ItemDataConstructorData, { embedded: { object: this.item, index } })).render(true, { editable: false });
     }
@@ -298,9 +298,9 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
 
   _onPowerDelete(ev: JQuery.ClickEvent) {
     let index = Number($(ev.currentTarget).parents('.item').attr('data-index'));
-    if (this.item.powers)
+    if (this.item.system.powers)
     {
-      let powers = foundry.utils.deepClone(this.item.powers); // TODO test this
+      let powers = foundry.utils.deepClone(this.item.system.powers); // TODO test this
       if (powers[index]?.ownedId && this.item.isOwned) this.actor?.updateEmbeddedDocuments('Item', [{ _id: powers[index]?.ownedId, 'data.embedded.item': null }]);
       
       powers.splice(index, 1);
@@ -311,7 +311,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
   _onEditEmbeddedPower(ev: JQuery.ChangeEvent) {
     let index = Number($(ev.currentTarget).parents('.item').attr('data-index'));
     let path = ev.currentTarget.dataset.path;
-    let powers = foundry.utils.deepClone(this.item.powers);
+    let powers = foundry.utils.deepClone(this.item.system.powers);
     let value = Number.isNumeric(ev.currentTarget.value) ? Number(ev.currentTarget.value) : ev.currentTarget.value;
 
     if (powers)
@@ -334,14 +334,14 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     let bond = ev.currentTarget.dataset.bond as string
     if (this.item.data.type == "bond")
     {
-      let traits = duplicate(this.item.data.data.traits);
+      let traits = duplicate(this.item.system.traits);
       if (checked && !traits.includes(bond))
       {
         traits.push(bond);
       }
       else if (!checked)
       {
-        traits = traits.filter(t => t != bond);
+        traits = traits.filter((t : string )=> t != bond);
       }
       this.item.update({"data.traits" : traits})
     }
@@ -356,7 +356,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
       return 
 
     
-    let range = duplicate(this.item.phases?.[phase]);
+    let range = duplicate(this.item.system.phases?.[phase]);
 
     if (range)
     {

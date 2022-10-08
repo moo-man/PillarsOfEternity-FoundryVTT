@@ -122,7 +122,7 @@ export class Imbuement extends Enchantment{
         let finishedItem = <PillarsItem>this.item;
         if (hasEmbeddedPowers(finishedItem))
         {
-            let powers = duplicate(finishedItem.data.data.powers) as EmbeddedPower[];
+            let powers = duplicate(finishedItem.system.powers) as EmbeddedPower[];
             let powerData = this.power.toObject();
             if (powerData.type == "power")
             {
@@ -148,7 +148,7 @@ export class Imbuement extends Enchantment{
     computeProgress() {
         this.progress = this.data.progress as typeof this.progress;
 
-        this.progress.total = this.power.level?.value || 0
+        this.progress.total = this.power.system.level?.value || 0
         if (this.data.frequency == 2)
             this.progress.total += 1
 
@@ -170,10 +170,10 @@ export class Imbuement extends Enchantment{
     }
 
     async advanceProgress() {
-        let powerSource = this.actor?.items.find((i) => (i.type == 'powerSource' && i.source && i.source.value == this.power.source?.value) || false);
+        let powerSource = this.actor?.items.find((i) => (i.type == 'powerSource' && i.system.source && i.system.source.value == this.power.system.source?.value) || false);
         if (powerSource && this.data.progress.state)
         {
-            this.data.progress.current += ((powerSource.pool?.max || 0) - (this.power.level?.value || 0)) * 2
+            this.data.progress.current += ((powerSource.system.pool?.max || 0) - (this.power.system.level?.value || 0)) * 2
             this.data.progress.current = Math.min(this.data.progress.current, this.progress.total)
         }
         this.computeProgress();
@@ -181,7 +181,7 @@ export class Imbuement extends Enchantment{
     }
 
     addMaedr(maedr : PillarsItem) {
-        if (maedr.category?.value != "maedr")
+        if (maedr.system.category?.value != "maedr")
             return
         
         this.data.maedrs.push(maedr.toObject());

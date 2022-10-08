@@ -1,6 +1,7 @@
 import { getGame } from "../system/utility"
 import { WeaponCheckDataFlattened, WeaponCheckData } from "../../types/checks"
 import SkillCheck from "./skill-check"
+import { WeaponSpecial } from "../../types/items"
 
 export default class WeaponCheck extends SkillCheck
 {
@@ -28,11 +29,11 @@ export default class WeaponCheck extends SkillCheck
         }
 
         get tags () {
-            return [this.weapon?.Category, this.weapon?.skill?.value]
+            return [this.weapon?.Category, this.weapon?.system.skill?.value]
         }
 
         get weaponTags() {
-            return this.weapon?.Specials?.filter(i => !i?.includes("text-decoration"))
+            return this.weapon?.Specials?.filter((i : string) => !i?.includes("text-decoration"))
         }
 
         get addedProperties()

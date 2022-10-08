@@ -37,6 +37,13 @@ import { PillarsCombatant } from "./module/system/combatant";
 import FoundryOverrides from "./module/system/overrides.js"
 //@ts-ignore
 import PillarsExplode from "./module/system/explode.js"
+//@ts-ignore
+import {CharacterActorDataModel} from "./module/model/actor/character.js"
+//@ts-ignore
+import {FollowerActorDataModel} from "./module/model/actor/follower.js"
+//@ts-ignore 
+import {StandardActorDataModel} from "./module/model/actor/components/base.js"
+
 import TimeTracker from "./module/apps/time-tracker";
 import AdventureSeasonalActivityApplication from "./module/apps/seasonal/adventure";
 import SocializingSeasonalActivityApplication from "./module/apps/seasonal/socializing";
@@ -70,6 +77,13 @@ Hooks.on("init", () => {
   CONFIG.Token.documentClass = PillarsTokenDocument
   CONFIG.Combat.defeatedStatusId = "incapacitated"
   CONFIG.ui.combat = PillarsCombatTracker
+  
+  //@ts-ignore
+  CONFIG.Actor.systemDataModels["character"] = CharacterActorDataModel;
+  //@ts-ignore
+  CONFIG.Actor.systemDataModels["follower"] = FollowerActorDataModel;
+  //@ts-ignore
+  CONFIG.Actor.systemDataModels["npc"] = StandardActorDataModel;
 
   PillarsExplode()
 

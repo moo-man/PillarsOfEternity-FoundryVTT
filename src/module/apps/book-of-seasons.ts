@@ -32,8 +32,8 @@ export default class BookOfSeasons extends Application {
     } = {};
 
     let currentTime = getGame().settings.get('pillars-of-eternity', 'season');
-    data.seasons = duplicate(this.actor!.seasons);
-    data.seasons.forEach((s, i) => {
+    data.seasons = duplicate(this.actor!.system.seasons) as SeasonData[];
+    data.seasons!.forEach((s, i) => {
       s.index = i;
       if (s.year == currentTime.year) {
         s.current = PILLARS.seasons[currentTime.season].toLowerCase(); // TODO make this better
@@ -45,7 +45,7 @@ export default class BookOfSeasons extends Application {
       //     "winter" : seasonsNeedUpdating[`${s.year}-winter`] || false,
       // }
     });
-    data.seasons.reverse();
+    data.seasons!.reverse();
     data.actor = this.actor!;
 
     return data;
@@ -65,7 +65,7 @@ export default class BookOfSeasons extends Application {
   }
 
   static indexToYear(index: number, actor : PillarsActor): number {
-    return actor?.seasons![index]?.year || -1;
+    return actor?.system.seasons![index]?.year || -1;
   }
 
   activateListeners(html: JQuery<HTMLElement>) {
@@ -73,7 +73,7 @@ export default class BookOfSeasons extends Application {
 
     html.find('.add-season').on('click', async (ev: JQuery.ClickEvent) => {
       ev.preventDefault();
-      let seasons = duplicate(this.actor!.seasons);
+      let seasons = duplicate(this.actor!.system.seasons);
 
       seasons.push({
         year: (seasons[seasons.length - 1]?.year || 0) + 1,
@@ -106,7 +106,7 @@ export default class BookOfSeasons extends Application {
       let name = ev.target.name.split('-');
       let index = parseInt(name[0] || '');
       let key = name[1] as keyof SeasonData;
-      let seasons = foundry.utils.deepClone(this.actor?.seasons);
+      let seasons = foundry.utils.deepClone(this.actor?.system.seasons);
       let val: string | number = ev.target.value;
       if (Number.isNumeric(val)) val = parseInt(val.toString());
       if (seasons![index] && key) {

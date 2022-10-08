@@ -9,7 +9,7 @@ export default function () {
         {
             if (hasProperty(data, "data.health") || hasProperty(data, "data.endurance"))
             {
-                if (actor.getFlag("pillars-of-eternity", "autoEffects") && actor.data.data.health.bloodied)
+                if (actor.getFlag("pillars-of-eternity", "autoEffects") && actor.system.health.bloodied)
                 {
                     let existing = actor.effects.find(e => e.getFlag("core", "statusId") == "bloodied")
                     if (!existing)
@@ -23,7 +23,7 @@ export default function () {
                     await actor.removeCondition("bloodied")
                 }
     
-                if (actor.getFlag("pillars-of-eternity", "autoEffects") && actor.data.data.endurance.winded)
+                if (actor.getFlag("pillars-of-eternity", "autoEffects") && actor.system.endurance.winded)
                 {
                     let existing = actor.hasCondition("winded")
                     if (!existing)
@@ -33,7 +33,7 @@ export default function () {
                     await actor.removeCondition("winded")
                 }
     
-                if (actor.getFlag("pillars-of-eternity", "autoEffects") && (actor.data.data.health.incap || actor.data.data.endurance.incap))
+                if (actor.getFlag("pillars-of-eternity", "autoEffects") && (actor.system.health.incap || actor.system.endurance.incap))
                 {
                     if (!actor.hasCondition("incapacitated"))
                         await actor.addCondition("incapacitated")
@@ -43,7 +43,7 @@ export default function () {
                 else if (actor.hasCondition("incapacitated"))
                     await actor.removeCondition("incapacitated")
     
-                if (actor.getFlag("pillars-of-eternity", "autoEffects") && (actor.data.data.health.dead))
+                if (actor.getFlag("pillars-of-eternity", "autoEffects") && (actor.system.health.dead))
                 {
                     await actor.addCondition("dead")
                 }
@@ -53,9 +53,9 @@ export default function () {
     
     
     
-                if (hasProperty(data, "data.health.wounds") && actor.data.data.health.value > actor.data.data.health.max)
+                if (hasProperty(data, "data.health.wounds") && actor.system.health.value > actor.system.health.max)
                 {
-                    actor.update({"data.health.value" : actor.data.data.health.max})
+                    actor.update({"data.health.value" : actor.system.health.max})
                 }
             }
         }

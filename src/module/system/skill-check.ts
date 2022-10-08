@@ -2,7 +2,7 @@ import { Data } from "@league-of-foundry-developers/foundry-vtt-types/src/foundr
 import { ActiveEffectDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
 import { getGame } from "../system/utility";
 import {  CheckAddData, CheckDataFlattened, DialogDamage, DialogHealing, SkillCheckData } from "../../types/checks";
-import { PowerBaseEffect } from "../../types/powers";
+import { PowerBaseEffect, PowerDamage } from "../../types/powers";
 import DamageDialog from "../apps/damage-dialog";
 import HealingDialog from "../apps/healing-dialog";
 import { PillarsItem } from "../item/item-pillars";
@@ -286,7 +286,7 @@ export default class SkillCheck
         }
 
         get effects () {
-            let effects = this.item?.base?.effects || []
+            let effects = this.item?.system.base?.effects || []
             return this._toEffectObjects(effects)
         }
 
@@ -301,11 +301,11 @@ export default class SkillCheck
         }
 
         get doesDamage() {
-            return this.item?.damage?.value?.filter(d => d.base || d.crit)?.length! > 0
+            return this.item?.system.damage?.value?.filter((d: PowerDamage) => d.base || d.crit)?.length! > 0
         }
 
         get doesHealing() {
-            return this.item?.healing?.length!  > 0
+            return this.item?.system.healing?.length!  > 0
         }
 
         get hasEffects() {

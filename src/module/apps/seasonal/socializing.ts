@@ -20,7 +20,7 @@ export default class SocializingSeasonalActivityApplication extends XPAllocation
 
     data.editableExperience = false;
     data.experience = 14;
-    data.lists.skills = {label : game.i18n.localize("PILLARS.Skills"), items :  this.actor.getItemTypes(ItemType.skill).filter(i => i.category!.value == "social")}
+    data.lists.skills = {label : game.i18n.localize("PILLARS.Skills"), items :  this.actor.getItemTypes(ItemType.skill).filter(i => i.system.category!.value == "social")}
     data.lists.connections = {label : game.i18n.localize("PILLARS.Connections"), items :  this.actor.getItemTypes(ItemType.connection)}
     data.lists.reputation = {label : game.i18n.localize("PILLARS.Reputation"), items :  this.actor.getItemTypes(ItemType.reputation)}
     return data

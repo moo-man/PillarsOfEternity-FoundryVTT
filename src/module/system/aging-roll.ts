@@ -100,7 +100,7 @@ export default class AgingRoll {
   {
     if (this.actor?.data.type == "character")
     {
-      let march = this.actor.data.data.life.march;
+      let march = this.actor.system.life.march;
       let index = -1;
       if (march > 0)
         index = march - 1 
@@ -109,7 +109,7 @@ export default class AgingRoll {
 
       let targetThreshold = march + marches;
 
-      let agingPoints = this.actor.data.data.life.agingPoints;
+      let agingPoints = this.actor.system.life.agingPoints;
       return pointThresholds[targetThreshold]! - agingPoints
     }
     return 0

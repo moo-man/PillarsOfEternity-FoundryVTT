@@ -14,7 +14,7 @@ export default class PillarsActiveEffect extends ActiveEffect {
 
     prepareData() {
         if (getGame().ready && this.requiresEquip && this.item?.canEquip)
-            this.data.disabled = !this.item.equipped?.value
+            this.data.disabled = !this.item.system.equipped?.value
     }
 
     getDialogChanges({target = undefined, condense = false, indexOffset = 0} : {target? : PillarsActor | null, condense? : boolean, indexOffset? : number} ={}) {
@@ -45,11 +45,6 @@ export default class PillarsActiveEffect extends ActiveEffect {
     }
     get changeConditionals() {
         return (getProperty(this.data, "flags.pillars-of-eternity.changeCondition") || {})
-    }
-
-
-    get label() {
-        return this.data.label
     }
 
     get description() {

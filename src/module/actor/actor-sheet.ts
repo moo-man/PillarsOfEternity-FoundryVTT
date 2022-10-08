@@ -318,12 +318,12 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     let items: SheetItemData = <SheetItemData>{};
 
     items.attributes = { benefits: [], hindrances: [] };
-    items.attributes.benefits = sheetData.actor.getItemTypes(ItemType.attribute).filter((i) => i.category?.value == 'benefit');
-    items.attributes.hindrances = sheetData.actor.getItemTypes(ItemType.attribute).filter((i) => i.category?.value == 'hindrance');
+    items.attributes.benefits = sheetData.actor.getItemTypes(ItemType.attribute).filter((i) => i.system.category?.value == 'benefit');
+    items.attributes.hindrances = sheetData.actor.getItemTypes(ItemType.attribute).filter((i) => i.system.category?.value == 'hindrance');
 
     items.skills = sheetData.actor.getItemTypes(ItemType.skill);
     items.traits = sheetData.actor.getItemTypes(ItemType.trait);
-    items.powers = sheetData.actor.getItemTypes(ItemType.power).filter((i) => !i.embedded?.item);
+    items.powers = sheetData.actor.getItemTypes(ItemType.power).filter((i) => !i.system.embedded?.item);
     items.embeddedPowers = sheetData.actor.getActiveEmbeddedPowers();
     items.powerSources = sheetData.actor.getItemTypes(ItemType.powerSource);
 
@@ -337,10 +337,10 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     items.inventory = this.constructInventory(sheetData);
 
     items.equipped = {
-      meleeWeapons: items.inventory.weapons.items.filter((i) => i.equipped?.value && i.isMelee),
-      rangedWeapons: items.inventory.weapons.items.filter((i) => i.equipped?.value && i.isRanged),
-      armor: items.inventory.armor.items.filter((i) => i.equipped?.value),
-      shields: items.inventory.shields.items.filter((i) => i.equipped?.value),
+      meleeWeapons: items.inventory.weapons.items.filter((i) => i.system.equipped?.value && i.isMelee),
+      rangedWeapons: items.inventory.weapons.items.filter((i) => i.system.equipped?.value && i.isRanged),
+      armor: items.inventory.armor.items.filter((i) => i.system.equipped?.value),
+      shields: items.inventory.shields.items.filter((i) => i.system.equipped?.value),
     };
     return items;
   }
@@ -365,17 +365,17 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
       tools: {
         label: 'Tools',
         type: 'equipment',
-        items: sheetData.actor.getItemTypes(ItemType.equipment).filter((i) => i.category?.value == 'tool'),
+        items: sheetData.actor.getItemTypes(ItemType.equipment).filter((i) => i.system.category?.value == 'tool'),
       },
       gear: {
         label: 'Gear',
         type: 'equipment',
-        items: sheetData.actor.getItemTypes(ItemType.equipment).filter((i) => i.category?.value == 'gear'),
+        items: sheetData.actor.getItemTypes(ItemType.equipment).filter((i) => i.system.category?.value == 'gear'),
       },
       grimoires: {
         label: 'Grimoires',
         type: 'equipment',
-        items: sheetData.actor.getItemTypes(ItemType.equipment).filter((i) => i.category?.value == 'grimoire'),
+        items: sheetData.actor.getItemTypes(ItemType.equipment).filter((i) => i.system.category?.value == 'grimoire'),
       },
     };
     return inventory;
@@ -441,8 +441,8 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
   _enrichKnownConnections(sheetData: PillarsActorSheetData) {
     if (sheetData.actor.data.type == 'character') {
-      let connections = sheetData.actor.data.data.knownConnections!.value;
-      sheetData.KnownConnections = connections.map((i) => {
+      let connections = sheetData.actor.system.knownConnections!.value;
+      sheetData.KnownConnections = connections.map((i : {name : string}) => {
         let actor = getGame().actors!.getName(i.name);
         return {
           name: i.name,
@@ -522,7 +522,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   _setPowerSourcePercentage(sheetData: PillarsActorSheetData) {
     let sources = sheetData.items.powerSources;
     sources.forEach((s) => {
-      s.pool!.pct = Math.clamped((s.pool!.current / s.pool!.max) * 100, 0, 100);
+      s.system.pool!.pct = Math.clamped((s.system.pool!.current / s.system.pool!.max) * 100, 0, 100);
     });
   }
 
@@ -787,7 +787,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   _onCreateConnection(event: JQuery.ClickEvent) {
     if (this.actor.data.type != "character")
     return
-    let connections = duplicate(this.actor.data.data.knownConnections?.value || []);
+    let connections = duplicate(this.actor.system.knownConnections?.value || []);
     if (connections) {
       connections.push({ name: getGame().i18n.format("PILLARS.NewConnection")});
       this.actor.update({ 'data.knownConnections.value': connections });
@@ -798,7 +798,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     if (this.actor.data.type != "character")
     return
     let index: number = parseInt($(event.currentTarget!).parents('.item').attr('data-index') || '');
-    let connections = duplicate(this.actor.data.data.knownConnections?.value || []);
+    let connections = duplicate(this.actor.system.knownConnections?.value || []);
     let game = getGame()
     new Dialog({
       title: game.i18n.localize("PILLARS.ChangeConnection"),
@@ -826,7 +826,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     if (this.actor.data.type != "character")
     return
     let index = parseInt($(event.currentTarget!).parents('.item').attr('data-index') || '');
-    let connections = duplicate(this.actor.data.data.knownConnections?.value || []);
+    let connections = duplicate(this.actor.system.knownConnections?.value || []);
     connections.splice(index, 1);
     this.actor.update({ 'data.knownConnections.value': connections });
   }
@@ -850,14 +850,14 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   _onRestorePoolClick(event: JQuery.ClickEvent) {
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
     let item = this.actor.items.get(itemId!);
-    if (item) return item.update({ 'data.pool.current': item.pool?.max });
+    if (item) return item.update({ 'data.pool.current': item.system.pool?.max });
   }
 
   _onWoundClick(event: JQuery.ClickEvent) {
     if (this.actor.data.type == "headquarters")
     return
     let multiplier = (<HTMLAnchorElement>event.currentTarget).classList.contains('add-wound') ? 1 : -1;
-    return this.actor.update({ 'data.health.wounds.value': this.actor.data.data.health.wounds.value + 1 * multiplier });
+    return this.actor.update({ 'data.health.wounds.value': this.actor.system.health.wounds.value + 1 * multiplier });
   }
 
   /* -------------------------------------------- */
@@ -969,8 +969,8 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   async _onItemSkillClick(event: JQuery.ClickEvent) {
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
     let item = this.actor.items.get(itemId!);
-    let skill = this.actor.items.getName(item?.skill?.value || "");
-    if (!skill) return ui.notifications!.warn(getGame().i18n.format("PILLARS.ErrorSkillNotFound", {name : item?.skill?.value}))
+    let skill = this.actor.items.getName(item?.system.skill?.value || "");
+    if (!skill) return ui.notifications!.warn(getGame().i18n.format("PILLARS.ErrorSkillNotFound", {name : item?.system.skill?.value}))
     let check = await this.actor.setupSkillCheck(skill);
     await check.rollCheck();
     check.sendToChat();
@@ -1031,7 +1031,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
     let item = this.actor.items.get(itemId!);
     if (item) {
-      let embedded = duplicate(item.embedded);
+      let embedded = duplicate(item.system.embedded);
 
       if (event.button == 0) embedded.uses.value++;
       else embedded.uses.value--;

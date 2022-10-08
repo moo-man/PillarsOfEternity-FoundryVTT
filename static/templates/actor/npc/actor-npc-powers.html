@@ -21,8 +21,8 @@
             </div>
 
             <span class="item-property-column large pool-inputs"><input class="item-property" data-target="data.pool.current" type="number" value="{{item.pool.current}}"  > / <input class="item-property" data-target="data.pool.max" type="number" disabled value="{{item.pool.max}}" ><a title="Restore Pool" class="restore-pool"><i class="fas fa-redo"></i></a></span>
-            <span class="item-property-column">+{{item.data.data.attack}}</span>
-            <span class="item-property-column"><input type="number" class="item-property" data-target="data.xp.level" value="{{item.xp.level}}"></span>
+            <span class="item-property-column">+{{item.system.attack}}</span>
+            <span class="item-property-column"><input type="number" class="item-property" data-target="data.xp.level" value="{{item.system.xp.level}}"></span>
 
             <div class="item-controls flexrow">
                 {{#if ../owner}}

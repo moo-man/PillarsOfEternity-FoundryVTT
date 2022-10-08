@@ -5,13 +5,12 @@ import { ItemDataConstructorData, ItemDataSource } from '@league-of-foundry-deve
 import { PowerSource } from '../../global';
 import { getGame } from "../system/utility"
 import { DamageType, Defense, hasCategory, hasEmbeddedPowers, hasXP, isEquippable, isPhysical, isUsableItem, ItemType } from '../../types/common';
-import { ItemChatData,  WeaponSpecialData } from '../../types/items';
+import { ItemChatData,  WeaponSpecialData, WeaponSpecial } from '../../types/items';
 import { EmbeddedPower, PowerBaseEffect, PowerDamage, PowerDisplay, PowerDuration, PowerGroup, PowerGroups, PowerHealing, PowerMisc, PowerRange, PowersConstructorContext, PowerTarget } from '../../types/powers';
 import { PILLARS } from '../system/config';
 import { PILLARS_UTILITY } from '../system/utility';
 /**
  * Extend the FVTT Item class for Pillars functionality
- * @extends {ItemSheet}
  */
 
 declare global {
@@ -21,6 +20,8 @@ declare global {
 }
 
 export class PillarsItem extends Item {
+
+  system: any//DeepPartial<PillarsItemSystemDataTemp> = {}
 
 
   constructor(data?: ItemDataConstructorData | undefined, context?: PowersConstructorContext | undefined){
@@ -33,7 +34,7 @@ export class PillarsItem extends Item {
 
     // Clamp the shield health to between max and 0
     if (this.type == 'shield' && hasProperty(updateData, 'data.health.current'))
-      setProperty(updateData, 'data.health.current', Math.clamped(getProperty(updateData, 'data.health.current'), 0, this.health?.max || 0));
+      setProperty(updateData, 'data.health.current', Math.clamped(getProperty(updateData, 'data.health.current'), 0, this.system.health?.max || 0));
 
     if (this.data.type == "bond" && hasProperty(updateData, "data.partner"))
     {
@@ -53,14 +54,14 @@ export class PillarsItem extends Item {
     if (getProperty(updateData, 'data.category.value') == 'grimoire') {
       // Check for non-arcana powers before switiching to Grimoire type
       if (!(await this._checkGrimoirePowers())) {
-        setProperty(updateData, 'data.category.value', this.category?.value);
+        setProperty(updateData, 'data.category.value', this.system.category?.value);
         return;
       }
 
       // Change all embedded powers to "source"
-      let powers = this.powers;
+      let powers = this.system.powers;
       if (powers) {
-        powers.forEach((p) => (p.data.embedded.spendType = 'source'));
+        powers.forEach((p : EmbeddedPower) => (p.data.embedded.spendType = 'source'));
 
         setProperty(updateData, 'data.powers', powers);
 
@@ -69,13 +70,13 @@ export class PillarsItem extends Item {
           this.actor!.updateEmbeddedDocuments(
             'Item',
             powers
-              .map((p) => {
+              .map((p : EmbeddedPower) => {
                 return {
                   _id: p.ownedId,
                   'data.embedded.spendType': 'source',
                 };
               })
-              .filter((p) => p)
+              .filter((p : EmbeddedPower) => p)
           );
       }
     }
@@ -96,7 +97,7 @@ export class PillarsItem extends Item {
   // Powers embedded in an item are created on the actor when the item is added, when the item is deleted, delete the embedded powers that were added.
   async _preDelete(options: DocumentModificationOptions, user: User) {
     if (this.isOwned && hasEmbeddedPowers(this)) {
-      let embeddedPowers = this.actor!.getItemTypes(ItemType.power).filter((i) => i.embedded?.item == this.id);
+      let embeddedPowers = this.actor!.getItemTypes(ItemType.power).filter((i) => i.system.embedded?.item == this.id);
 
       await this.actor!.deleteEmbeddedDocuments(
         'Item',
@@ -109,17 +110,17 @@ export class PillarsItem extends Item {
     super._onCreate(data, options, user);
 
     // If the new item has embedded powers, add them to the actor
-    if (this.isOwned && this.powers?.length && user == getGame().user!.id) {
+    if (this.isOwned && this.system.powers?.length && user == getGame().user!.id) {
       this.actor!.createEmbeddedDocuments(
         'Item',
-        this.powers.map((p) => {
+        this.system.powers.map((p : EmbeddedPower) => {
           p.data.embedded.item = this.id!;
           return { ...p };
         })
       ).then((items) => {
         // Add id of actual owned power to the parent flags
         this.update({
-          'data.powers': this.powers?.map((p, i) => {
+          'data.powers': this.system.powers?.map((p : EmbeddedPower, i : number) => {
             p.ownedId = items[i]!.id;
             return p;
           }),
@@ -135,9 +136,9 @@ export class PillarsItem extends Item {
 
     if (embeddedParent) {
       // TODO changed from duplicate to deepClone, test to see if it still works
-      let parentPowers = foundry.utils.deepClone(embeddedParent.powers);
+      let parentPowers = foundry.utils.deepClone(embeddedParent.system.powers);
 
-      let index = parentPowers!.findIndex((i) => i.ownedId == this.id);
+      let index = parentPowers!.findIndex((i : EmbeddedPower) => i.ownedId == this.id);
       if (this.data.type == 'power') {
         let powerData = this.toObject() as PowerSource;
         powerData.ownedId = this.id!;
@@ -149,9 +150,9 @@ export class PillarsItem extends Item {
 
     if (this.data.type == "bond")
     {
-      if (this.xp!.rank! >= 5)
+      if (this.system.xp!.rank! >= 5)
       {
-        let traits = foundry.utils.deepClone(this.data.data.traits)
+        let traits = foundry.utils.deepClone(this.system.traits)
         if (!traits.includes("emotionSense"))
         {
           traits.push("emotionSense")
@@ -182,7 +183,7 @@ export class PillarsItem extends Item {
       let bondEffects = this.actor!.effects.filter(i => !!(i.getFlag("pillars-of-eternity", "bondTrait") as string))
 
       // Find traits owned but with no effect and add them
-      for(let trait of this.data.data.traits)
+      for(let trait of this.system.traits)
       {
         let existing = bondEffects.find(i => trait == i.getFlag("pillars-of-eternity", "bondTrait") as string)
         if (!existing)
@@ -194,7 +195,7 @@ export class PillarsItem extends Item {
       {
         let key = effect.getFlag("pillars-of-eternity", "bondTrait") as string
 
-        if (!this.data.data.traits.includes(key))
+        if (!this.system.traits.includes(key))
           toDelete.push(effect.id!);
       }
 
@@ -226,38 +227,38 @@ export class PillarsItem extends Item {
       prepareOwnedFunction.bind(this)()
     }
 
-    if (this.weight) {
-      this.weight.value *= this.quantity?.value || 0;
+    if (this.system.weight) {
+      this.system.weight.value *= this.system.quantity?.value || 0;
     }
   }
 
   prepareWeapon() {
 
-    let category = this.category?.value || ""
+    let category = this.system.category?.value || ""
 
     if (isPhysical(this))
     {
 
       if (["smallMelee", "mediumMelee", "mediumRanged"].includes(category))
-        this.data.data.size.value = "small"
+        this.system.size.value = "small"
       else if (["largeMelee", "largeRanged"].includes(category))
-        this.data.data.size.value = "average"
+        this.system.size.value = "average"
       else if (category == "grenade")
-        this.data.data.size.value == "tiny"
+        this.system.size.value == "tiny"
     }
   }
 
   prepareArmor() {
     if (isPhysical(this))
     {
-      this.data.data.size.value = "large"
+      this.system.size.value = "large"
     }
   }
 
   prepareShield() {
     if (isPhysical(this))
     {
-      this.data.data.size.value = "small"
+      this.system.size.value = "small"
     }
   }
 
@@ -266,37 +267,37 @@ export class PillarsItem extends Item {
   preparePower() {
     if (this.data.type == 'power') this.data.groups = this.preparePowerGroups();
 
-    if (this.level) {
-      this.level.value = this.calculatePowerLevel();
-      this.level.cost = this.improvised?.value ? this.level.value * 2 : this.level.value;
+    if (this.system.level) {
+      this.system.level.value = this.calculatePowerLevel();
+      this.system.level.cost = this.system.improvised?.value ? this.system.level.value * 2 : this.system.level.value;
     }
   }
 
   prepareOwnedSkill() {
-    this.xp!.rank = PILLARS_UTILITY.getSkillRank(this.xp!.value) + (this.modifier?.value || 0);
+    this.system.xp!.rank = PILLARS_UTILITY.getSkillRank(this.system.xp!.value) + (this.system.modifier?.value || 0);
   }
 
   prepareOwnedReputation() {
-    this.xp!.rank = PILLARS_UTILITY.getSkillRank(this.xp!.value) + (this.modifier?.value || 0);
+    this.system.xp!.rank = PILLARS_UTILITY.getSkillRank(this.system.xp!.value) + (this.system.modifier?.value || 0);
   }
 
   prepareOwnedConnection() {
-    this.xp!.rank = PILLARS_UTILITY.getSkillRank(this.xp!.value) + (this.modifier?.value || 0);
+    this.system.xp!.rank = PILLARS_UTILITY.getSkillRank(this.system.xp!.value) + (this.system.modifier?.value || 0);
   }
 
   prepareOwnedBond() {
-    this.xp!.rank = PILLARS_UTILITY.getSkillRank(this.xp!.value) + (this.modifier?.value || 0);
+    this.system.xp!.rank = PILLARS_UTILITY.getSkillRank(this.system.xp!.value) + (this.system.modifier?.value || 0);
     if (this.data.type == "bond")
-      this.data.active = this.xp!.value >= 15
+      this.data.active = this.system.xp!.value >= 15
   }
 
   prepareOwnedPowerSource() {
     if (this.data.type == 'powerSource') {
       // NPCs don't use xp, so use level directly
-      if (this.actor!.type == 'character') this.xp!.level = PILLARS_UTILITY.getPowerSourceLevel(this.xp!.value);
+      if (this.actor!.type == 'character') this.system.xp!.level = PILLARS_UTILITY.getPowerSourceLevel(this.system.xp!.value);
 
-      this.data.data.attack = PILLARS_UTILITY.getPowerSourceAttackBonus(this.xp!.level!);
-      this.pool!.max = PILLARS_UTILITY.getPowerSourcePool(this.xp!.level!);
+      this.system.attack = PILLARS_UTILITY.getPowerSourceAttackBonus(this.system.xp!.level!);
+      this.system.pool!.max = PILLARS_UTILITY.getPowerSourcePool(this.system.xp!.level!);
     }
   }
 
@@ -321,7 +322,7 @@ export class PillarsItem extends Item {
   }
 
   dropdownData(): { text: string; groups?: PowerGroups } {
-    let data = <ItemChatData>{ text: this.description.value };
+    let data = <ItemChatData>{ text: this.system.description.value };
 
     if (this.data.type === 'power') data.groups = this.data.groups;
 
@@ -357,24 +358,26 @@ export class PillarsItem extends Item {
     try {
       let config = getGame().pillars.config;
       let groupIds: string[] = [];
-      groupIds = groupIds.concat(this.target!.map((i) => i.group).filter((g) => !groupIds.includes(g)));
-      groupIds = groupIds.concat(this.range!.map((i) => i.group).filter((g) => !groupIds.includes(g)));
-      groupIds = groupIds.concat(this.duration!.map((i) => i.group).filter((g) => !groupIds.includes(g)));
-      groupIds = groupIds.concat(this.damage!.value.map((i) => i.group).filter((g) => !groupIds.includes(g)));
-      groupIds = groupIds.concat(this.base!.effects.map((i) => i.group).filter((g) => !groupIds.includes(g)));
+
+      
+      groupIds = groupIds.concat(this.system.target!.map((i : PowerTarget) => i.group).filter((g : string) => !groupIds.includes(g)));
+      groupIds = groupIds.concat(this.system.range!.map((i : PowerRange) => i.group).filter((g : string) => !groupIds.includes(g)));
+      groupIds = groupIds.concat(this.system.duration!.map((i : PowerDuration) => i.group).filter((g : string) => !groupIds.includes(g)));
+      groupIds = groupIds.concat(this.system.damage!.value.map((i : PowerDamage) => i.group).filter((g : string) => !groupIds.includes(g)));
+      groupIds = groupIds.concat(this.system.base!.effects.map((i : PowerBaseEffect) => i.group).filter((g : string) => !groupIds.includes(g)));
       groupIds = groupIds.filter((i) => i || Number.isNumeric(i));
       groupIds.push('');
 
       for (let g of groupIds) {
         groups[g] = <PowerGroup>{};
 
-        groups[g]!.target = this.target!.filter((i) => i.group == g);
-        groups[g]!.range = this.range!.filter((i) => i.group == g);
-        groups[g]!.duration = this.duration!.filter((i) => i.group == g);
-        groups[g]!.damage = this.damage!.value.filter((i) => i.group == g);
-        groups[g]!.effects = this.base!.effects.filter((i) => i.group == g);
-        groups[g]!.healing = this.healing!.filter((i) => i.group == g);
-        groups[g]!.misc = (this.misc as PowerMisc[]).filter((i) => i.group == g);
+        groups[g]!.target = this.system.target!.filter((i : PowerTarget) => i.group == g);
+        groups[g]!.range = this.system.range!.filter((i : PowerRange) => i.group == g);
+        groups[g]!.duration = this.system.duration!.filter((i : PowerDuration) => i.group == g);
+        groups[g]!.damage = this.system.damage!.value.filter((i : PowerDamage) => i.group == g);
+        groups[g]!.effects = this.system.base!.effects.filter((i : PowerBaseEffect) => i.group == g);
+        groups[g]!.healing = this.system.healing!.filter((i : PowerHealing) => i.group == g);
+        groups[g]!.misc = (this.system.misc as PowerMisc[]).filter((i) => i.group == g);
 
         groups[g]!.display = {
           target: '',
@@ -476,22 +479,22 @@ export class PillarsItem extends Item {
         let pl = 0;
         let values = getGame().pillars.config.powerLevelValues;
 
-        for (let range of this.range!) pl += values.powerRanges[range.value as keyof typeof PILLARS.powerRanges] || 0;
+        for (let range of this.system.range!) pl += values.powerRanges[range.value as keyof typeof PILLARS.powerRanges] || 0;
 
-        for (let target of this.target!) {
+        for (let target of this.system.target!) {
           let targetSubTypes = values[`power${target.value[0]?.toUpperCase() + target.value.slice(1)}s` as keyof typeof values];
           pl += targetSubTypes[target.subtype as keyof typeof targetSubTypes] || 0;
           pl += values.powerExclusions[target.exclusion as keyof typeof PILLARS.powerExclusions];
         }
-        for (let duration of this.duration!) pl += values.powerDurations[duration.value as keyof typeof PILLARS.powerDurations];
-        for (let summon of this.summons || []) pl += summon.modifier || 0;
+        for (let duration of this.system.duration!) pl += values.powerDurations[duration.value as keyof typeof PILLARS.powerDurations];
+        for (let summon of this.system.summons || []) pl += summon.modifier || 0;
 
-        for (let misc of <PowerMisc[]>this.misc!) pl += misc.modifier || 0;
+        for (let misc of <PowerMisc[]>this.system.misc!) pl += misc.modifier || 0;
 
-        pl += values.powerSpeeds[this.speed!.value as keyof typeof PILLARS.powerSpeeds];
-        pl += this.base!.cost || 0;
-        this.data.data.pl = pl;
-        level = PillarsItem._abstractToLevel(pl) + (this.level?.modifier || 0);
+        pl += values.powerSpeeds[this.system.speed!.value as keyof typeof PILLARS.powerSpeeds];
+        pl += this.system.base!.cost || 0;
+        this.system.pl = pl;
+        level = PillarsItem._abstractToLevel(pl) + (this.system.level?.modifier || 0);
       } catch (e) {
         console.log(getGame().i18n.format("PILLARS.ErrorPLCalculation", {name : this.name}) + ": " +  e);
       }
@@ -500,7 +503,7 @@ export class PillarsItem extends Item {
   }
 
   updateEmbeddedPower(index: number, updateData: Record<string, unknown>) {
-    let powers = duplicate(this.powers || []);
+    let powers = duplicate(this.system.powers || []);
     if (powers[index]) {
       mergeObject(powers[index]!, updateData, { overwrite: true });
       return this.update({ 'data.powers': powers });
@@ -509,9 +512,9 @@ export class PillarsItem extends Item {
 
   async addEmbeddedPower(power : EmbeddedPower)
   {
-    if (this.type == 'equipment' && this.category?.value == 'grimoire' && power.data.source.value != 'arcana')
+    if (this.type == 'equipment' && this.system.category?.value == 'grimoire' && power.data.source.value != 'arcana')
       return ui.notifications?.error(getGame().i18n.localize("PILLARS.OnlyArcanaInGrimoire"))
-    if (this.type == 'equipment' && this.category?.value == 'grimoire') power.data.embedded.spendType = 'source';
+    if (this.type == 'equipment' && this.system.category?.value == 'grimoire') power.data.embedded.spendType = 'source';
 
     // If drag item was an owned power already, add embedded data to it
     let ownedPower: PillarsItem | undefined;
@@ -524,7 +527,7 @@ export class PillarsItem extends Item {
       power.ownedId = ownedPower?.id!;
     }
 
-    let powers = foundry.utils.deepClone(this.powers) || []; // TODO test this
+    let powers = foundry.utils.deepClone(this.system.powers) || []; // TODO test this
     powers.push(power);
     return this.update({ 'data.powers': powers }).then((item) => {
       if (ownedPower) ownedPower.update({ 'data.embedded.item': item?.id, 'data.embedded.spendType': 'source' });
@@ -532,21 +535,21 @@ export class PillarsItem extends Item {
   }
 
   async _checkGrimoirePowers() {
-    let powers = duplicate(this.powers || []);
+    let powers = duplicate(this.system.powers || []);
 
     let game = getGame();
-    let nonArcanaPowers = powers.filter((i) => i.data.source.value != 'arcana');
+    let nonArcanaPowers = powers.filter((i : EmbeddedPower) => i.data.source.value != 'arcana');
     if (nonArcanaPowers.length)
       return new Promise((resolve) => {
         new Dialog({
           title: game.i18n.localize("PILLARS.RemoveArcanePowers"),
-          content: game.i18n.format("PILLARS.PromptRemoveArcanePowers", {powers : nonArcanaPowers.map((i) => `<li>${i.name}</li>`).join('')}),
+          content: game.i18n.format("PILLARS.PromptRemoveArcanePowers", {powers : nonArcanaPowers.map((i : EmbeddedPower) => `<li>${i.name}</li>`).join('')}),
           buttons: {
             remove: {
               label: game.i18n.localize("PILLARS.Remove"),
               callback: async () => {
-                let arcanaPowers = powers.filter((i) => i.data.source.value == 'arcana');
-                arcanaPowers.forEach((p) => {
+                let arcanaPowers = powers.filter((i : EmbeddedPower) => i.data.source.value == 'arcana');
+                arcanaPowers.forEach((p : EmbeddedPower) => {
                   p.data.embedded.spendType == 'source';
                 });
                 await this.update({ 'data.powers': arcanaPowers });
@@ -568,35 +571,35 @@ export class PillarsItem extends Item {
   hasMatchingBond() {
     if (this.data.type == "bond" && this.isOwned)
     {
-      let partner = getGame().actors!.get(this.data.data.partner)
+      let partner = getGame().actors!.get(this.system.partner)
       let partnerBond = partner?.getItemTypes(ItemType.bond).find(b => {
         if (b.data.type == "bond")
         {
-          return b.data.data.partner == this.parent!.id
+          return b.system.partner == this.parent!.id
         }
       })
       if (partnerBond && partnerBond.data.type == "bond")
       {
         let matching = true;
-        if (this.xp!.value != partnerBond.xp!.value)
+        if (this.system.xp!.value != partnerBond.system.xp!.value)
           matching = false;
-        if (this.modifier!.value != partnerBond.modifier!.value)
+        if (this.system.modifier!.value != partnerBond.system.modifier!.value)
           matching = false;
-        if (this.data.data.traits.length == partnerBond.data.data.traits.length)
+        if (this.system.traits.length == partnerBond.system.traits.length)
         {
 
           // If both partner and self arrays have the same values, return true
-          let matchingArrays = this.data.data.traits.every(t => {
+          let matchingArrays = this.system.traits.every((t : string) => {
             if (partnerBond?.data.type == "bond")
             {
-              return partnerBond.data.data.traits.includes(t)
+              return partnerBond.system.traits.includes(t)
             }
           })
           &&
-          partnerBond.data.data.traits.every(t => {
+          partnerBond.system.traits.every((t : string) => {
             if (this.data.type == "bond")
             {
-              return this.data.data.traits.includes(t)
+              return this.system.traits.includes(t)
             }
           })
 
@@ -620,11 +623,11 @@ export class PillarsItem extends Item {
   //#region Getters
   // @@@@@@@@ CALCULATION GETTERS @@@@@@@
   get isMelee() {
-    return this.category?.value == 'smallMelee' || this.category?.value == 'mediumMelee' || this.category?.value == 'largeMelee';
+    return this.system.category?.value == 'smallMelee' || this.system.category?.value == 'mediumMelee' || this.system.category?.value == 'largeMelee';
   }
 
   get isRanged() {
-    return this.category?.value == 'mediumRanged' || this.category?.value == 'largeRanged' || this.category?.value == 'grenade';
+    return this.system.category?.value == 'mediumRanged' || this.system.category?.value == 'largeRanged' || this.system.category?.value == 'grenade';
   }
 
   get specialList(): Record<string, WeaponSpecialData> {
@@ -634,13 +637,13 @@ export class PillarsItem extends Item {
   }
 
   get canEquip() {
-    return (this.type == 'equipment' && (this.wearable?.value || this.category?.value == 'grimoire')) || this.type == 'weapon' || this.type == 'armor' || this.type == 'shield';
+    return (this.type == 'equipment' && (this.system.wearable?.value || this.system.category?.value == 'grimoire')) || this.type == 'weapon' || this.type == 'armor' || this.type == 'shield';
   }
 
   get languageProficiency() : keyof typeof PILLARS.languageProficiencies {
-    if (this.data.type == "skill" && this.data.data.category.value == "language")
+    if (this.data.type == "skill" && this.system.category.value == "language")
     {
-      let rank = this.xp?.rank || 0
+      let rank = this.system.xp?.rank || 0
       if (rank >= 9)
         return "native"
       else if (rank >= 7)
@@ -659,8 +662,8 @@ export class PillarsItem extends Item {
   // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
 
   get Category() {
-    if (this.type == 'weapon') return getGame().pillars.config.weaponTypes[this.category?.value! as keyof typeof PILLARS.weaponTypes];
-    if (this.type == 'skill') return getGame().pillars.config.skillTypes[this.category?.value! as keyof typeof PILLARS.skillTypes];
+    if (this.type == 'weapon') return getGame().pillars.config.weaponTypes[this.system.category?.value! as keyof typeof PILLARS.weaponTypes];
+    if (this.type == 'skill') return getGame().pillars.config.skillTypes[this.system.category?.value! as keyof typeof PILLARS.skillTypes];
   }
 
   get Type() {
@@ -668,12 +671,12 @@ export class PillarsItem extends Item {
   }
 
   get Range() {
-    return getGame().pillars.config.powerRanges[this.range?.find((i) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('range'))?.value! as keyof typeof PILLARS.powerRanges];
+    return getGame().pillars.config.powerRanges[this.system.range?.find((i: PowerRange) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('range'))?.value! as keyof typeof PILLARS.powerRanges];
   }
 
   get Target() {
     try {
-      let targetObj = this.target?.find((i) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('target'));
+      let targetObj = this.system.target?.find((i : PowerTarget) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('target'));
       if (!targetObj) return;
       let targetSubTypes = getGame().pillars.config[`power${targetObj!.value[0]!.toUpperCase() + targetObj.value.slice(1)}s` as keyof typeof PILLARS];
       let target = targetSubTypes[targetObj.subtype as keyof typeof targetSubTypes] as string;
@@ -685,40 +688,40 @@ export class PillarsItem extends Item {
     }
   }
   get Duration() {
-    return getGame().pillars.config.powerDurations[this.duration?.find((i) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('duration'))?.value as keyof typeof PILLARS.powerDurations];
+    return getGame().pillars.config.powerDurations[this.system.duration?.find((i : PowerDuration) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('duration'))?.value as keyof typeof PILLARS.powerDurations];
   }
   get Speed() {
-    return getGame().pillars.config.powerSpeeds[this.speed?.value as keyof typeof PILLARS.powerSpeeds];
+    return getGame().pillars.config.powerSpeeds[this.system.speed?.value as keyof typeof PILLARS.powerSpeeds];
   }
   get Exclusion() {
-    return getGame().pillars.config.powerExclusions[this.target?.find((i) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('target'))?.exclusion as keyof typeof PILLARS.powerExclusions];
+    return getGame().pillars.config.powerExclusions[this.system.target?.find((i : PowerTarget) => (i.group || getGame().i18n.localize("Default")) == this.displayGroupKey('target'))?.exclusion as keyof typeof PILLARS.powerExclusions];
   }
   get Skill() {
-    return this.actor?.getItemTypes(ItemType.skill).find((i) => i.name == this.skill?.value);
+    return this.actor?.getItemTypes(ItemType.skill).find((i) => i.name == this.system.skill?.value);
   }
 
   get SourceItem(): PillarsItem | undefined {
     if (!this.isOwned) return;
-    if (this.EmbeddedPowerParent && this.EmbeddedPowerParent.category?.value != 'grimoire') {
+    if (this.EmbeddedPowerParent && this.EmbeddedPowerParent.system.category?.value != 'grimoire') {
       // If embedded and not in grimoire, get highest power source attack value
       return this.actor?.getItemTypes(ItemType.powerSource).sort((a, b) => (b.attack || 0) - (a.attack || 0))[0];
     }
 
-    return this.actor?.items.find((i) => (i.type == 'powerSource' && i.source && i.source.value == this.source?.value) || false);
+    return this.actor?.items.find((i) => (i.type == 'powerSource' && i.system.source && i.system.source.value == this.system.source?.value) || false);
   }
 
   get EmbeddedPowerParent(): PillarsItem | undefined {
-    if (this.isOwned && this.embedded) return this.actor!.items.get(this.embedded.item);
+    if (this.isOwned && this.system.embedded) return this.actor!.items.get(this.system.embedded.item);
   }
 
   get Specials() {
     let specials = this.specialList;
-    let notSkilledEnough = this.special?.value.filter((i) => this.isOwned && specials[i.name as keyof typeof specials]?.skilled && (!this.Skill || (this.Skill?.rank || 0) < 5));
+    let notSkilledEnough = this.system.special?.value.filter((i : WeaponSpecial) => this.isOwned && specials[i.name as keyof typeof specials]?.skilled && (!this.Skill || (this.Skill?.rank || 0) < 5));
 
-    return this.special?.value.map((i) => {
+    return this.system.special?.value.map((i: WeaponSpecial) => {
       let display = this.specialList?.[i.name as keyof typeof specials]?.label;
       if (i.value) display += ` (${i.value})`;
-      if (notSkilledEnough?.find((sp) => sp.name == i.name)) display = `<p style="text-decoration: line-through">${display}</p>`;
+      if (notSkilledEnough?.find((sp : WeaponSpecial) => sp.name == i.name)) display = `<p style="text-decoration: line-through">${display}</p>`;
       return display;
     });
   }
@@ -726,24 +729,24 @@ export class PillarsItem extends Item {
   get EmbeddedDisplay() {
     let string = '';
     let game = getGame()
-    if (this.embedded) {
-      if (['encounter', 'longRest'].includes(this.embedded.spendType)) string += `${this.embedded.uses.value}/${this.embedded.uses.max} ${this.embedded.spendType == 'encounter' ? game.i18n.localize("PILLARS.EncounterAbbreviation") : game.i18n.localize("PILLARS.LongRestAbbreviation")}`;
-      else if (this.embedded.spendType == 'charges') string += `${this.EmbeddedPowerParent?.powerCharges?.value}/${this.EmbeddedPowerParent?.powerCharges?.max}`;
-      else if (this.embedded.spendType == 'source') {
-        string += getGame().pillars.config.powerSources[this.source?.value as keyof typeof PILLARS.powerSources];
+    if (this.system.embedded) {
+      if (['encounter', 'longRest'].includes(this.system.embedded.spendType)) string += `${this.system.embedded.uses.value}/${this.system.embedded.uses.max} ${this.system.embedded.spendType == 'encounter' ? game.i18n.localize("PILLARS.EncounterAbbreviation") : game.i18n.localize("PILLARS.LongRestAbbreviation")}`;
+      else if (this.system.embedded.spendType == 'charges') string += `${this.EmbeddedPowerParent?.system.powerCharges?.value}/${this.EmbeddedPowerParent?.system.powerCharges?.max}`;
+      else if (this.system.embedded.spendType == 'source') {
+        string += getGame().pillars.config.powerSources[this.system.source?.value as keyof typeof PILLARS.powerSources];
       }
       return string;
     }
   }
 
   get Soak() {
-    if (this.soak && this.health) return Math.min(this.soak.value || 0, this.health.current || 0);
+    if (this.system.soak && this.system.health) return Math.min(this.system.soak.value || 0, this.system.health.current || 0);
   }
 
   get Bond() {
-    if (this.data.type == "bond" && this.partner)
+    if (this.data.type == "bond" && this.system.partner)
     {
-      return getGame().actors!.get(this.partner);
+      return getGame().actors!.get(this.system.partner);
     }
   }
 
@@ -787,7 +790,7 @@ export class PillarsItem extends Item {
 
   get specials() {
     let specials: { [key: string]: WeaponSpecialData } = {};
-    this.special?.value?.forEach((sp) => {
+    this.system.special?.value?.forEach((sp : WeaponSpecial) => {
       specials[sp.name] = this.specialList?.[sp.name]!;
       specials[sp.name]!.value = sp.value;
     });
@@ -795,9 +798,9 @@ export class PillarsItem extends Item {
   }
 
   get isEmbeddedPower(): boolean {
-    if (this.embedded?.item && this.isOwned) {
-      return !!this.actor?.items.get(this.embedded.item);
-    } else if (this.embedded?.item) {
+    if (this.system.embedded?.item && this.isOwned) {
+      return !!this.actor?.items.get(this.system.embedded.item);
+    } else if (this.system.embedded?.item) {
       //???
     }
     return false;
@@ -822,169 +825,25 @@ export class PillarsItem extends Item {
   }
 
   _isVsDefense(defense: Defense) {
-    if (this.type == 'weapon' || this.type == 'power') return this.damage?.value.some((d) => d.defense.toLowerCase() == defense);
+    if (this.type == 'weapon' || this.type == 'power') return this.system.damage?.value.some((d: PowerDamage) => d.defense.toLowerCase() == defense);
     return false;
   }
 
-  get name() {
-    if (this.type == 'skill' && this.specialization?.has) return super.name + ` (${this.specialization.value})`;
+  get specializedName() {
+    if (this.type == 'skill' && this.system.specialization?.has) return super.name + ` (${this.system.specialization.value})`;
     else return super.name;
   }
 
   // @@@@@@@@ DATA GETTERS @@@@@@@@@@;
-  get category() {
-    if (hasCategory(this)) return this.data.data.category;
-  }
-  get xp() {
-    if (hasXP(this)) return this.data.data.xp;
-  }
-  get used() {
-    if (isUsableItem(this)) return this.data.data.used;
-  }
-  get equipped() {
-    if (isEquippable(this)) return this.data.data.equipped;
-  }
-  get wearable() {
-    if (this.data.type == 'equipment') return this.data.data.wearable;
-  }
-  get weight() {
-    if (isPhysical(this)) return this.data.data.weight;
-  }
-  get quantity() {
-    if (isPhysical(this)) return this.data.data.quantity;
-  }
-  get cost() {
-    if (isPhysical(this)) return this.data.data.cost;
-  }
-  get range() {
-    if (this.data.type === 'power') return this.data.data.range;
-  }
-  get target() {
-    if (this.data.type === 'power') return this.data.data.target;
-  }
-  get duration() {
-    if (this.data.type === 'power') return this.data.data.duration;
-  }
-  get speed() {
-    if (this.data.type === 'power') return this.data.data.speed;
-  }
-  get pool() {
-    if (this.data.type == 'powerSource') return this.data.data.pool;
-  }
-  get description() {
-    return this.data.data.description;
-  }
-  get soak() {
-    if (this.data.type == 'armor' || this.data.type == 'shield') return this.data.data.soak;
-  }
-  get winded() {
-    if (this.data.type == 'armor' || this.data.type == 'shield') return this.data.data.winded;
-  }
-  get initiative() {
-    if (this.data.type == 'armor') return this.data.data.initiative;
-  }
-  get health() {
-    if (this.data.type == 'shield') return this.data.data.health;
-  }
-  get deflection() {
-    if (this.data.type == 'shield') return this.data.data.deflection;
-  }
-  get skill() {
-    if (this.data.type == 'weapon' || this.data.type == 'equipment') return this.data.data.skill;
-  }
-  get misc() {
-    if (this.data.type === 'power' || this.data.type == 'weapon') return this.data.data.misc;
-  }
-  get accuracy() {
-    if (this.data.type == 'weapon') return this.data.data.accuracy;
-  }
-  get damage() {
-    if (this.data.type === 'power' || this.data.type == 'weapon') return this.data.data.damage;
-  }
-  get special() {
-    if (this.data.type == 'weapon') return this.data.data.special;
-  }
-  get modifier() {
-    if (hasXP(this)) return this.data.data.modifier;
-  }
-  get setting() {
-    if (this.data.type == 'background') return this.data.data.setting;
-  }
-  get years() {
-    if (this.data.type == 'background') return this.data.data.years;
-  }
-  get group() {
-    if (this.data.type == 'reputation') return this.data.data.group;
-  }
-  get stride() {
-    if (this.data.type == 'armor' || this.data.type == 'species') return this.data.data.stride;
-  }
-  get size() {
-    if (this.data.type == 'species') return this.data.data.size;
-  }
-  get itemSize() {
-    if(isPhysical(this)) return this.data.data.size
-  }
-  get species() {
-    if (this.data.type == 'species') return this.data.data.species;
-  }
-  get source() {
-    if (this.data.type == 'powerSource' || this.data.type == 'power') return this.data.data.source;
-  }
-  get base() {
-    if (this.data.type === 'power') return this.data.data.base;
-  }
-  get level() {
-    if (this.data.type === 'power') return this.data.data.level;
-  }
-  get healing() {
-    if (this.data.type === 'power') return this.data.data.healing;
-  }
-  get toughness() {
-    if (this.data.type == 'armor') return this.data.data.toughness;
-  }
-  get summons() {
-    if (this.data.type === 'power') return this.data.data.summons;
-  }
-  get run() {
-    if (this.data.type == 'armor') return this.data.data.run;
-  }
-  get improvised() {
-    if (this.data.type == 'power') return this.data.data.improvised;
-  }
-  get roll() {
-    if (this.data.type == 'power') return this.data.data.roll;
-  }
-  get powers() {
-    if (hasEmbeddedPowers(this)) return this.data.data.powers;
-  }
-  get embedded() {
-    if (this.data.type == 'power') return this.data.data.embedded;
-  }
-  get powerCharges() {
-    if (hasEmbeddedPowers(this)) return this.data.data.powerCharges;
-  }
-  get powerRecharge() {
-    if (hasEmbeddedPowers(this)) return this.data.data.powerRecharge;
-  }
-  get specialization() {
-    if (this.data.type == 'skill') return this.data.data.specialization;
-  }
-  get partner() {
-    if (this.data.type == "bond") return this.data.data.partner
-  }
 
-  get phases() {
-    if (this.data.type == "species") return this.data.data.phases
-  }
   
 
   // Processed data getters
   get rank() {
-    return this.xp!.rank;
+    return this.system.xp!.rank;
   }
   get attack() {
-    if (this.data.type == 'powerSource') return this.data.data.attack;
+    if (this.data.type == 'powerSource') return this.system.attack;
   }
 
   //#endregion

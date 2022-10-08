@@ -81,9 +81,11 @@ export default class DamageRoll {
 
   calculateCrit(token: TokenDocument, damage: DialogDamage): DamageTarget {
     try {
+      if (token.actor?.data.type == "headquarters")
+        throw new Error("Cannot calculate crit against headquarter type actors")
       if (!token || damage.healing || !token.actor) return { token: <TokenDataProperties>token?.toObject(), crit: 0 };
       let defense: Defense = <Defense>damage.defense.toLowerCase() || 'deflection';
-      let margin = (this.check?.result?.total || 0) - token.actor!.defenses[defense].value;
+      let margin = (this.check?.result?.total || 0) - token.actor!.system.defenses![defense]!.value!;
       let crit = Number.isNumeric(damage.mult) ? damage.mult || 0 : Math.floor(margin / 5);
       return { token: <TokenDataProperties>token.toObject(), crit, shield: !!token.actor.equippedShield };
     } catch (e) {

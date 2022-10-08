@@ -24,12 +24,12 @@ export class PillarsCombat extends Combat {
         else if (data.turn == 0 && data.round! > 1 && this.phase == 1)
         {
             setProperty(data, "flags.pillars-of-eternity.phase", 0)
-            data.combatants = this.combatants.map(c => c.resetMoveCounter())
+            data.combatants = this.pillarsCombatants.map(c => c.resetMoveCounter())
         }
     }
 
-    get combatants() : EmbeddedCollection<typeof PillarsCombatant, CombatData> {
-        return super.combatants as EmbeddedCollection<typeof PillarsCombatant, CombatData>
+    get pillarsCombatants() : EmbeddedCollection<typeof PillarsCombatant, CombatData> {
+        return this.combatants as EmbeddedCollection<typeof PillarsCombatant, CombatData>
     }
 
     setupTurns() {

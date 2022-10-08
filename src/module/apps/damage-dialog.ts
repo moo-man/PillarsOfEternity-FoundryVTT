@@ -19,7 +19,7 @@ export default class DamageDialog extends Application
     check : SkillCheck
     targets : TokenDocument[]
     disabled : TokenDocument[]
-    additionalDamages : number 
+    additionalDamages : number
     addedCrits : number
     damages : DialogDamage[]
     resolve? : (value: DialogDamage[]) => void
@@ -53,37 +53,37 @@ export default class DamageDialog extends Application
 
 
     render(force=false, options : Partial<DamageDialogRenderOptions> = {}) {
-        
+
         super.render(force, options)
         if (options.resolve)
             this.resolve = options.resolve
         if (options.reject)
             this.reject = options.reject
     }
-    
+
     getData() {
         let data : Partial<Pick<DamageDialog, "damages" | "targets" | "disabled">> = {};
 
         data.damages = this.damages;
         data.targets = this.targets
         data.disabled = this.disabled
-        
+
         return data;
     }
 
     constructDamages() {
         let damages :  DialogDamage[] = []
 
-        if(this.item.damage)
+        if(this.item.system.damage)
         {
-            damages = foundry.utils.deepClone(this.item.damage.value) as DialogDamage[]
+            damages = foundry.utils.deepClone(this.item.system.damage.value) as DialogDamage[]
             if (this.check && this.check.addedProperties?.damage?.length)
             {
-                // Separate 
+                // Separate
                 this.addedCrits = this.check.addedProperties.damage.filter(d => !d.base && !d.crit && d.defaultCrit).reduce((prev, current) => prev += current.defaultCrit, 0)
                 damages = damages.concat(this.check.addedProperties.damage as DialogDamage[])
             }
-                
+
             damages = damages.filter(d => d.crit || d.base)
             damages.forEach((damage, i) => {
                 damage.mult = undefined
@@ -109,12 +109,15 @@ export default class DamageDialog extends Application
             {
                 if (!damage.target)
                     damage.mult = this.addedCrits;
-
-                let defense = damage.defense.toLowerCase() || "deflection"
-                let target = this.targets.find(i => i.id == damage.target)
-                let margin = (this.check.result?.total || 0) - (target?.actor?.defenses[<Defense>defense]!.value || 0)
-                let multiplier = Math.floor(margin / 5)
-                damage.mult = this.check.requiresRoll ? multiplier : 0;
+                    let defense = damage.defense.toLowerCase() || "deflection"
+                    let target = this.targets.find(i => i.id == damage.target)
+                    let multiplier = 0
+                    if (target?.actor?.data.type != "headquarters")
+                    {
+                        let margin = (this.check.result?.total || 0) - (target?.actor?.system.defenses?.[<Defense>defense]!.value || 0)
+                        multiplier = Math.floor(margin / 5)
+                    }
+                    damage.mult = this.check.requiresRoll ? multiplier : 0;
 
                 // don't add default crits unless the attack hit
                 if (damage.mult >= 0)
@@ -137,7 +140,7 @@ export default class DamageDialog extends Application
                     let targetIndex = this.targets.findIndex(i => i.id == damage.target)
                     if (targetIndex > -1)
                         this.targets.splice(targetIndex, 1)
-                        
+
                     delete damage.img;
                     delete damage.target;
                 }
@@ -150,7 +153,7 @@ export default class DamageDialog extends Application
 
     }
 
-    assignTargets() 
+    assignTargets()
     {
         let sizeDiff = this.targets.length - this.damages.length
 
@@ -169,7 +172,7 @@ export default class DamageDialog extends Application
         })
     }
 
-    setTargetImages() 
+    setTargetImages()
     {
         for(let i = 0; i < this.damages.length; i++)
             this.setTargetImage(i)
@@ -244,7 +247,7 @@ export default class DamageDialog extends Application
         html.find(".target-select").on("change", (ev : JQuery.ChangeEvent) => {
             let parent = $(ev.currentTarget).parents(".damage")
             let damageIndex = parseInt(parent.attr("data-index") || "")
- 
+
             if (damageIndex && this.damages[damageIndex])
             {
                 this.damages[damageIndex]!.target = ev.target.value

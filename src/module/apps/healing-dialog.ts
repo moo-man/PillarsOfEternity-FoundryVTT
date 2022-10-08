@@ -62,7 +62,7 @@ export default class HealingDialog extends Application
 
     constructHealing() {
         let healing : DialogHealing[]
-        healing = foundry.utils.deepClone(this.item.healing)!
+        healing = foundry.utils.deepClone(this.item.system.healing)!
 
         healing.forEach(h => {
             if (!h.label) h.label = this.item.name!

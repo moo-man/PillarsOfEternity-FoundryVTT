@@ -4,6 +4,7 @@ import { ItemType } from "../../types/common"
 import { PillarsItem } from "../item/item-pillars"
 import { PILLARS } from "./config"
 import SkillCheck from "./skill-check"
+import { PowerRange } from "../../types/powers"
 
 export default class PowerCheck extends SkillCheck
 {
@@ -29,25 +30,25 @@ export default class PowerCheck extends SkillCheck
                 
             // If embedded item, use up charges instead of power source
             let embeddedParent = this.power.EmbeddedPowerParent;
-            if (embeddedParent && embeddedParent.category?.value != "grimoire")
+            if (embeddedParent && embeddedParent.system.category?.value != "grimoire")
             {
-                let spendType = this.power.embedded?.spendType;
+                let spendType = this.power.system.embedded?.spendType;
                 if (spendType == "encounter" || spendType == "longRest")
-                    this.power.update({"data.embedded.uses.value" : this.power.embedded?.uses.value! - 1});
+                    this.power.update({"data.embedded.uses.value" : this.power.system.embedded?.uses.value! - 1});
                 else if (spendType == "charges") 
-                    embeddedParent.update({"data.powerCharges.value" : embeddedParent.powerCharges?.value! - this.power.embedded?.chargeCost!})
+                    embeddedParent.update({"data.powerCharges.value" : embeddedParent.system.powerCharges?.value! - this.power.system.embedded?.chargeCost!})
             }
             else // Not embedded item or is grimoire item
             {
                 let update : Record<string, unknown> = {"data.used.value" : true}
 
-                if (this.power.source?.value == "spirits" && this.power.category?.value == "phrase") // If spirits and phrase, add 1 to pool
+                if (this.power.system.source?.value == "spirits" && this.power.system.category?.value == "phrase") // If spirits and phrase, add 1 to pool
                 {
-                    update["data.pool.current"] = Math.min(this.powerSource.pool?.current! + 1, this.powerSource.pool?.max!)
+                    update["data.pool.current"] = Math.min(this.powerSource.system.pool?.current! + 1, this.powerSource.system.pool?.max!)
                 }
                 else // if normal power just subtract cost as normal
                 {
-                    update["data.pool.current"] = this.powerSource.pool?.current! - this.power.level?.cost!
+                    update["data.pool.current"] = this.powerSource.system.pool?.current! - this.power.system.level?.cost!
                 }
 
                 this.powerSource.update(update)
@@ -59,7 +60,7 @@ export default class PowerCheck extends SkillCheck
         }
 
         async handleEquippedWeaponRange() {
-            let range = this.power.range?.find(r => r.value == "equippedWeapon");
+            let range = this.power.system.range?.find((r: PowerRange)=> r.value == "equippedWeapon");
 
             if (!range)
                 return
@@ -85,7 +86,7 @@ export default class PowerCheck extends SkillCheck
         // Show the dialog to select which equipped weapon to apply this power to
         async weaponSelectDialog() {
             let game = getGame()
-            let weapons = this.actor.getItemTypes(ItemType.weapon).filter(w => w.equipped?.value);
+            let weapons = this.actor.getItemTypes(ItemType.weapon).filter(w => w.system.equipped?.value);
             let html = `<select>`
             weapons.forEach(w => {
                 html += `<option value=${w.id}>${w.name}</option>`
@@ -122,11 +123,11 @@ export default class PowerCheck extends SkillCheck
         }
 
         get tags () {
-            return [PILLARS.powerSources[this.item?.source?.value as keyof typeof PILLARS.powerSources]]
+            return [PILLARS.powerSources[this.item?.system.source?.value as keyof typeof PILLARS.powerSources]]
         }
 
         get requiresRoll() {
-            return !!this.power?.roll?.value
+            return !!this.power?.system.roll?.value
         }
 
         get powerSource() : PillarsItem {
