@@ -50,13 +50,16 @@ export class PillarsActor extends Actor {
   // }> = {}
 
   system : any
+  prototypeToken : any
 
   itemCategories: Record<keyof typeof ItemType, PillarsItem[]> | undefined;
 
   async _preCreate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: User) {
     await super._preCreate(data, options, user);
     // Set wounds, advantage, and display name visibility
-    if (!data.token)
+
+    //@ts-ignore
+    if (!data.prototypeToken)
       this.data.update({
         'token.disposition': CONST.TOKEN_DISPOSITIONS.NEUTRAL, // Default disposition to neutral
         'token.name': data.name, // Set token name to actor name
@@ -522,7 +525,7 @@ export class PillarsActor extends Actor {
 
   getSkillDialogData(type: string, item: PillarsItem, options: CheckOptions = {}) {
     let dialogData: SkillDialogData = <SkillDialogData>this.getDialogData(type, item, options);
-    dialogData.assisters = this.constructAssisterList(item.data.name || options.name || '');
+    dialogData.assisters = this.constructAssisterList(item.name || options.name || '');
     dialogData.hasRank = item ? !!item.system.xp!.rank : false;
     dialogData.skill = item;
     return dialogData;
@@ -549,15 +552,15 @@ export class PillarsActor extends Actor {
   }
 
   constructAssisterList(itemName: string): AssisterData[] {
-    let assisters = getGame().actors!.contents.filter((i) => (i.hasPlayerOwner || i.data.token.disposition > 0) && i.id != this.id);
-    assisters = assisters.filter((a) => a.items.contents.find((i) => i.data.name == itemName)); // data.name because we want to account for specializations have the same base name
+    let assisters = getGame().actors!.contents.filter((i) => (i.hasPlayerOwner || i.prototypeToken.disposition > 0) && i.id != this.id);
+    assisters = assisters.filter((a) => a.items.contents.find((i) => i.name == itemName)); // name because we want to account for specializations have the same base name
 
     let assisterData: AssisterData[] = assisters.map((actor): AssisterData => {
       return {
         name: actor.name || '',
         id: actor.id,
-        rank: actor.items.contents.find((i) => i.data.name == itemName)?.rank || 0,
-        die: `d${SkillCheck.rankToDie(actor.items.contents.find((i) => i.data.name == itemName))}`,
+        rank: actor.items.contents.find((i) => i.name == itemName)?.rank || 0,
+        die: `d${SkillCheck.rankToDie(actor.items.contents.find((i) => i.name == itemName))}`,
       };
     });
     return assisterData.filter((a) => a.rank >= 5);
@@ -845,7 +848,7 @@ export class PillarsActor extends Actor {
       name: this.name!,
       type: this.data.type,
       items: [],
-      data: {
+      system: {
         health: {
           wounds: {},
         },
@@ -885,18 +888,18 @@ export class PillarsActor extends Actor {
     }
 
     if (damage > this.system.toughness.value) {
-      updateObj.data!.endurance!.value = this.system.endurance.value + 1;
+      updateObj.system!.endurance!.value = this.system.endurance.value + 1;
       message += ` - ${game.i18n.format('PILLARS.ApplyEndurance', { value: 1 })}`;
     }
 
     if (damage > this.system.toughness.value && damage > soak) {
       let damageMinusSoak = damage - soak;
       let pips = Math.floor(damageMinusSoak / this.system.damageIncrement.value);
-      updateObj.data!.health!.value = this.system.health.value + pips;
+      updateObj.system!.health!.value = this.system.health.value + pips;
       message += ` - ${game.i18n.format('PILLARS.ApplyHealth', { value: pips })}`;
 
       if (pips >= 3 && pips <= 4 && this.system.health.wounds.value < 3) {
-        updateObj.data!.health!.wounds!.value = this.system.health.wounds.value + 1;
+        updateObj.system!.health!.wounds!.value = this.system.health.wounds.value + 1;
         message += ` - ${game.i18n.format('PILLARS.ApplyWounds', { value: 1 })}`;
       }
     }

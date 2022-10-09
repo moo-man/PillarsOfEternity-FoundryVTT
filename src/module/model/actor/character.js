@@ -6,6 +6,10 @@ export class CharacterActorDataModel extends TieredActorDataModel {
         let schema = super.defineSchema();
         schema.life = new foundry.data.fields.EmbeddedDataField(CharacterLifeModel)
         schema.details = new foundry.data.fields.EmbeddedDataField(CharacterDetailsModel)
+        schema.connections = new foundry.data.fields.ArrayField(
+            new foundry.data.fields.SchemaField({ 
+                name : new foundry.data.fields.StringField()
+        }))
         schema.seasons = new foundry.data.fields.ArrayField(
             new foundry.data.fields.SchemaField({
                 year: new foundry.data.fields.NumberField(),

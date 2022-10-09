@@ -1,33 +1,33 @@
 <div class="detail-group">
     <label>{{localize "PILLARS.TheCause"}}</label>
-    <input type="text" name="data.details.cause" value="{{data.details.cause}}">
+    <input type="text" name="system.details.cause" value="{{system.details.cause}}">
 </div>
 
 <div class="detail-group">
     <label>{{localize "PILLARS.CallToTheCause"}}</label>
-    <input type="text" name="data.details.call" value="{{data.details.call}}">
+    <input type="text" name="system.details.call" value="{{system.details.call}}">
 </div>
 
 <div class="detail-group">
     <label>{{localize "PILLARS.PersonalGoal"}}</label>
-    <input type="text" name="data.details.goal" value="{{data.details.goal}}">
+    <input type="text" name="system.details.goal" value="{{system.details.goal}}">
 </div>
 
 <div class="detail-group textbox">
     <label>{{localize "PILLARS.Relationships"}}</label>
-    <textarea name="data.details.relationships">{{data.details.relationships}}</textarea>
+    <textarea name="system.details.relationships">{{system.details.relationships}}</textarea>
 </div>
 <hr>
 <div class="notes">
-    {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
+    {{editor content=system.notes.value target="system.notes.value" engine="prosemirror" button=true owner=owner editable=editable}}
 </div>
 <hr>
 <!-- childhood/background -->
 <div class="background">
     <div class="detail-group">
         <label>{{localize "PILLARS.Childhood"}}: </label>
-        <select name="data.childhood.value">
-            {{#select data.childhood.value}}
+        <select name="system.life.childhood">
+            {{#select system.life.childhood}}
             <option value=""></option>
             {{#each items.settings as |setting s|}}
             <option value="{{setting.id}}" >{{setting.name}}</option>
@@ -54,15 +54,15 @@
 
         <ol class="items">
             {{#each items.backgrounds as |item i|}}
-            <li class="item {{#if item.used.value}}used{{/if}}" data-item-id="{{item.id}}">
+            <li class="item {{#if item.system.used.value}}used{{/if}}" data-item-id="{{item.id}}">
                 <div class="row-content">
 
-                    {{#if item.used.value}}
+                    {{#if item.system.used.value}}
                     <a class="item-toggle item-used sheet-checkbox" data-target="item"
-                        data-item-target="data.used.value"><i class="far fa-check-circle"></i></a>
+                        data-item-target="system.used.value"><i class="far fa-check-circle"></i></a>
                     {{else}}
                     <a class="item-toggle item-used sheet-checkbox" data-target="item"
-                        data-item-target="data.used.value"><i class="far fa-circle"></i></a>
+                        data-item-target="system.used.value"><i class="far fa-circle"></i></a>
                     {{/if}}
 
                     <div class="item-name flexrow item-dropdown">
@@ -74,7 +74,7 @@
 
 
                     <span class="item-property-column flex">
-                        <select class="item-property" data-target="data.setting.id">
+                        <select class="item-property" data-target="system.setting.id">
                             <option value=""></option>
                             {{#select item.setting.id}}
                             {{#each ../items.settings as |item i|}}
@@ -84,7 +84,7 @@
                         </select>
                     </span>
                     <span class="item-property-column"><input type="number" class="item-property"
-                            data-target="data.years.value" value="{{item.years.value}}"></span>
+                            data-target="system.years.value" value="{{item.years.value}}"></span>
 
 
                     <div class="item-controls flexrow">
@@ -118,7 +118,7 @@
 
         <ol class="items">
             {{#each items.bonds as |item i|}}
-            <li class="item" draggable="true" {{#unless item.data.active}}style="opacity: 0.5"{{/unless}} data-item-id="{{item.id}}">
+            <li class="item" draggable="true" {{#unless item.system.active}}style="opacity: 0.5"{{/unless}} data-item-id="{{item.id}}">
                 <div class="row-content">
                     <div class="item-name flexrow item-dropdown">
                         <div class="item-image" style="background-image: url('{{item.img}}')"></div>
@@ -128,11 +128,11 @@
                     </div>
 
                     <span class="item-property-column"><input type="number" class="item-property"
-                        data-target="data.xp.value" value="{{item.system.xp.value}}"></span>
+                        data-target="system.xp.value" value="{{item.system.xp.value}}"></span>
                 <span class="item-property-column"><input type="number" class="item-property"
-                        data-target="data.xp.rank" value="{{item.system.xp.rank}}"></span>
+                        data-target="system.xp.rank" value="{{item.system.xp.rank}}"></span>
                 <span class="item-property-column"><input type="number" class="item-property"
-                        data-target="data.modifier.value" value="{{item.modifier.value}}"></span>
+                        data-target="system.modifier.value" value="{{item.modifier.value}}"></span>
 
 
                     <div class="item-controls flexrow">
@@ -176,11 +176,11 @@
                     </div>
 
                     <span class="item-property-column"><input type="number" class="item-property"
-                        data-target="data.xp.value" value="{{item.system.xp.value}}"></span>
+                        data-target="system.xp.value" value="{{item.system.xp.value}}"></span>
                 <span class="item-property-column"><input type="number" class="item-property"
-                        data-target="data.xp.rank" value="{{item.system.xp.rank}}"></span>
+                        data-target="system.xp.rank" value="{{item.system.xp.rank}}"></span>
                 <span class="item-property-column"><input type="number" class="item-property"
-                        data-target="data.modifier.value" value="{{item.modifier.value}}"></span>
+                        data-target="system.modifier.value" value="{{item.modifier.value}}"></span>
 
 
                     <div class="item-controls flexrow">
@@ -205,7 +205,7 @@
         </li>
 
         <ol class="items">
-            {{#each KnownConnections as |item i|}}
+            {{#each Connections as |item i|}}
             <li class="item" draggable="true" data-index="{{i}}" data-actor-id="{{item.id}}">
                 <div class="row-content">
 
@@ -256,11 +256,11 @@
 
                     <span class="item-property-column flex">{{item.group.value}}</span>
                     <span class="item-property-column"><input type="number" class="item-property"
-                            data-target="data.xp.value" value="{{item.system.xp.value}}"></span>
+                            data-target="system.xp.value" value="{{item.system.xp.value}}"></span>
                     <span class="item-property-column"><input type="number" class="item-property"
-                            data-target="data.xp.rank" value="{{item.system.xp.rank}}"></span>
+                            data-target="system.xp.rank" value="{{item.system.xp.rank}}"></span>
                     <span class="item-property-column"><input type="number" class="item-property"
-                            data-target="data.modifier.value" value="{{item.modifier.value}}"></span>
+                            data-target="system.modifier.value" value="{{item.modifier.value}}"></span>
                     
 
 
@@ -286,22 +286,22 @@
             
             <div class="points">
                 <label>{{localize "PILLARS.ActualAge"}}: </label>
-                <input type="text" name="data.life.age" value="{{data.life.age}}">
+                <input type="text" name="system.life.age" value="{{system.life.age}}">
             </div>
             
             <div class="points">
                 <label>{{localize "PILLARS.ApparentAge"}}: </label>
-                <input type="text" name="data.life.apparentAge" value="{{data.life.apparentAge}}">
+                <input type="text" name="system.life.apparentAge" value="{{system.life.apparentAge}}">
             </div>
             
             <div class="points">
                 <label>{{localize "PILLARS.AgingPoints"}}: </label>
-                <input type="text" name="data.life.agingPoints" value="{{data.life.agingPoints}}">
+                <input type="text" name="system.life.agingPoints" value="{{system.life.agingPoints}}">
             </div>
             <div class="phase">
                 <label>{{localize "PILLARS.CurrentPhase"}}: </label>
-                <select name="data.life.phase">
-                    {{#select data.life.phase}}
+                <select name="system.life.phase">
+                    {{#select system.life.phase}}
                     <option value="">-</option>
                     {{#each (config "lifePhases") as |value key|}}
                     <option value="{{key}}">{{value}}</option>

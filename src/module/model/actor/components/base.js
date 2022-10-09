@@ -75,6 +75,7 @@ export class TieredActorDataModel extends StandardActorDataModel {
             this.damageIncrement.value = attributes.damageIncrement;
             this.toughness.value = attributes.toughness;
         }
+        this.defenses.applyTierBonus(this.tier.value)
     }
 }
 

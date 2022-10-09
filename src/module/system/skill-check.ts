@@ -187,13 +187,13 @@ export default class SkillCheck
 
         assisterDie() {
             if (this.checkData?.assister)
-                return {number : 1, faces : Number(SkillCheck.rankToDie(this.assister?.items.contents.find(i => i.data.name == this.skill?.data.name))), options : {appearance : this.assistDieAppearance(), flavor : this.assister?.name}}
+                return {number : 1, faces : Number(SkillCheck.rankToDie(this.assister?.items.contents.find(i => i.name == this.skill?.name))), options : {appearance : this.assistDieAppearance(), flavor : this.assister?.name}}
             else return {}
         }
 
         assisterDieString() {
             if (this.checkData?.assister)
-                return `d${SkillCheck.rankToDie(this.assister?.items.contents.find(i => i.data.name == this.skill?.data.name))}`
+                return `d${SkillCheck.rankToDie(this.assister?.items.contents.find(i => i.name == this.skill?.name))}`
             else return ""
         }
 

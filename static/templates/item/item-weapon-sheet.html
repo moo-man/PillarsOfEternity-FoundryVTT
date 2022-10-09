@@ -17,8 +17,8 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Type"}}</label>
                 <div class="form-fields">
-                    <select name="data.category.value">
-                        {{#select data.category.value}}
+                    <select name="system.category.value">
+                        {{#select system.category.value}}
                         <option value=""></option>
                         {{#each (config "weaponTypes") as |value k|}}
                         <option value="{{k}}">{{value}}</option>
@@ -31,8 +31,8 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Skill"}}</label>
                 <div class="form-fields">
-                    <select name="data.skill.value">
-                        {{#select data.skill.value}}
+                    <select name="system.skill.value">
+                        {{#select system.skill.value}}
                         <option value=""></option>
                         {{#each martialSkills as |value k|}}
                         <option value="{{value.name}}">{{value.name}}</option>
@@ -45,13 +45,13 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Accuracy"}}</label>
                 <div class="form-fields small">
-                    <input type="text" name="data.accuracy.value" value="{{data.accuracy.value}}" data-dtype="Number">
+                    <input type="text" name="system.accuracy.value" value="{{system.accuracy.value}}" data-dtype="Number">
                 </div>
             </div>
             <div class="form-group">
                 <label>{{localize "PILLARS.Miscellaneous"}}</label>
                 <div class="form-fields small">
-                    <input type="text" name="data.misc.value" value="{{data.misc.value}}" data-dtype="Number">
+                    <input type="text" name="system.misc.value" value="{{system.misc.value}}" data-dtype="Number">
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Range"}}</label>
                 <div class="form-fields small">
-                    <input type="text" name="data.range.value" value="{{data.range.value}}" data-dtype="Number">
+                    <input type="text" name="system.range.value" value="{{system.range.value}}" data-dtype="Number">
                     <label>{{localize "PILLARS.Hexes"}}</label>
                 </div>
             </div>

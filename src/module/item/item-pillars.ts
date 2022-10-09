@@ -36,13 +36,13 @@ export class PillarsItem extends Item {
     if (this.type == 'shield' && hasProperty(updateData, 'data.health.current'))
       setProperty(updateData, 'data.health.current', Math.clamped(getProperty(updateData, 'data.health.current'), 0, this.system.health?.max || 0));
 
-    if (this.data.type == "bond" && hasProperty(updateData, "data.partner"))
+    if (this.data.type == "bond" && hasProperty(updateData, "system.partner"))
     {
-      let id = getProperty(updateData, "data.partner")
+      let id = getProperty(updateData, "system.partner")
       let actor = getGame().actors?.get(id);
       if (actor)
       {
-        updateData.img = actor.data.token.img
+        updateData.img = actor.prototypeToken.texture.src
         updateData.name = actor.name || this.name!
       }
     }
@@ -165,9 +165,9 @@ export class PillarsItem extends Item {
         {
           traits.push("bondedGrief")
         }
-        this.update({"data.traits" : traits})
+        this.update({"system.traits" : traits})
       }
-      else this.update({"data.traits" : []})
+      else this.update({"system.traits" : []})
 
       this.checkBondTraitEffects();
     }

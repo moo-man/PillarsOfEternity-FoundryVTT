@@ -16,8 +16,8 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Size"}}</label>
                 <div class="form-fields">
-                    <select name="data.size.value">
-                        {{#select data.size.value}}
+                    <select name="system.size.value">
+                        {{#select system.size.value}}
                         <option value=""></option>
                         {{#each (config "itemSizes") as |value k|}}
                         <option value="{{k}}">{{value}}</option>
@@ -31,8 +31,8 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Type"}}</label>
                 <div class="form-fields">
-                    <select name="data.category.value">
-                        {{#select data.category.value}}
+                    <select name="system.category.value">
+                        {{#select system.category.value}}
                         <option value=""></option>
                         {{#each (config "equipmentTypes") as |value k|}}
                         <option value="{{k}}">{{value}}</option>
@@ -41,19 +41,19 @@
                     </select>
                 </div>
             </div>
-            {{#if (eq data.category.value "tool")}}
+            {{#if (eq system.category.value "tool")}}
             <div class="form-group">
                 <label>{{localize "PILLARS.Skill"}}</label>
                 <div class="form-fields">
-                    <input type="text" name="data.skill.value" value="{{data.skill.value}}" data-dtype="String">
+                    <input type="text" name="system.skill.value" value="{{system.skill.value}}" data-dtype="String">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>{{localize "PILLARS.Suitability"}}</label>
                 <div class="form-fields">
-                    <select name="data.skill.suitability">
-                        {{#select data.skill.suitability}}
+                    <select name="system.skill.suitability">
+                        {{#select system.skill.suitability}}
                         {{#each (config "suitabilities") as |value k|}}
                         <option value="{{k}}">{{value}}</option>
                         {{/each}}
@@ -62,22 +62,22 @@
                 </div>
             </div>
 
-            {{else if (eq data.category.value "gear")}}
+            {{else if (eq system.category.value "gear")}}
             
             <div class="form-group">
                 <label>{{localize "PILLARS.Wearable"}}</label>
                 <div class="form-fields">
-                    <input type="checkbox" name="data.wearable.value" value="{{data.wearable.value}}" {{checked data.wearable.value}}>
+                    <input type="checkbox" name="system.wearable.value" value="{{system.wearable.value}}" {{checked system.wearable.value}}>
                 </div>
             </div>
 
-            {{else if (eq data.category.value "book")}}
+            {{else if (eq system.category.value "book")}}
 
             <div class="form-group">
                 <label>{{localize "PILLARS.BookType"}}</label>
                 <div class="form-fields">
-                    <select name="data.subtype.value">
-                        {{#select data.subtype.value}}
+                    <select name="system.subtype.value">
+                        {{#select system.subtype.value}}
                         <option value=""></option>
                         {{#each (config "bookTypes") as |value k|}}
                         <option value="{{k}}">{{value}}</option>
@@ -90,7 +90,7 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Subject"}}</label>
                 <div class="form-fields">
-                    <input type="text" name="data.subject.value" value="{{data.subject.value}}" data-dtype="String">
+                    <input type="text" name="system.subject.value" value="{{system.subject.value}}" data-dtype="String">
                 </div>
             </div>
 
@@ -98,14 +98,14 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Language"}}</label>
                 <div class="form-fields">
-                    <input type="text" name="data.language.value" value="{{data.language.value}}" data-dtype="String">
+                    <input type="text" name="system.language.value" value="{{system.language.value}}" data-dtype="String">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>{{localize "PILLARS.Training"}}</label>
                 <div class="form-fields">
-                    <input type="number" name="data.training.value" value="{{data.training.value}}" data-dtype="Number">
+                    <input type="number" name="system.training.value" value="{{system.training.value}}" data-dtype="Number">
                 </div>
             </div>
 
@@ -113,25 +113,25 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.SkillRequirement"}}</label>
                 <div class="form-fields small">
-                    <input class="array-edit" data-path="data.range" data-index="0" type="number" value="{{data.range.[0]}}" data-dtype="Number">
-                    <input class="array-edit" data-path="data.range" data-index="1" type="number" value="{{data.range.[1]}}" data-dtype="Number">
+                    <input class="array-edit" data-path="system.range" data-index="0" type="number" value="{{system.range.[0]}}" data-dtype="Number">
+                    <input class="array-edit" data-path="system.range" data-index="1" type="number" value="{{system.range.[1]}}" data-dtype="Number">
                 </div>
             </div>
 
 
-            {{else if (eq data.category.value "maedr")}}
+            {{else if (eq system.category.value "maedr")}}
 
             <div class="form-group">
                 <label>{{localize "PILLARS.GreaterQualities"}}</label>
                 <div class="form-fields">
-                    <input type="text" name="data.qualities.greater" value="{{data.qualities.greater}}" data-dtype="String">
+                    <input type="text" name="system.qualities.greater" value="{{system.qualities.greater}}" data-dtype="String">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>{{localize "PILLARS.LesserQualities"}}</label>
                 <div class="form-fields">
-                    <input type="text" name="data.qualities.lesser" value="{{data.qualities.lesser}}" data-dtype="String">
+                    <input type="text" name="system.qualities.lesser" value="{{system.qualities.lesser}}" data-dtype="String">
                 </div>
             </div>
             

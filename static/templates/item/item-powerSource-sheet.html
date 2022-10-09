@@ -15,8 +15,8 @@
 
             <div class="form-group">
                 <label>{{localize "PILLARS.Category"}}</label>
-                <select name="data.category.value">
-                    {{#select data.category.value}}
+                <select name="system.category.value">
+                    {{#select system.category.value}}
                     {{#each (config "powerSourceTypes") as |value k|}}
                     <option value="{{k}}">{{value}}</option>
                     {{/each}}
@@ -27,8 +27,8 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Source"}}</label>
                 <div class="form-fields">
-                    <select name="data.source.value">
-                        {{#select data.source.value}}
+                    <select name="system.source.value">
+                        {{#select system.source.value}}
                         <option value=""></option>
                         {{#each (config "powerSources") as |value k|}}
                         <option value="{{k}}">{{value}}</option>

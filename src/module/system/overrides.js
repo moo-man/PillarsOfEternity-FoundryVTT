@@ -41,7 +41,7 @@ export default function() {
         obj.token = token
         if (game.combat)
         {
-          obj.combatant = game.combat.combatants.find(i => i.data.tokenId == token._id)?.toObject()
+          obj.combatant = game.combat.combatants.find(i => i.prototypeTokenId == token._id)?.toObject()
         }
         return obj
       })

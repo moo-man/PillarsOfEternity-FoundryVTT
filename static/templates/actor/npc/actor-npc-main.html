@@ -118,7 +118,7 @@
                 </a>
             </div>
 
-            <span class="item-property-column"><input class="item-property" type="number" data-target="data.modifier.value" value="{{item.modifier.value}}"></span>
+            <span class="item-property-column"><input class="item-property" type="number" data-target="system.modifier.value" value="{{item.modifier.value}}"></span>
 
             <div class="item-controls flexrow">
                 {{#if ../owner}}
@@ -199,7 +199,7 @@
             <span class="item-property-column">{{item.deflection.value}}</span>
             <span class="item-property-column">{{item.soak.value}}</span>
             <span class="item-property-column">{{item.winded.value}}</span>
-            <span class="item-property-column"><a class="property-counter" data-target="item" data-item-target="data.health.current">{{item.health.current}}</a>/{{item.health.max}}</span>
+            <span class="item-property-column"><a class="property-counter" data-target="item" data-item-target="system.health.current">{{item.health.current}}</a>/{{item.health.max}}</span>
 
             <div class="item-controls flexrow">
                 {{#if ../document.isOwner}}

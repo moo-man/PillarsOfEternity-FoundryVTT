@@ -49,7 +49,7 @@ export default class ItemSpecials extends FormApplication<FormApplicationOptions
                 delete obj[special]
 
         }
-        return this.object.update({"data.special.value" : Object.values(obj)})
+        return this.object.update({"system.special.value" : Object.values(obj)})
     }
 
 }

@@ -1,3 +1,5 @@
+import { PILLARS } from "../../../system/config";
+
 export class DefenseModel extends foundry.abstract.DataModel {
     static defineSchema() {
         return {
@@ -26,6 +28,26 @@ export class ActorDefensesModel extends foundry.abstract.DataModel {
         this.reflex.value = (this.reflex.base || 15) - size * 2;
         this.fortitude.value = (this.fortitude.base || 15) + size * 2;
         this.will.value = this.will.base || 15;
+        
+        let checkedCount = 0;
+        for (let defense of Object.keys(this)) 
+          checkedCount += this[defense].checked ? 1 : 0;
+
+        
+        if (checkedCount > 0) {
+          let bonus = 5 - checkedCount;
+          for (let defense of Object.keys(this))
+            if (this[defense].checked) {
+              this[defense].value += bonus;
+            }
+        }
+    }
+
+    applyTierBonus(tier)
+    {
+      let bonus = PILLARS.tierBonus[tier]?.def || 0;
+      for (let defense of Object.keys(this)) 
+        this[defense].value += bonus
     }
 
     applyEquippedBonuses({shield, weapons})

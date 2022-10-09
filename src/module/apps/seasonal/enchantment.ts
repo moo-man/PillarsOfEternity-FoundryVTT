@@ -263,7 +263,7 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
     });
 
     dragDrop.bind(html[0]!);
-
+    
     html.find('.dragarea').each((i, element) => {
       element.addEventListener('dragenter', (ev: DragEvent) => {
         (ev.currentTarget as HTMLElement).classList.add('hover');

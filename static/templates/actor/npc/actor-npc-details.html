@@ -2,52 +2,52 @@
 
 <div class="form-group" >
     <label>{{localize "PILLARS.Species"}}</label>
-    <div data-type="species" class="fake-input open-info">{{data.details.species}}</div>
+    <div data-type="species" class="fake-input open-info">{{system.details.species}}</div>
 </div>
 <div class="form-group" >
     <label>{{localize "PILLARS.Culture"}}</label>
-    <div data-type="culture" class="fake-input open-info">{{data.details.culture}}</div>
+    <div data-type="culture" class="fake-input open-info">{{system.details.culture}}</div>
 </div>
 <div class="form-group" >
     <label>{{localize "PILLARS.Stock"}}</label>
-    <div data-type="stock" class="fake-input open-info">{{data.details.stock}}</div>
+    <div data-type="stock" class="fake-input open-info">{{system.details.stock}}</div>
 </div>
 <div class="form-group" >
     <label>{{localize "PILLARS.Godlike"}}</label>
-    <div data-type="godlike" class="fake-input open-info">{{data.details.godlike}}</div>
+    <div data-type="godlike" class="fake-input open-info">{{system.details.godlike}}</div>
 </div>
 <div class="form-group">
     <label>{{localize "PILLARS.Size"}}</label>
-    <input type="text" disabled value="{{data.size.value}}">
+    <input type="text" disabled value="{{system.size.value}}">
 </div>
 
 <div class="form-group">
     <label>{{localize "PILLARS.BirthYear"}}</label>
     <div class="form-fields">
-        <input type="number" name="data.life.birthYear" value="{{data.life.birthYear}}">
-        <input type="number" disabled value="{{data.life.age}}">
-        <input type="text" disabled value="{{configLookup 'lifePhases' data.life.phase}}">
+        <input type="number" name="system.life.birthYear" value="{{system.life.birthYear}}">
+        <input type="number" disabled value="{{system.life.age}}">
+        <input type="text" disabled value="{{configLookup 'lifePhases' system.life.phase}}">
     </div>
 </div>
 
 <div class="form-group">
     <label>{{localize "PILLARS.StartYear"}}</label>
     <div class="form-fields">
-        <input type="number" name="data.life.startYear" value="{{data.life.startYear}}">
+        <input type="number" name="system.life.startYear" value="{{system.life.startYear}}">
     </div>
 </div>
 
 <div class="form-group">
     <label>{{localize "PILLARS.Loyalty"}}</label>
     <div class="form-fields">
-        <input type="number" name="data.loyalty.value" value="{{data.loyalty.value}}">
+        <input type="number" name="system.loyalty.value" value="{{system.loyalty.value}}">
     </div>
 </div>
 
 <div class="form-group">
     <label>{{localize "PILLARS.Upkeep"}}</label>
     <div class="form-fields">
-        <input type="number" name="data.upkeep.value" value="{{data.upkeep.value}}">
+        <input type="number" name="system.upkeep.value" value="{{system.upkeep.value}}">
     </div>
 </div>
 
@@ -55,5 +55,5 @@
 
 
 <div class="notes npc">
-    {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
+    {{editor content=system.notes.value target="system.notes.value" engine="prosemirror" button=true owner=owner editable=editable}}
 </div>

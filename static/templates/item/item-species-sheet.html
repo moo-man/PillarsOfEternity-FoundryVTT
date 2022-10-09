@@ -17,8 +17,8 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Size"}}</label>
                 <div class="form-fields">
-                    <select name="data.size.value">
-                        {{#select data.size.value}}
+                    <select name="system.size.value">
+                        {{#select system.size.value}}
                         <option value=""></option>
                         {{#each (config "actorSizes") as |value k|}}
                         <option value="{{value}}">{{value}}</option>
@@ -31,14 +31,14 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Stride"}}</label>
                 <div class="form-fields small">
-                    <input type="number" name="data.stride.value" value="{{data.stride.value}}" data-dtype="Number">
+                    <input type="number" name="system.stride.value" value="{{system.stride.value}}" data-dtype="Number">
                 </div>
             </div>
 
             <hr>
             <h3>{{localize "PILLARS.LifePhases"}}</h3>
 
-            {{#each data.phases as |range phase|}}
+            {{#each system.phases as |range phase|}}
             <div class="form-group">
                 <label>{{configLookup "lifePhases" phase}}</label>
                 <div class="form-fields small" data-phase="{{phase}}">

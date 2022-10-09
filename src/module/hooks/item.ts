@@ -3,9 +3,9 @@ export default function () {
 
 
     // Hooks.on("updateItem", (item, data) => {
-    //     if (hasProperty(data, "data.equipped.value"))
+    //     if (hasProperty(data, "system.equipped.value"))
     //     {
-    //         let equipped = getProperty(data, "data.equipped.value")
+    //         let equipped = getProperty(data, "system.equipped.value")
     //         let actor = item.parent
     //         if (actor.documentName == "Actor")
     //         {

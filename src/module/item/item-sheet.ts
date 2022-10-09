@@ -87,7 +87,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     {
       data.matching = this.item.hasMatchingBond() || false
 
-      data.possibleBonds = getGame().actors!.contents.filter((i) => (i.hasPlayerOwner || i.data.token.disposition > 0) && i.id != this.id);
+      data.possibleBonds = getGame().actors!.contents.filter((i) => (i.hasPlayerOwner || i.prototypeToken.disposition > 0) && i.id != this.id);
       data.traitsAllowed = Math.max((this.item.system.xp.rank || 0) - 5, 0)
       data.traitsOwned = Math.max(this.item.system.traits.length - 3, 0) // Don't count default traits
       data.traitsAvailable = Math.max(data.traitsAllowed - data.traitsOwned, 0)
@@ -343,7 +343,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
       {
         traits = traits.filter((t : string )=> t != bond);
       }
-      this.item.update({"data.traits" : traits})
+      this.item.update({"system.traits" : traits})
     }
   }
 

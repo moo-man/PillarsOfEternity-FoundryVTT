@@ -166,9 +166,7 @@
                 "goal": "",
                 "relationships": ""
             },
-            "knownConnections": {
-                "value": []
-            },
+            "connections" : [],
             "childhood": {
                 "value": ""
             },

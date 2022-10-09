@@ -9,12 +9,12 @@ export default function () {
     let isDamage = (li : JQuery<HTMLElement>): boolean=> {
       const message = getGame().messages!.get(li.data("messageId"));
       let test = duplicate(message)
-      return message?.isRoll && getProperty(message, "data.flags.pillars-of-eternity.damageData") && !isHealing(li)
+      return message?.isRoll && getProperty(message, "flags.pillars-of-eternity.damageData") && !isHealing(li)
     };
 
     let isHealing = (li : JQuery<HTMLElement>): boolean => {
       const message = getGame().messages!.get(li.data("messageId"));
-      return message?.isRoll && getProperty(message, "data.flags.pillars-of-eternity.damageData.healing")
+      return message?.isRoll && getProperty(message, "flags.pillars-of-eternity.damageData.healing")
     };
 
 

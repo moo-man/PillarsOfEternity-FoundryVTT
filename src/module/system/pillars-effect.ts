@@ -10,6 +10,7 @@ declare global {
   }
 
 export default class PillarsActiveEffect extends ActiveEffect {
+    changes : typeof this["data"]["changes"] = [] // V10 shim
     
 
     prepareData() {
@@ -18,7 +19,7 @@ export default class PillarsActiveEffect extends ActiveEffect {
     }
 
     getDialogChanges({target = undefined, condense = false, indexOffset = 0} : {target? : PillarsActor | null, condense? : boolean, indexOffset? : number} ={}) {
-        let allChanges = this.data.changes.map(c => c.toObject()) as PillarsEffectChangeDataProperties[]
+        let allChanges = this.changes.map(c => duplicate(c)) as PillarsEffectChangeDataProperties[]
         allChanges.forEach((c, i) => {
             c.conditional = this.changeConditionals[i] || {}
             c.document = this
@@ -68,7 +69,7 @@ export default class PillarsActiveEffect extends ActiveEffect {
     }
 
     get hasRollEffect() {
-        return this.data.changes.some(c => c.mode == 0)
+        return this.changes.some(c => c.mode == 0)
     }
 
     get sourceName() {
@@ -92,7 +93,6 @@ export default class PillarsActiveEffect extends ActiveEffect {
                 return super.sourceName;
         }
         return ""
-        //this.data.changes
     }
 
     get conditionId() {

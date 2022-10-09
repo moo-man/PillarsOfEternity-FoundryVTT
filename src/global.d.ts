@@ -110,7 +110,7 @@ export interface PillarsCharacterSourceSystemData
     stock: string;
     godlike: string;
   };
-  knownConnections: {
+  connections: {
     value: {name : string}[];
   };
   childhood: {
@@ -221,9 +221,7 @@ export interface PreparedPillarsCharacterData
     stock: string;
     godlike: string;
   };
-  knownConnections: {
-    value: {name : string}[];
-  };
+  connections: {name : string}[];
   childhood: {
     value: string;
   };
@@ -943,6 +941,11 @@ declare global {
 
   interface Actor {
     updateSource : any
+  }
+
+  interface ActorDataConstructorData
+  {
+    prototypeToken : any
   }
 }
 

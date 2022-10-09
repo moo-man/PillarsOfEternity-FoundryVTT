@@ -2,8 +2,8 @@
     <section class="general">
         <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
         <div class="subtype">
-            <select name="data.subtype.value">
-                {{#select data.subtype.value}}
+            <select name="system.subtype.value">
+                {{#select system.subtype.value}}
                 <option value=""></option>
                 {{#each (config "followerTypes") as |type t|}}
                 <option value="{{t}}">{{type}}</option>
@@ -15,13 +15,13 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Def"}}</label>
                 <div class="property-value">
-                    <input type="number" title="{{tooltips.defenses.deflection}}" class="defense-input" data-defense="deflection" value="{{data.defenses.deflection.value}}" />
+                    <input type="number" title="{{tooltips.defenses.deflection}}" class="defense-input" data-defense="deflection" value="{{system.defenses.deflection.value}}" />
                 </div>
                 <div class="property-check">
-                    {{#if data.defenses.deflection.checked}}
-                    <a class="sheet-checkbox" data-target="data.defenses.deflection.checked"><i class="far fa-check-square"></i></a>
+                    {{#if system.defenses.deflection.checked}}
+                    <a class="sheet-checkbox" data-target="system.defenses.deflection.checked"><i class="far fa-check-square"></i></a>
                     {{else}}
-                    <a class="sheet-checkbox" data-target="data.defenses.deflection.checked"><i class="far fa-square"></i></a>
+                    <a class="sheet-checkbox" data-target="system.defenses.deflection.checked"><i class="far fa-square"></i></a>
                     {{/if}}
                 </div>
             </div>
@@ -29,13 +29,13 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Fort"}}</label>
                 <div class="property-value">
-                    <input type="number" title="{{tooltips.defenses.fortitude}}" class="defense-input" data-defense="fortitude" value="{{data.defenses.fortitude.value}}" />
+                    <input type="number" title="{{tooltips.defenses.fortitude}}" class="defense-input" data-defense="fortitude" value="{{system.defenses.fortitude.value}}" />
                 </div>
                 <div class="property-check">
-                    {{#if data.defenses.fortitude.checked}}
-                    <a class="sheet-checkbox" data-target="data.defenses.fortitude.checked"><i class="far fa-check-square"></i></a>
+                    {{#if system.defenses.fortitude.checked}}
+                    <a class="sheet-checkbox" data-target="system.defenses.fortitude.checked"><i class="far fa-check-square"></i></a>
                     {{else}}
-                    <a class="sheet-checkbox" data-target="data.defenses.fortitude.checked"><i class="far fa-square"></i></a>
+                    <a class="sheet-checkbox" data-target="system.defenses.fortitude.checked"><i class="far fa-square"></i></a>
                     {{/if}}
                 </div>
             </div>
@@ -43,13 +43,13 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Ref"}}</label>
                 <div class="property-value">
-                    <input type="number" title="{{tooltips.defenses.reflex}}" class="defense-input" data-defense="reflex" value="{{data.defenses.reflex.value}}" />
+                    <input type="number" title="{{tooltips.defenses.reflex}}" class="defense-input" data-defense="reflex" value="{{system.defenses.reflex.value}}" />
                 </div>
                 <div class="property-check">
-                    {{#if data.defenses.reflex.checked}}
-                    <a class="sheet-checkbox" data-target="data.defenses.reflex.checked"><i class="far fa-check-square"></i></a>
+                    {{#if system.defenses.reflex.checked}}
+                    <a class="sheet-checkbox" data-target="system.defenses.reflex.checked"><i class="far fa-check-square"></i></a>
                     {{else}}
-                    <a class="sheet-checkbox" data-target="data.defenses.reflex.checked"><i class="far fa-square"></i></a>
+                    <a class="sheet-checkbox" data-target="system.defenses.reflex.checked"><i class="far fa-square"></i></a>
                     {{/if}}
                 </div>
             </div>
@@ -57,13 +57,13 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Will"}}</label>
                 <div class="property-value">
-                    <input type="number" title="{{tooltips.defenses.will}}" class="defense-input" data-defense="will" value="{{data.defenses.will.value}}" />
+                    <input type="number" title="{{tooltips.defenses.will}}" class="defense-input" data-defense="will" value="{{system.defenses.will.value}}" />
                 </div>
                 <div class="property-check">
-                    {{#if data.defenses.will.checked}}
-                    <a class="sheet-checkbox" data-target="data.defenses.will.checked"><i class="far fa-check-square"></i></a>
+                    {{#if system.defenses.will.checked}}
+                    <a class="sheet-checkbox" data-target="system.defenses.will.checked"><i class="far fa-check-square"></i></a>
                     {{else}}
-                    <a class="sheet-checkbox" data-target="data.defenses.will.checked"><i class="far fa-square"></i></a>
+                    <a class="sheet-checkbox" data-target="system.defenses.will.checked"><i class="far fa-square"></i></a>
                     {{/if}}
                 </div>
             </div>
@@ -75,21 +75,21 @@
                 <div class="property-group {{#if actor.health.bloodied}}bloodied{{/if}}" >
                     <label>{{localize "PILLARS.Health"}}</label>
                     <div class="status-array">
-                        {{#each data.health.array as | value key| }}
-                        {{#if (eq key ../data.health.threshold.bloodied)}}
+                        {{#each system.health.array as | value key| }}
+                        {{#if (eq key ../system.health.threshold.bloodied)}}
                         <span title="{{../tooltips.health.threshold.bloodied}}" class="threshold bloodied">|</span>
                         {{/if}}
-                        {{#if (eq key ../data.health.threshold.incap)}}
+                        {{#if (eq key ../system.health.threshold.incap)}}
                         <span title="{{../tooltips.health.threshold.incap}}" class="threshold bloodied">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
-                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.health"><i class="far fa-circle"></i></a>
+                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="system.health"><i class="far fa-circle"></i></a>
                         {{else if (eq value.state 1)}}
-                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.health"><i class="far fa-times-circle"></i></a>
+                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="system.health"><i class="far fa-times-circle"></i></a>
                         {{else if (eq value.state 2)}}
                         <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
                         {{else if (eq value.state -1)}}
-                        <span class="penalty" data-index="{{key}}" data-target="data.health"><i class="fas fa-times-circle"></i></span>
+                        <span class="penalty" data-index="{{key}}" data-target="system.health"><i class="fas fa-times-circle"></i></span>
                         {{/if}}
                         {{/each}}
                     </div>
@@ -97,18 +97,18 @@
                 <div class="property-group {{#if actor.endurance.winded}}winded{{/if}}">
                     <label>{{localize "PILLARS.Endurance"}}</label>
                     <div class="status-array">
-                        {{#each data.endurance.array as | value key| }}
-                        {{#if (eq key ../data.endurance.threshold.winded)}}
+                        {{#each system.endurance.array as | value key| }}
+                        {{#if (eq key ../system.endurance.threshold.winded)}}
                         <span title="{{../tooltips.endurance.threshold.winded}}" class="threshold winded">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
-                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.endurance"><i class="far fa-circle"></i></a>
+                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="system.endurance"><i class="far fa-circle"></i></a>
                         {{else if (eq value.state 1)}}
-                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="data.endurance"><i class="far fa-times-circle"></i></a>
+                        <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="system.endurance"><i class="far fa-times-circle"></i></a>
                         {{else if (eq value.state 2)}}
                         <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
                         {{else if (eq value.state -1)}}
-                        <span class="penalty" data-index="{{key}}" data-target="data.endurance"><i class="fas fa-times-circle"></i></span>
+                        <span class="penalty" data-index="{{key}}" data-target="system.endurance"><i class="fas fa-times-circle"></i></span>
                         {{/if}}
                         {{/each}}
                     </div>
@@ -118,13 +118,13 @@
                     <div class="property-group small">
                         <label>{{localize "PILLARS.ToughAbbrev"}}</label>
                         <div class="property-value">
-                            <input type="number" title="{{tooltips.toughness.value}}" name="data.toughness.value" value="{{data.toughness.value}}" />
+                            <input type="number" title="{{tooltips.toughness.value}}" name="system.toughness.value" value="{{system.toughness.value}}" />
                         </div>
                     </div>
                     <div class="property-group small">
                         <label>{{localize "PILLARS.DamageIncrementAbbrev"}}</label>
                         <div class="property-value">
-                            <input type="number" title="{{tooltips.damageIncrement.value}}" name="data.damageIncrement.value" value="{{data.damageIncrement.value}}" />
+                            <input type="number" title="{{tooltips.damageIncrement.value}}" name="system.damageIncrement.value" value="{{system.damageIncrement.value}}" />
                         </div>
                     </div>
             </div>
@@ -134,7 +134,7 @@
             <div class="wounds">
                 <div class="wound-group">
                     <div class="wound-label">
-                        <label>{{localize "PILLARS.Wounds"}}:</label> {{data.health.wounds.value}} 
+                        <label>{{localize "PILLARS.Wounds"}}:</label> {{system.health.wounds.value}} 
                     </div>
                     <div class="wound-buttons">
                         <a class="subtract-wound"> <i class="far fa-minus-square"></i></a>
@@ -146,7 +146,7 @@
                 <!--
                 <div class="wound-group">
                     <div class="wound-label">
-                        <label>Heavy:</label> {{data.health.wounds.heavy}} 
+                        <label>Heavy:</label> {{system.health.wounds.heavy}} 
                     </div>
                     <div class="wound-buttons">
                         <a class="subtract-wound" data-type="heavy"> <i class="far fa-minus-square"></i></a>
@@ -156,7 +156,7 @@
                 </div>
                 <div class="wound-group">
                     <div class="wound-label">
-                        <label>Severe:</label> {{data.health.wounds.severe}} 
+                        <label>Severe:</label> {{system.health.wounds.severe}} 
                     </div>
                     <div class="wound-buttons">
                         <a class="subtract-wound" data-type="severe"> <i class="far fa-minus-square"></i></a>
@@ -165,8 +165,8 @@
                 </div>
             </div>
             <div class="thresholds">
-                <div>Bloodied</div> <input type="number" value="{{data.health.bloodiedThreshold}}"/>
-                <div>Winded</div> <input type="number" value="{{data.endurance.windedThreshold}}"/>
+                <div>Bloodied</div> <input type="number" value="{{system.health.bloodiedThreshold}}"/>
+                <div>Winded</div> <input type="number" value="{{system.endurance.windedThreshold}}"/>
             </div> -->
         </section>
         <section>
@@ -174,24 +174,24 @@
 
                 <div class="initiative">
                     <h3>{{localize "PILLARS.Initiative"}} <a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a></h3>
-                    <input type="number" class="value" title="{{tooltips.initiative.value}}" name="data.initiative.value" value="{{data.initiative.value}}" />
+                    <input type="number" class="value" title="{{tooltips.initiative.value}}" name="system.initiative.value" value="{{system.initiative.value}}" />
                 </div>
                 <div class="stride">
                     <h3>{{localize "PILLARS.Stride"}}: </h3>
-                    <input type="number" class="value" title="{{tooltips.stride.value}}" name="data.stride.value" value="{{data.stride.value}}">
+                    <input type="number" class="value" title="{{tooltips.stride.value}}" name="system.stride.value" value="{{system.stride.value}}">
                 </div>
                 <div class="run">
                     <h3>{{localize "PILLARS.Run"}}: </h3>
-                    <input type="number" class="value"  title="{{tooltips.run.value}}" name="data.run.value" value="{{data.run.value}}">
+                    <input type="number" class="value"  title="{{tooltips.run.value}}" name="system.run.value" value="{{system.run.value}}">
                 </div>
         
                 <div class="soak">
                     <h3>{{localize "PILLARS.Soak"}}: </h3>
-                    <input type="number" class="value" title="{{tooltips.soak.base}}" name="data.soak.base" value="{{data.soak.base}}">
+                    <input type="number" class="value" title="{{tooltips.soak.base}}" name="system.soak.base" value="{{system.soak.base}}">
                     {{#if items.equipped.shields.length}}
                     <div class="soak-group">
                         <img class="soak-img" src="icons/svg/shield.svg"/>
-                        <input class="soak-total" type="number" class="value" title="{{tooltips.soak.shield}}" value="{{data.soak.shield}}">
+                        <input class="soak-total" type="number" class="value" title="{{tooltips.soak.shield}}" value="{{system.soak.shield}}">
                     </div>
                     {{/if}}
                     {{#each soaks as |soak s|}}
@@ -217,27 +217,27 @@
         <!-- <div class="char-info">
             <div class="info-group" >
                 <label>Culture</label>
-                <div data-type="culture" class="fake-input open-info">{{data.details.culture}}</div>
+                <div data-type="culture" class="fake-input open-info">{{system.details.culture}}</div>
             </div>
             <div class="info-group" >
                 <label>Species</label>
-                <div data-type="species" class="fake-input open-info">{{data.details.species}}</div>
+                <div data-type="species" class="fake-input open-info">{{system.details.species}}</div>
             </div>
             <div class="info-group" >
                 <label>Stock</label>
-                <div data-type="stock" class="fake-input open-info">{{data.details.stock}}</div>
+                <div data-type="stock" class="fake-input open-info">{{system.details.stock}}</div>
             </div>
             <div class="info-group" >
                 <label>Godlike</label>
-                <div data-type="godlike" class="fake-input open-info">{{data.details.godlike}}</div>
+                <div data-type="godlike" class="fake-input open-info">{{system.details.godlike}}</div>
             </div>
             <div class="info-group">
                 <label>Size</label>
-                <input type="text" value="{{data.size.value}}">
+                <input type="text" value="{{system.size.value}}">
             </div>
             <div class="info-group age">
                 <label>Apparent Age</label>
-                <input type="text" value="{{data.life.apparentAge}}">
+                <input type="text" value="{{system.life.apparentAge}}">
             </div>
         </div> -->
         <section class="tab-section">

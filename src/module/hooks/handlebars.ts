@@ -37,6 +37,14 @@ export default function () {
         Handlebars.registerHelper("enrich", function (string : string) {
             return TextEditor.enrichHTML(string)
         })
+
+        Handlebars.registerHelper("tokenImg", function(actor) {
+            return actor.token ? actor.token.texture.src : actor.prototypeToken.texture.src
+        })
+
+        Handlebars.registerHelper("tokenName", function(actor) {
+            return actor.token ? actor.token.name : actor.prototypeToken.name;
+        })
         
 
         loadTemplates([

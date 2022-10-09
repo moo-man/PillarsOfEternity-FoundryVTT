@@ -11,11 +11,11 @@ import { PowerGroups } from '../../types/powers';
 
 // Overwrite default ActorSheet.Data data property and replace it with system data
 interface PillarsActorSheetData extends Omit<ActorSheet.Data, 'data' | 'effects' | 'items'> {
-  data: BasePreparedPillarsActorData;
+  system: BasePreparedPillarsActorData;
   items: SheetItemData;
   effects: SheetEffectData;
   soaks: SoakData;
-  KnownConnections: { name: string; img: string; id: string }[];
+  Connections: { name: string; img: string; id: string }[];
   deathMarch: string[];
   tooltips: {
     defenses: {
@@ -271,11 +271,12 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   async getData(): Promise<PillarsActorSheetData> {
     const data = await super.getData();
 
-    data.data = (data as unknown as ActorSheet.Data).data.data as (BasePreparedPillarsActorData)
+    data.system = (data as unknown as ActorSheet.Data).data.data as (BasePreparedPillarsActorData)
 
     this.prepareSheetData(data);
-    this.formatTooltips(data);
+    // this.formatTooltips(data);
 
+    console.log(data)
     return data;
   }
 
@@ -285,12 +286,12 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     this._setPowerSourcePercentage(sheetData);
     //this._createWoundsArrays(sheetData : PillarsSheetData)
     if (this.actor.type == 'character') {
-      this._enrichKnownConnections(sheetData);
+      this._enrichConnections(sheetData);
       this._createDeathMarchArray(sheetData);
     }
 
-    this._createHealthArray(<ActorHealthSheetData>sheetData.data.health);
-    this._createEnduranceArray(<ActorEnduranceSheetData>sheetData.data.endurance);
+    this._createHealthArray(<ActorHealthSheetData>sheetData.system.health);
+    this._createEnduranceArray(<ActorEnduranceSheetData>sheetData.system.endurance);
     this._createSoakArray(sheetData);
   }
 
@@ -408,7 +409,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
 
   _createSoakArray(sheetData: PillarsActorSheetData) {
-    let soakValues = sheetData.data.soak;
+    let soakValues = sheetData.system.soak;
 
     sheetData.soaks = {
       physical: {
@@ -439,14 +440,14 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     };
   }
 
-  _enrichKnownConnections(sheetData: PillarsActorSheetData) {
+  _enrichConnections(sheetData: PillarsActorSheetData) {
     if (sheetData.actor.data.type == 'character') {
-      let connections = sheetData.actor.system.knownConnections!.value;
-      sheetData.KnownConnections = connections.map((i : {name : string}) => {
+      let connections = sheetData.actor.system.connections;
+      sheetData.Connections = connections.map((i : {name : string}) => {
         let actor = getGame().actors!.getName(i.name);
         return {
           name: i.name,
-          img: actor ? actor.data.token.img || '' : '',
+          img: actor ? actor.prototypeToken.texture.src || '' : '',
           id: actor ? actor.id : '',
         };
       });
@@ -506,7 +507,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
 
   _createDeathMarchArray(sheetData: PillarsActorSheetData): void {
     if (this.actor.type == 'character') {
-      let marchVal = (<PreparedPillarsCharacterData>sheetData.data).life.march;
+      let marchVal = (<PreparedPillarsCharacterData>sheetData.system).life.march;
       sheetData.deathMarch = [];
 
       for (let i = 0; i < 7; i++) {
@@ -787,10 +788,10 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   _onCreateConnection(event: JQuery.ClickEvent) {
     if (this.actor.data.type != "character")
     return
-    let connections = duplicate(this.actor.system.knownConnections?.value || []);
+    let connections = duplicate(this.actor.system.connections || []);
     if (connections) {
       connections.push({ name: getGame().i18n.format("PILLARS.NewConnection")});
-      this.actor.update({ 'data.knownConnections.value': connections });
+      this.actor.update({ 'data.connections': connections });
     }
   }
 
@@ -798,7 +799,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     if (this.actor.data.type != "character")
     return
     let index: number = parseInt($(event.currentTarget!).parents('.item').attr('data-index') || '');
-    let connections = duplicate(this.actor.system.knownConnections?.value || []);
+    let connections = duplicate(this.actor.system.connections || []);
     let game = getGame()
     new Dialog({
       title: game.i18n.localize("PILLARS.ChangeConnection"),
@@ -814,7 +815,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
           callback: (dlg) => {
             let newName = ($(dlg).find("[name='connection']")[0] as HTMLInputElement).value || '';
             connections[index]!.name = newName;
-            this.actor.update({ 'data.knownConnections.value': connections });
+            this.actor.update({ 'data.connections': connections });
           },
         },
       },
@@ -826,9 +827,9 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     if (this.actor.data.type != "character")
     return
     let index = parseInt($(event.currentTarget!).parents('.item').attr('data-index') || '');
-    let connections = duplicate(this.actor.system.knownConnections?.value || []);
+    let connections = duplicate(this.actor.system.connections || []);
     connections.splice(index, 1);
-    this.actor.update({ 'data.knownConnections.value': connections });
+    this.actor.update({ 'data.connections': connections });
   }
 
   _onConnectionClick(event: JQuery.ClickEvent) {

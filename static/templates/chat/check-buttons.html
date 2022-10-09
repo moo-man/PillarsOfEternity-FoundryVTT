@@ -9,7 +9,7 @@
 {{log check.power}}
 {{#if check.power.summons.length}}
     {{#each check.power.summons as |summon s|}}
-    <button type="button" data-index="{{s}}" class="add-summon"><img src="{{summon.data.img}}">{{format "PILLARS.AddSummon"}} name=summon.data.name</button>
+    <button type="button" data-index="{{s}}" class="add-summon"><img src="{{summon.img}}">{{format "PILLARS.AddSummon"}} name=summon.name</button>
     {{/each}}
 {{/if}}
 
@@ -28,6 +28,6 @@
 
 {{#if check.hasEffects}}
 {{#each check.effects as |effect e|}}
-<button type="button" data-effect="{{effect.id}}" class="apply-effect"><img src="{{effect.data.icon}}">{{format "PILLARS.ApplyEffect"}} name=effect.data.label}}</button>
+<button type="button" data-effect="{{effect.id}}" class="apply-effect"><img src="{{effect.system.icon}}">{{format "PILLARS.ApplyEffect"}} name=effect.system.label}}</button>
 {{/each}}
 {{/if}}

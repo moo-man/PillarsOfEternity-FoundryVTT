@@ -14,8 +14,8 @@
 
             <div class="form-group">
                 <label>{{localize "PILLARS.Type"}}</label>
-                <select name="data.category.value">
-                    {{#select data.category.value}}
+                <select name="system.category.value">
+                    {{#select system.category.value}}
                     {{#each (config "attributeTypes") as |type t|}}
                     <option value="{{t}}">{{type}}</option>
                     {{/each}}
@@ -24,7 +24,7 @@
             </div>
 
             <h2 class="note-section label">Description</h2>
-          {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+          {{editor content=system.description.value target="system.description.value" engine="prosemirror" button=true owner=owner editable=editable}}
 
 
         </div>

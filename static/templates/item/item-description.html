@@ -1,8 +1,8 @@
 <div class="tab description active" data-tab="description">
       <h2 class="note-section label">{{localize "PILLARS.Description"}}</h2>
-      {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+      {{editor content=system.description.value target="system.description.value" engine="prosemirror" button=true owner=owner editable=editable}}
     {{#if (isGM)}}
       <h2 class="note-section label">{{localize "PILLARS.GMNotes"}}</h2>
-      {{editor content=data.description.gm target="data.description.gm" button=true owner=owner editable=editable}}
+      {{editor content=system.description.gm target="system.description.gm" engine="prosemirror" button=true owner=owner editable=editable}}
     {{/if}}
   </div>

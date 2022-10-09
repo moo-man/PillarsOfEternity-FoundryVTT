@@ -15,6 +15,8 @@ export class ActorEnduranceModel extends foundry.abstract.DataModel {
 
     compute({armor, shield})
     {
+        console.log(this.parent.parent.name)
+        console.log(this)
         this.threshold.winded += this.bonus;
         this.threshold.winded += armor?.system.winded?.value || 0;
         this.threshold.winded += shield?.system.winded?.value || 0;

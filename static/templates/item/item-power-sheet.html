@@ -17,15 +17,15 @@
                 <label>{{localize "PILLARS.PowerLevel"}}</label>
                 <div class="form-fields">
                     <input type="number" disabled value="{{item.level.value}}" data-dtype="Number">
-                    <input type="number" name="data.level.modifier" placeholder="Modifier" value="{{item.level.modifier}}" data-dtype="Number">
+                    <input type="number" name="system.level.modifier" placeholder="Modifier" value="{{item.level.modifier}}" data-dtype="Number">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>{{localize "PILLARS.PowerSource"}}</label>
                 <div class="form-fields">
-                    <select name="data.source.value">
-                        {{#select data.source.value}}
+                    <select name="system.source.value">
+                        {{#select system.source.value}}
                         <option value=""></option>
                         {{#each (config "powerSources") as |value k|}}
                         <option value="{{k}}">{{value}}</option>
@@ -36,12 +36,12 @@
 
             </div>
 
-            {{#if (eq data.source.value "spirits") }}
+            {{#if (eq system.source.value "spirits") }}
             <div class="form-group">
                 <label>{{localize "PILLARS.Type"}}</label>
                 <div class="form-fields">
-                    <select name="data.category.value">
-                        {{#select data.category.value}}
+                    <select name="system.category.value">
+                        {{#select system.category.value}}
                         <option value=""></option>
                         <option value="phrase">Phrase</option>
                         <option value="invocation">Invocation</option>
@@ -55,43 +55,43 @@
             <div class="form-group">
                 <label>{{localize "PILLARS.Improvised"}}</label>
                 <div class="form-fields">
-                    <input type="checkbox" name="data.improvised.value" {{checked data.improvised.value}}>
+                    <input type="checkbox" name="system.improvised.value" {{checked system.improvised.value}}>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>{{localize "PILLARS.RequiresRoll"}}</label>
                 <div class="form-fields">
-                    <input type="checkbox" name="data.roll.value" {{checked data.roll.value}}>
+                    <input type="checkbox" name="system.roll.value" {{checked system.roll.value}}>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>{{localize "PILLARS.Speed"}}</label>
                 <div class="form-fields">
-                    <select name="data.speed.value">
-                        {{#select data.speed.value}}
+                    <select name="system.speed.value">
+                        {{#select system.speed.value}}
                         {{#each (config "powerSpeeds") as |value k|}}
                         <option value="{{k}}">{{value}}</option>
                         {{/each}}
                         {{/select}}
                     </select>
-                    <input type="text" name="data.speed.text" value="{{data.speed.text}}" placeholder="Text" data-dtype="String">
+                    <input type="text" name="system.speed.text" value="{{system.speed.text}}" placeholder="Text" data-dtype="String">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>{{localize "PILLARS.Limitations"}}</label>
                 <div class="form-fields">
-                    <input type="text" name="data.limitations.value" value="{{data.limitations.value}}" data-dtype="String">
+                    <input type="text" name="system.limitations.value" value="{{system.limitations.value}}" data-dtype="String">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>{{localize "PILLARS.BaseAbstractModifier"}}</label>
                 <div class="form-fields">
-                    <!-- <input type="text" name="data.base.value" value="{{data.base.value}}" data-dtype="String"> -->
-                    <input class="base-effect-cost" type="text" name="data.base.cost" value="{{data.base.cost}}" data-dtype="Number">
+                    <!-- <input type="text" name="system.base.value" value="{{system.base.value}}" data-dtype="String"> -->
+                    <input class="base-effect-cost" type="text" name="system.base.cost" value="{{system.base.cost}}" data-dtype="Number">
                 </div>
             </div>
 
@@ -298,8 +298,8 @@
                     <div class="property-inputs" data-index="{{i}}">
                         <input type="text" data-path="group" class="power-property group" title="Group" value="{{summon.group}}">
                         <div class="power-property summon">
-                            <img src="{{summon.data.img}}"/>
-                            <a>{{summon.data.name}}</a>
+                            <img src="{{summon.img}}"/>
+                            <a>{{summon.name}}</a>
                         </div>
                         <input type="number" data-path="modifier" class="power-property group" title="Abstract Modifier" value="{{summon.modifier}}">
                         <div class="property-control">

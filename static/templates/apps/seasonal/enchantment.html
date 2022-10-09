@@ -35,20 +35,20 @@
             <div class="details">
                 <div class="resonance">
                     <label>{{localize "PILLARS.Resonance"}}</label>
-                    <input type="checkbox" class="update-enchantment" data-path="resonance" {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} {{checked enchantment.data.resonance}}>
+                    <input type="checkbox" class="update-enchantment" data-path="resonance" {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} {{checked enchantment.system.resonance}}>
                 </div>
                 <div class="exclusion">
                     <label>{{localize "PILLARS.UseExclusion"}}</label>
-                    <input type="checkbox" class="update-enchantment" data-path="exclusion" {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} {{checked enchantment.data.exclusion}}>
+                    <input type="checkbox" class="update-enchantment" data-path="exclusion" {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} {{checked enchantment.system.exclusion}}>
                 </div>
                 <div class="trigger">
                     <label>{{localize "PILLARS.SituationalTrigger"}}</label>
-                    <input type="checkbox" class="update-enchantment" data-path="trigger" {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} {{checked enchantment.data.trigger}}>
+                    <input type="checkbox" class="update-enchantment" data-path="trigger" {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} {{checked enchantment.system.trigger}}>
                 </div>
                 <div class="frequency">
                     <label>{{localize "PILLARS.Frequency"}}</label>
                     <select {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} class="update-enchantment" data-path="frequency" >
-                        {{#select enchantment.data.frequency}}
+                        {{#select enchantment.system.frequency}}
                         <option value="1">
                             1 per Day
                         </option>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="sealed">
                     <label>{{localize "PILLARS.Sealed"}}</label>
-                    <input type="checkbox" class="update-enchantment" data-path="sealed" {{#unless (eq enchantment.progress.state 2) }}disabled{{/unless}} {{checked enchantment.data.sealed}}>
+                    <input type="checkbox" class="update-enchantment" data-path="sealed" {{#unless (eq enchantment.progress.state 2) }}disabled{{/unless}} {{checked enchantment.system.sealed}}>
                 </div>
             </div>
             <div class="maedrs" {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} }}>
@@ -117,7 +117,7 @@
                 <div class="quality">
                     <label>{{localize "PILLARS.Quality"}}</label>
                     <select {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} class="update-enchantment" data-path="quality" >
-                        {{#select enchantment.data.quality}}
+                        {{#select enchantment.system.quality}}
                         <option value="fine">
                             {{localize "PILLARS.FineQuality"}}
                         </option>
@@ -136,7 +136,7 @@
 
                 <div class="cost">
                     <label>{{localize "PILLARS.Cost"}}</label>
-                    <input class="update-enchantment" data-path="cost" type="number" value="{{enchantment.data.cost}}">
+                    <input class="update-enchantment" data-path="cost" type="number" value="{{enchantment.system.cost}}">
                 </div>
 
                 <div class="Skill">
@@ -178,7 +178,7 @@
                     </div>
                     <div class="dragarea" data-type="refinement">
                         {{#if item}}
-                        <img src="{{item.data.img}}">
+                        <img src="{{item.img}}">
                         {{/if}}
                     </div>
                 </div>
@@ -187,7 +187,7 @@
                 <div class="quality">
                     <label>{{localize "PILLARS.EnchantmentLimit"}}</label>
                     <select {{#if (ne enchantment.progress.state 0) }}disabled{{/if}} class="update-enchantment" data-path="enchantmentLimit" >
-                        {{#select enchantment.data.quality}}
+                        {{#select enchantment.system.quality}}
                         <option value="2">x2</option>
                         <option value="3">x3</option>
                         <option value="4">x4</option>
@@ -197,7 +197,7 @@
 
                 <div class="cost">
                     <label>{{localize "PILLARS.Cost"}}</label>
-                    <input class="update-enchantment" data-path="cost" type="number" value="{{enchantment.data.cost}}">
+                    <input class="update-enchantment" data-path="cost" type="number" value="{{enchantment.system.cost}}">
                 </div>
 
                 <div class="Skill">

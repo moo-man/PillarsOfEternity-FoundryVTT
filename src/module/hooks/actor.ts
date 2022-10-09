@@ -7,7 +7,7 @@ export default function () {
             return
         if (getGame().user?.id == userId)
         {
-            if (hasProperty(data, "data.health") || hasProperty(data, "data.endurance"))
+            if (hasProperty(data, "system.health") || hasProperty(data, "system.endurance"))
             {
                 if (actor.getFlag("pillars-of-eternity", "autoEffects") && actor.system.health.bloodied)
                 {
@@ -53,9 +53,9 @@ export default function () {
     
     
     
-                if (hasProperty(data, "data.health.wounds") && actor.system.health.value > actor.system.health.max)
+                if (hasProperty(data, "system.health.wounds") && actor.system.health.value > actor.system.health.max)
                 {
-                    actor.update({"data.health.value" : actor.system.health.max})
+                    actor.update({"system.health.value" : actor.system.health.max})
                 }
             }
         }

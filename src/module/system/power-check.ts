@@ -34,21 +34,21 @@ export default class PowerCheck extends SkillCheck
             {
                 let spendType = this.power.system.embedded?.spendType;
                 if (spendType == "encounter" || spendType == "longRest")
-                    this.power.update({"data.embedded.uses.value" : this.power.system.embedded?.uses.value! - 1});
+                    this.power.update({"system.embedded.uses.value" : this.power.system.embedded?.uses.value! - 1});
                 else if (spendType == "charges") 
-                    embeddedParent.update({"data.powerCharges.value" : embeddedParent.system.powerCharges?.value! - this.power.system.embedded?.chargeCost!})
+                    embeddedParent.update({"system.powerCharges.value" : embeddedParent.system.powerCharges?.value! - this.power.system.embedded?.chargeCost!})
             }
             else // Not embedded item or is grimoire item
             {
-                let update : Record<string, unknown> = {"data.used.value" : true}
+                let update : Record<string, unknown> = {"system.used.value" : true}
 
                 if (this.power.system.source?.value == "spirits" && this.power.system.category?.value == "phrase") // If spirits and phrase, add 1 to pool
                 {
-                    update["data.pool.current"] = Math.min(this.powerSource.system.pool?.current! + 1, this.powerSource.system.pool?.max!)
+                    update["system.pool.current"] = Math.min(this.powerSource.system.pool?.current! + 1, this.powerSource.system.pool?.max!)
                 }
                 else // if normal power just subtract cost as normal
                 {
-                    update["data.pool.current"] = this.powerSource.system.pool?.current! - this.power.system.level?.cost!
+                    update["system.pool.current"] = this.powerSource.system.pool?.current! - this.power.system.level?.cost!
                 }
 
                 this.powerSource.update(update)

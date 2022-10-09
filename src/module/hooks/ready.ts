@@ -67,7 +67,9 @@ export default function () {
 
     // Don't really like this but "ready" is needed for active effect to know if their item has been equipped or not
     game.actors!.contents.forEach((a) => {
-      a.prepareData();
+      //@ts-ignore
+      a._initialize();
+      // a.prepareData();
     });
   });
 }
