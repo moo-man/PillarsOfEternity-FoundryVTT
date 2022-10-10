@@ -438,6 +438,8 @@
     "PILLARS.RollDialogEffect": "Roll Dialog Effect",
     "PILLARS.RollHealing": "Roll Healing",
     "PILLARS.RollMode": "Roll Mode",
+    "PILLARS.RollInitiativeAdv": "Roll Initiative (Advantage)",
+    "PILLARS.RollInitiativeDis": "Roll Initiative (Disadvantage)",
     "PILLARS.Round": "Round",
     "PILLARS.Rudimentary" : "Rudimentary",
     "PILLARS.Run": "Run",

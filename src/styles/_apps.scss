@@ -113,12 +113,12 @@
   background: unset;
 }
 
-#combat .phase-header {
+#combat-tracker .phase-header {
   flex: unset;
   text-align: center;
 }
 
-#combat #combat-round .encounters .switch-phase {
+#combat-tracker #combat-round .encounters .switch-phase {
   flex: 1;
   margin: 0;
   font-size: 18px;
@@ -126,16 +126,16 @@
   color: unset;
 }
 
-#combat .initiative-buttons {
+#combat-tracker .initiative-buttons {
   display: flex;
   width: 130px;
 }
 
-#combat .initiative-buttons a[data-control='rollInitiativeAdv'] {
+#combat-tracker .initiative-buttons a[data-control='rollInitiativeAdv'] {
   filter: sepia(100%) saturate(1500%) brightness(70%) hue-rotate(380deg);
 }
 
-#combat .initiative-buttons a[data-control='rollInitiativeDis'] {
+#combat-tracker .initiative-buttons a[data-control='rollInitiativeDis'] {
   filter: sepia(100%) saturate(1500%) brightness(70%) hue-rotate(280deg);
 }
 
@@ -295,24 +295,23 @@
   resize: none;
 }
 
-#combat li.combatant .token-resource {
+#combat-tracker li.combatant .token-resource {
   display: flex;
   align-items: center;
-}
 
-#combat li.combatant .token-resource > * {
-  padding: 0px 3px;
-}
+  > * {
+    padding: 0px 3px;
+  }
 
-#combat li.combatant .token-resource .token-move {
-  opacity: 0.5;
-}
+  .token-move {
+    opacity: 0.5;
+  }
 
-#combat li.combatant .token-resource .token-move.running {
-  opacity: 1;
-  color: red;
+  .token-move.running {
+    opacity: 1;
+    color: red;
+  }
 }
-
 
 #time-tracker .window-content,
 #time-tracker.window-app {
@@ -326,7 +325,7 @@
 
 #time-tracker {
   .window-header {
-    display: none
+    visibility: hidden
   }
   .time-tracker {
     display: flex;
