@@ -40,11 +40,13 @@ export default function () {
       game.settings.set('pillars-of-eternity', 'systemMigrationVersion', game.system.data.version);
     }
 
-    game.socket!.on('system.pillars-of-eternity', (data) => {
+    game.socket!.on('system.pillars-of-eternity', async (data) => {
       if (data.type == 'updateActor') {
         if (game.user!.isGM) {
           let actor = PILLARS_UTILITY.getSpeaker(data.payload.speaker);
-          actor?.update(data.payload.updateData);
+          await actor?.update(data.payload.updateData);
+          if (data.payload.updateItems)
+            actor?.updateEmbeddedDocuments("Item", data.payload.updateItems)
           ui.notifications!.notify(getGame().i18n.format("PILLARs.AppliedDamageTo", {name : actor?.name}))
         }
       } else if (data.type == 'applyEffect') {

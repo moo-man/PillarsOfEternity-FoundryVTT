@@ -12,7 +12,7 @@ import PillarsActiveEffect from '../system/pillars-effect';
 import { PillarsItem } from './item-pillars';
 
 interface PillarsItemSheetData extends Omit<ItemSheet.Data, 'data'> {
-  data: PillarsItemSystemData;
+  system: PillarsItemSystemData;
 
   // power
   powerEffects : {conditions : ActiveEffectDataConstructorData[], item : PillarsActiveEffect[]}
@@ -70,7 +70,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
   async getData(): Promise<PillarsItemSheetData> {
     const data = await super.getData();
 
-    data.data = (data as unknown as ItemSheet.Data).data.data;
+    data.system = (data as unknown as ItemSheet.Data).data.data;
 
     if (this.item.type == 'power' && this.item.system.target?.length) {
       this.item.system.target.forEach((target : PowerTarget) => (target.subchoices = getProperty(getGame().pillars.config, `power${target.value[0]?.toUpperCase() + target.value.slice(1)}s`)))
@@ -272,7 +272,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     let el = ev.currentTarget;
     let property = $(el).parents('.form-group').attr('data-property')!;
     let index = $(el).parents('.property-inputs').attr('data-index');
-    let data = foundry.utils.deepClone(getProperty(this.item, property)) as (PowerTarget & PowerRange & PowerDuration & PowerHealing & PowerMisc & PowerDamage & PowerBaseEffect)[];
+    let data = foundry.utils.deepClone(getProperty(this.item.system, property)) as (PowerTarget & PowerRange & PowerDuration & PowerHealing & PowerMisc & PowerDamage & PowerBaseEffect)[];
     let target = $(ev.currentTarget).attr('data-path');
 
     let value : string | number = ev.currentTarget.value;

@@ -935,6 +935,13 @@ declare global {
 
 
   // V10
+
+  namespace foundry {
+    interface utils {
+      isEmpty : any
+    }
+  }
+
   interface ActiveEffect {
     label : string
   }
@@ -943,10 +950,10 @@ declare global {
     updateSource : any
   }
 
-  interface ActorDataConstructorData
-  {
-    prototypeToken : any
-  }
+  // interface ActorDataConstructorData
+  // {
+  //   prototypeToken : any
+  // }
 }
 
 

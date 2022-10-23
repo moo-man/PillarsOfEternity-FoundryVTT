@@ -59,6 +59,13 @@ import LivingOffLandSeasonalActivityApplication from "./module/apps/seasonal/liv
 
 
 Hooks.on("init", () => {
+
+  // #if _ENV == "development"
+  //@ts-ignore
+    CONFIG.compatibility.mode = 0
+  // #endif
+
+
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("pillars-of-eternity", PillarsActorSheet, { makeDefault: true });

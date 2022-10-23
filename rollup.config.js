@@ -21,7 +21,7 @@ export default {
   plugins: [
     typescript(),
     jscc({
-      values: { _ENV: process.env }
+      values: { _ENV: process.env.NODE_ENV }
     }),
     copy({
       targets: [

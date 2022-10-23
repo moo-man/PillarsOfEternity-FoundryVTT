@@ -13,7 +13,7 @@ export default function() {
     let h = Math.max((canvas.dimensions.size / 12), 8);
     const w = this.w;
     const bs = Math.clamped(h / 8, 1, 2);
-    if ( this.data.height >= 2 ) h *= 1.6;  // Enlarge the bar for large tokens
+    if ( this.document.height >= 2 ) h *= 1.6;  // Enlarge the bar for large tokens
 
     // Determine the color to use
     const blk = 0x000000;

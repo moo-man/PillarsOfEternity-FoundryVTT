@@ -68,7 +68,7 @@
             <div class="form-group power-group" data-property="damage.value">
                 <h3>{{localize "PILLARS.Damage"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
                 <div class="property-list">
-                {{#each item.damage.value as |damage d|}}
+                {{#each item.system.damage.value as |damage d|}}
                 <div class="property-inputs" data-index="{{d}}">
                     <input type="text" data-path="label" class="power-property" placeholder="Label" value="{{damage.label}}">
                     <input type="text" data-path="base" class="power-property" placeholder="Base" value="{{damage.base}}">

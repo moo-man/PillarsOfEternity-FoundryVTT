@@ -23,16 +23,8 @@
             </div>
 
             <h2 class="note-section label">{{localize "PILLARS.Description"}}</h2>
-          {{editor content=system.description.value target="system.description.value" engine="prosemirror" button=true owner=owner editable=editable}}
-
-
+          {{editor system.description.value target="system.description.value" engine="prosemirror" button=true owner=owner editable=editable}}
         </div>
-
-
-
-
-
-
         {{> systems/pillars-of-eternity/templates/item/item-effects.html}}
 
     </section>

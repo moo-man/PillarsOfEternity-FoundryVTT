@@ -15,7 +15,7 @@ export default class PillarsTokenDocument extends TokenDocument {
 
   getBarAttribute(...args : Parameters<TokenDocument["getBarAttribute"]>) {
     let bar = super.getBarAttribute(...args);
-    let data = foundry.utils.getProperty(this.actor?.data.data!, bar!.attribute);
+    let data = foundry.utils.getProperty(this.actor?.system!, bar!.attribute);
     if (data.threshold?.incap) (<ObjectAttributeBar>bar).max = data.threshold.incap + 1;
     return bar;
   }

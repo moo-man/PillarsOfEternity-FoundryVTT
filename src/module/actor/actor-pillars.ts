@@ -31,7 +31,7 @@ import { PILLARS_UTILITY } from '../system/utility';
 import ItemDialog from '../apps/item-dialog';
 import BookOfSeasons from '../apps/book-of-seasons';
 import SeasonalActivityMenu from '../apps/seasonal/activity-menu';
-import { ItemDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
+import { ItemDataConstructorData, ItemDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
 
 declare global {
   interface DocumentClassConfig {
@@ -51,6 +51,7 @@ export class PillarsActor extends Actor {
 
   system : any
   prototypeToken : any
+  _source: any
 
   itemCategories: Record<keyof typeof ItemType, PillarsItem[]> | undefined;
 
@@ -797,9 +798,9 @@ export class PillarsActor extends Actor {
   handleScrollingText(data: ActorDataConstructorData) {
     if (this.data.type == 'headquarters') return;
     try {
-      if (hasProperty(data, 'data.health.value')) this._displayScrollingChange(getProperty(data, 'data.health.value') - this.system.health.value);
-      if (hasProperty(data, 'data.health.wounds.value')) this._displayScrollingChange(getProperty(data, 'data.health.wounds.value') - this.system.health.wounds.value, { text: 'Wound' });
-      if (hasProperty(data, 'data.endurance.value')) this._displayScrollingChange(getProperty(data, 'data.endurance.value') - this.system.endurance.value, { endurance: true });
+      if (hasProperty(data, 'system.health.value')) this._displayScrollingChange(getProperty(data, 'system.health.value') - this._source.system.health.value);
+      if (hasProperty(data, 'system.health.wounds.value')) this._displayScrollingChange(getProperty(data, 'system.health.wounds.value') - this._source.system.health.wounds.value, { text: 'Wound' });
+      if (hasProperty(data, 'system.endurance.value')) this._displayScrollingChange(getProperty(data, 'system.endurance.value') - this._source.system.endurance.value, { endurance: true });
     } catch (e) {
       console.error(getGame().i18n.localize('PILLARS.ErrorScrollingText'), data, e);
     }
@@ -816,8 +817,8 @@ export class PillarsActor extends Actor {
     change = Number(change);
     const tokens = this.getActiveTokens(true);
     for (let t of tokens) {
-      if (!t?.hud?.createScrollingText) continue; // This is undefined prior to v9-p2
-      t.hud.createScrollingText(change.signedString() + ' ' + text, {
+      //@ts-ignore
+      canvas?.interface.createScrollingText(t.center, change.signedString() + ' ' + text, {
         anchor: CONST.TEXT_ANCHOR_POINTS.TOP,
         fontSize: 30,
         fill: endurance ? '0x6666FF' : change > 0 ? '0xFF0000' : '0x00FF00', // I regret nothing
@@ -847,7 +848,6 @@ export class PillarsActor extends Actor {
     let updateObj: DeepPartial<PreparedPillarsNonHeadquartersActorData> & ActorDataConstructorData = {
       name: this.name!,
       type: this.data.type,
-      items: [],
       system: {
         health: {
           wounds: {},
@@ -855,6 +855,10 @@ export class PillarsActor extends Actor {
         endurance: {},
       },
     };
+
+    // Need to separate items from updateObj because of https://github.com/foundryvtt/foundryvtt/issues/8351
+    let items : ItemDataSource[]  = []
+
 
     let soak = this.system.soak.base;
     switch (type) {
@@ -884,7 +888,7 @@ export class PillarsActor extends Actor {
 
     if (options.shield && this.equippedShield) {
       message += ` ${game.i18n.format('PILLARS.ShieldSoak', { soak: this.equippedShield.Soak })}`;
-      updateObj.items = [this.calculateShieldDamage(this.equippedShield, damage)];
+      items = [this.calculateShieldDamage(this.equippedShield, damage)];
     }
 
     if (damage > this.system.toughness.value) {
@@ -904,11 +908,19 @@ export class PillarsActor extends Actor {
       }
     }
 
-    if (this.isOwner || !game.settings.get('pillars-of-eternity', 'playerApplyDamage')) this.update(updateObj);
+    if (this.isOwner || !game.settings.get('pillars-of-eternity', 'playerApplyDamage')) 
+    {
+      await this.update(updateObj);
+
+      // Currently the only items within the items array are shields and their health being updated
+      // If items need to be added, a separate call to createEmbeddedDocuments is needed
+      if (items.length)
+        this.updateEmbeddedDocuments("Item", [{...items}])
+    }
     else if (game.settings.get('pillars-of-eternity', 'playerApplyDamage'))
       game.socket!.emit('system.pillars-of-eternity', {
         type: 'updateActor',
-        payload: { updateData: updateObj, speaker: this.speakerData() },
+        payload: { updateData: updateObj, speaker: this.speakerData(), updateItems : items },
       });
 
     return message;

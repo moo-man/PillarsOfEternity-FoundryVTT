@@ -2,6 +2,7 @@ import { getGame } from "../system/utility"
 import { PillarsActor } from "../actor/actor-pillars"
 
 export default function () {
+
     Hooks.on("updateActor", async (actor : PillarsActor, data : Record<string, unknown>, options : unknown, userId: string) => {
         if (actor.data.type == "headquarters")
             return
