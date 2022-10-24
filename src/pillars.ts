@@ -51,6 +51,7 @@ import PracticeSeasonalActivityApplication from "./module/apps/seasonal/practice
 import StudySeasonalActivityApplication from "./module/apps/seasonal/study";
 import EnchantmentSeasonalActivityApplication from "./module/apps/seasonal/enchantment";
 import LivingOffLandSeasonalActivityApplication from "./module/apps/seasonal/living-off-land";
+import { PillarsHeadquartersSheet } from "./module/actor/headquarters-sheet";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -61,6 +62,7 @@ import LivingOffLandSeasonalActivityApplication from "./module/apps/seasonal/liv
 Hooks.on("init", () => {
 
   // #if _ENV == "development"
+  CONFIG.debug.pillars = true;
   //@ts-ignore
     CONFIG.compatibility.mode = 0
   // #endif
@@ -71,6 +73,7 @@ Hooks.on("init", () => {
   Actors.registerSheet("pillars-of-eternity", PillarsActorSheet, { makeDefault: true });
   Actors.registerSheet("pillars-of-eternity", PillarsNPCSheet, {types: ["npc"], makeDefault: true });
   Actors.registerSheet("pillars-of-eternity", PillarsFollowerSheet, {types: ["follower"], makeDefault: true });
+  Actors.registerSheet("pillars-of-eternity", PillarsHeadquartersSheet, {types: ["headquarters"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("pillars-of-eternity", PillarsItemSheet, { makeDefault: true });
   DocumentSheetConfig.registerSheet(ActiveEffect, "pillars-of-eternity", PillarsEffectConfig)

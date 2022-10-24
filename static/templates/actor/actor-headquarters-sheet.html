@@ -1,0 +1,38 @@
+<form class="{{cssClass}}" autocomplete="off">
+
+    <section class="general">
+        <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
+
+    </section>
+
+    <section class="sheet-content">
+        <div class="name-header">
+            <h1 class="charname">
+                <input name="name" type="text" value="{{actor.name}}" placeholder="Name" />
+            </h1>
+        </div>
+
+        <section class="tab-section">
+            <nav class="sheet-tabs tabs">
+                <a  class="tab-select item active" data-tab="residents">{{localize "PILLARS.Residents"}}</a>
+                <a  class="tab-select item" data-tab="accommodations">{{localize "PILLARS.Accommodations"}}</a>
+                <a  class="tab-select item" data-tab="library">{{localize "PILLARS.Library"}}</a>
+                <a  class="tab-select item" data-tab="defenses">{{localize "PILLARS.Defenses"}}</a>
+            </nav>
+            <div class="tab-content">
+                <div class="tab main save-scroll" data-tab="residents">
+                    {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-residents.html}}
+                </div>
+                <div class="tab combat save-scroll" data-tab="accommodations">
+                    {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-accommodations.html}}
+                </div>
+                <div class="tab combat save-scroll" data-tab="library">
+                    {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-library.html}}
+                </div>
+                <div class="tab combat save-scroll" data-tab="defenses">
+                    {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-defenses.html}}
+                </div>
+            </div>
+        </section>
+    </section>
+</form>
