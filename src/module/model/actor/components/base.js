@@ -92,7 +92,7 @@ export class BasicLifeModel extends foundry.abstract.DataModel {
     // Compute age and phase (using species) of the actor
     compute({species})
     {
-        age = game.settings.get('pillars-of-eternity', 'season').year - this.birthYear;
+      let age = game.settings.get('pillars-of-eternity', 'season').year - this.birthYear;
 
       let currentPhase = '';
       if (species) {

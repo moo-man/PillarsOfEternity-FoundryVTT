@@ -1086,7 +1086,7 @@ export class PillarsActor extends Actor {
       let followerSkills = PILLARS.followerSkills[followerType];
       for (let skills of followerSkills) {
         filterData.choices = skills.number;
-        filterData.diff = { 'data.modifier.value': skills.rank };
+        filterData.diff = { 'system.modifier.value': skills.rank };
         filterData.text = game.i18n.format('PILLARS.FollowerSkillPrompt', skills);
         let skillsSelected = await ItemDialog.create(filterData);
 

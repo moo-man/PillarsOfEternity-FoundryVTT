@@ -145,11 +145,11 @@ export interface PillarsFollowerSourceSystemData
 
 export interface PillarsHeadquartersSourceSystemData {
   residents : {
-    list : {id : string, count : number}[],
+    list : {id : string, count : number, data : Record<string,unknown>}[],
     extra: 0
   },
   staff : {
-    list : {id : string, count : number}[],
+    list : {id : string, count : number, data: Record<string,unknown>}[],
     extra : 0
   },
   size : number,
@@ -915,6 +915,9 @@ declare global {
 
   interface CONFIG {
     statusEffects : Partial<ActiveEffectDataConstructorData & { id: string }>[];
+    debug : {
+      pillars: boolean
+    }
   }
 
 

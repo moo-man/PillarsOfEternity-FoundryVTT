@@ -9,6 +9,7 @@ import entryContextHooks from "./entryContext";
 import scene from "./scene";
 import initHooks from "./init"
 import settings from "./settings";
+import { PILLARS_UTILITY } from "../system/utility";
 
 export default function () {
     initHooks()
@@ -22,4 +23,15 @@ export default function () {
     entryContextHooks();
     scene();
     settings();
+
+
+    
+    // #if _ENV === "development"
+    Hooks.on("renderApplication", (app : Application, html : HTMLElement, data : unknown) => {
+        PILLARS_UTILITY.log(`Rendering ${app.constructor.name}: `, undefined, data)
+    })
+    //#endif
+
 }
+
+

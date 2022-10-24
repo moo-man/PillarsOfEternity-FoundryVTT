@@ -9,12 +9,8 @@ export class PillarsFollowerSheet extends PillarsActorSheet {
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-            classes: ["pillars-of-eternity", "sheet", "actor"],
-            template: "systems/pillars-of-eternity/templates/actor/actor-sheet.html",
             width: 810,
             height: 830,
-            tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".tab-content", initial: "main" }],
-            scrollY: [".details", ".inventory-lists", ".items", ".powers" , ".general"]
         });
     }
 

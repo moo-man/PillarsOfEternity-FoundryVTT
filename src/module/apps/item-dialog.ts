@@ -74,7 +74,8 @@ export default class ItemDialog extends Dialog {
     static async applyDiff(items : PillarsItem[], diff : Record<string, unknown>)
     {
       items.forEach(i => {
-        i.data.update(diff)
+        //@ts-ignore
+        i.updateSource(diff)
       })
       return items;
     }

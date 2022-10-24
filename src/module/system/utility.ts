@@ -5,6 +5,12 @@ import { PillarsItem } from '../item/item-pillars';
 import { PILLARS } from './config';
 
 export class PILLARS_UTILITY {
+
+  static log(message : string, force : boolean = false, args : unknown) {
+    if (CONFIG.debug.pillars || force)
+      console.log(`%cPILLARS` + `%c | ${message}`, "color: green", "color: unset", args || "");
+  }
+
   static getSkillRank(xp: number) {
     return Math.floor(Math.sqrt(2 * xp + 0.25) - 0.5);
   }

@@ -153,7 +153,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
   }
 
   get template(): string {
-    if (this.actor.type == 'character') return 'systems/pillars-of-eternity/templates/actor/actor-sheet.html';
+    if (this.actor.type == 'character') return 'systems/pillars-of-eternity/templates/actor/actor-character-sheet.html';
     else return '';
   }
 

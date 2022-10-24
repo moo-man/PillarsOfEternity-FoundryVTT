@@ -72,7 +72,7 @@
         <hr>
         <section class="status">
             <div class="health-endurance">
-                <div class="property-group {{#if actor.health.bloodied}}bloodied{{/if}}" >
+                <div class="property-group {{#if system.health.bloodied}}bloodied{{/if}}" >
                     <label>{{localize "PILLARS.Health"}}</label>
                     <div class="status-array">
                         {{#each system.health.array as | value key| }}
@@ -94,7 +94,7 @@
                         {{/each}}
                     </div>
                 </div>
-                <div class="property-group {{#if actor.endurance.winded}}winded{{/if}}">
+                <div class="property-group {{#if system.endurance.winded}}winded{{/if}}">
                     <label>{{localize "PILLARS.Endurance"}}</label>
                     <div class="status-array">
                         {{#each system.endurance.array as | value key| }}
