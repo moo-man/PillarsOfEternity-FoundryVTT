@@ -288,7 +288,7 @@ export class PillarsItem extends Item {
   prepareOwnedBond() {
     this.system.xp!.rank = PILLARS_UTILITY.getSkillRank(this.system.xp!.value) + (this.system.modifier?.value || 0);
     if (this.data.type == "bond")
-      this.data.active = this.system.xp!.value >= 15
+      this.system.active = this.system.xp!.value >= 15
   }
 
   prepareOwnedPowerSource() {

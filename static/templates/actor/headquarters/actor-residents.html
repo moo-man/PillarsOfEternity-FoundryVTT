@@ -1,1 +1,83 @@
-<div></div>
+<ol class="items-list resident-list">
+    <li class="items-header flexrow">
+        <h3 class="item-name flexrow">{{localize "PILLARS.Residents"}}</h3>
+        <span class="item-property-column">{{localize "PILLARS.Count"}}</span>
+        <!-- <div class="item-property-column extra">
+            <label>{{localize "PILLARS.Extra"}}</label>
+            <input type="number" name="{{system.residents.extra}}" value="{{system.residents.extra}}" >
+        </div> -->
+        <div class="item-controls">
+        </div>
+    </li>
+
+    <ol class="items">
+        {{#each system.residents.list as |obj index|}}
+        <li class="item" data-index="{{index}}" data-type="residents">
+            <div class="row-content">
+                <div class="resident-sheet item-name flexrow">
+                    <img class="item-image" src='{{tokenImg obj.document}}'>
+                    <a>
+                        <h4>{{obj.document.name}}</h4>
+                    </a>
+                </div>
+
+                {{#unless obj.document.prototypeToken.actorLink}}
+                <div class="item-property-column">
+                    <input class="resident-edit" data-target="count" type="number" value="{{obj.count}}">
+                </div>
+                {{/unless}}
+                <!-- <div class="item-property-column extra"></div> -->
+
+
+                <div class="item-controls flexrow">
+                {{#if ../owner}}
+                <a class="item-control resident-remove" title="Edit Item"><i class="fa-solid fa-times"></i></a>
+                {{/if}}
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ol>
+</ol>
+
+<ol class="items-list resident-list">
+    <li class="items-header flexrow">
+        <h3 class="resident-sheet item-name flexrow">{{localize "PILLARS.Staff"}}</h3>
+        <span class="item-property-column">{{localize "PILLARS.Count"}}</span>
+        <!-- <div class="item-property-column large extra">
+            <label>{{localize "PILLARS.Extra"}}</label>
+            <input type="number" name="{{system.staff.extra}}" value="{{system.staff.extra}}" >
+        </div> -->
+        <div class="item-controls">
+        </div>
+    </li>
+
+    <ol class="items">
+        {{#each system.staff.list as |obj index|}}
+        <li class="item" data-index="{{index}}" data-type="staff">
+            <div class="row-content">
+                <div class="resident-name item-name flexrow">
+                    <img class="item-image" src='{{tokenImg obj.document}}'>
+                    <a>
+                        <h4>{{obj.document.name}}</h4>
+                    </a>
+                </div>
+
+                {{#unless obj.document.prototypeToken.actorLink}}
+                <div class="item-property-column">
+                    <input class="resident-edit" data-target="count" type="number" value="{{obj.count}}">
+                </div>
+                {{/unless}}
+                <!-- <div class="item-property-column extra"></div> -->
+
+
+                <div class="item-controls flexrow">
+                {{#if ../owner}}
+                <a class="item-control resident-remove" title="Edit Item"><i class="fa-solid fa-times"></i></a>
+                {{/if}}
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ol>
+</ol>

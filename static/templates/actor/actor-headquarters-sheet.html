@@ -2,7 +2,28 @@
 
     <section class="general">
         <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
-
+        <div>
+            <div class="form-group">
+                <label>Size</label>
+                <input type="number" value="{{system.size}}" name="system.size">
+            </div>
+            <div class="form-group">
+                <label>Residents</label>
+                <input type="number" value="{{system.residents.total}}" disabled>
+            </div>
+            <div class="form-group">
+                <label>Staff</label>
+                <input type="number" value="{{system.staff.total}}" disabled>
+            </div>
+            <div class="form-group">
+                <label>Treasury  <a class="transfer"><i class="fa-solid fa-treasure-chest"></i></a></label>
+                <input type="number" name="system.treasury.value" value="{{system.treasury.value}}" {{#unless (isGM)}}disabled{{/unless}}>
+            </div>
+            <div class="form-group">
+                <label>Disrepair</label>
+                <input type="number" name="system.disrepair.value" value="{{system.disrepair.value}}">
+            </div>
+        </div>
     </section>
 
     <section class="sheet-content">
@@ -20,16 +41,16 @@
                 <a  class="tab-select item" data-tab="defenses">{{localize "PILLARS.Defenses"}}</a>
             </nav>
             <div class="tab-content">
-                <div class="tab main save-scroll" data-tab="residents">
+                <div class="tab residents save-scroll" data-tab="residents">
                     {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-residents.html}}
                 </div>
-                <div class="tab combat save-scroll" data-tab="accommodations">
+                <div class="tab accommodations save-scroll" data-tab="accommodations">
                     {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-accommodations.html}}
                 </div>
-                <div class="tab combat save-scroll" data-tab="library">
+                <div class="tab library save-scroll" data-tab="library">
                     {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-library.html}}
                 </div>
-                <div class="tab combat save-scroll" data-tab="defenses">
+                <div class="tab defenses save-scroll" data-tab="defenses">
                     {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-defenses.html}}
                 </div>
             </div>

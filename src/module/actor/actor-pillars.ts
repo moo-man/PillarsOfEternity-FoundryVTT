@@ -57,91 +57,77 @@ export class PillarsActor extends Actor {
 
   async _preCreate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: User) {
     await super._preCreate(data, options, user);
-    // Set wounds, advantage, and display name visibility
-
-    //@ts-ignore
-    if (!data.prototypeToken)
-      this.data.update({
-        'token.disposition': CONST.TOKEN_DISPOSITIONS.NEUTRAL, // Default disposition to neutral
-        'token.name': data.name, // Set token name to actor name
-        'token.bar1': { attribute: 'health' }, // Default Bar 1 to Wounds
-        'token.bar2': { attribute: 'endurance' }, // Default Bar 2 to Advantage
-        'token.dimSight': 12,
-        'token.brightSight': 6,
-      });
-
-    this.data.update({ 'flags.pillars-of-eternity.autoEffects': true });
-    // Default characters to HasVision = true and Link Data = true
-    if (data.type == 'character') {
-      this.data.update({ 'token.vision': true });
-      this.data.update({ 'token.actorLink': true });
-    }
+    this.updateSource(this.system.getPreCreateData(data))
   }
 
   async _preUpdate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: User) {
     await super._preUpdate(data, options, user);
     this.handleScrollingText(data);
-  }
-
-  setSpeciesData(data: PreparedPillarsCharacterData | PreparedPillarsFollowerData) {
-    if (this.data.type == 'headquarters') return;
-    let speciesItem = this.getItemTypes(ItemType.species)[0];
-    let stockItem = this.getItemTypes(ItemType.stock)[0];
-    let godlikeItem = this.getItemTypes(ItemType.godlike)[0];
-    let cultureItem = this.getItemTypes(ItemType.culture)[0];
-
-    if (speciesItem?.name && (this.type == 'character' || this.type == 'follower')) {
-      data.details.species = speciesItem.name;
-      data.stride.value = speciesItem.system.stride!.value;
-      this.data.flags.tooltips.stride.value.push(`${speciesItem.system.stride!.value} (${speciesItem.name})`);
-      data.size.value = speciesItem.system.size!.value;
-      this.setSizeData(data);
-    } else if (Number.isNumeric(data.size.value)) {
-      this.setSizeData(data);
+    if (this.system.handlePreUpdate)
+    {
+      this.system.handlePreUpdate(data)
     }
-    if (stockItem?.name) data.details.stock = stockItem.name;
-    if (cultureItem?.name) data.details.culture = cultureItem.name;
-    if (godlikeItem?.name) data.details.godlike = godlikeItem.name;
-
-    //return this.update({"data" : data})
   }
 
-  setSizeData(data: PreparedPillarsCharacterData | PreparedPillarsFollowerData) {
-    if (this.data.type == 'headquarters') return;
-    let game = getGame();
-    if (this.type == 'character') {
-      let tier = this.system.tier!.value || Tier.NOVICE;
+  // setSpeciesData(data: PreparedPillarsCharacterData | PreparedPillarsFollowerData) {
+  //   if (this.data.type == 'headquarters') return;
+  //   let speciesItem = this.getItemTypes(ItemType.species)[0];
+  //   let stockItem = this.getItemTypes(ItemType.stock)[0];
+  //   let godlikeItem = this.getItemTypes(ItemType.godlike)[0];
+  //   let cultureItem = this.getItemTypes(ItemType.culture)[0];
 
-      type Size = keyof typeof PILLARS.sizeAttributes;
+  //   if (speciesItem?.name && (this.type == 'character' || this.type == 'follower')) {
+  //     data.details.species = speciesItem.name;
+  //     data.stride.value = speciesItem.system.stride!.value;
+  //     this.data.flags.tooltips.stride.value.push(`${speciesItem.system.stride!.value} (${speciesItem.name})`);
+  //     data.size.value = speciesItem.system.size!.value;
+  //     this.setSizeData(data);
+  //   } else if (Number.isNumeric(data.size.value)) {
+  //     this.setSizeData(data);
+  //   }
+  //   if (stockItem?.name) data.details.stock = stockItem.name;
+  //   if (cultureItem?.name) data.details.culture = cultureItem.name;
+  //   if (godlikeItem?.name) data.details.godlike = godlikeItem.name;
 
-      let attributes = PILLARS.sizeAttributes[<Size>data.size.value.toString()][<Tier>tier];
-      data.damageIncrement.value = attributes.damageIncrement;
-      data.toughness.value = attributes.toughness;
-    }
-    this.data.flags.tooltips.toughness.value.push(game.i18n.format('PILLARS.Tooltip', { value: data.toughness.value, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.damageIncrement.value.push(game.i18n.format('PILLARS.Tooltip', { value: data.damageIncrement.value, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    data.defenses.deflection.value = (data.defenses.deflection.base || 10) - data.size.value * 2;
-    data.defenses.reflex.value = (data.defenses.reflex.base || 15) - data.size.value * 2;
-    data.defenses.fortitude.value = (data.defenses.fortitude.base || 15) + data.size.value * 2;
-    data.defenses.will.value = data.defenses.will.base || 15;
+  //   //return this.update({"data" : data})
+  // }
 
-    this.data.flags.tooltips.endurance.threshold.winded.push(
-      game.i18n.format('PILLARS.Tooltip', { value: this.system.endurance.threshold.winded, source: game.i18n.localize('PILLARS.TooltipBase') })
-    );
-    this.data.flags.tooltips.health.threshold.bloodied.push(
-      game.i18n.format('PILLARS.Tooltip', { value: this.system.health.threshold.bloodied, source: game.i18n.localize('PILLARS.TooltipBase') })
-    );
-    this.data.flags.tooltips.health.threshold.incap.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.health.threshold.incap, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  // setSizeData(data: PreparedPillarsCharacterData | PreparedPillarsFollowerData) {
+  //   if (this.data.type == 'headquarters') return;
+  //   let game = getGame();
+  //   if (this.type == 'character') {
+  //     let tier = this.system.tier!.value || Tier.NOVICE;
 
-    this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.deflection.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.defenses.reflex.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.reflex.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.defenses.fortitude.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.fortitude.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.defenses.will.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.will.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //     type Size = keyof typeof PILLARS.sizeAttributes;
 
-    this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: -data.size.value * 2, source: game.i18n.localize('PILLARS.TooltipSize') }));
-    this.data.flags.tooltips.defenses.reflex.push(game.i18n.format('PILLARS.Tooltip', { value: -data.size.value * 2, source: game.i18n.localize('PILLARS.TooltipSize') }));
-    this.data.flags.tooltips.defenses.fortitude.push(game.i18n.format('PILLARS.Tooltip', { value: data.size.value * 2, source: game.i18n.localize('PILLARS.TooltipSize') }));
-  }
+  //     let attributes = PILLARS.sizeAttributes[<Size>data.size.value.toString()][<Tier>tier];
+  //     data.damageIncrement.value = attributes.damageIncrement;
+  //     data.toughness.value = attributes.toughness;
+  //   }
+  //   this.data.flags.tooltips.toughness.value.push(game.i18n.format('PILLARS.Tooltip', { value: data.toughness.value, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   this.data.flags.tooltips.damageIncrement.value.push(game.i18n.format('PILLARS.Tooltip', { value: data.damageIncrement.value, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   data.defenses.deflection.value = (data.defenses.deflection.base || 10) - data.size.value * 2;
+  //   data.defenses.reflex.value = (data.defenses.reflex.base || 15) - data.size.value * 2;
+  //   data.defenses.fortitude.value = (data.defenses.fortitude.base || 15) + data.size.value * 2;
+  //   data.defenses.will.value = data.defenses.will.base || 15;
+
+  //   this.data.flags.tooltips.endurance.threshold.winded.push(
+  //     game.i18n.format('PILLARS.Tooltip', { value: this.system.endurance.threshold.winded, source: game.i18n.localize('PILLARS.TooltipBase') })
+  //   );
+  //   this.data.flags.tooltips.health.threshold.bloodied.push(
+  //     game.i18n.format('PILLARS.Tooltip', { value: this.system.health.threshold.bloodied, source: game.i18n.localize('PILLARS.TooltipBase') })
+  //   );
+  //   this.data.flags.tooltips.health.threshold.incap.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.health.threshold.incap, source: game.i18n.localize('PILLARS.TooltipBase') }));
+
+  //   this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.deflection.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   this.data.flags.tooltips.defenses.reflex.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.reflex.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   this.data.flags.tooltips.defenses.fortitude.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.fortitude.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   this.data.flags.tooltips.defenses.will.push(game.i18n.format('PILLARS.Tooltip', { value: data.defenses.will.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+
+  //   this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: -data.size.value * 2, source: game.i18n.localize('PILLARS.TooltipSize') }));
+  //   this.data.flags.tooltips.defenses.reflex.push(game.i18n.format('PILLARS.Tooltip', { value: -data.size.value * 2, source: game.i18n.localize('PILLARS.TooltipSize') }));
+  //   this.data.flags.tooltips.defenses.fortitude.push(game.i18n.format('PILLARS.Tooltip', { value: data.size.value * 2, source: game.i18n.localize('PILLARS.TooltipSize') }));
+  // }
 
   prepareBaseData() {
     this.system.computeBase(this.itemCategories)
@@ -297,7 +283,7 @@ export class PillarsActor extends Actor {
 
 
       this.prepareItems();
-      this.prepareHeadquarters();
+      // this.prepareHeadquarters();
       // this.prepareCombat();
       // this.prepareEffectTooltips();
     } catch (e) {
@@ -316,80 +302,77 @@ export class PillarsActor extends Actor {
     this.system.weight = weight;
   }
 
-  prepareHeadquarters() {
-    if (this.data.type == 'headquarters') {
-      let game = getGame();
-      if (!game.ready) game.pillars.postReadyPrepare.push(this);
-      else {
-        
-      }
-    }
-  }
+  // prepareHeadquarters() {
+  //   if (this.data.type == 'headquarters') {
+  //     let game = getGame();
+  //     if (!game.ready) game.pillars.postReadyPrepare.push(this);
+  //   }
+  // }
 
-  prepareCombat() {
-    if (this.data.type == 'headquarters') return;
-    let equippedArmor = this.equippedArmor;
-    let equippedShield = this.equippedShield;
-    let equippedWeapons = this.getItemTypes(ItemType.weapon).filter((i) => i.system.equipped?.value);
-    let game = getGame();
+  // prepareCombat() {
+  //   if (this.data.type == 'headquarters') return;
+  //   let equippedArmor = this.equippedArmor;
+  //   let equippedShield = this.equippedShield;
+  //   let equippedWeapons = this.getItemTypes(ItemType.weapon).filter((i) => i.system.equipped?.value);
+  //   let game = getGame();
 
-    let weaponDeflectionBonus = 0;
-    for (let weapon of equippedWeapons) {
-      let skill = weapon.Skill;
-      if (skill) {
-        let bonus = Math.floor((skill.rank || 0) / 5);
-        if (bonus > weaponDeflectionBonus) weaponDeflectionBonus = bonus;
-      }
-    }
+  //   let weaponDeflectionBonus = 0;
+  //   for (let weapon of equippedWeapons) {
+  //     let skill = weapon.Skill;
+  //     if (skill) {
+  //       let bonus = Math.floor((skill.rank || 0) / 5);
+  //       if (bonus > weaponDeflectionBonus) weaponDeflectionBonus = bonus;
+  //     }
+  //   }
 
-    if (weaponDeflectionBonus > 0) {
-      this.system.defenses.deflection.value += weaponDeflectionBonus;
-      this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: weaponDeflectionBonus, source: game.i18n.localize('PILLARS.TooltipWeaponDeflectionBonus') }));
-    }
+  //   if (weaponDeflectionBonus > 0) {
+  //     this.system.defenses.deflection.value += weaponDeflectionBonus;
+  //     this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: weaponDeflectionBonus, source: game.i18n.localize('PILLARS.TooltipWeaponDeflectionBonus') }));
+  //   }
 
-    if (equippedArmor) {
-      this.system.soak.base += equippedArmor.system.soak!.value || 0;
-      this.system.initiative.value += equippedArmor.system.initiative!.value;
-      this.system.toughness.value += equippedArmor.system.toughness!.value;
-      this.system.stride.value += equippedArmor.system.stride!.value;
-      this.system.run.value += equippedArmor.system.run!.value;
+  //   if (equippedArmor) {
+  //     this.system.soak.base += equippedArmor.system.soak!.value || 0;
+  //     this.system.initiative.value += equippedArmor.system.initiative!.value;
+  //     this.system.toughness.value += equippedArmor.system.toughness!.value;
+  //     this.system.stride.value += equippedArmor.system.stride!.value;
+  //     this.system.run.value += equippedArmor.system.run!.value;
 
-      this.data.flags.tooltips.soak.base.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.soak!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-      this.data.flags.tooltips.initiative.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.initiative!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-      this.data.flags.tooltips.toughness.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.toughness!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-      this.data.flags.tooltips.stride.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.stride!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-      this.data.flags.tooltips.run.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.run!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
-    }
-    if (equippedShield) {
-      this.system.soak.shield = this.system.soak.base + (equippedShield.system.soak!.value || 0);
-      this.data.flags.tooltips.soak.shield = this.data.flags.tooltips.soak.shield.concat(this.data.flags.tooltips.soak.base);
-      this.data.flags.tooltips.soak.shield.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield.system.soak!.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
-      this.system.defenses.deflection.value += equippedShield.system.deflection!.value;
-      this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield.system.deflection!.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
-    }
+  //     this.data.flags.tooltips.soak.base.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.soak!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+  //     this.data.flags.tooltips.initiative.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.initiative!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+  //     this.data.flags.tooltips.toughness.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.toughness!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+  //     this.data.flags.tooltips.stride.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.stride!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+  //     this.data.flags.tooltips.run.value.push(game.i18n.format('PILLARS.Tooltip', { value: equippedArmor.system.run!.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+  //   }
+  //   if (equippedShield) {
+  //     this.system.soak.shield = this.system.soak.base + (equippedShield.system.soak!.value || 0);
+  //     this.data.flags.tooltips.soak.shield = this.data.flags.tooltips.soak.shield.concat(this.data.flags.tooltips.soak.base);
+  //     this.data.flags.tooltips.soak.shield.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield.system.soak!.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
+  //     this.system.defenses.deflection.value += equippedShield.system.deflection!.value;
+  //     this.data.flags.tooltips.defenses.deflection.push(game.i18n.format('PILLARS.Tooltip', { value: equippedShield.system.deflection!.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
+  //   }
 
-    this.data.flags.tooltips.soak.physical.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.burn.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.freeze.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.raw.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.corrode.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-    this.data.flags.tooltips.soak.shock.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
-  }
+  //   this.data.flags.tooltips.soak.physical.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   this.data.flags.tooltips.soak.burn.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   this.data.flags.tooltips.soak.freeze.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   this.data.flags.tooltips.soak.raw.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   this.data.flags.tooltips.soak.corrode.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  //   this.data.flags.tooltips.soak.shock.push(game.i18n.format('PILLARS.Tooltip', { value: this.system.soak.base, source: game.i18n.localize('PILLARS.TooltipBase') }));
+  // }
 
-  prepareEffectTooltips() {
-    if (this.data.type == 'headquarters') return;
-    let tooltips = this.data.flags.tooltips;
-    let tooltipKeys = Object.keys(flattenObject(this.data.flags.tooltips));
-    for (let effect of this.effects.filter((e) => !e.data.disabled)) {
-      for (let change of effect.data.changes) {
-        let foundTooltipKey = tooltipKeys.find((key) => change.key.includes(key));
-        if (foundTooltipKey) {
-          let tooltip = getProperty(tooltips, foundTooltipKey);
-          tooltip.push(change.value + ` (${effect.data.label})`);
-        }
-      }
-    }
-  }
+  // prepareEffectTooltips() {
+  //   if (this.data.type == 'headquarters') return;
+  //   let tooltips = this.data.flags.tooltips;
+  //   let tooltipKeys = Object.keys(flattenObject(this.data.flags.tooltips));
+  //   for (let effect of this.effects.filter((e) => !e.data.disabled)) {
+  //     for (let change of effect.data.changes) {
+  //       let foundTooltipKey = tooltipKeys.find((key) => change.key.includes(key));
+  //       if (foundTooltipKey) {
+  //         let tooltip = getProperty(tooltips, foundTooltipKey);
+  //         tooltip.push(change.value + ` (${effect.data.label})`);
+  //       }
+  //     }
+  //   }
+  // }
 
   //#endregion
 
@@ -765,7 +748,7 @@ export class PillarsActor extends Actor {
     let effect = duplicate(CONFIG.statusEffects.find((e) => e.id == condition));
     if (!effect) return new Error(getGame().i18n.localize('PILLARS.ErrorConditionKey'));
 
-    if (condition == 'incapacitated') this.handleDefeatedStatus();
+    if (condition == 'incapacitated') this.addDefeatedStatus();
 
     if (condition == 'dead' || condition == 'incapacitated') setProperty(effect, 'flags.core.overlay', true);
 
@@ -776,11 +759,11 @@ export class PillarsActor extends Actor {
 
   removeCondition(condition: string) {
     let effect = this.hasCondition(condition);
-    if (condition == 'incapacitated') this.handleDefeatedStatus();
+    if (condition == 'incapacitated') this.addDefeatedStatus();
     if (effect) return effect.delete();
   }
 
-  handleDefeatedStatus() {
+  addDefeatedStatus() {
     if (this.data.type == 'headquarters') return;
     let game = getGame();
     if (game.combat) {
@@ -1060,6 +1043,14 @@ export class PillarsActor extends Actor {
           no: () => {},
         });
       }
+  }
+
+
+  isBondedWith(actor : PillarsActor)
+  {
+    let thisBonds = this.getItemTypes(ItemType.bond).filter(i => i.system.active);
+    let theirBonds = actor.getItemTypes(ItemType.bond).filter(i => i.system.active);
+    return thisBonds.find(b => b.system.partner == actor.id) && theirBonds.find(b => b.system.partner == this.id)
   }
 
   /**

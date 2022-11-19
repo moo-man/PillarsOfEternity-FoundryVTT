@@ -1,5 +1,5 @@
 import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
-import { Defense, LifePhase, Season, SeasonContextData, SeasonData } from './types/common';
+import { Defense, LifePhase, Season, SeasonContextData, SeasonData, Time } from './types/common';
 import {
   EmbeddedPower,
   PowerBaseEffect,
@@ -32,6 +32,9 @@ import { PillarsChat } from './module/system/chat';
 import PowerTemplate from './module/system/power-template';
 import TimeTracker from './module/apps/time-tracker';
 import SeasonalActivityApplication from './module/apps/seasonal/seasonal-activity';
+import { PillarsItem } from './module/item/item-pillars';
+import { PillarsActor } from './module/actor/actor-pillars';
+import { Accommodation } from './types/headquarters';
 
 //#region Actor
 
@@ -89,6 +92,11 @@ export interface PillarsActorSourceSystemData {
   notes: {
     value: string;
   };
+  headquarters : {
+    id : string ,
+    role : string ,
+    accommodation : string
+  }
 }
 
 export interface PillarsCharacterSourceSystemData
@@ -145,22 +153,27 @@ export interface PillarsFollowerSourceSystemData
 
 export interface PillarsHeadquartersSourceSystemData {
   residents : {
-    list : {id : string, count : number, data : Record<string,unknown>}[],
-    extra: 0
+    list : {id : string, count : number}[],
+    extra: 0,
+    documents: Actor[]
   },
   staff : {
-    list : {id : string, count : number, data: Record<string,unknown>}[],
+    list : {id : string, count : number}[],
     extra : 0
+    documents: Actor[]
   },
   size : number,
   accommodations : {
-      prepared : number
-  },
+    list : Accommodation[]
+  }
   library : {
     [key: string] : unknown
   },
 
-  disrepair: number,
+  disrepair: {
+    value : number,
+    ruin: boolean
+  },
   log : {
     [key: string] : unknown
   }
@@ -789,6 +802,7 @@ export interface InjurySource {
 
 export interface InjurySourceData extends Description {}
 
+
 export interface BondSource {
   type: 'bond';
   data: BondSourceData;
@@ -802,6 +816,19 @@ export interface BondSourceData extends Description, XP {
     value : number
   }
 }
+export interface SpaceSource {
+  type : "space",
+  data : SpaceSourceData
+}
+
+export interface DefenseSource {
+  type : "defense",
+  data : DefenseSourceData
+}
+
+
+export interface SpaceSourceData extends Description {}
+export interface DefenseSourceData extends Description {}
 
 type PillarsItemDataSource =
  | AttributeSource
@@ -823,27 +850,31 @@ type PillarsItemDataSource =
  | ReputationSource
  | InjurySource
  | BondSource
+ | SpaceSource
+ | DefenseSource
 
 export type PillarsItemSystemData  =
-AttributeSourceData |
-SkillSourceData |
-TraitSourceData |
-PowerSourceData |
-PowerSourceSourceData |
-WeaponSourceData |
-ArmorSourceData |
-ShieldSourceData |
-EquipmentSourceData |
-ConnectionSourceData |
-CultureSourceData |
-BackgroundSourceData |
-SettingSourceData |
-SpeciesSourceData |
-StockSourceData |
-GodlikeSourceData |
-ReputationSourceData |
-InjurySourceData |
-BondSourceData
+| AttributeSourceData 
+| SkillSourceData 
+| TraitSourceData 
+| PowerSourceData 
+| PowerSourceSourceData 
+| WeaponSourceData 
+| ArmorSourceData 
+| ShieldSourceData 
+| EquipmentSourceData 
+| ConnectionSourceData 
+| CultureSourceData 
+| BackgroundSourceData 
+| SettingSourceData 
+| SpeciesSourceData 
+| StockSourceData 
+| GodlikeSourceData 
+| ReputationSourceData 
+| InjurySourceData 
+| BondSourceData 
+| SpaceSourceData 
+| DefenseSourceData 
 
 export type PillarsItemSystemDataTemp =
 AttributeSourceData &
@@ -894,6 +925,7 @@ declare global {
       templates : typeof PowerTemplate,
       TimeTracker : TimeTracker,
       postReadyPrepare : Actor[]
+      time: Time
     };
     dice3d : {
       DiceFactory : {

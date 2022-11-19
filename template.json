@@ -135,6 +135,11 @@
                 "notes": {
                     "value": ""
                 }
+            },
+            "headquarters" : {
+                "id" : "",
+                "role" : "",
+                "accommodation" : ""
             }
         },
         "character": {
@@ -227,14 +232,22 @@
             }
         },
         "headquarters": {
-            "residents" : [],
+            "residents" : {
+                "list" : [],
+                "extra" : []
+            },
+            "staff" : {
+                "list" : [],
+                "extra" : []
+            },
             "hirelings" : 0,
             "size" : 15,
-            "accommodations" : {
-                "prepared" : 15
+            "treasury" : {
+                "value" : 0
             },
-            "library" : [],
-
+            "accommodations" : {
+                "list": []
+            },
             "disrepair": 0,
             "log" : {
 

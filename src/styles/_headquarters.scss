@@ -1,0 +1,136 @@
+.pillars-of-eternity.actor.headquarters.sheet {
+    .general {
+      .form-group{
+        label {
+          flex: 0 0 100px;
+        }
+        input {
+          flex: 0 0 50px;
+          text-align: center;
+        }
+      }
+    }
+
+    .tab[data-tab].active {
+      height: 100%
+    }
+
+    .resident-list {
+      .resident-edit {
+        width: 70%
+      }
+      height: unset
+    }
+
+    .actor-drag img {
+      width: 50px;
+      height: 50px;
+      border: none;
+      cursor: move;
+    }
+
+    .resident-tokens {
+      display: flex;
+      align-items: center;
+      border: 1px dashed black;
+      border-radius: 10px;
+      flex-wrap: wrap;
+    }
+
+
+    .accomm-controls {
+      flex: 0 0 30px;
+      display: flex;
+      justify-content: space-around;
+
+      > * {
+        margin: 3px;
+        cursor: pointer;
+      }
+    }
+
+    .accomm-list {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      overflow: auto;
+      align-content: baseline;
+
+      .accomm-container {
+        min-width: 100px;
+        background: #555;
+        border-radius: 10px;
+        margin: 5px;
+      }
+
+      .accomm-container.unprepared {
+        opacity: 0.3;
+      }
+
+      .unoccupied .accomm-status,
+        .unprepared .accomm-status {
+        font-size: 30px;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        line-height: 50px;
+      }
+
+      .unoccupied .accomm-status i {
+        opacity: 0.3
+      }
+
+      .accomm-status {
+        display:flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .accomm-header {
+        height: 20px;
+        width: 100%;
+        display: flex;
+        color: white;
+        align-items: center;
+        padding: 3px 5px 0px 5px;
+
+        label {
+          flex: 1;
+          white-space: nowrap;
+          overflow: hidden;
+          margin-right:3px;
+        }
+        
+        a {
+          flex: 0 0 10px;
+          color: white;
+          display: flex;
+        }
+      }
+
+      .accomm-footer {
+        height: 15px;
+        margin: 1px 0px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        padding: 0px 5px;
+
+        
+        a {
+          flex: 0 0 10px;
+          color: white;
+          display: flex;
+        }
+      }
+
+      .accomm-details {
+        height: 50px;
+        margin: 0px 5px;
+        background: #CCC;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+    }
+}

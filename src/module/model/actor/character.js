@@ -22,6 +22,19 @@ export class CharacterActorDataModel extends TieredActorDataModel {
         return schema
     }
 
+    getPreCreateData(data)
+    {
+        let preCreateData = super.getPreCreateData(data);
+        mergeObject(preCreateData, { prototypeToken : {
+            sight : {
+                enabled : true
+            },
+            actorLink : true
+        }}, {overwrite : true})
+
+        return preCreateData
+      }
+
     computeBase(items) {
         // Compute Details (size) before calling super class (which uses size)
         let details = this.details.compute(items);
@@ -31,5 +44,11 @@ export class CharacterActorDataModel extends TieredActorDataModel {
             this.size.value = details.size;
         this.life.compute(items);
         super.computeBase(items)
+    }
+
+    currentSeasonData() {
+        let season = game.pillars.config.seasons[game.pillars.time.season].toLowerCase() // TODO: Fix this because it's bad and won't work with localization
+        let year = this.seasons.find(i => i.year == game.pillars.time.year);
+        return year?.[season]        
     }
 }

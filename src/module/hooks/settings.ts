@@ -1,5 +1,5 @@
 import { getGame } from "../system/utility"
-import { Time } from "../../types/common"
+import {  Time } from "../../types/common"
 import { PillarsActorSheet } from "../actor/actor-sheet"
 import BookOfSeasons from "../apps/book-of-seasons"
 
@@ -12,6 +12,10 @@ export default function () {
         if (setting.key == "pillars-of-eternity.season")
         {
             game.pillars.TimeTracker.render(true)
+            game.pillars.time = {
+                season : (setting.value as Time).season,
+                year : (setting.value as Time).year,
+            }
             let windows = Object.values(ui.windows)   
             windows.forEach(w => {
 

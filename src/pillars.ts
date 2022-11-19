@@ -43,6 +43,8 @@ import {CharacterActorDataModel} from "./module/model/actor/character.js"
 import {FollowerActorDataModel} from "./module/model/actor/follower.js"
 //@ts-ignore 
 import {StandardActorDataModel} from "./module/model/actor/components/base.js"
+//@ts-ignore
+import {HeadquartersDataModel} from "./module/model/actor/headquarters.js"
 
 import TimeTracker from "./module/apps/time-tracker";
 import AdventureSeasonalActivityApplication from "./module/apps/seasonal/adventure";
@@ -94,6 +96,8 @@ Hooks.on("init", () => {
   CONFIG.Actor.systemDataModels["follower"] = FollowerActorDataModel;
   //@ts-ignore
   CONFIG.Actor.systemDataModels["npc"] = StandardActorDataModel;
+  //@ts-ignore
+  CONFIG.Actor.systemDataModels["headquarters"] = HeadquartersDataModel;
 
   PillarsExplode()
 
@@ -129,7 +133,11 @@ Hooks.on("init", () => {
     chat : PillarsChat,
     templates : PowerTemplate,
     TimeTracker : new TimeTracker(),
-    postReadyPrepare : []
+    postReadyPrepare : [],
+    time : {
+      season : 0,
+      year: 0
+    }
   }
 })
 

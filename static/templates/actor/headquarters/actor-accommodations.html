@@ -1,1 +1,48 @@
-<div></div>
+<div class="flexrow">
+    <div class="resident-tokens actor-drop">
+        {{#each system.residents.list}}
+        {{#unless this.accommodation}}
+        <div class="actor-drag actor-drag" draggable="true" data-id="{{this.document.id}}">
+            <img src="{{tokenImg this.document}}">
+        </div>
+        {{/unless}}
+        {{/each}}
+    </div>
+    <div class="accomm-controls">
+        <a class="accomm-action" data-action="reset"><i class="fa-solid fa-rotate-right"></i></a>
+    </div>
+</div>
+<div class="accomm-list">
+    {{#each system.accommodations.list}}
+    <div class="accomm-container {{this.status}} actor-drop" style="flex: 0 0 {{this.size}}px" data-index="{{@index}}">
+        <div class="accomm-header">
+            <label>
+                {{this.label}}
+            </label>
+        </div>
+        <div class="accomm-details">
+            <div class="accomm-status">
+                {{#if (eq this.status "unprepared")}}
+                <a class="prepare">
+                    <i class="fa-solid fa-house-circle-xmark"></i>
+                </a>
+                {{else if (eq this.status "unoccupied")}}
+                <span>
+                    <i class="fa-solid fa-house"></i>
+                </span>
+                {{else if (eq this.status "occupied")}}
+                {{#each this.occupants}}
+                <div class="actor-drag" draggable="true" data-id="{{this.id}}">
+                    <img src="{{tokenImg this}}">
+                </div>
+                {{/each}}
+                {{/if}}
+            </div>
+        </div>
+        <div class="accomm-footer">
+            <a>{{this.upkeep}}<i class="fa-solid fa-up"></i></a>
+            <a class="accomm-action" data-action="edit"><i class="fas fa-edit"></i></a>
+        </div>
+    </div>
+    {{/each}}
+</div>

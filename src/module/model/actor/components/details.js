@@ -26,7 +26,7 @@ export class ComputedDetailsModel extends BasicDetailsModel {
     {
         super.compute(items)
         let species = items.species[0]
-        return {stride : species?.system.stride.value, size : species?.system.size.value};
+        return {stride : species?.system.stride.value, size : Number(species?.system.size.value) || 0};
     }
 
 }

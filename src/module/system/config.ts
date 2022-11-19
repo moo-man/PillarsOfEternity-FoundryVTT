@@ -634,6 +634,7 @@ export const PILLARS = {
     '3': 6,
     '4': 10,
     '5': 15,
+    '6': 21
   },
 
   meleeSpecials: {

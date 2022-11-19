@@ -8,6 +8,7 @@ export default function () {
 
     game.pillars.TimeTracker.render(true);
     game.pillars.TimeTracker.checkFirstTimeStartup();
+    game.pillars.time = game.settings.get("pillars-of-eternity", "season")
 
     CONFIG.ChatMessage.documentClass.prototype.getCheck = function () {
       let rollData = this.getFlag('pillars-of-eternity', 'rollData') as SkillCheckData;

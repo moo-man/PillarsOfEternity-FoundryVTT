@@ -39,11 +39,17 @@ export default function () {
         })
 
         Handlebars.registerHelper("tokenImg", function(actor) {
-            return actor.token ? actor.token.texture.src : actor.prototypeToken.texture.src
+            try {
+                return actor.token ? actor.token.texture.src : actor.prototypeToken.texture.src
+            }
+            catch(e) {}
         })
 
         Handlebars.registerHelper("tokenName", function(actor) {
-            return actor.token ? actor.token.name : actor.prototypeToken.name;
+            try {
+                return actor.token ? actor.token.name : actor.prototypeToken.name;
+            }
+            catch(e) {}
         })
         
 

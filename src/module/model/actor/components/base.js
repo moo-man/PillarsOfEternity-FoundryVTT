@@ -18,12 +18,33 @@ export class StandardActorDataModel extends foundry.abstract.DataModel {
             stride: new foundry.data.fields.SchemaField({ value: new foundry.data.fields.NumberField() }),
             run: new foundry.data.fields.SchemaField({ value: new foundry.data.fields.NumberField() }),
             initiative: new foundry.data.fields.SchemaField({ value: new foundry.data.fields.NumberField() }),
+            wealth: new foundry.data.fields.SchemaField({ cp: new foundry.data.fields.NumberField() }),
             weight : new foundry.data.fields.NumberField(),
             notes: new foundry.data.fields.SchemaField({
                 value: new foundry.data.fields.StringField()
-            })
+            }),
+            headquarters : new foundry.data.fields.EmbeddedDataField(HeadquarterResidencyModel)
         }
     } 
+
+
+    getPreCreateData(data)
+    {
+        let preCreateData = {}
+        if (!data.prototypeToken)
+        {
+            mergeObject(preCreateData, {
+                'prototypeToken.disposition': CONST.TOKEN_DISPOSITIONS.NEUTRAL, // Default disposition to neutral
+                'prototypeToken.name': data.name, // Set token name to actor name
+                'prototypeToken.bar1': { attribute: 'health' }, // Default Bar 1 to Wounds
+                'prototypeToken.bar2': { attribute: 'endurance' }, // Default Bar 2 to Advantage
+                'prototypeToken.sight.range': 6,
+            });
+        }
+  
+      setProperty(preCreateData, 'flags.pillars-of-eternity.autoEffects', true);
+      return preCreateData
+    }
 
     computeBase(items) {
         this.defenses.compute(this.size.value)
@@ -107,5 +128,15 @@ export class BasicLifeModel extends foundry.abstract.DataModel {
             this.phase = currentPhase;
         }
         this.age = age;
+    }
+}
+
+export class HeadquarterResidencyModel extends foundry.abstract.DataModel {
+    static defineSchema() {
+        return {
+            id : new foundry.data.fields.StringField(),
+            role : new foundry.data.fields.StringField(),
+            accommodation :new foundry.data.fields.StringField()
+        }
     }
 }
