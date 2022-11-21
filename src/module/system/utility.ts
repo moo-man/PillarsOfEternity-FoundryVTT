@@ -1,5 +1,5 @@
 import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
-import { ItemType, Time } from '../../types/common';
+import { ItemType } from '../../types/common';
 import { PillarsActor } from '../actor/actor-pillars';
 import { PillarsItem } from '../item/item-pillars';
 import { PILLARS } from './config';
@@ -56,20 +56,6 @@ export class PILLARS_UTILITY {
     return mergeObject(foundry.utils.deepClone(PILLARS.meleeSpecials), PILLARS.rangedSpecials);
   }
 
-  /**
-   * Returns true if timeA is later than timeB
-   * @param timeA
-   * @param timeB
-   */
-  static isLaterDate(timeA: Time, timeB: Time) {
-    if (timeA.year > timeB.year) {
-      return true;
-    } else if (timeA.year < timeB.year) {
-      return false;
-    } else if (timeA.year == timeB.year) {
-      return timeA.season > timeB.season;
-    }
-  }
 
   static async findSkillName(name: string, actor?: PillarsActor): Promise<PillarsItem | undefined> {
     let skill;

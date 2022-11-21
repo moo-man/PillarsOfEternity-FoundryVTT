@@ -1,5 +1,5 @@
 import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
-import { Defense, LifePhase, Season, SeasonContextData, SeasonData, Time } from './types/common';
+import { Defense, LifePhase, BookYearData } from './types/common';
 import {
   EmbeddedPower,
   PowerBaseEffect,
@@ -30,11 +30,11 @@ import Migration from './module/system/migrations';
 import { PILLARS_UTILITY } from './module/system/utility';
 import { PillarsChat } from './module/system/chat';
 import PowerTemplate from './module/system/power-template';
-import TimeTracker from './module/apps/time-tracker';
 import SeasonalActivityApplication from './module/apps/seasonal/seasonal-activity';
-import { PillarsItem } from './module/item/item-pillars';
-import { PillarsActor } from './module/actor/actor-pillars';
 import { Accommodation } from './types/headquarters';
+import { HeadquartersManager } from './module/system/headquarters-manager';
+import { TimeManager } from './module/system/time-manager';
+import { TimeSettingData, Season } from './types/time';
 
 //#region Actor
 
@@ -124,7 +124,7 @@ export interface PillarsCharacterSourceSystemData
   childhood: {
     value: string;
   };
-  seasons : SeasonData[]
+  seasons : BookYearData[]
 }
 
 export interface PillarsFollowerSourceSystemData
@@ -238,7 +238,7 @@ export interface PreparedPillarsCharacterData
   childhood: {
     value: string;
   };
-  seasons : SeasonData[]
+  seasons : BookYearData[]
 }
 
 interface PillarsActorTooltips {
@@ -916,6 +916,8 @@ declare global {
         WeaponCheck : typeof WeaponCheck,
         PowerCheck : typeof PowerCheck,
       },
+      headquarters : HeadquartersManager,
+      time : TimeManager,
       seasonalActivities : typeof SeasonalActivityApplication[]
       DamageRoll : typeof DamageRoll
       migration : typeof Migration,
@@ -923,9 +925,7 @@ declare global {
       config : typeof PILLARS,
       chat : typeof PillarsChat,
       templates : typeof PowerTemplate,
-      TimeTracker : TimeTracker,
       postReadyPrepare : Actor[]
-      time: Time
     };
     dice3d : {
       DiceFactory : {
@@ -962,9 +962,10 @@ declare global {
     interface Values {
       'pillars-of-eternity.playerApplyDamage': boolean;
       'pillars-of-eternity.systemMigrationVersion': string;
-      'pillars-of-eternity.season': {season: Season, year : number, context? : SeasonContextData};
-      'pillars-of-eternity.latestSeason': {season: Season, year : number};
-      'pillars-of-eternity.seasonPosition': {left: number, top : number};
+      'pillars-of-eternity.time': TimeSettingData,
+      'pillars-of-eternity.latestTime': {season: Season, year : number};
+      'pillars-of-eternity.trackerPosition': {left: number, top : number};
+      'pillars-of-eternity.activeHeadquarters': string[];
     }
   }
 

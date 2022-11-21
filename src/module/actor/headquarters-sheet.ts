@@ -1,5 +1,5 @@
 import { PreparedPillarsHeadquartersData } from "../../global";
-import { ItemType } from "../../types/common";
+import { hasXPData, ItemType } from "../../types/common";
 import { Accommodation } from "../../types/headquarters";
 import { PillarsItem } from "../item/item-pillars";
 import { getGame } from "../system/utility";
@@ -143,7 +143,24 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                     {
                         return ui.notifications!.error("Seasonal Activity already exists for this season")
                     }
-                    game.user!.character?.updateSeasonYear(game.pillars.time.year, game.pillars.config.seasons[game.pillars.time.season].toLowerCase(), `Practice (Prepared Accommodotation): +10 Housekeeping`)
+                    else if (game.user!.character)
+                    {
+                        let skill = game.user!.character.getItemTypes(ItemType.skill).find(i => i.name?.includes("Housekeeping"))
+                        if (!skill)
+                            skill = game.items!.contents.find(i => i.type == "skill" && i.name?.includes("Housekeeping"))
+                        let skillObject = skill?.toObject()
+                        if (hasXPData(skillObject))
+                        {
+                            skillObject.data.xp.value += 10
+                        }
+                            
+                        await game.pillars.time.updateSeasonAtYear(game.user?.character!, game.pillars.time.current.year, game.pillars.time.current.key, `Practice (Prepared Accommodotation): +10 Housekeeping`)
+                        await game.user?.character.update(...[{skillObject}])
+                    }
+                    else  
+                    {
+                        return ui.notifications!.error("No Assigned Character")
+                    }
                     this.object.update({"system.accommodations.list" : this.object.system.accommodations.edit(index, {prepared: true})})
                 },
                 no: () => {},

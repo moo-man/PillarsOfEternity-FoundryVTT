@@ -8,8 +8,8 @@ import AgingRoll from '../system/aging-roll';
 import { PillarsItem } from '../item/item-pillars';
 import { ActorDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData';
 import { DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
-import { PillarsNonHeadquartersActorSourceData, PreparedPillarsActorData, PreparedPillarsCharacterData, PreparedPillarsFollowerData, PreparedPillarsHeadquartersData, PreparedPillarsNonHeadquartersActorData } from '../../global';
-import { Defense, isUsable, ItemDialogData, ItemType, LifePhase, Season, SeasonData, Tier } from '../../types/common';
+import { PreparedPillarsNonHeadquartersActorData } from '../../global';
+import { Defense, isUsable, ItemDialogData, ItemType, LifePhase, BookYearData, Tier } from '../../types/common';
 import { PILLARS } from '../system/config';
 import {
   AssisterData,
@@ -32,6 +32,7 @@ import ItemDialog from '../apps/item-dialog';
 import BookOfSeasons from '../apps/book-of-seasons';
 import SeasonalActivityMenu from '../apps/seasonal/activity-menu';
 import { ItemDataConstructorData, ItemDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
+import { TimeManager } from '../system/time-manager';
 
 declare global {
   interface DocumentClassConfig {
@@ -448,7 +449,7 @@ export class PillarsActor extends Actor {
         modifier: PILLARS.lifePhaseModifier[this.system.life!.phase as LifePhase] || 0,
         changeList: this.getDialogChanges({ condense: true }),
         changes: this.getDialogChanges(),
-        years: this.system.seasons?.filter((i : SeasonData) => !i.aging).map((i : SeasonData) => i.year) || [],
+        years: this.system.seasons?.filter((i : BookYearData) => !i.aging).map((i : BookYearData) => i.year) || [],
         defaultYear: year,
       };
       let checkData: AgingCheckDataFlattened = <AgingCheckDataFlattened>await AgingDialog.create(dialogData);
@@ -979,72 +980,6 @@ export class PillarsActor extends Actor {
     return shieldObj; // Return data instead of updating it to send it with the rest of the update
   }
 
-  /**
-   * Helper method to easily update seasonal data
-   *
-   * @param year Number - year being updated
-   * @param type Property being updated, such as `aging` or `winter`
-   * @param message Value being added to the property
-   * @returns
-   */
-  updateSeasonYear(year: number, type: string, message: string) {
-    if (this.data.type == "character") {
-      let seasons = duplicate(this.system.seasons);
-      let index = seasons.findIndex((s : SeasonData) => s.year == year);
-      return this.updateSeasonIndex(index, type, message);
-    } else throw new Error(getGame().i18n.format('PILLARS.ErrorYearNotFound', { year }));
-  }
-
-  /**
-   * Helper method to easily update seasonal data
-   *
-   * @param index index of the season being updated
-   * @param type Property being updated, such as `aging` or `winter`
-   * @param message Value being added to the property
-   * @returns
-   */
-  updateSeasonIndex(index: number, type: string, message: string) {
-    if (this.data.type == 'character') {
-      let seasons = duplicate(this.system.seasons);
-      let season = seasons[index];
-
-      if (season) {
-        setProperty(season, type, message);
-        return this.update({ 'data.seasons': seasons }).then(() => {
-          this.book.render(true);
-        });
-      } else throw new Error(getGame().i18n.format('PILLARS.ErrorSeasonIndex', { index }));
-    }
-  }
-
-  async handleSeasonChange() {
-      let game = getGame();
-      let needsUpdating = Object.keys(this.seasonsNeedUpdating).reverse();
-      // ex. 3-winter, 2-summer
-      let mostRecentSeason = needsUpdating[0]?.split('-');
-      let aging = mostRecentSeason?.[1] == 'winter' || mostRecentSeason?.[1] == 'aging';
-
-      // Prevent trying to update Aging section with normal seasonal activities
-      if (aging && mostRecentSeason) {
-        mostRecentSeason[1] = 'winter';
-      }
-
-      if (aging) {
-        let roll = await this.setupAgingRoll(BookOfSeasons.indexToYear(Number(mostRecentSeason?.[0]), this));
-        await roll?.rollCheck();
-        await roll?.sendToChat();
-      }
-
-      if (mostRecentSeason) {
-        Dialog.confirm({
-          title: game.i18n.localize('PILLARS.NewSeason'),
-          content: `<p>${game.i18n.localize('PILLARS.NewSeasonPrompt')}</p>`,
-          yes: () => new SeasonalActivityMenu({ actor: this, index: Number(mostRecentSeason?.[0]), season: mostRecentSeason?.[1]! }).render(true),
-          no: () => {},
-        });
-      }
-  }
-
 
   isBondedWith(actor : PillarsActor)
   {
@@ -1100,7 +1035,7 @@ export class PillarsActor extends Actor {
    */
   setFollowerSpecies(speciesItem: PillarsItem) {
     let game = getGame();
-    let time = game.settings.get('pillars-of-eternity', 'season');
+    let time = game.settings.get('pillars-of-eternity', 'time');
     let year = time.year;
     let YA_age = speciesItem.system.phases!['youngAdult'][0]!;
     let age = YA_age + Math.ceil(CONFIG.Dice.randomUniform() * 6);
@@ -1122,59 +1057,10 @@ export class PillarsActor extends Actor {
     if (items.length) return this.update({ items });
   }
 
-  /**
-   * Compares the current time in the world settings and returns the index-season values that need updating
-   */
-  get seasonsNeedUpdating(): Record<string, boolean> | boolean {
-    let needsUpdating: Record<string, boolean> = {};
-    let currentTime = getGame().settings.get('pillars-of-eternity', 'season');
-    if (this.data.type == 'character') {
-      this.system.seasons!.forEach((s: SeasonData, i : Number) => {
-          if (Number.isNumeric(s.year)) {
-            if (!s.spring && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SPRING, year: s.year! })) {
-              needsUpdating[`${i}-spring`] = true;
-            }
-            if (!s.summer && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.SUMMER, year: s.year! })) {
-              needsUpdating[`${i}-summer`] = true;
-            }
-            if (!s.autumn && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.AUTUMN, year: s.year! })) {
-              needsUpdating[`${i}-autumn`] = true;
-            }
-          if (!s.winter && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.WINTER, year: s.year! })) {
-            needsUpdating[`${i}-winter`] = true;
-          }
-          if (!s.aging && PILLARS_UTILITY.isLaterDate(currentTime, { season: Season.WINTER, year: s.year! })) {
-            needsUpdating[`${i}-aging`] = true;
-          }
-      }
-      });
-      return foundry.utils.isObjectEmpty(needsUpdating) ? false : needsUpdating;
-    } else return false;
-  }
-
-  // addWound(type)
-  // {
-  //     return this.update({[`data.health.wounds.${type}`] : this.system.health.wounds[type] + 1 })
-  // }
-
-  //#region Getters
-  // @@@@@@@@ CALCULATION GETTERS @@@@@@
-  // get woundModifier() {
-  //   let woundModifier = 0;
-  //   woundModifier +=
-  //     this.system.health.wounds.light * (this.system.health.threshold.light / 2);
-  //   woundModifier +=
-  //     this.system.health.wounds.heavy * (this.system.health.threshold.heavy / 2);
-  //   woundModifier +=
-  //     this.system.health.wounds.severe * (this.system.health.threshold.severe / 2);
-  //   return woundModifier;
-  // }
 
   get book() {
     return new BookOfSeasons(this);
   }
-
-  // @@@@@@@@ FORMATTED GETTERS @@@@@@@@
 
   // @@@@@@@ ITEM GETTERS @@@@@@@@@
 

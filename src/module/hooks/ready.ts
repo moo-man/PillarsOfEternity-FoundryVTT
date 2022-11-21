@@ -5,10 +5,9 @@ import { PILLARS_UTILITY } from '../system/utility';
 export default function () {
   Hooks.on('ready', () => {
     let game = getGame();
-
-    game.pillars.TimeTracker.render(true);
-    game.pillars.TimeTracker.checkFirstTimeStartup();
-    game.pillars.time = game.settings.get("pillars-of-eternity", "season")
+    
+    game.pillars.time.setup();
+    game.pillars.headquarters.sync();
 
     CONFIG.ChatMessage.documentClass.prototype.getCheck = function () {
       let rollData = this.getFlag('pillars-of-eternity', 'rollData') as SkillCheckData;

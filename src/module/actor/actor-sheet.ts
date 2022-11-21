@@ -188,7 +188,7 @@ export class PillarsActorSheet extends ActorSheet<ActorSheet.Options, PillarsAct
     if (buttons)
     {
       let icon = buttons.firstElementChild as HTMLElement
-      if(this.actor.seasonsNeedUpdating)
+      if(getGame().pillars.time.seasonsNeedUpdating(this.actor))
       {
           buttons.classList.add("alert")
           if (icon)

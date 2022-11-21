@@ -33,7 +33,7 @@ export default class SeasonalActivityMenu extends FormApplication<FormApplicatio
   }
 
   async _updateObject(event: Event, formData?: Record<string, string>): Promise<unknown> {
-      let promise = await this.object.actor?.updateSeasonIndex(this.object.index, this.object.season, formData!["activity"] || "")
+      let promise = await getGame().pillars.time.updateSeasonAtIndex(this.object.actor, this.object.index, this.object.season, formData!["activity"] || "")
       if (this.resultData)
       {
 

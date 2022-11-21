@@ -128,33 +128,13 @@ interface XPData {
     data : XP & {modifier : {value : number}}
 }
 
-export interface SeasonData {
+export interface BookYearData {
   year: number;
   spring: string;
   summer: string;
   autumn: string;
   winter: string;
   aging: string;
-}
-
-export enum Season {
-  SPRING,
-  SUMMER,
-  AUTUMN,
-  WINTER
-}
-
-export interface Time {
-  season : Season,
-  year : number
-}
-
-export interface SeasonContextData {
-  latest? : boolean
-  adventure? : {
-    name? : string,
-    experience? : number
-  }
 }
 
 export interface ItemDialogData {

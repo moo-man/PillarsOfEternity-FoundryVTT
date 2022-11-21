@@ -19,9 +19,9 @@ export default class AdventureSeasonalActivityApplication extends XPAllocationAc
     let game = getGame();
 
     
-    let season = game.settings.get("pillars-of-eternity", "season")
+    let time = game.pillars.time.current
 
-    data.experience = season.context?.adventure?.experience
+    data.experience = time.context?.adventure?.experience
     data.editableExperience = !data.experience;
 
     data.lists.skills = {label : game.i18n.localize("PILLARS.Skills"), items :  this.actor.getItemTypes(ItemType.skill).filter(i => i.system.used?.value)}

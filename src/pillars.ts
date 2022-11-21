@@ -46,7 +46,6 @@ import {StandardActorDataModel} from "./module/model/actor/components/base.js"
 //@ts-ignore
 import {HeadquartersDataModel} from "./module/model/actor/headquarters.js"
 
-import TimeTracker from "./module/apps/time-tracker";
 import AdventureSeasonalActivityApplication from "./module/apps/seasonal/adventure";
 import SocializingSeasonalActivityApplication from "./module/apps/seasonal/socializing";
 import PracticeSeasonalActivityApplication from "./module/apps/seasonal/practice";
@@ -54,6 +53,8 @@ import StudySeasonalActivityApplication from "./module/apps/seasonal/study";
 import EnchantmentSeasonalActivityApplication from "./module/apps/seasonal/enchantment";
 import LivingOffLandSeasonalActivityApplication from "./module/apps/seasonal/living-off-land";
 import { PillarsHeadquartersSheet } from "./module/actor/headquarters-sheet";
+import { HeadquartersManager } from "./module/system/headquarters-manager";
+import { TimeManager } from "./module/system/time-manager";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -126,18 +127,15 @@ Hooks.on("init", () => {
       EnchantmentSeasonalActivityApplication,
       LivingOffLandSeasonalActivityApplication
     ],
+    headquarters : new HeadquartersManager(),
+    time : new TimeManager(),
     DamageRoll : DamageRoll,
     migration : Migration,
     utility: PILLARS_UTILITY,
     config : PILLARS,
     chat : PillarsChat,
     templates : PowerTemplate,
-    TimeTracker : new TimeTracker(),
     postReadyPrepare : [],
-    time : {
-      season : 0,
-      year: 0
-    }
   }
 })
 

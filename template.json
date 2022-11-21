@@ -249,9 +249,7 @@
                 "list": []
             },
             "disrepair": 0,
-            "log" : {
-
-            }
+            "log" : []
         }
     },
     "Item": {

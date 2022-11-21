@@ -41,7 +41,7 @@ export default class AgingRoll {
     let message = this.handleAgeRollResult()
     if (this.checkData?.year)
     {
-      await this.actor?.updateSeasonYear(this.data?.checkData.year!, "aging", message)
+      await getGame().pillars.time.updateSeasonAtYear(this.actor!, this.data?.checkData.year!, "aging", message)
     }
     ui.notifications!.notify(message)
     return this

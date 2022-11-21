@@ -2,6 +2,7 @@ import { getGame } from "../system/utility";
 
 export default function () {
     Hooks.on("getChatLogEntryContext", addChatMessageContextOptions)
+    Hooks.on("getActorDirectoryEntryContext", addActorContextOptions)
 }
 
 
@@ -62,3 +63,40 @@ export default function () {
     return options;
   };
   
+  function addActorContextOptions (html: JQuery, options: ContextMenuEntry[]) {
+
+     let isActiveHeadquarters = (li : JQuery<HTMLElement>) : boolean => {
+        let id = li.attr("data-document-id")
+        let actor = getGame().actors!.get(id!)!
+        return actor.type == "headquarters" && getGame().pillars.headquarters.isActive(actor.id)
+     }
+
+     let isInactiveHeadquarters = (li : JQuery<HTMLElement>) : boolean => {
+      let id = li.attr("data-document-id")
+      let actor = getGame().actors!.get(id!)!
+      return actor.type == "headquarters" && !getGame().pillars.headquarters.isActive(actor.id)
+   }
+
+
+     options.push({
+        name: "PILLARS.ToggleHeadquartersActive",
+        icon: '<i class="fa-solid fa-house-turret"></i>',
+        condition: isInactiveHeadquarters,
+        callback: (li: JQuery<HTMLElement>) => {
+          let id = li.attr("data-document-id")
+          getGame().pillars.headquarters.activate(id!)
+        }
+      },
+     )
+
+     options.push({
+      name: "PILLARS.ToggleHeadquartersInactive",
+      icon: '<i class="fa-solid fa-house-turret"></i>',
+      condition: isActiveHeadquarters,
+      callback: (li: JQuery<HTMLElement>) => {
+        let id = li.attr("data-document-id")
+        getGame().pillars.headquarters.deactivate(id!)
+      }
+    },
+   )
+  }

@@ -1,5 +1,5 @@
 import { getGame } from "../system/utility"
-import { SeasonData } from '../../types/common';
+import { BookYearData } from '../../types/common';
 import { PillarsActor } from '../actor/actor-pillars';
 import { PILLARS } from '../system/config';
 import SeasonalActivityMenu from './seasonal/activity-menu';
@@ -26,13 +26,13 @@ export default class BookOfSeasons extends Application {
 
   getData() {
     let data: {
-      seasons?: (SeasonData & { index?: number; current?: string })[];
+      seasons?: (BookYearData & { index?: number; current?: string })[];
       actor?: PillarsActor;
       seasonsNeedUpdating?: Record<string, boolean> | boolean;
     } = {};
 
-    let currentTime = getGame().settings.get('pillars-of-eternity', 'season');
-    data.seasons = duplicate(this.actor!.system.seasons) as SeasonData[];
+    let currentTime = getGame().pillars.time.current
+    data.seasons = duplicate(this.actor!.system.seasons) as BookYearData[];
     data.seasons!.forEach((s, i) => {
       s.index = i;
       if (s.year == currentTime.year) {
@@ -52,7 +52,7 @@ export default class BookOfSeasons extends Application {
   }
 
   checkAlerts() {
-    let seasonsNeedUpdating = this.actor?.seasonsNeedUpdating as Record<string, boolean>;
+    let seasonsNeedUpdating = getGame().pillars.time.seasonsNeedUpdating(this.actor!) as Record<string, boolean>;
 
     let elements = this.element.find<HTMLDivElement>('.alert');
 
@@ -84,7 +84,7 @@ export default class BookOfSeasons extends Application {
         aging: '',
       });
 
-      await this.actor!.update({ 'data.seasons': seasons });
+      await this.actor!.update({ 'system.seasons': seasons });
       this.render(true);
     });
 
@@ -105,7 +105,7 @@ export default class BookOfSeasons extends Application {
     html.find('input').on('change', (ev: JQuery.ChangeEvent) => {
       let name = ev.target.name.split('-');
       let index = parseInt(name[0] || '');
-      let key = name[1] as keyof SeasonData;
+      let key = name[1] as keyof BookYearData;
       let seasons = foundry.utils.deepClone(this.actor?.system.seasons);
       let val: string | number = ev.target.value;
       if (Number.isNumeric(val)) val = parseInt(val.toString());
@@ -113,7 +113,7 @@ export default class BookOfSeasons extends Application {
         setProperty(seasons![index]!, key, val);
         //seasons[index][type] = val // TODO figure this out1`
       }
-      return this.actor?.update({ 'data.seasons': seasons }).then((actor) => {
+      return this.actor?.update({ 'system.seasons': seasons }).then((actor) => {
         this.checkAlerts();
       });
     });

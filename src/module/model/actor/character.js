@@ -45,10 +45,4 @@ export class CharacterActorDataModel extends TieredActorDataModel {
         this.life.compute(items);
         super.computeBase(items)
     }
-
-    currentSeasonData() {
-        let season = game.pillars.config.seasons[game.pillars.time.season].toLowerCase() // TODO: Fix this because it's bad and won't work with localization
-        let year = this.seasons.find(i => i.year == game.pillars.time.year);
-        return year?.[season]        
-    }
 }
