@@ -25,7 +25,7 @@ export class TimeManager {
     }
 
     get current() {
-        let time  = getGame().settings.get("pillars-of-eternity", "time") as TimeSettingData & {key : string, display : string};
+        let time  = getGame().settings.get("pillars-of-eternity", "time") as TimeSettingData & {key : typeof TimeManager.timeKeyMap[keyof typeof TimeManager.timeKeyMap], display : string};
         time.key = TimeManager.timeKeyMap[time.season]
         time.display = PILLARS.seasons[time.season]
         return time
@@ -66,7 +66,13 @@ export class TimeManager {
         
         if (!game.user!.isGM && game.user?.character && time.context?.latest)
         {
-            this.handleSeasonChange(game.user.character);
+            this.handleCharacterSeasonChange(game.user.character);
+        }
+        else if (game.user!.isGM)
+        {
+          game.pillars.headquarters.activeHeadquarters.forEach(hq => {
+            this.handleHeadquartersSeasonChange(hq)
+          })
         }
     }
 
@@ -97,6 +103,7 @@ export class TimeManager {
             title : game.i18n.localize("PILLARS.SeasonContext"),
             content : `
             <p>${game.i18n.localize("PILLARS.SeasonContextData")}</p>
+            <form>
             <div class="form-group">
               <label>${game.i18n.localize("PILLARS.SeasonContextAdventure")}</label>
               <div class="form-fields">
@@ -109,6 +116,7 @@ export class TimeManager {
                 <input class="adventure-xp" type="number">
               </div>
             </div>
+            </form>
             `,
             buttons: {
               confirm : {
@@ -201,12 +209,30 @@ export class TimeManager {
    * @param message Value being added to the property
    * @returns
    */
-    updateSeasonAtYear(actor : PillarsActor, year: number, seasonKey: string, message: string) {
+    updateSeasonAtYear(actor : PillarsActor, year: number, seasonKey: "spring" | "summer" | "autumn" | "winter" | "aging", message: string) {
         if (actor.data.type == "character") {
           let seasons = duplicate(actor.system.seasons);
           let index = seasons.findIndex((s : BookYearData) => s.year == year);
-          return this.updateSeasonAtIndex(actor, index, seasonKey, message);
-        } else throw new Error(getGame().i18n.format('PILLARS.ErrorYearNotFound', { year }));
+
+          // Add year if it doesn't exist
+          if (index == -1)
+          {
+            let seasons = duplicate(actor.system.seasons);
+            let seasonData = {
+              year,
+              spring : "",
+              summer : "",
+              autumn : "",
+              winter : "",
+              aging : "",
+            }
+            seasonData[seasonKey] = message
+            seasons.push(seasonData)
+            actor.update({"system.seasons" : seasons})
+          }
+          // OTherwise update at index
+          else return this.updateSeasonAtIndex(actor, index, seasonKey, message);
+        } 
       }
     
       /**
@@ -231,7 +257,7 @@ export class TimeManager {
         }
       }
     
-      async handleSeasonChange(actor: PillarsActor) {
+      async handleCharacterSeasonChange(actor: PillarsActor) {
           let game = getGame();
           let needsUpdating = Object.keys(this.seasonsNeedUpdating(actor) || {}).reverse();
           // ex. 3-winter, 2-summer
@@ -258,6 +284,15 @@ export class TimeManager {
             });
           }
       }
+
+      async handleHeadquartersSeasonChange(actor: PillarsActor) {
+        let game = getGame();
+
+        if (game.pillars.time.current.season == Season.WINTER && game.pillars.time.current.context?.latest)
+        {
+          actor.update(actor.system.performUpkeep())
+        }
+    }
 
       currentSeasonDataFor(actor : PillarsActor) {
         if (actor.data.type != "character")

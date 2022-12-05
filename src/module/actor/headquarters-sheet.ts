@@ -2,6 +2,7 @@ import { PreparedPillarsHeadquartersData } from "../../global";
 import { hasXPData, ItemType } from "../../types/common";
 import { Accommodation } from "../../types/headquarters";
 import { PillarsItem } from "../item/item-pillars";
+import { PILLARS } from "../system/config";
 import { getGame } from "../system/utility";
 import { PillarsActor } from "./actor-pillars";
 
@@ -10,6 +11,7 @@ type PillarsHeadquartersSheetData = ActorSheet & {
     system : PreparedPillarsHeadquartersData,
     items: HeadquartersSheetItemData
     accommodations : any
+    log : any
 }
 
 type SheetAccommodation = {
@@ -52,6 +54,8 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
         data.system = data.actor.system
         data.items = this.constructItemLists(data);
         data.accommodations = this.formatAccommodations(data) 
+        data.log = this.formatLog(data)
+        console.log(data)
         return data
 
     }
@@ -69,12 +73,56 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
         return sheetData.system.accommodations.list.map((a : SheetAccommodation)=> {
 
             //  Attempting to reflect larger sized actors taking up more space : make accommodation element bigger
-            let size = Math.max(1, a.occupants!.reduce((acc : number, actor : PillarsActor) => acc + (actor.system.size.value || 1), 0));
+            let size = Math.max(1, a.occupants!.filter(o => o).reduce((acc : number, actor : PillarsActor) => acc + (actor.system.size.value || 1), 0));
             a.size = Math.max(a.occupants!.length * 60, size * 100);
             return a
         })
+    }
+
+    formatLog(sheetData : PillarsHeadquartersSheetData)
+    {
+        let log : Record<string, Record<string, string[]>> = {}
+
+        let html = `<ul>`
+
+        sheetData.system.log.forEach((entry)=> {
+            let yearEntry = log[entry.year] || {}
+            if (!log[entry.year])
+                log[entry.year] = yearEntry
+
+            if (yearEntry?.[entry.season])
+            {
+                yearEntry[entry.season]?.push(entry.text)
+            }
+            else 
+            {
+                yearEntry[entry.season] = [entry.text]
+            }
+        })
+
+        let years = Object.keys(log)
+        let entries = Object.values(log)
+
+        let logArray = entries.map((seasons, index) => {
+            return {year : Number(years[index]), seasons}
+        }).sort((a, b) => b.year - a.year)
 
 
+
+        for(let group of logArray)
+        {
+            html += `<li class="log-group"><div class="year">${group.year}</div>`
+            Object.keys(group.seasons).reverse().forEach(seasonNum => {
+                html += `<div class="season">${PILLARS.seasons[Number(seasonNum) as keyof typeof PILLARS.seasons]}</div>`
+                group.seasons[seasonNum]?.forEach(entry => {
+                    html += `<div class="entry">${entry}</div>`
+                })
+            })
+            html += "</li>"
+        }
+        html += "</ul>"
+
+        return html
     }
 
     async _onDrop(ev : DragEvent) {
@@ -139,7 +187,7 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                 title: game.i18n.localize('PILLARS.PrepareAccommodation'),
                 content: `<p>${game.i18n.format('PILLARS.PrepareAccommodationPrompt', {name : game.user?.character.name})}</p>`,
                 yes: async () => {
-                    if (game.user!.character?.system.currentSeasonData())
+                    if (game.pillars.time.currentSeasonDataFor(game.user!.character!))
                     {
                         return ui.notifications!.error("Seasonal Activity already exists for this season")
                     }
@@ -154,14 +202,21 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                             skillObject.data.xp.value += 10
                         }
                             
-                        await game.pillars.time.updateSeasonAtYear(game.user?.character!, game.pillars.time.current.year, game.pillars.time.current.key, `Practice (Prepared Accommodotation): +10 Housekeeping`)
+                        await game.pillars.time.updateSeasonAtYear(
+                            game.user?.character!, 
+                            game.pillars.time.current.year, 
+                            game.pillars.time.current.key as "spring" | "summer" | "autumn" | "winter", 
+                            `Practice (Prepared Accommodotation): +10 Housekeeping`)
                         await game.user?.character.update(...[{skillObject}])
                     }
                     else  
                     {
                         return ui.notifications!.error("No Assigned Character")
                     }
-                    this.object.update({"system.accommodations.list" : this.object.system.accommodations.edit(index, {prepared: true})})
+                    this.object.update({
+                            "system.accommodations.list" : this.object.system.accommodations.edit(index, {prepared: true}), 
+                            "system.log" : this.object.system.addToLog(this.object.system.accommodations.list[index].label + " was prepared")
+                        })
                 },
                 no: () => {},
               });
@@ -270,8 +325,9 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
     {
         let li = $(ev.currentTarget).parents(".item")[0];
         let type = li?.dataset.type as string
-        let list = this.object.system[type].remove(Number(li?.dataset.index))
-        this.object.update({[`system.${type}.list`] : list})
+        let index = Number(li?.dataset.index);
+        let list = this.object.system[type].remove(index)
+        this.object.update({[`system.${type}.list`] : list, "system.log" : this.object.system.addToLog(this.object.system[type].list[index].document.name + " Left")})
     }
     
     _onEditResident(ev : JQuery.ChangeEvent)
@@ -315,14 +371,14 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                     label : "Resident",
                     callback : () => {
                         let list = this.object.system.residents.add(actor)
-                        this.object.update({"system.residents.list" : list})
+                        this.object.update({"system.residents.list" : list, "system.log" : this.object.system.addToLog(`${actor.name} Arrived (Resident)`)})
                     }
                 },
                 "staff" : {
                     label : "Staff",
                     callback : () => {
                         let list = this.object.system.staff.add(actor)
-                        this.object.update({"system.staff.list" : list})
+                        this.object.update({"system.staff.list" : list,  "system.log" : this.object.system.addToLog(`${actor.name} Arrived (Staff)`)})
                     }
                 }
             }
@@ -385,7 +441,7 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                             return ui.notifications!.error("No Actor Found")
                         }
 
-                        await this.object.update({"system.treasury.value" : this.object.system.treasury.value + value})
+                        await this.object.update({"system.treasury.value" : this.object.system.treasury.value + value, "system.log" : this.object.system.addToLog(`Deposited ${value}`)})
                     }
                 },
                 withdraw : {
@@ -404,7 +460,7 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                             else 
                             {
                                 await actor.update({"system.wealth.cp" : actor.system.wealth.cp + value})
-                                await this.object.update({"system.treasury.value" : this.object.system.treasury.value + (-value)})
+                                await this.object.update({"system.treasury.value" : this.object.system.treasury.value + (-value), "system.log" : this.object.system.addToLog(`Withdrew ${value}`)})
                             }
 
                         }

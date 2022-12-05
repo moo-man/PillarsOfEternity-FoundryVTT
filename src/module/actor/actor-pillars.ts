@@ -50,23 +50,69 @@ export class PillarsActor extends Actor {
   //   computeDerived : any
   // }> = {}
 
-  system : any
-  prototypeToken : any
-  _source: any
+  system: any;
+  prototypeToken: any;
+  _source: any;
 
   itemCategories: Record<keyof typeof ItemType, PillarsItem[]> | undefined;
 
   async _preCreate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: User) {
     await super._preCreate(data, options, user);
-    this.updateSource(this.system.getPreCreateData(data))
+    this.updateSource(this.system.getPreCreateData(data));
   }
 
   async _preUpdate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: User) {
     await super._preUpdate(data, options, user);
     this.handleScrollingText(data);
-    if (this.system.handlePreUpdate)
-    {
-      this.system.handlePreUpdate(data)
+    if (this.system.handlePreUpdate) {
+      this.system.handlePreUpdate(data);
+    }
+  }
+
+  async _onUpdate(data: Record<string, unknown>, options: DocumentModificationOptions, userId: string) {
+    await super._onUpdate(data, options, userId);
+    if (this.data.type == 'headquarters') return;
+
+    // Only allow user who made the modification to apply effects, otherwise multiple effects are applied
+    if (getGame().user?.id == userId) {
+      // If health or endurance has been modified
+      if (hasProperty(data, 'system.health') || hasProperty(data, 'system.endurance')) {
+        // Apply automatic effects only if option is enabled
+        if (this.getFlag('pillars-of-eternity', 'autoEffects')) {
+          // Bloodied
+          if (this.system.health.bloodied) {
+            let existing = this.effects.find((e) => e.getFlag('core', 'statusId') == 'bloodied');
+            if (!existing) {
+              let existing = this.hasCondition('bloodied');
+              if (!existing) await this.addCondition('bloodied');
+            }
+          } else {
+            await this.removeCondition('bloodied');
+          }
+
+          // Winded
+          if (this.system.endurance.winded) {
+            let existing = this.hasCondition('winded');
+            if (!existing) await this.addCondition('winded');
+          } else {
+            await this.removeCondition('winded');
+          }
+
+          // Incapacitated (From health or endurance)
+          if (this.system.health.incap || this.system.endurance.incap) {
+            if (!this.hasCondition('incapacitated')) await this.addCondition('incapacitated');
+            if (!this.hasCondition('prone')) await this.addCondition('prone');
+          } else if (this.hasCondition('incapacitated')) await this.removeCondition('incapacitated');
+
+          // Dead
+          if (this.system.health.dead) {
+            await this.addCondition('dead');
+          } else if (this.hasCondition('dead')) await this.removeCondition('dead');
+          if (hasProperty(data, 'system.health.wounds') && this.system.health.value > this.system.health.max) {
+            this.update({ 'system.health.value': this.system.health.max });
+          }
+        }
+      }
     }
   }
 
@@ -131,7 +177,7 @@ export class PillarsActor extends Actor {
   // }
 
   prepareBaseData() {
-    this.system.computeBase(this.itemCategories)
+    this.system.computeBase(this.itemCategories);
     // if (this.data.type == 'headquarters') return;
 
     // this.data.flags.tooltips = {
@@ -212,7 +258,7 @@ export class PillarsActor extends Actor {
   }
 
   prepareDerivedData() {
-    this.system.computeDerived(this.itemCategories)
+    this.system.computeDerived(this.itemCategories);
     // if (this.data.type == 'headquarters') return;
 
     // let equippedArmor = this.equippedArmor;
@@ -281,7 +327,6 @@ export class PillarsActor extends Actor {
       this.itemCategories = this.itemTypes;
       //for (let type in this.itemCategories) this.itemCategories[<ItemType>type] = this.itemCategories[<ItemType>type]!.sort((a, b) => (a.data.sort > b.data.sort ? 1 : -1));
       super.prepareData();
-
 
       this.prepareItems();
       // this.prepareHeadquarters();
@@ -449,7 +494,7 @@ export class PillarsActor extends Actor {
         modifier: PILLARS.lifePhaseModifier[this.system.life!.phase as LifePhase] || 0,
         changeList: this.getDialogChanges({ condense: true }),
         changes: this.getDialogChanges(),
-        years: this.system.seasons?.filter((i : BookYearData) => !i.aging).map((i : BookYearData) => i.year) || [],
+        years: this.system.seasons?.filter((i: BookYearData) => !i.aging).map((i: BookYearData) => i.year) || [],
         defaultYear: year,
       };
       let checkData: AgingCheckDataFlattened = <AgingCheckDataFlattened>await AgingDialog.create(dialogData);
@@ -841,8 +886,7 @@ export class PillarsActor extends Actor {
     };
 
     // Need to separate items from updateObj because of https://github.com/foundryvtt/foundryvtt/issues/8351
-    let items : ItemDataSource[]  = []
-
+    let items: ItemDataSource[] = [];
 
     let soak = this.system.soak.base;
     switch (type) {
@@ -892,19 +936,16 @@ export class PillarsActor extends Actor {
       }
     }
 
-    if (this.isOwner || !game.settings.get('pillars-of-eternity', 'playerApplyDamage')) 
-    {
+    if (this.isOwner || !game.settings.get('pillars-of-eternity', 'playerApplyDamage')) {
       await this.update(updateObj);
 
       // Currently the only items within the items array are shields and their health being updated
       // If items need to be added, a separate call to createEmbeddedDocuments is needed
-      if (items.length)
-        this.updateEmbeddedDocuments("Item", [{...items}])
-    }
-    else if (game.settings.get('pillars-of-eternity', 'playerApplyDamage'))
+      if (items.length) this.updateEmbeddedDocuments('Item', [{ ...items }]);
+    } else if (game.settings.get('pillars-of-eternity', 'playerApplyDamage'))
       game.socket!.emit('system.pillars-of-eternity', {
         type: 'updateActor',
-        payload: { updateData: updateObj, speaker: this.speakerData(), updateItems : items },
+        payload: { updateData: updateObj, speaker: this.speakerData(), updateItems: items },
       });
 
     return message;
@@ -980,12 +1021,10 @@ export class PillarsActor extends Actor {
     return shieldObj; // Return data instead of updating it to send it with the rest of the update
   }
 
-
-  isBondedWith(actor : PillarsActor)
-  {
-    let thisBonds = this.getItemTypes(ItemType.bond).filter(i => i.system.active);
-    let theirBonds = actor.getItemTypes(ItemType.bond).filter(i => i.system.active);
-    return thisBonds.find(b => b.system.partner == actor.id) && theirBonds.find(b => b.system.partner == this.id)
+  isBondedWith(actor: PillarsActor) {
+    let thisBonds = this.getItemTypes(ItemType.bond).filter((i) => i.system.active);
+    let theirBonds = actor.getItemTypes(ItemType.bond).filter((i) => i.system.active);
+    return thisBonds.find((b) => b.system.partner == actor.id) && theirBonds.find((b) => b.system.partner == this.id);
   }
 
   /**
@@ -1056,7 +1095,6 @@ export class PillarsActor extends Actor {
 
     if (items.length) return this.update({ items });
   }
-
 
   get book() {
     return new BookOfSeasons(this);

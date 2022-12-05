@@ -174,9 +174,8 @@ export interface PillarsHeadquartersSourceSystemData {
     value : number,
     ruin: boolean
   },
-  log : {
-    [key: string] : unknown
-  }
+  log : {text : string, year : number, season: string}[]
+  
 }
 
 interface CharacterDataSource {

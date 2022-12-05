@@ -9,6 +9,30 @@
           text-align: center;
         }
       }
+
+      .log {
+        h3 {
+          text-align: center;
+        }
+        ul {
+          list-style: none;
+          padding: 0px;
+
+          .year {
+            font-weight: bold;
+          }
+
+          .season {
+            font-style: italic;
+            padding: 0 0 0 1.5rem;
+          }
+
+          .entry {
+            padding: 0 0 0 3rem;
+          }
+
+        }
+      }
     }
 
     .tab[data-tab].active {

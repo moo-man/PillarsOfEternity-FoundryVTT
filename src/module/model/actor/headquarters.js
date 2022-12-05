@@ -7,6 +7,11 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
             staff: new foundry.data.fields.EmbeddedDataField(EmbeddedActorDataModel),
             accommodations: new foundry.data.fields.EmbeddedDataField(AccommodationsDataModel),
             size: new foundry.data.fields.NumberField(),
+            log : new foundry.data.fields.ArrayField(new foundry.data.fields.SchemaField({
+                text : new foundry.data.fields.StringField(),
+                year : new foundry.data.fields.NumberField(),
+                season :  new foundry.data.fields.NumberField()
+            })),
             treasury: new foundry.data.fields.SchemaField({
                 value: new foundry.data.fields.NumberField({ default: 0, min: 0 }),
             }),
@@ -50,9 +55,26 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
             {
                 let remaining = this.accommodations.list.slice(0, data.system.size)
                 setProperty(data, "system.accommodations.list", remaining)
-                // removed
             }
         }
+
+        mergeObject(data, {
+            "system.accommodations.list" :  this._cleanAccommodationOccupants(data.system?.accommodations?.list || this.accommodations.list),
+            "system.residents.list" :  this._cleanActors(data.system?.residents?.list || this.residents.list),
+            "system.staff.list" :  this._cleanActors(data.system?.staff?.list || this.staff.list)
+        })
+    }
+
+    addToLog(text)
+    {
+        let time = game.pillars.time.current
+        let entry = {
+            text,
+            year : time.year,
+            season : time.season
+        }
+        let newLog = [entry].concat(this.log)
+        return newLog
     }
 
     computeBase() {
@@ -67,6 +89,13 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
         this.staff.computeTotal()
         this.accommodations.prepareAccommodations(this.residents)
         this.residents.setAccommodations(this.accommodations)
+        this.upkeep = this.accommodations.list.reduce((total, accomm) => total + accomm.upkeep, 0) + this.staff.list.reduce((total, staff) => total += staff.count * (staff.document?.system.upkeep?.value || 0), 0)
+    }
+
+    performUpkeep() {
+
+        // TODO: if upkeep isn't paid
+        return {"system.treasury.value" : this.treasury.value - this.upkeep, "system.log" : this.addToLog("Upkeep: " + this.upkeep)}
     }
 
     _createAccommodations(number)
@@ -80,6 +109,20 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
                 occupantIds : []
             }
         })
+    }
+
+    // Make sure occupantIds only include existing residents
+    _cleanAccommodationOccupants(list)
+    {
+        return list.map(a => {
+            a.occupantIds = a.occupantIds.filter(i => this.residents.getActor(i))
+            return a
+        })
+    }
+
+    // Make sure residents/staff only includes existing actors
+    _cleanActors(list) {
+        return list.filter(i => game.actors.has(i.id))
     }
 
 }
@@ -165,9 +208,8 @@ class EmbeddedActorDataModel extends ListDataModel {
     getActor(id) {
         let index = this.findIndex(id)
         if (index >= 0)
-            return this.list[this.findIndex(id)].document
+            return this.list[this.findIndex(id)]?.document
     }
-    
 }
 
 
@@ -223,6 +265,8 @@ class AccommodationsDataModel extends ListDataModel {
 
             if (bonded)
                 upkeep -= 1
+
+            upkeep = Math.max(1, upkeep);
 
             a.upkeep = upkeep
 

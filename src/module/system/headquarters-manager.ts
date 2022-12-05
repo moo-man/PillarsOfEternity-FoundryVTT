@@ -3,10 +3,12 @@ import { getGame } from "./utility";
 
 export class HeadquartersManager {
 
-    activeHeadquarters : PillarsActor[] = [];
+    get activeHeadquarters() : PillarsActor[] {
+        return getGame().settings.get("pillars-of-eternity", "activeHeadquarters").map(i => getGame().actors!.get(i)!).filter(i => i)
+    }
     
     sync() {
-        this.activeHeadquarters = getGame().settings.get("pillars-of-eternity", "activeHeadquarters").map(i => getGame().actors!.get(i)!).filter(i => i)
+        
     }
     
     activate(id : string)
