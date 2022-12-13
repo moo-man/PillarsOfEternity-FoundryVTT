@@ -3,31 +3,31 @@
 
         <div class="initiative">
             <h3>{{localize "PILLARS.Initiative"}}</h3><a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a>
-            <input type="number" class="value" title="{{tooltips.initiative.value}}" disabled value="{{system.initiative.value}}" />
+            <input type="number" class="value" data-tooltip="{{tooltips.initiative.value}}" disabled value="{{system.initiative.value}}" />
         </div>
         <div class="stride">
             <h3>{{localize "PILLARS.Stride"}}: </h3>
-            <input type="number" disabled class="value" title="{{tooltips.stride.value}}" value="{{system.stride.value}}">
+            <input type="number" disabled class="value" data-tooltip="{{tooltips.stride.value}}" value="{{system.stride.value}}">
         </div>
         <div class="run">
             <h3>{{localize "PILLARS.Run"}}: </h3>
-            <input type="number" disabled class="value"  title="{{tooltips.run.value}}" value="{{system.run.value}}">
+            <input type="number" disabled class="value"  data-tooltip="{{tooltips.run.value}}" value="{{system.run.value}}">
         </div>
 
         <div class="soak">
             <h3>{{localize "PILLARS.Soak"}}: </h3>
-            <input type="number" disabled class="value" title="{{tooltips.soak.base}}" value="{{system.soak.base}}">
+            <input type="number" disabled class="value" data-tooltip="{{tooltips.soak.base}}" value="{{system.soak.base}}">
             {{#if items.equipped.shields.length}}
             <div class="soak-group">
                 <img class="soak-img" src="icons/svg/shield.svg"/>
-                <input class="soak-total" type="number" disabled class="value" title="{{tooltips.soak.shield}}" value="{{system.soak.shield}}">
+                <input class="soak-total" type="number" disabled class="value" data-tooltip="{{tooltips.soak.shield}}" value="{{system.soak.shield}}">
             </div>
             {{/if}}
             {{#each soaks as |soak s|}}
             {{#if soak.show}}
             <div class="soak-group">
                 <img class="soak-img" src="{{soak.img}}"/>
-                <input class="soak-total" type="number" disabled class="value" title="{{lookup ../tooltips.soak s}} " value="{{soak.total}}">
+                <input class="soak-total" type="number" disabled class="value" data-tooltip="{{lookup ../tooltips.soak s}} " value="{{soak.total}}">
             </div>
             {{/if}}
             {{/each}}

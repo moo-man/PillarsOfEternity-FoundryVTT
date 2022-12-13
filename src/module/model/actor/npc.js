@@ -19,10 +19,10 @@ export class CharacterActorDataModel extends TieredActorDataModel {
 
     }
 
-    computeBase() {
+    computeBase(items, tooltips) {
         // Compute Details (size) before calling super class (which uses size)
-        this.details.compute(items, this);
+        this.details.compute(items, tooltips);
         this.life.compute(items);
-        super.computeBase(items)
+        super.computeBase(items, tooltips)
     }
 }

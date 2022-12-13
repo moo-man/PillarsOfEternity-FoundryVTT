@@ -70,7 +70,7 @@ export class BasePillarsActorSheet<Options extends ActorSheet.Options = ActorShe
     }
 
     let html = await renderTemplate('systems/pillars-of-eternity/templates/apps/quick-effect.html', effectData);
-    let dialog = new Dialog({
+    new Dialog({
       title: getGame().i18n.localize("PILLARS.QuickEffect"),
       content: html,
       buttons: {
@@ -95,7 +95,7 @@ export class BasePillarsActorSheet<Options extends ActorSheet.Options = ActorShe
       render: (dlg) => {
         $(dlg).find('.label').select();
       },
-    });
+    }).render(true);
   }
 
   _onEffectEdit(ev: JQuery.ClickEvent) {

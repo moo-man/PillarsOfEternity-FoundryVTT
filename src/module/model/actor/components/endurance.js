@@ -12,15 +12,17 @@ export class ActorEnduranceModel extends foundry.abstract.DataModel {
             })
         }
     }
-
-    compute({armor, shield})
+    
+    compute({armor, shield}, tooltips)
     {
-        console.log(this.parent.parent.name)
-        console.log(this)
+        tooltips?.endurance.threshold.winded.push(game.i18n.format('PILLARS.Tooltip', { value: this.threshold.winded, source: game.i18n.localize('PILLARS.TooltipBase') }));
         this.threshold.winded += this.bonus;
         this.threshold.winded += armor?.system.winded?.value || 0;
         this.threshold.winded += shield?.system.winded?.value || 0;
         this.winded = this.value > this.threshold.winded;
         this.incap = this.value >= this.max + this.bonus;
+
+        tooltips?.endurance.threshold.winded.push(game.i18n.format('PILLARS.Tooltip', { value: armor?.system.winded?.value, source: game.i18n.localize('PILLARS.TooltipArmor') }));
+        tooltips?.endurance.threshold.winded.push(game.i18n.format('PILLARS.Tooltip', { value: shield?.system.winded?.value, source: game.i18n.localize('PILLARS.TooltipShield') }));
     }
 }

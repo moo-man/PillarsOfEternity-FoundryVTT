@@ -275,7 +275,7 @@ export class PillarsActorSheet extends BasePillarsActorSheet<ActorSheet.Options,
     data.system = (data as unknown as ActorSheet.Data).data.data as (BasePreparedPillarsActorData)
 
     this.prepareSheetData(data);
-    // this.formatTooltips(data);
+    this.formatTooltips(data);
 
     console.log(data)
     return data;

@@ -15,7 +15,7 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Def"}}</label>
                 <div class="property-value">
-                    <input type="number" title="{{tooltips.defenses.deflection}}" class="defense-input" data-defense="deflection" value="{{system.defenses.deflection.value}}" />
+                    <input type="number" data-tooltip="{{tooltips.defenses.deflection}}" class="defense-input" data-defense="deflection" value="{{system.defenses.deflection.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if system.defenses.deflection.checked}}
@@ -29,7 +29,7 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Fort"}}</label>
                 <div class="property-value">
-                    <input type="number" title="{{tooltips.defenses.fortitude}}" class="defense-input" data-defense="fortitude" value="{{system.defenses.fortitude.value}}" />
+                    <input type="number" data-tooltip="{{tooltips.defenses.fortitude}}" class="defense-input" data-defense="fortitude" value="{{system.defenses.fortitude.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if system.defenses.fortitude.checked}}
@@ -43,7 +43,7 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Ref"}}</label>
                 <div class="property-value">
-                    <input type="number" title="{{tooltips.defenses.reflex}}" class="defense-input" data-defense="reflex" value="{{system.defenses.reflex.value}}" />
+                    <input type="number" data-tooltip="{{tooltips.defenses.reflex}}" class="defense-input" data-defense="reflex" value="{{system.defenses.reflex.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if system.defenses.reflex.checked}}
@@ -57,7 +57,7 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Will"}}</label>
                 <div class="property-value">
-                    <input type="number" title="{{tooltips.defenses.will}}" class="defense-input" data-defense="will" value="{{system.defenses.will.value}}" />
+                    <input type="number" data-tooltip="{{tooltips.defenses.will}}" class="defense-input" data-defense="will" value="{{system.defenses.will.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if system.defenses.will.checked}}
@@ -77,10 +77,10 @@
                     <div class="status-array">
                         {{#each system.health.array as | value key| }}
                         {{#if (eq key ../system.health.threshold.bloodied)}}
-                        <span title="{{../tooltips.health.threshold.bloodied}}" class="threshold bloodied">|</span>
+                        <span data-tooltip="{{../tooltips.health.threshold.bloodied}}" class="threshold bloodied">|</span>
                         {{/if}}
                         {{#if (eq key ../system.health.threshold.incap)}}
-                        <span title="{{../tooltips.health.threshold.incap}}" class="threshold bloodied">|</span>
+                        <span data-tooltip="{{../tooltips.health.threshold.incap}}" class="threshold bloodied">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
                         <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="system.health"><i class="far fa-circle"></i></a>
@@ -99,7 +99,7 @@
                     <div class="status-array">
                         {{#each system.endurance.array as | value key| }}
                         {{#if (eq key ../system.endurance.threshold.winded)}}
-                        <span title="{{../tooltips.endurance.threshold.winded}}" class="threshold winded">|</span>
+                        <span data-tooltip="{{../tooltips.endurance.threshold.winded}}" class="threshold winded">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
                         <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="system.endurance"><i class="far fa-circle"></i></a>
@@ -118,13 +118,13 @@
                     <div class="property-group small">
                         <label>{{localize "PILLARS.ToughAbbrev"}}</label>
                         <div class="property-value">
-                            <input type="number" title="{{tooltips.toughness.value}}" name="system.toughness.value" value="{{system.toughness.value}}" />
+                            <input type="number" data-tooltip="{{tooltips.toughness.value}}" name="system.toughness.value" value="{{system.toughness.value}}" />
                         </div>
                     </div>
                     <div class="property-group small">
                         <label>{{localize "PILLARS.DamageIncrementAbbrev"}}</label>
                         <div class="property-value">
-                            <input type="number" title="{{tooltips.damageIncrement.value}}" name="system.damageIncrement.value" value="{{system.damageIncrement.value}}" />
+                            <input type="number" data-tooltip="{{tooltips.damageIncrement.value}}" name="system.damageIncrement.value" value="{{system.damageIncrement.value}}" />
                         </div>
                     </div>
             </div>
@@ -174,24 +174,24 @@
 
                 <div class="initiative">
                     <h3>{{localize "PILLARS.Initiative"}} <a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg"/></a></h3>
-                    <input type="number" class="value" title="{{tooltips.initiative.value}}" name="system.initiative.value" value="{{system.initiative.value}}" />
+                    <input type="number" class="value" data-tooltip="{{tooltips.initiative.value}}" name="system.initiative.value" value="{{system.initiative.value}}" />
                 </div>
                 <div class="stride">
                     <h3>{{localize "PILLARS.Stride"}}: </h3>
-                    <input type="number" class="value" title="{{tooltips.stride.value}}" name="system.stride.value" value="{{system.stride.value}}">
+                    <input type="number" class="value" data-tooltip="{{tooltips.stride.value}}" name="system.stride.value" value="{{system.stride.value}}">
                 </div>
                 <div class="run">
                     <h3>{{localize "PILLARS.Run"}}: </h3>
-                    <input type="number" class="value"  title="{{tooltips.run.value}}" name="system.run.value" value="{{system.run.value}}">
+                    <input type="number" class="value"  data-tooltip="{{tooltips.run.value}}" name="system.run.value" value="{{system.run.value}}">
                 </div>
         
                 <div class="soak">
                     <h3>{{localize "PILLARS.Soak"}}: </h3>
-                    <input type="number" class="value" title="{{tooltips.soak.base}}" name="system.soak.base" value="{{system.soak.base}}">
+                    <input type="number" class="value" data-tooltip="{{tooltips.soak.base}}" name="system.soak.base" value="{{system.soak.base}}">
                     {{#if items.equipped.shields.length}}
                     <div class="soak-group">
                         <img class="soak-img" src="icons/svg/shield.svg"/>
-                        <input class="soak-total" type="number" class="value" title="{{tooltips.soak.shield}}" value="{{system.soak.shield}}">
+                        <input class="soak-total" type="number" class="value" data-tooltip="{{tooltips.soak.shield}}" value="{{system.soak.shield}}">
                     </div>
                     {{/if}}
                     {{#each soaks as |soak s|}}

@@ -15,7 +15,7 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Def"}}</label>
                 <div class="property-value">
-                    <input type="number" disabled title="{{tooltips.defenses.deflection}}" value="{{system.defenses.deflection.value}}" />
+                    <input type="number" disabled data-tooltip="{{tooltips.defenses.deflection}}" value="{{system.defenses.deflection.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if system.defenses.deflection.checked}}
@@ -29,7 +29,7 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Fort"}}</label>
                 <div class="property-value">
-                    <input type="number" disabled title="{{tooltips.defenses.fortitude}}" value="{{system.defenses.fortitude.value}}" />
+                    <input type="number" disabled data-tooltip="{{tooltips.defenses.fortitude}}" value="{{system.defenses.fortitude.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if system.defenses.fortitude.checked}}
@@ -43,7 +43,7 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Ref"}}</label>
                 <div class="property-value">
-                    <input type="number" disabled title="{{tooltips.defenses.reflex}}" value="{{system.defenses.reflex.value}}" />
+                    <input type="number" disabled data-tooltip="{{tooltips.defenses.reflex}}" value="{{system.defenses.reflex.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if system.defenses.reflex.checked}}
@@ -57,7 +57,7 @@
             <div class="property-group">
                 <label>{{localize "PILLARS.Will"}}</label>
                 <div class="property-value">
-                    <input type="number" disabled title="{{tooltips.defenses.will}}" value="{{system.defenses.will.value}}" />
+                    <input type="number" disabled data-tooltip="{{tooltips.defenses.will}}" value="{{system.defenses.will.value}}" />
                 </div>
                 <div class="property-check">
                     {{#if system.defenses.will.checked}}
@@ -77,10 +77,10 @@
                     <div class="status-array">
                         {{#each system.health.array as | value key| }}
                         {{#if (eq key ../system.health.threshold.bloodied)}}
-                        <span title="{{../tooltips.health.threshold.bloodied}}" class="threshold bloodied">|</span>
+                        <span data-tooltip="{{../tooltips.health.threshold.bloodied}}" class="threshold bloodied">|</span>
                         {{/if}}
                         {{#if (eq key ../system.health.threshold.incap)}}
-                        <span title="{{../tooltips.health.threshold.incap}}" class="threshold bloodied">|</span>
+                        <span data-tooltip="{{../tooltips.health.threshold.incap}}" class="threshold bloodied">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
                         <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="system.health"><i class="far fa-circle"></i></a>
@@ -99,7 +99,7 @@
                     <div class="status-array">
                         {{#each system.endurance.array as | value key| }}
                         {{#if (eq key ../system.endurance.threshold.winded)}}
-                        <span title="{{../tooltips.endurance.threshold.winded}}" class="threshold winded">|</span>
+                        <span data-tooltip="{{../tooltips.endurance.threshold.winded}}" class="threshold winded">|</span>
                         {{/if}}
                         {{#if (eq value.state 0)}}
                         <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}" data-target="system.endurance"><i class="far fa-circle"></i></a>
@@ -118,13 +118,13 @@
                     <div class="property-group small">
                         <label>{{localize "PILLARS.ToughAbbrev"}}</label>
                         <div class="property-value">
-                            <input type="number" title="{{tooltips.toughness.value}}" disabled value="{{system.toughness.value}}" />
+                            <input type="number" data-tooltip="{{tooltips.toughness.value}}" disabled value="{{system.toughness.value}}" />
                         </div>
                     </div>
                     <div class="property-group small">
                         <label>{{localize "PILLARS.DamageIncrementAbbrev"}}</label>
                         <div class="property-value">
-                            <input type="number" title="{{tooltips.damageIncrement.value}}" disabled value="{{system.damageIncrement.value}}" />
+                            <input type="number" data-tooltip="{{tooltips.damageIncrement.value}}" disabled value="{{system.damageIncrement.value}}" />
                         </div>
                     </div>
             </div>

@@ -214,7 +214,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
       render: (dlg: HTMLElement | JQuery<HTMLElement>) => {
         $(dlg).find('.label').trigger('select'); // TODO test this
       },
-    });
+    }).render(true);
   }
 
   _onEffectDelete(ev: JQuery.ClickEvent) {

@@ -22,10 +22,11 @@ export class BasicDetailsModel extends foundry.abstract.DataModel {
 export class ComputedDetailsModel extends BasicDetailsModel {
 
     // trying to figure out how to get these items in a clean fashion
-    compute(items)
+    compute(items, tooltips)
     {
         super.compute(items)
         let species = items.species[0]
+        tooltips?.stride.value.push(`${species.system.stride.value} (${species.name})`);
         return {stride : species?.system.stride.value, size : Number(species?.system.size.value) || 0};
     }
 

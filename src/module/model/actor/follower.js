@@ -14,14 +14,14 @@ export class FollowerActorDataModel extends TieredActorDataModel {
 
     }
     
-    computeBase(items) {
+    computeBase(items, tooltips) {
         // Compute Details (size) before calling super class (which uses size)
-        let details = this.details.compute(items);
+        let details = this.details.compute(items, tooltips);
         if (details.stride)
         this.stride.value = details.stride;
         if (Number.isNumeric(details.size))
             this.size.value = details.size;
-        this.life.compute(items);
-        super.computeBase(items)
+        this.life.compute(items, tooltips);
+        super.computeBase(items, tooltips)
     }
 }
