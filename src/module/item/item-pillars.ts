@@ -114,7 +114,7 @@ export class PillarsItem extends Item {
       this.actor!.createEmbeddedDocuments(
         'Item',
         this.system.powers.map((p : EmbeddedPower) => {
-          p.data.embedded.item = this.id!;
+          p.system.embedded.item = this.id!;
           return { ...p };
         })
       ).then((items) => {
@@ -264,6 +264,12 @@ export class PillarsItem extends Item {
 
   prepareSkill() {}
 
+  prepareSpace() {
+    this.system.cost = this.system.upkeep.value * 1000;
+    this.system.workers = this.system.upkeep.value * 3;
+    this.system.seasons = this.system.upkeep.value * 2;
+  }
+
   preparePower() {
     if (this.data.type == 'power') this.data.groups = this.preparePowerGroups();
 
@@ -298,6 +304,13 @@ export class PillarsItem extends Item {
 
       this.system.attack = PILLARS_UTILITY.getPowerSourceAttackBonus(this.system.xp!.level!);
       this.system.pool!.max = PILLARS_UTILITY.getPowerSourcePool(this.system.xp!.level!);
+    }
+  }
+
+  prepareOwnedDefense() {
+    if (this.actor?.type == "headquarters")
+    {
+      this.system.upkeep.total = this.system.upkeep.value * Math.ceil(this.actor.system.accommodationUpkeep / this.system.upkeep.per)
     }
   }
 
@@ -538,7 +551,7 @@ export class PillarsItem extends Item {
     let powers = duplicate(this.system.powers || []);
 
     let game = getGame();
-    let nonArcanaPowers = powers.filter((i : EmbeddedPower) => i.data.source.value != 'arcana');
+    let nonArcanaPowers = powers.filter((i : EmbeddedPower) => i.system.source.value != 'arcana');
     if (nonArcanaPowers.length)
       return new Promise((resolve) => {
         new Dialog({
@@ -548,9 +561,9 @@ export class PillarsItem extends Item {
             remove: {
               label: game.i18n.localize("PILLARS.Remove"),
               callback: async () => {
-                let arcanaPowers = powers.filter((i : EmbeddedPower) => i.data.source.value == 'arcana');
+                let arcanaPowers = powers.filter((i : EmbeddedPower) => i.system.source.value == 'arcana');
                 arcanaPowers.forEach((p : EmbeddedPower) => {
-                  p.data.embedded.spendType == 'source';
+                  p.system.embedded.spendType == 'source';
                 });
                 await this.update({ 'data.powers': arcanaPowers });
                 resolve(true);

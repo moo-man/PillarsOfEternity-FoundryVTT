@@ -1,0 +1,31 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.html category=item.Type physical=false}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "PILLARS.Description"}}</a>
+        <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+    </nav>
+
+    <section class="content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.html}}
+
+
+        <div class="tab details active" data-tab="details"> 
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.UpkeepPerAccommodation"}}</label>
+                <div class="form-fields">
+                    <input type="number" name="system.upkeep.value" value="{{system.upkeep.value}}">
+                    <label>Per</label>
+                    <input type="number" name="system.upkeep.per" value="{{system.upkeep.per}}">
+                </div>
+            </div>
+        
+        </div>
+
+        {{> systems/pillars-of-eternity/templates/item/item-effects.html}}
+
+    </section>
+
+</form>

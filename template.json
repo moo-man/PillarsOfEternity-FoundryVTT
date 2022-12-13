@@ -552,6 +552,10 @@
             "training": {
                 "value": 0
             },
+            "damage" : {
+                "value" : 0,
+                "destroyed" : false
+            },
             "language": {
                 "value": ""
             },
@@ -688,6 +692,23 @@
             ],
             "partner": "",
             "traits": []
+        },
+        "space" : {
+            "templates": [
+                "description"
+            ],
+            "upkeep" : {
+                "value" : 1
+            }
+        },
+        "defense" : {
+            "templates": [
+                "description"
+            ],
+            "upkeep" : {
+                "value" : 1,
+                "per" : 2
+            }
         }
 
     }

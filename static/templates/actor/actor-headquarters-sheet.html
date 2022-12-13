@@ -20,6 +20,10 @@
                 <input type="number" name="system.treasury.value" value="{{system.treasury.value}}" {{#unless (isGM)}}disabled{{/unless}}>
             </div>
             <div class="form-group">
+                <label>Upkeep</label>
+                <input type="number" name="system.upkeep" value="{{system.upkeep}}" disabled>
+            </div>
+            <div class="form-group">
                 <label>Disrepair</label>
                 <input type="number" name="system.disrepair.value" value="{{system.disrepair.value}}">
             </div>

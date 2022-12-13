@@ -471,6 +471,7 @@ export interface TraitSourceData extends Description, Category, Used, Powers {
 
 export interface PowerSource {
   type: 'power';
+  system: any
   data: PowerSourceData;
   ownedId?: string
   groups? : PowerGroups

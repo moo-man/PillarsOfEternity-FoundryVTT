@@ -83,19 +83,110 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
         this.size = this.accommodations.list.length
     }
 
-    computeDerived() {
+    computeDerived(items) {
         this.disrepair.ruin = this.disrepair.value >= 3
         this.residents.computeTotal()
         this.staff.computeTotal()
         this.accommodations.prepareAccommodations(this.residents)
         this.residents.setAccommodations(this.accommodations)
-        this.upkeep = this.accommodations.list.reduce((total, accomm) => total + accomm.upkeep, 0) + this.staff.list.reduce((total, staff) => total += staff.count * (staff.document?.system.upkeep?.value || 0), 0)
+        this.accommodationUpkeep = this.accommodations.list.reduce((total, accomm) => total + accomm.upkeep, 0) // Used for calculating defense upkeep
+
+        this.upkeep = 
+            this.accommodationUpkeep + 
+            this.staff.list.reduce((total, staff) => total += staff.count * (staff.document?.system.upkeep?.value || 0), 0) +
+            items.space.reduce((total, space) => total += space.system.upkeep.value, 0) +
+            items.defense.reduce((total, defense) => total += defense.system.upkeep.value * Math.ceil(this.accommodationUpkeep / defense.system.upkeep.per), 0)
+
     }
 
-    performUpkeep() {
+    performUpkeep(items) {
 
         // TODO: if upkeep isn't paid
+        let library = this.handleLibrary(items);
         return {"system.treasury.value" : this.treasury.value - this.upkeep, "system.log" : this.addToLog("Upkeep: " + this.upkeep)}
+    }
+
+    handleLibrary(items) {
+        let books = items.equipment.filter(i => i.category?.value == "book")
+
+        let librariansNeeded = Math.floor(books.length / 30)
+
+        let librariansPresent = this.staff.list.filter(i => i.type == "book").reduce((prev, current) => prev += current.count || 1, 0)
+
+        if (this.disrepair.value > 0 || librariansPresent < librariansNeeded)
+        {
+            let roll = Math.ceil(CONFIG.Dice.randomUniform() * 10) + (this.disrepair.ruin ? 5 : this.disrepair.value);
+
+            let damage = 0;
+            let texts = 0;
+
+            if (roll >= 15)
+            {
+                texts = 2;
+                damage = 6;
+            }
+            else if (roll >= 13)
+            {
+                texts = 1;
+                damage = 6;
+            }
+            else if (roll == 12)
+            {
+                texts = 2;
+                damage = 2;
+            }
+            else if (roll == 11)
+            {
+                texts = 1;
+                damage = 2;
+            }
+            else if (roll == 10)
+            {
+                texts = 2;
+                damage = 1;
+            }
+            else if (roll >= 6)
+            {
+                texts = 1;
+                damage = 1;
+            }
+            else 
+            {
+                // no damage
+            }
+
+            // Texts selected to be damaged
+            let textsDamaged = [];
+
+            // If more books damaged is greater or equal to the library contents, use all books
+            if (books.length <= texts)
+            {
+                textsDamaged = books;
+            }
+            else // Select unique books to damage
+            {
+                while(texts > 0) 
+                {
+                    let index = Math.ceil(CONFIG.Dice.randomUniform() * 10);
+
+                    // Only decrement if book isn't already included
+                    if (!textsDamaged.find(i => i.id == books[index].id))
+                    {
+                        textsDamaged.push(books[index]);
+                        texts--;
+                    }
+                }
+            }
+
+            for(let book of textsDamaged.map(i => i.toObject()))
+            {
+                book.system.damage.value += damage;
+            }
+
+            return textsDamaged
+        }
+
+
     }
 
     _createAccommodations(number)
@@ -162,6 +253,7 @@ class EmbeddedActorDataModel extends ListDataModel {
             list: new foundry.data.fields.ArrayField(new foundry.data.fields.SchemaField(
                 {
                     id: new foundry.data.fields.StringField(),
+                    type : new foundry.data.fields.StringField(),
                     count: new foundry.data.fields.NumberField({ integer: true, min: 0 }),
                 }
             )),
@@ -189,8 +281,14 @@ class EmbeddedActorDataModel extends ListDataModel {
 
     /* EDIT FUNCTIONS */
 
-    add(actor) {
-        let list = super.add({ id: actor.id, count: 1 })
+    add(actor, type=undefined) {
+        let obj = { id: actor.id, count: 1 };
+
+        // Only used by staff
+        if (type)
+            obj.type = type;
+
+        let list = super.add(obj)
         return list
     }
 

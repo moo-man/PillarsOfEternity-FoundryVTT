@@ -30,6 +30,8 @@ export enum ItemType {
   reputation = 'reputation',
   injury = 'injury',
   bond = 'bond',
+  space = 'space',
+  defense = 'defense',
 }
 
 export enum Tier {

@@ -109,6 +109,16 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label>{{localize "PILLARS.Damage"}}</label>
+                <div class="form-fields">
+                    <input type="number" name="system.damage.value" value="{{system.damage.value}}" data-dtype="Number">
+                    <input type="checkbox" name="system.damage.destroyed" {{checked system.damage.destroyed}}>
+                    <label>{{localize "PILLARS.Destroyed"}}</label>
+                </div>
+            </div>
+
+
 
             <div class="form-group">
                 <label>{{localize "PILLARS.SkillRequirement"}}</label>

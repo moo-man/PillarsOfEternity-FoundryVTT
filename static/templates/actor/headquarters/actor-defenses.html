@@ -1,1 +1,37 @@
-<div></div>
+<ol class="items-list">
+    <li class="items-header flexrow">
+        <h3 class="item-name flexrow">{{localize "PILLARS.Defenses"}}</h3>
+        <h3 class="item-property-column">{{localize "PILLARS.Upkeep"}}</h3>
+        <div class="item-controls">
+            <a class="item-control item-create" title="Create" data-type="defense"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ol class="items">
+        {{#each items.defenses as |item i|}}
+        <li class="item" draggable="true" data-item-id="{{item.id}}">
+            <div class="row-content">
+            <div class="item-name skill-roll flexrow item-dropdown-alt">
+                <div class="item-image" style="background-image: url('{{item.img}}')"></div>
+                <a>
+                    <h4>{{item.name}}</h4>
+                </a>
+            </div>
+
+            <div class="item-property-column">
+                {{item.system.upkeep}}
+            </div>
+
+            <div class="item-controls flexrow">
+                {{#if ../owner}}
+                <a class="item-control item-post" title="Post Item"><i class="fas fa-comment"></i></a>
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-dropdown" title="Dropdown"><i class="fas fa-chevron-down"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                {{/if}}
+            </div>
+            </div>
+        </li>
+        {{/each}}
+    </ol>
+</ol>

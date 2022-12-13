@@ -1,5 +1,6 @@
 .pillars-of-eternity.actor.headquarters.sheet {
     .general {
+      overflow: hidden;
       .form-group{
         label {
           flex: 0 0 100px;
@@ -11,13 +12,15 @@
       }
 
       .log {
+        height: calc(100% - 460px);
         h3 {
           text-align: center;
         }
         ul {
           list-style: none;
           padding: 0px;
-
+          overflow-y: auto;
+          height: calc(100% - 30px);
           .year {
             font-weight: bold;
           }
@@ -71,6 +74,10 @@
         margin: 3px;
         cursor: pointer;
       }
+    }
+
+    .items-list.spaces {
+      height: unset;
     }
 
     .accomm-list {

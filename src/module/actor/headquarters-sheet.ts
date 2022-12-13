@@ -5,6 +5,7 @@ import { PillarsItem } from "../item/item-pillars";
 import { PILLARS } from "../system/config";
 import { getGame } from "../system/utility";
 import { PillarsActor } from "./actor-pillars";
+import { BasePillarsActorSheet } from "./base-sheet";
 
 
 type PillarsHeadquartersSheetData = ActorSheet & {
@@ -29,7 +30,7 @@ type HeadquartersSheetItemData = {
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, PillarsHeadquartersSheetData> {
+export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.Options, PillarsHeadquartersSheetData> {
     /** @override */
     static get defaultOptions() {
         let data = mergeObject(super.defaultOptions, {
@@ -48,14 +49,13 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
             return "systems/pillars-of-eternity/templates/actor/actor-headquarters-sheet.html"
     }
 
-    async getData() 
+    async getData()
     {
         let data = await super.getData()
         data.system = data.actor.system
         data.items = this.constructItemLists(data);
-        data.accommodations = this.formatAccommodations(data) 
+        data.accommodations = this.formatAccommodations(data)
         data.log = this.formatLog(data)
-        console.log(data)
         return data
 
     }
@@ -65,6 +65,8 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
         let items: HeadquartersSheetItemData = <HeadquartersSheetItemData>{};
 
         items.library = sheetData.actor.getItemTypes(ItemType.equipment).filter(i => ["book", "grimoire"].includes(i.system.category.value))
+        items.spaces = sheetData.actor.getItemTypes(ItemType.space)
+        items.defenses = sheetData.actor.getItemTypes(ItemType.defense)
 
         return items;
       }
@@ -94,7 +96,7 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
             {
                 yearEntry[entry.season]?.push(entry.text)
             }
-            else 
+            else
             {
                 yearEntry[entry.season] = [entry.text]
             }
@@ -136,14 +138,14 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
         else if (data.type == "Item")
         {
             let item = await fromUuid(data.uuid) as PillarsItem;
-            if (item.type != "space" && 
+            if (item.type != "space" &&
                 item.type != "defense" &&
                 item.system.category?.value != "grimoire" &&
                 item.system.category?.value != "book")
             {
                 ui.notifications?.error("Invalid item type for Headquarters")
             }
-            else 
+            else
                 this.actor.createEmbeddedDocuments("Item", [{...item.toObject()}])
         }
         else
@@ -162,7 +164,7 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
             permissions : {dragstart : () => true, drop : () => true},
             callbacks : { drop: this._onActorDrop.bind(this), dragstart : this._onActorDrag.bind(this) }
           })
-    
+
         dragDrop.bind(html[0]!)
 
         html.find(".resident-remove").on("click", this._onRemoveResident.bind(this))
@@ -201,20 +203,20 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                         {
                             skillObject.data.xp.value += 10
                         }
-                            
+
                         await game.pillars.time.updateSeasonAtYear(
-                            game.user?.character!, 
-                            game.pillars.time.current.year, 
-                            game.pillars.time.current.key as "spring" | "summer" | "autumn" | "winter", 
+                            game.user?.character!,
+                            game.pillars.time.current.year,
+                            game.pillars.time.current.key as "spring" | "summer" | "autumn" | "winter",
                             `Practice (Prepared Accommodotation): +10 Housekeeping`)
                         await game.user?.character.update(...[{skillObject}])
                     }
-                    else  
+                    else
                     {
                         return ui.notifications!.error("No Assigned Character")
                     }
                     this.object.update({
-                            "system.accommodations.list" : this.object.system.accommodations.edit(index, {prepared: true}), 
+                            "system.accommodations.list" : this.object.system.accommodations.edit(index, {prepared: true}),
                             "system.log" : this.object.system.addToLog(this.object.system.accommodations.list[index].label + " was prepared")
                         })
                 },
@@ -241,12 +243,12 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
 
     _onResetAccommodations() {
         this.object.update({"system.accommodations.list" : this.object.system.accommodations.reset()});
-    }   
+    }
 
     _onEditAccommodation(ev : JQuery.ClickEvent)
     {
         let index = $(ev.currentTarget).parents(".accomm-container").attr("data-index")
-        if (!Number.isNumeric(index))   
+        if (!Number.isNumeric(index))
             return
 
         let accomm = this.object.system.accommodations.list[index!]
@@ -255,7 +257,7 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
         let GMcontent = game.user!.isGM ? `
         <div class="form-group">
         <label>Prepared</label>
-        <input type="checkbox" ${accomm.prepared ? "checked" : ""}> 
+        <input type="checkbox" ${accomm.prepared ? "checked" : ""}>
         </div>`
         : ""
 
@@ -305,14 +307,14 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
             let to = this.object.system.accommodations.list[index]
             if (to.status == "unprepared")
                 return
-        } 
+        }
 
         // Clear previous accommodation, if any
         if (fromIndex && Number.isNumeric(fromIndex))
         {
             await this.object.update({"system.accommodations.list" : this.object.system.accommodations.removeActorFrom(fromIndex, data.id) })
         }
-        
+
         if (index)
             this.object.update({"system.accommodations.list" : this.object.system.accommodations.addActorTo(index, data.id)})
     }
@@ -329,7 +331,7 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
         let list = this.object.system[type].remove(index)
         this.object.update({[`system.${type}.list`] : list, "system.log" : this.object.system.addToLog(this.object.system[type].list[index].document.name + " Left")})
     }
-    
+
     _onEditResident(ev : JQuery.ChangeEvent)
     {
         let li = $(ev.currentTarget).parents(".item")[0];
@@ -343,17 +345,17 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
 
         let list = this.object.system[type].edit(Number(li?.dataset.index), {[`${target}`] : value})
 
-        this.object.update({[`system.${type}.list`] : list})
+        this.object.update({[`system.${type}.list`] : list}, {diff: false})
     }
 
-    _onResidentClick(ev : JQuery.ClickEvent) 
+    _onResidentClick(ev : JQuery.ClickEvent)
     {
         let li= $(ev.currentTarget).parents(".item")
         let type = li.attr("data-type") || "";
         let index = Number(li.attr("data-index"));
 
         this.object.system[type].list[index].document?.sheet.render(true)
-        
+
     }
 
     async _onDropResident(dragData : {uuid : string, type : string})
@@ -377,7 +379,7 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                 "staff" : {
                     label : "Staff",
                     callback : () => {
-                        let list = this.object.system.staff.add(actor)
+                        let list = this.object.system.staff.add(actor, "staff")
                         this.object.update({"system.staff.list" : list,  "system.log" : this.object.system.addToLog(`${actor.name} Arrived (Staff)`)})
                     }
                 }
@@ -430,13 +432,13 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                             if (value > actor.system.wealth.cp)
                                 return ui.notifications!.error("Not Enough Money")
 
-                            else 
+                            else
                             {
                                 await actor.update({"system.wealth.cp" : actor.system.wealth.cp + (-value)})
                             }
 
                         }
-                        else if (!getGame().user!.isGM) 
+                        else if (!getGame().user!.isGM)
                         {
                             return ui.notifications!.error("No Actor Found")
                         }
@@ -457,7 +459,7 @@ export class PillarsHeadquartersSheet extends ActorSheet<ActorSheet.Options, Pil
                             if (value > this.object.system.treasury.value)
                                 return ui.notifications!.error("Not Enough Money")
 
-                            else 
+                            else
                             {
                                 await actor.update({"system.wealth.cp" : actor.system.wealth.cp + value})
                                 await this.object.update({"system.treasury.value" : this.object.system.treasury.value + (-value), "system.log" : this.object.system.addToLog(`Withdrew ${value}`)})

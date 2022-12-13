@@ -412,6 +412,7 @@ export const PILLARS = {
   },
 
   bookTypes: {
+    power: 'PILLARS.Power',
     powerSource: 'PILLARS.PowerSource',
     academic: 'PILLARS.Academic',
     artistic: 'PILLARS.Artistic',

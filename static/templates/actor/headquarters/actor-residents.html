@@ -43,6 +43,7 @@
 <ol class="items-list resident-list">
     <li class="items-header flexrow">
         <h3 class="resident-sheet item-name flexrow">{{localize "PILLARS.Staff"}}</h3>
+        <span class="item-property-column large">{{localize "PILLARS.Type"}}</span>
         <span class="item-property-column">{{localize "PILLARS.Count"}}</span>
         <!-- <div class="item-property-column large extra">
             <label>{{localize "PILLARS.Extra"}}</label>
@@ -63,11 +64,21 @@
                     </a>
                 </div>
 
-                {{#unless obj.document.prototypeToken.actorLink}}
-                <div class="item-property-column">
-                    <input class="resident-edit" data-target="count" type="number" value="{{obj.count}}">
+                <div class="item-property-column large">
+                    <select class="resident-edit" data-target="type">
+                        {{#select obj.type}}
+                        <option value="staff">{{localize "PILLARS.Staff"}}</option>
+                        <option value="guard">{{localize "PILLARS.Guard"}}</option>
+                        <option value="librarian">{{localize "PILLARS.Librarian"}}</option>
+                        {{/select}}
+                    </select>
                 </div>
-                {{/unless}}
+
+                <div class="item-property-column">
+                    {{#unless obj.document.prototypeToken.actorLink}}
+                        <input class="resident-edit" data-target="count" type="number" value="{{obj.count}}">
+                    {{/unless}}
+                </div>
                 <!-- <div class="item-property-column extra"></div> -->
 
 
