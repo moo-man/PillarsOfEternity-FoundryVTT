@@ -10,6 +10,7 @@ import scene from "./scene";
 import initHooks from "./init"
 import settings from "./settings";
 import { PILLARS_UTILITY } from "../system/utility";
+import CharacterCreation from "../apps/character-creation";
 
 export default function () {
     initHooks()
@@ -23,6 +24,8 @@ export default function () {
     entryContextHooks();
     scene();
     settings();
+
+    Hooks.on("ready", () => new CharacterCreation().render(true));
 
 
     

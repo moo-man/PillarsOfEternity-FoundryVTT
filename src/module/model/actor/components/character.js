@@ -8,12 +8,15 @@ export class CharacterLifeModel extends BasicLifeModel {
         schema.apparentAge = new foundry.data.fields.NumberField();
         schema.agingPoints = new foundry.data.fields.NumberField();
         schema.march = new foundry.data.fields.NumberField();
-        schema.childhood = new foundry.data.fields.StringField();
+        schema.childhood = new foundry.data.fields.SchemaField({
+            setting : new foundry.data.fields.StringField()
+        });
         return schema
     }
     
-    compute() 
+    compute({species}) 
     {
+        super.compute({species});
         let thresholds = PILLARS.agePointsDeathRank;
         for (let pointThreshold in thresholds) {
           if (this.agingPoints < parseInt(pointThreshold)) {

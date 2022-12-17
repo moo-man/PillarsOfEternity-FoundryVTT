@@ -1,0 +1,60 @@
+.pillar-of-eternity.character-creation {
+
+    h3 input {
+        text-align: center;
+    }
+
+    .fields {
+        display: flex;
+        margin: 5px;
+        > *
+        {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        input {
+            width: 50px;
+            margin: 0px 5px;
+        }
+    }
+
+    .item-list {
+        display: flex;
+        flex-direction: column;
+        h3 {
+            text-align: center;
+        }
+        
+    }
+
+    
+    .item {
+        display: flex;
+        align-items: center;
+
+        .item-outline,
+        img {
+            width:  var(--sidebar-item-height);
+            height: var(--sidebar-item-height);
+            border: none;
+        }
+
+        .item-outline {
+            border: 1px dashed black;
+        }
+
+        input[type="number"] {
+            width: 30px;
+        }
+    }
+
+    .singleton-items {
+        .item {
+            flex-direction: column;
+        }
+    }
+
+}

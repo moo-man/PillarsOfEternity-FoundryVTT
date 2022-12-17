@@ -491,6 +491,26 @@
     "PILLARS.Settings": "Settings",
     "PILLARS.SettingSeason": "TIme",
     "PILLARS.SettingTrackerPosition": "Time Tracker Position",
+    "PILLARS.SettingWild" : "Wild",
+    "PILLARS.SettingPrison" : "Prison",
+    "PILLARS.SettingRural" : "Rural",
+    "PILLARS.SettingTown" : "Town",
+    "PILLARS.SettingMilitary" : "Military",
+    "PILLARS.SettingEstate" : "Estate",
+    "PILLARS.SettingNoble" : "Noble",
+    "PILLARS.SettingReligious" : "Religious",
+    "PILLARS.SettingAcademic" : "Academic",
+    "PILLARS.SettingCriminal" : "Criminal",
+    "PILLARS.SettingWildReputation" : "",
+    "PILLARS.SettingPrisonReputation" : "in a prison/criminal network.",
+    "PILLARS.SettingRuralReputation" : "in their region",
+    "PILLARS.SettingTownReputation" : "in their town",
+    "PILLARS.SettingMilitaryReputation" : "in their military organization",
+    "PILLARS.SettingEstateReputation" : "in the community or land surrounding their estate",
+    "PILLARS.SettingNobleReputation" : "in their nation's nobility",
+    "PILLARS.SettingReligiousReputation" : "in their religious community, order, or surrounding community",
+    "PILLARS.SettingAcademicReputation" : "in their academic institution or, if it is a small institution, a network of affiliated institutions",
+    "PILLARS.SettingCriminalReputation" : "in their community's criminal networks",
     "PILLARS.SetStartingYear" : "Set Starting Year",
     "PILLARS.SetStartingYearPrompt" : "Set the starting year",
     "PILLARS.Shield": "Shield",
@@ -653,4 +673,7 @@
     "PILLARS.Years": "Years",
     "PILLARS.YoungAdult": "Young Adult",
     "PILLARS.Zeal": "Zeal"
+
+
+
 }

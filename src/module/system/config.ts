@@ -45,6 +45,89 @@ export const PILLARS = {
     specialist : [{number : 2, rank : 8}, {number : 3, rank : 6}],
     expert : [{number : 1, rank : 10}, {number : 3, rank : 6}]
   },
+
+  settings : {
+    wild : {
+      name : "PILLARS.SettingWild", 
+      free : 12,
+      reputation : 0,
+      reputationLabel : "PILLARS.SettingWildReputation",
+      cp : 0,
+      transition: 0
+    },
+    prison : {
+      name : "PILLARS.SettingPrison", 
+      free : 10,
+      reputation : 5,
+      reputationLabel : "PILLARS.SettingPrisonReputation",
+      cp : 50,
+      transition: 0
+    },
+    rural : {
+      name : "PILLARS.SettingRural", 
+      free : 10,
+      reputation : 5,
+      reputationLabel : "PILLARS.SettingRuralReputation",
+      cp : 50,
+      transition: 0
+    },
+    town : {
+      name : "PILLARS.SettingTown", 
+      free : 8,
+      reputation : 5,
+      reputationLabel : "PILLARS.SettingTownReputation",
+      cp : 100,
+      transition: 1
+    },
+    military : {
+      name : "PILLARS.SettingMilitary", 
+      free : 8,
+      reputation : 5,
+      reputationLabel : "PILLARS.SettingMilitaryReputation",
+      cp : 150,
+      transition: 1
+    },
+    estate : {
+      name : "PILLARS.SettingEstate", 
+      free : 4,
+      reputation : 5,
+      reputationLabel : "PILLARS.SettingEstateReputation",
+      cp : 600,
+      transition: 3
+    },
+    noble : {
+      name : "PILLARS.SettingNoble", 
+      free : 2,
+      reputation : 5,
+      reputationLabel : "PILLARS.SettingNobleReputation",
+      cp : 2000,
+      transition: 7
+    },
+    religious : {
+      name : "PILLARS.SettingReligious", 
+      free : 8,
+      reputation : 5,
+      reputationLabel : "PILLARS.SettingReligiousReputation",
+      cp : 100,
+      transition: 1
+    },
+    academic : {
+      name : "PILLARS.SettingAcademic", 
+      free : 6,
+      reputation : 5,
+      reputationLabel : "PILLARS.SettingAcademicReputation",
+      cp : 150,
+      transition: 2
+    },
+    criminal : {
+      name : "PILLARS.SettingCriminal", 
+      free : 10,
+      reputation : 5,
+      reputationLabel : "PILLARS.SettingCriminalReputation",
+      cp : 75,
+      transition: 0
+    },
+  },
   
   seasons: {
     0: 'PILLARS.Spring',

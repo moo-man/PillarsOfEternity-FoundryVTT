@@ -155,6 +155,7 @@
                 "size",
                 "initiative",
                 "stride",
+                "wealth",
                 "notes"
             ],
             "life": {
@@ -163,7 +164,9 @@
                 "phase": "",
                 "agingPoints": 0,
                 "march": 0,
-                "childhood" : ""
+                "childhood" : {
+                    "setting" : ""
+                }
             },
             "details": {
                 "cause": "",
@@ -172,9 +175,6 @@
                 "relationships": ""
             },
             "connections" : [],
-            "childhood": {
-                "value": ""
-            },
             "seasons": [
                 {
                     "year": 0,
@@ -199,6 +199,7 @@
                 "size",
                 "initiative",
                 "stride",
+                "wealth",
                 "notes"
             ]
         },
@@ -214,6 +215,7 @@
                 "size",
                 "initiative",
                 "stride",
+                "wealth",
                 "notes"
             ],
             "life": {
@@ -597,7 +599,7 @@
             ],
             "setting": {
                 "value": "",
-                "id": ""
+                "available": ""
             },
             "skills": {
                 "value": []

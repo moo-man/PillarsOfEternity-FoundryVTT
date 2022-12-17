@@ -262,7 +262,10 @@ export class PillarsItem extends Item {
     }
   }
 
-  prepareSkill() {}
+  prepareSkill() {
+    this.system.xp!.rank = PILLARS_UTILITY.getSkillRank(this.system.xp!.value) + (this.system.modifier?.value || 0);
+
+  }
 
   prepareSpace() {
     this.system.cost = this.system.upkeep.value * 1000;
@@ -277,10 +280,6 @@ export class PillarsItem extends Item {
       this.system.level.value = this.calculatePowerLevel();
       this.system.level.cost = this.system.improvised?.value ? this.system.level.value * 2 : this.system.level.value;
     }
-  }
-
-  prepareOwnedSkill() {
-    this.system.xp!.rank = PILLARS_UTILITY.getSkillRank(this.system.xp!.value) + (this.system.modifier?.value || 0);
   }
 
   prepareOwnedReputation() {

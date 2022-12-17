@@ -26,7 +26,11 @@ export class ComputedDetailsModel extends BasicDetailsModel {
     {
         super.compute(items)
         let species = items.species[0]
-        tooltips?.stride.value.push(`${species.system.stride.value} (${species.name})`);
+        if (species)
+        {
+            tooltips?.stride.value.push(`${species.system.stride.value} (${species.name})`);
+        }
+        
         return {stride : species?.system.stride.value, size : Number(species?.system.size.value) || 0};
     }
 

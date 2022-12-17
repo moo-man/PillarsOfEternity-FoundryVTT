@@ -29,17 +29,17 @@
         <select name="system.life.childhood">
             {{#select system.life.childhood}}
             <option value=""></option>
-            {{#each items.settings as |setting s|}}
-            <option value="{{setting.id}}" >{{setting.name}}</option>
+            {{#each (config "settings") as |setting s|}}
+            <option value="{{s}}" >{{setting.name}}</option>
             {{/each}}
             {{/select}}
         </select>
-        <div class="settings">
+        <!-- <div class="settings">
             <label>{{localize "PILLARS.Settings"}}: </label>
             {{#each items.settings as |setting s|}}
             <a class="setting" data-item-id={{setting.id}}>{{setting.name}},</a>
             {{/each}}
-        </div>
+        </div> -->
     </div>
     <ol class="items-list">
         <li class="items-header flexrow">
@@ -75,16 +75,16 @@
 
                     <span class="item-property-column flex">
                         <select class="item-property" data-target="system.setting.id">
+                            {{#select item.system.setting.value}}
                             <option value=""></option>
-                            {{#select item.setting.id}}
-                            {{#each ../items.settings as |item i|}}
-                            <option value="{{item.id}}">{{item.name}}</option>
+                            {{#each (config "settings") as |setting s|}}
+                            <option value="{{s}}" >{{setting.name}}</option>
                             {{/each}}
                             {{/select}}
                         </select>
                     </span>
                     <span class="item-property-column"><input type="number" class="item-property"
-                            data-target="system.years.value" value="{{item.years.value}}"></span>
+                            data-target="system.years.value" value="{{item.system.years.value}}"></span>
 
 
                     <div class="item-controls flexrow">

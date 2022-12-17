@@ -986,6 +986,11 @@ declare global {
     updateSource : any
   }
 
+  interface Item {
+    updateSource : any
+  }
+
+
   // interface ActorDataConstructorData
   // {
   //   prototypeToken : any
