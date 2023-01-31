@@ -60,6 +60,13 @@
             </div>
 
             <div class="form-group">
+                <label>{{localize "PILLARS.Foundation"}}</label>
+                <div class="form-fields">
+                    <input type="checkbox" name="system.foundation.value" {{checked system.foundation.value}}>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>{{localize "PILLARS.RequiresRoll"}}</label>
                 <div class="form-fields">
                     <input type="checkbox" name="system.roll.value" {{checked system.roll.value}}>
@@ -94,13 +101,7 @@
                     <input class="base-effect-cost" type="text" name="system.base.cost" value="{{system.base.cost}}" data-dtype="Number">
                 </div>
             </div>
-
-
-
-
             <hr>
-
-            
             <div class="form-group power-group" data-property="base.effects">
                 <h3>{{localize "PILLARS.Effects"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
                 <div class="property-list">

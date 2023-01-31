@@ -1,6 +1,20 @@
 .pillar-of-eternity.character-creation {
 
+
+    form {
+        height : 100%;
+        > div {
+
+            height: calc(100% - 30px);
+            overflow-y: auto;
+        }
+    }
+
     h3 input {
+        text-align: center;
+    }
+
+    input[type="number"] {
         text-align: center;
     }
 
@@ -27,6 +41,8 @@
         h3 {
             text-align: center;
         }
+
+        margin: 5px;
         
     }
 
@@ -34,6 +50,11 @@
     .item {
         display: flex;
         align-items: center;
+        margin: 5px 0px;
+
+        label {
+            flex: 1
+        }
 
         .item-outline,
         img {
@@ -47,7 +68,7 @@
         }
 
         input[type="number"] {
-            width: 30px;
+            flex: 0 0 30px;
         }
     }
 

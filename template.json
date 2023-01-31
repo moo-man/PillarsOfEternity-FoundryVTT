@@ -372,6 +372,9 @@
                 "value": 0,
                 "modifier": 0
             },
+            "foundation" : {
+                "value" : false
+            },
             "source": {
                 "value": ""
             },

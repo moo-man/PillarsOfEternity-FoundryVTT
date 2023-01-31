@@ -1,128 +1,174 @@
 <form>
-    <div><h3><input type="text" class="actor-property" name="name" value="{{character.name}}" placeholder="{{localize 'Name'}}"></h3></div>
+    <div>
 
-    <div class="fields">
         <div>
-            <label>{{localize "PILLARS.Age"}}</label>
-            <input type="number" disabled value="{{character.data.age}}">
+            <h3><input type="text" class="actor-property" name="name" value="{{character.name}}"
+                    placeholder="{{localize 'Name'}}"></h3>
         </div>
-        <div>
-            <label>{{localize "PILLARS.StartingCP"}}</label>
-            <input type="number" disabled value="{{character.data.cp}}">
-        </div>
-        <div>
-            <label>{{localize "PILLARS.FreeXP"}}</label>
-            <input type="number" disabled value="{{character.data.xp.free.used}}">
-            <input type="number" disabled value="{{character.data.xp.free.total}}">
-        </div>
-    </div>
 
-    <div class="flexrow singleton-items">
-        <div>
-            <div class="item culture">
-                {{#if character.items.culture}}
-                    <img src="{{character.items.culture.img}}">
-                    <label>{{character.items.culture.name}}</label>
-                {{else}}
-                    <div class="item-outline"></div>
-                    <label>{{localize "PILLARS.Culture"}}</label>
+        <div class="fields">
+            <div>
+                <label>{{localize "PILLARS.Age"}}</label>
+                <input type="number" disabled value="{{character.data.age}}">
+            </div>
+            <div>
+                <label>{{localize "PILLARS.StartingCP"}}</label>
+                <input type="number" disabled value="{{character.data.cp}}">
+            </div>
+            <div>
+                <label>{{localize "PILLARS.FreeXP"}}</label>
+                <input type="number" disabled value="{{character.data.xp.free.used}}">
+                <input type="number" disabled value="{{character.data.xp.free.total}}">
+            </div>
+        </div>
+
+        <div class="flexrow singleton-items">
+            <div>
+                <div class="item culture">
+                    {{#if character.items.culture}}
+                        <img src="{{character.items.culture.img}}">
+                        <label>{{character.items.culture.name}}</label>
+                    {{else}}
+                        <div class="item-outline"></div>
+                        <label>{{localize "PILLARS.Culture"}}</label>
+                    {{/if}}
+                </div>
+            </div>
+            <div>
+                <div class="item species">
+                    {{#if character.items.species}}
+                        <img src="{{character.items.species.img}}">
+                        <label>{{character.items.species.name}}</label>
+                    {{else}}
+                        <div class="item-outline"></div>
+                        <label>{{localize "PILLARS.Species"}}</label>
+                    {{/if}}
+                </div>
+            </div>
+            <div>
+                <div class="item stock">
+                    {{#if character.items.stock}}
+                        <img src="{{character.items.stock.img}}">
+                        <label>{{character.items.stock.name}}</label>
+                    {{else}}
+                        <div class="item-outline"></div>
+                        <label>{{localize "PILLARS.Stock"}}</label>
+                    {{/if}}
+                </div>
+            </div>
+            <div>
+                <div class="item godlike">
+                    {{#if character.items.godlike}}
+                        <img src="{{character.items.godlike.img}}">
+                        <label>{{character.items.godlike.name}}</label>
+                    {{else}}
+                        <div class="item-outline"></div>
+                        <label>{{localize "PILLARS.Godlike"}}</label>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+
+        <div class="flexrow">
+            <div class="item-list backgrounds">
+                <h3>{{localize "PILLARS.Backgrounds"}}</h3>
+                <div class="item">
+                    <label>{{localize "PILLARS.Childhood"}}</label>
+                    <select name="setting-childhood">
+                        {{#select character.childhood.setting}}
+                            <option value="">{{localize "PILLARS.Setting"}}</option>
+                            {{#each (config "settings")}}
+                                <option value="{{@key}}">{{this.name}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+                {{#if (ne character.childhood.setting "wild")}}
+                <div class="item" data-index="childhood">
+                    <input type="number" disabled value="{{this.character.childhood.reputation.xp}}">
+                    XP
+                    <input type="text" value="{{this.character.childhood.reputation.name}}"
+                        placeholder="{{this.character.childhood.reputation.placeholder}}">
+                </div>
                 {{/if}}
+                {{#each character.items.background}}
+                    <div class="item">
+                        <img src="{{this.img}}">
+                        <label>{{this.name}}</label>
+                        <select name="setting-{{@key}}">
+                            {{#select this.system.setting.value}}
+                                <option value="">{{localize "PILLARS.Setting"}}</option>
+                                {{#each (config "settings")}}
+                                    <option value="{{@key}}">{{this.name}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </div>
+                    <div class="item" data-index="{{@key}}">
+                        <input type="number" disabled value="{{this.flags.pillars-of-eternity.reputation.xp}}">
+                        XP
+                        <input type="text" value="{{this.flags.pillars-of-eternity.reputation.name}}"
+                            placeholder="{{this.flags.pillars-of-eternity.reputation.placeholder}}">
+                    </div>
+                {{/each}}
             </div>
-        </div>
-        <div>
-            <div class="item species">
-                {{#if character.items.species}}
-                    <img src="{{character.items.species.img}}">
-                    <label>{{character.items.species.name}}</label>
-                {{else}}
+
+            <div class="item-list skills">
+                <h3>{{localize "PILLARS.Skills"}}</h3>
+                {{#each character.items.skill}}
+                    <div class="item" data-index="{{@key}}">
+                        <label>{{this.name}}</label>
+                        <input class="skill-xp" type="number" value="{{this.system.xp.value}}">
+                        <input type="number" value="{{this.system.xp.rank}}" disabled>
+                    </div>
+                {{/each}}
+            </div>
+
+            <div class="item-list powers">
+                <h3>{{localize "PILLARS.Powers"}}</h3>
+                <div class="flexrow">
+                    <div class="source">
+                        <select name="source1">
+                            {{#select character.data.source1}}
+                            <option value="">{{localize "PILLARS.Source1"}}</option>
+                            {{#each (config "powerSources")}}
+                            <option value="{{@key}}">{{localize this}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </div>
+
+                    <div class="source">
+                        <select name="source2">
+                            {{#select character.data.source2}}
+                            <option value="">{{localize "PILLARS.Source2"}}</option>
+                            {{#each (config "powerSources")}}
+                            <option value="{{@key}}">{{localize this}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </div>
+                </div>
+                {{#each foundationPowers}}
+                    <div class="item" data-index="{{this.id}}">
+                        <img src="{{this.img}}">
+                        <label>{{this.name}}</label>
+                    </div>
+                {{/each}}
+                {{#each character.items.power}}
+                    <div class="item" data-index="{{this.id}}">
+                        <img src="{{this.img}}">
+                        <label>{{this.name}}</label>
+                    </div>
+                {{/each}}
+                {{#each emptyPowers}}
+                <div class="item" data-index="{{this.id}}">
                     <div class="item-outline"></div>
-                    <label>{{localize "PILLARS.Species"}}</label>
-                {{/if}}
+                </div>
+                {{/each}}
             </div>
-        </div>
-        <div>
-            <div class="item stock">
-                {{#if character.items.stock}}
-                    <img src="{{character.items.stock.img}}">
-                    <label>{{character.items.stock.name}}</label>
-                {{else}}
-                    <div class="item-outline"></div>
-                    <label>{{localize "PILLARS.Stock"}}</label>
-                {{/if}}
-            </div>
-        </div>
-        <div>
-            <div class="item godlike">
-                {{#if character.items.godlike}}
-                    <img src="{{character.items.godlike.img}}">
-                    <label>{{character.items.godlike.name}}</label>
-                {{else}}
-                    <div class="item-outline"></div>
-                    <label>{{localize "PILLARS.Godlike"}}</label>
-                {{/if}}
-            </div>
-        </div>
-    </div>
 
-    <div class="flexrow">
-        <div class="item-list backgrounds">
-            <h3>{{localize "PILLARS.Backgrounds"}}</h3>
-            <div class="item">
-                <label>{{localize "PILLARS.Childhood"}}</label>
-                <select name="setting-childhood">
-                    {{#select character.childhood.setting}}
-                        <option value="">{{localize "PILLARS.Setting"}}</option>
-                        {{#each (config "settings")}}
-                            <option value="{{@key}}">{{this.name}}</option>
-                        {{/each}}
-                    {{/select}}
-                </select>
-            </div>
-            {{#each character.items.background}}
-            <div class="item">
-                <img src="{{this.img}}">
-                <label>{{this.name}}</label>
-                <select name="setting-{{@key}}">
-                    {{#select this.system.setting.value}}
-                        <option value="">{{localize "PILLARS.Setting"}}</option>
-                        {{#each (config "settings")}}
-                            <option value="{{@key}}">{{this.name}}</option>
-                        {{/each}}
-                    {{/select}}
-                </select>
-            </div>
-            {{/each}}
-        </div>
-
-        <div class="item-list skills">
-            <h3>{{localize "PILLARS.Skills"}}</h3>
-            {{#each character.items.skill}}
-            <div class="item" data-index="{{@key}}">
-                <img src="{{this.img}}">
-                <label>{{this.name}}</label>
-                <input class="skill-xp" type="number" value="{{this.system.xp.value}}">
-                <input type="number" value="{{this.system.xp.rank}}" disabled>
-            </div>
-            {{/each}}
-        </div>
-
-        <div class="item-list reputation">
-            <h3>{{localize "PILLARS.Reputation"}}</h3>
-            <div class="item" data-index="childhood">
-                <input type="number" disabled value="{{this.character.childhood.reputation.xp}}">
-                XP
-                <input type="text" value="{{this.character.childhood.reputation.name}}" placeholder="{{this.character.childhood.reputation.placeholder}}">
-            </div>
-            {{#each character.items.background}}
-            <div class="item" data-index="{{@key}}">
-                <input type="number" disabled value="{{this.flags.pillars-of-eternity.reputation.xp}}">
-                XP
-                <input type="text" value="{{this.flags.pillars-of-eternity.reputation.name}}" placeholder="{{this.flags.pillars-of-eternity.reputation.placeholder}}">
-            </div>
-            {{/each}}
-        </div>
-
-<!-- 
+            <!-- 
         <div class="item-list">
             <h3>{{localize "PILLARS.BenefitsHindrances"}}</h3>
             {{#each character.items.attribute}}
@@ -143,7 +189,8 @@
             {{/each}}
         </div>
     -->
-</div> 
+        </div>
+    </div>
 
     <button type="submit">{{localize "Submit"}}</button>
 </form>

@@ -21,9 +21,13 @@ interface CharacterCreationData {
                     used: number,
                     total: number
                 }
-            }
-        }
+            },
+            source1 : string,
+            source2 : string
+        },
     },
+    foundationPowers : PillarsItem[];
+    emptyPowers : undefined[];
 }
 
 export default class CharacterCreation extends FormApplication<FormApplicationOptions, CharacterCreationData, undefined>
@@ -39,7 +43,8 @@ export default class CharacterCreation extends FormApplication<FormApplicationOp
             setting: [],
             attribute: [],
             skill: getGame().items!.filter(i => i.type == "skill").sort((a, b) => a.name! > b.name! ? 1 : -1),
-            trait: []
+            trait: [],
+            power : []
         },
         childhood: {
             setting: "",
@@ -53,8 +58,10 @@ export default class CharacterCreation extends FormApplication<FormApplicationOp
                     used: 0,
                     total: 0
                 }
-            }
-        }
+            },
+            source1 : "",
+            source2 : ""
+        },
     }
 
     static get defaultOptions() {
@@ -72,7 +79,15 @@ export default class CharacterCreation extends FormApplication<FormApplicationOp
         let data = await super.getData();
         (this.character.items.skill as PillarsItem[]).forEach(s => s.prepareData());
         data.character = this.character;
-        return data
+        data.foundationPowers = getGame().items!.filter(i => 
+            i.type == "power" && 
+            i.system.foundation.value && 
+            i.system.source.value && 
+            (i.system.source.value == this.character.data.source1 || i.system.source.value == this.character.data.source2) )
+
+        let emptyNum = 4 - ((data.character.items.power as PillarsItem[]).length + data.foundationPowers.length);
+        data.emptyPowers = new Array(emptyNum).fill(undefined);
+        return data;
     }
 
 
@@ -192,6 +207,7 @@ export default class CharacterCreation extends FormApplication<FormApplicationOp
         html.find(".backgrounds select").on("change", this._onChangeSetting.bind(this))
         html.find(".skill-xp").on("change", this._onChangeSkillXP.bind(this))
         html.find(".reputation input").on("change", this._onChangeReputation.bind(this))
+        html.find(".source select").on("change", this._onChangePowerSource.bind(this))
     }
 
     _onChangeProperty(ev: JQuery.ChangeEvent) {
@@ -267,6 +283,12 @@ export default class CharacterCreation extends FormApplication<FormApplicationOp
         else {
             (this.character.items.background as PillarsItem[])[Number(index)]!.updateSource({ "flags.pillars-of-eternity.reputation.name": ev.currentTarget.value });
         }
+        this.render(true);
+    }
+
+    _onChangePowerSource(ev : JQuery.ChangeEvent) 
+    {
+        this.character.data[ev.currentTarget.name as ("source1" | "source2")] = ev.currentTarget.value;
         this.render(true);
     }
 }
