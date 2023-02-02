@@ -37,7 +37,7 @@ export default class HealingDialog extends Application
             //height: "auto",
             resizable: true,
             width: 500,
-            template : "systems/pillars-of-eternity/templates/apps/healing-dialog.html"
+            template : "systems/pillars-of-eternity/templates/apps/healing-dialog.hbs"
         })
     }
 

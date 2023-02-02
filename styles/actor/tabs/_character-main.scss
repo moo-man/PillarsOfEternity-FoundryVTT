@@ -1,0 +1,33 @@
+.pillars-of-eternity.character {
+
+    .main.tab.active {
+
+        overflow: none;
+
+        display: flex;
+        > * {
+            overflow: auto;
+            flex: 1
+        }
+        .skills {
+            flex: 2;
+
+            .list-header {
+                .list-name {
+                    a {
+                        margin-left: 10px;
+                        padding-top: 7px;
+                        img {
+                            opacity: 0.7;
+                        }
+                    }
+                }
+            }
+        }
+
+        .attributes {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

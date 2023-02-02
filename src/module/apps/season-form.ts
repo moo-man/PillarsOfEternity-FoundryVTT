@@ -5,7 +5,7 @@ export default class SeasonForm extends FormApplication<any, any, any>
 {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-            template : "systems/pillars-of-eternity/templates/apps/season-form.html",
+            template : "systems/pillars-of-eternity/templates/apps/season-form.hbs",
             width:420
         })
     }

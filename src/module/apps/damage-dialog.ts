@@ -47,7 +47,7 @@ export default class DamageDialog extends Application
             //height: "auto",
             resizable: true,
             width: 500,
-            template : "systems/pillars-of-eternity/templates/apps/damage-dialog.html"
+            template : "systems/pillars-of-eternity/templates/apps/damage-dialog.hbs"
         })
     }
 

@@ -1,0 +1,112 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.hbs category=item.Type physical=true}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "PILLARS.Description"}}</a>
+        <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+        <a class="item" data-tab="powers">{{localize "PILLARS.Powers"}}</a>
+    </nav>
+
+    <section class="content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.hbs}}
+
+
+        <div class="tab details active" data-tab="details"> 
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Type"}}</label>
+                <div class="form-fields">
+                    <select name="system.category.value">
+                        {{#select system.category.value}}
+                        <option value=""></option>
+                        {{#each (config "weaponTypes") as |value k|}}
+                        <option value="{{k}}">{{value}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Skill"}}</label>
+                <div class="form-fields">
+                    <select name="system.skill.value">
+                        {{#select system.skill.value}}
+                        <option value=""></option>
+                        {{#each martialSkills as |value k|}}
+                        <option value="{{value.name}}">{{value.name}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Accuracy"}}</label>
+                <div class="form-fields small">
+                    <input type="text" name="system.accuracy.value" value="{{system.accuracy.value}}" data-dtype="Number">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>{{localize "PILLARS.Miscellaneous"}}</label>
+                <div class="form-fields small">
+                    <input type="text" name="system.misc.value" value="{{system.misc.value}}" data-dtype="Number">
+                </div>
+            </div>
+
+            {{#if item.isRanged}}
+            <div class="form-group">
+                <label>{{localize "PILLARS.Range"}}</label>
+                <div class="form-fields small">
+                    <input type="text" name="system.range.value" value="{{system.range.value}}" data-dtype="Number">
+                    <label>{{localize "PILLARS.Hexes"}}</label>
+                </div>
+            </div>
+            {{/if}}
+            <hr>
+            <div class="form-group power-group" data-property="damage.value">
+                <h3>{{localize "PILLARS.Damage"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                {{#each item.system.damage.value as |damage d|}}
+                <div class="property-inputs" data-index="{{d}}">
+                    <input type="text" data-path="label" class="power-property" placeholder="Label" value="{{damage.label}}">
+                    <input type="text" data-path="base" class="power-property" placeholder="Base" value="{{damage.base}}">
+                    <input type="text" data-path="crit" class="power-property" placeholder="Crit" value="{{damage.crit}}">
+                    <select data-path="type" class="power-property">
+                        {{#select damage.type}}
+                        {{#each (config "damageTypes") as |type t|}}
+                        <option value="{{t}}">{{type}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                    vs.
+                    <select data-path="defense" class="power-property">
+                        {{#select damage.defense}}
+                        {{#each (config "defenses") as |defense def|}}
+                        <option value="{{def}}">{{defense}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                    <div class="property-control">
+                        <a class="remove-property"><i class="fas fa-times"></i></a>
+                    </div>
+                </div>
+                {{/each}}
+                </div>
+            </div>
+
+
+            <hr>
+
+            <button type="button" class="item-specials">{{localize "PILLARS.ConfigureSpecialProperties"}}</button>
+        
+        </div>
+
+        {{> systems/pillars-of-eternity/templates/item/item-effects.hbs}}
+
+        {{> systems/pillars-of-eternity/templates/item/item-powers.hbs}}
+
+    </section>
+
+</form>

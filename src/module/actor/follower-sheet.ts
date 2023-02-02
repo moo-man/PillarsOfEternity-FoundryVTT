@@ -1,11 +1,11 @@
 import { stringToElement } from "../system/utility";
-import { PillarsActorSheet } from "./actor-sheet";
+import { PillarsCharacterSheet } from "./character-sheet";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PillarsFollowerSheet extends PillarsActorSheet {
+export class PillarsFollowerSheet extends PillarsCharacterSheet {
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -15,7 +15,7 @@ export class PillarsFollowerSheet extends PillarsActorSheet {
     }
 
     get template() {
-            return "systems/pillars-of-eternity/templates/actor/actor-follower-sheet.html"
+            return "systems/pillars-of-eternity/templates/actor/actor-follower-sheet.hbs"
     }
 
     checkAlerts(): void {

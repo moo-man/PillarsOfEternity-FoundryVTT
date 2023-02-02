@@ -1,0 +1,243 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <div class="sheet-side">
+        <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
+        <div class="tier">
+            <select name="system.tier.value">
+                {{#select system.tier.value}}
+                    <option value=""></option>
+                    {{#each (config "tiers") as |tier t|}}
+                        <option value="{{t}}">{{tier}}</option>
+                    {{/each}}
+                {{/select}}
+            </select>
+        </div>
+        <div class="defenses">
+            <div class="defense-group">
+                <label>{{localize "PILLARS.Def"}}</label>
+                <div class="defense-value">
+                    <input type="number" disabled data-tooltip="{{tooltips.defenses.deflection}}"
+                        value="{{system.defenses.deflection.value}}" />
+                </div>
+                <div class="defense-check">
+                    {{#if system.defenses.deflection.checked}}
+                        <a class="sheet-checkbox" data-target="system.defenses.deflection.checked"><i
+                                class="far fa-check-square"></i></a>
+                    {{else}}
+                        <a class="sheet-checkbox" data-target="system.defenses.deflection.checked"><i
+                                class="far fa-square"></i></a>
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="defense-group">
+                <label>{{localize "PILLARS.Fort"}}</label>
+                <div class="defense-value">
+                    <input type="number" disabled data-tooltip="{{tooltips.defenses.fortitude}}"
+                        value="{{system.defenses.fortitude.value}}" />
+                </div>
+                <div class="defense-check">
+                    {{#if system.defenses.fortitude.checked}}
+                        <a class="sheet-checkbox" data-target="system.defenses.fortitude.checked"><i
+                                class="far fa-check-square"></i></a>
+                    {{else}}
+                        <a class="sheet-checkbox" data-target="system.defenses.fortitude.checked"><i
+                                class="far fa-square"></i></a>
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="defense-group">
+                <label>{{localize "PILLARS.Ref"}}</label>
+                <div class="defense-value">
+                    <input type="number" disabled data-tooltip="{{tooltips.defenses.reflex}}"
+                        value="{{system.defenses.reflex.value}}" />
+                </div>
+                <div class="defense-check">
+                    {{#if system.defenses.reflex.checked}}
+                        <a class="sheet-checkbox" data-target="system.defenses.reflex.checked"><i
+                                class="far fa-check-square"></i></a>
+                    {{else}}
+                        <a class="sheet-checkbox" data-target="system.defenses.reflex.checked"><i
+                                class="far fa-square"></i></a>
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="defense-group">
+                <label>{{localize "PILLARS.Will"}}</label>
+                <div class="defense-value">
+                    <input type="number" disabled data-tooltip="{{tooltips.defenses.will}}"
+                        value="{{system.defenses.will.value}}" />
+                </div>
+                <div class="defense-check">
+                    {{#if system.defenses.will.checked}}
+                        <a class="sheet-checkbox" data-target="system.defenses.will.checked"><i
+                                class="far fa-check-square"></i></a>
+                    {{else}}
+                        <a class="sheet-checkbox" data-target="system.defenses.will.checked"><i
+                                class="far fa-square"></i></a>
+                    {{/if}}
+                </div>
+            </div>
+
+        </div>
+        <hr>
+        <div class="side-section">
+            <div class="status">
+                <div class="status-section {{#if system.health.bloodied}}bloodied{{/if}}">
+                    <label>{{localize "PILLARS.Health"}} <a class="action" data-type="long-rest"><i
+                                class="fas fa-bed"></i></a></label>
+                    <div class="status-array">
+                        {{#each system.health.array as | value key| }}
+                            {{#if (eq key ../system.health.threshold.bloodied)}}
+                                <span data-tooltip="{{../tooltips.health.threshold.bloodied}}"
+                                    class="health-threshold">|</span>
+                            {{/if}}
+                            {{#if (eq key ../system.health.threshold.incap)}}
+                                <span data-tooltip="{{../tooltips.health.threshold.incap}}"
+                                    class="health-threshold">|</span>
+                            {{/if}}
+                            {{#if (eq value.state 0)}}
+                                <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}"
+                                    data-target="system.health"><i class="far fa-circle"></i></a>
+                            {{else if (eq value.state 1)}}
+                                <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}"
+                                    data-target="system.health"><i class="far fa-times-circle"></i></a>
+                            {{else if (eq value.state 2)}}
+                                <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
+                            {{else if (eq value.state -1)}}
+                                <span class="penalty" data-index="{{key}}" data-target="system.health"><i
+                                        class="fas fa-times-circle"></i></span>
+                            {{/if}}
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="status-section {{#if system.endurance.winded}}winded{{/if}}">
+                    <label>{{localize "PILLARS.Endurance"}} <a class="action" data-type="exert" title="Exert"><i
+                                class="fa-solid fa-person-running"></i></a><a class="action" data-type="breath"
+                            title="Catch Breath"><i class="fa-solid fa-lungs"></i></a></label>
+                    <div class="status-array">
+                        {{#each system.endurance.array as | value key| }}
+                            {{#if (eq key ../system.endurance.threshold.winded)}}
+                                <span data-tooltip="{{../tooltips.endurance.threshold.winded}}"
+                                    class="endurance-threshold">|</span>
+                            {{/if}}
+                            {{#if (eq value.state 0)}}
+                                <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}"
+                                    data-target="system.endurance"><i class="far fa-circle"></i></a>
+                            {{else if (eq value.state 1)}}
+                                <a class="box-click {{#if value.bonus}}bonus{{/if}}" data-index="{{key}}"
+                                    data-target="system.endurance"><i class="far fa-times-circle"></i></a>
+                            {{else if (eq value.state 2)}}
+                                <a class="{{#if value.bonus}}bonus{{/if}}"><i class="fas fa-times-circle"></i></a>
+                            {{else if (eq value.state -1)}}
+                                <span class="penalty" data-index="{{key}}" data-target="system.endurance"><i
+                                        class="fas fa-times-circle"></i></span>
+                            {{/if}}
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            <div class="damage-resistance">
+                <div class="toughness">
+                    <label>{{localize "PILLARS.ToughnessAbbrev"}}</label>
+                    <div>
+                        <input type="number" data-tooltip="{{tooltips.toughness.value}}" disabled
+                            value="{{system.toughness.value}}" />
+                    </div>
+                </div>
+                <div class="damage-increment">
+                    <label>{{localize "PILLARS.DamageIncrementAbbrev"}}</label>
+                    <div>
+                        <input type="number" data-tooltip="{{tooltips.damageIncrement.value}}" disabled
+                            value="{{system.damageIncrement.value}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="side-section">
+            <div class="wounds">
+                <label>{{localize "PILLARS.Wounds"}}: {{system.health.wounds.value}} </label>
+                <div class="wound-buttons">
+                    <a class="subtract-wound"> <i class="far fa-minus-square"></i></a>
+                    <a class="add-wound"> <i class="far fa-plus-square"></i></a>
+                </div>
+            </div>
+            <div class="injuries">
+                <label>{{localize "PILLARS.Injuries"}}</label>
+                <div class="injury-names">
+                    {{#each items.injuries}}
+                        <a>{{this.name}}</a>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sheet-content">
+        <div class="sheet-header">
+            <div class="name">
+                <h1 class="charname">
+                    <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'Name'}}" />
+                </h1>
+            </div>
+            <div class="header-details">
+                <div class="detail-group">
+                    <label>{{localize "PILLARS.Culture"}}</label>
+                    <div data-type="culture" class="fake-input"><a>{{system.details.culture}}</a></div>
+                </div>
+                <div class="detail-group">
+                    <label>{{localize "PILLARS.Species"}}</label>
+                    <div data-type="species" class="fake-input"><a>{{system.details.species}}</a></div>
+                </div>
+                <div class="detail-group">
+                    <label>{{localize "PILLARS.Stock"}}</label>
+                    <div data-type="stock" class="fake-input"><a>{{system.details.stock}}</a></div>
+                </div>
+                <div class="detail-group">
+                    <label>{{localize "PILLARS.Godlike"}}</label>
+                    <div data-type="godlike" class="fake-input"><a>{{system.details.godlike}}</a></div>
+                </div>
+                <div class="detail-group">
+                    <label>{{localize "PILLARS.Size"}}</label>
+                    <input type="text" disabled value="{{system.size.value}}">
+                </div>
+                <div class="detail-group age">
+                    <label>{{localize "PILLARS.ApparentAge"}}</label>
+                    <input type="text" disabled value="{{system.life.apparentAge}}">
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-section">
+            <nav class="sheet-tabs tabs">
+                <a class="tab-select item active" data-tab="main">{{localize "PILLARS.Main"}}</a>
+                <a class="tab-select item" data-tab="combat">{{localize "PILLARS.Combat"}}</a>
+                <a class="tab-select item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+                <a class="tab-select item" data-tab="powers">{{localize "PILLARS.Powers"}}</a>
+                <a class="tab-select item" data-tab="inventory">{{localize "PILLARS.Inventory"}}</a>
+                <a class="tab-select item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+            </nav>
+            <div class="tab-content">
+                <div class="tab main" data-tab="main">
+                    {{> systems/pillars-of-eternity/templates/actor/character/character-main.hbs}}
+                </div>
+                <div class="tab combat" data-tab="combat">
+                    {{> systems/pillars-of-eternity/templates/actor/character/actor-combat.hbs}}
+                </div>
+                <div class="tab effects" data-tab="effects">
+                    {{> systems/pillars-of-eternity/templates/actor/shared/actor-effects.hbs}}
+                </div>
+                <div class="tab powers" data-tab="powers">
+                    {{> systems/pillars-of-eternity/templates/actor/character/actor-powers.hbs}}
+                </div>
+                <div class="tab inventory" data-tab="inventory">
+                    {{> systems/pillars-of-eternity/templates/actor/shared/actor-inventory.hbs}}
+                </div>
+                <div class="tab details" data-tab="details">
+                    {{> systems/pillars-of-eternity/templates/actor/character/actor-details.hbs}}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

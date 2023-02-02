@@ -198,7 +198,7 @@ export default class DamageRoll {
         label = game.i18n.localize("PILLARS.Healing");
       }
 
-      let html = await renderTemplate('systems/pillars-of-eternity/templates/chat/damage.html', damage);
+      let html = await renderTemplate('systems/pillars-of-eternity/templates/chat/damage.hbs', damage);
 
       let chatData = {
         // TODO: Test this

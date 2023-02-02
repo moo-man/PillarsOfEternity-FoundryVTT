@@ -15,7 +15,7 @@ export default class BookOfSeasons extends Application {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       id: 'seasons',
-      template: 'systems/pillars-of-eternity/templates/apps/book-of-seasons.html',
+      template: 'systems/pillars-of-eternity/templates/apps/book-of-seasons.hbs',
       height: 900,
       width: 400,
       title: getGame().i18n.localize("PILLARS.BookOfSeasons"),

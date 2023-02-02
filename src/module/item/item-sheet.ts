@@ -50,7 +50,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
   }
 
   get template() {
-    return `systems/pillars-of-eternity/templates/item/item-${this.item.type}-sheet.html`;
+    return `systems/pillars-of-eternity/templates/item/item-${this.item.type}-sheet.hbs`;
   }
 
   _getHeaderButtons() {
@@ -188,7 +188,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
       return ui.notifications!.error(game.i18n.localize("PILLARS.ErrorCreateEffectOnOwnedItem"))
 
     let effectData: ActiveEffectDataSource = <ActiveEffectDataSource>{ label: this.item.name!, icon: this.item.data.img || 'icons/svg/aura.svg' };
-    let html = await renderTemplate('systems/pillars-of-eternity/templates/apps/quick-effect.html', effectData);
+    let html = await renderTemplate('systems/pillars-of-eternity/templates/apps/quick-effect.hbs', effectData);
     new Dialog({
       title: game.i18n.localize("PILLARS.QuickEffect"),
       content: html,

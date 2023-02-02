@@ -1,0 +1,64 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.hbs category=item.Type physical=false}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "PILLARS.Description"}}</a>
+        <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+    </nav>
+
+    <section class="content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.hbs}}
+
+        <div class="tab details active" data-tab="details"> 
+
+            {{#unless matching}}
+            <span class="notification warning">{{localize "PILLARS.ErrorBondMatch"}}</span>
+            {{/unless}}
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Bond"}}</label>
+                <div class="form-fields">
+                    <select name="system.partner">
+                        <option value=""></option>
+                        {{#select system.partner}}
+                        {{#each possibleBonds as |actor a|}}
+                        <option value="{{actor.id}}">{{actor.name}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group xp-rank">
+                <label>{{localize "PILLARS.XPAndRank"}}</label>
+                <div class="form-fields">
+                    <input type="number" name="system.xp.value" value="{{system.xp.value}}" data-dtype="Number">
+                    <input type="number" disabled value="{{item.system.xp.rank}}" data-dtype="Number">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>{{localize "PILLARS.Modifier"}}</label>
+                <div class="form-fields">
+                    <input type="number" name="system.modifier.value" value="{{system.modifier.value}}" data-dtype="Number">
+                </div>
+            </div>
+
+            {{#if traitsAvailable}}
+            <div>
+                {{traitsOwned}} / {{traitsAllowed}} Traits Selected
+            </div>
+            {{/if}}
+            <ul>
+                {{#each traits as |trait t|}}
+                <li class="bond-trait" {{#if trait.disabled}}style="opacity:0.5"{{/if}}>
+                        <input type="checkbox" data-bond={{trait.key}} {{checked trait.active}} {{#if trait.disabled}}disabled{{/if}}>
+                        <span>
+                            <b>{{trait.name}}</b>: {{{enrich trait.description}}}
+                        </span>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </section>
+
+</form>

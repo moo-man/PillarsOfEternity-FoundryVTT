@@ -6,7 +6,7 @@ import EffectScriptConfig from "./effect-script"
 export default class PillarsEffectConfig extends ActiveEffectConfig<ActiveEffectConfig.Options, ActiveEffectConfig.Data & {showEquip : boolean, modes : Record<number, string>}> {
 
     get template() {
-        return "systems/pillars-of-eternity/templates/apps/active-effect-config.html"
+        return "systems/pillars-of-eternity/templates/apps/active-effect-config.hbs"
     }
 
     async getData()

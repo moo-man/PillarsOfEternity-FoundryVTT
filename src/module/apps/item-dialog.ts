@@ -30,7 +30,7 @@ export default class ItemDialog extends Dialog {
 
         ItemDialog.applyDiff(items, data.diff);
 
-        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/item-dialog.html", {items, text : data.text})
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/item-dialog.hbs", {items, text : data.text})
         return new Promise((resolve) => {
             return new this({
                 title: "Item Dialog",

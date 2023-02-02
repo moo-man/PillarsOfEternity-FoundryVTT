@@ -1,10 +1,10 @@
-import { PillarsActorSheet } from "./actor-sheet";
+import { PillarsCharacterSheet } from "./character-sheet";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PillarsNPCSheet extends PillarsActorSheet {
+export class PillarsNPCSheet extends PillarsCharacterSheet {
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -14,7 +14,7 @@ export class PillarsNPCSheet extends PillarsActorSheet {
     }
 
     get template() {
-            return "systems/pillars-of-eternity/templates/actor/actor-npc-sheet.html"
+            return "systems/pillars-of-eternity/templates/actor/actor-npc-sheet.hbs"
     }
 
 

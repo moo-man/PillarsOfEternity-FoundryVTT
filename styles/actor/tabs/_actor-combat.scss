@@ -1,0 +1,65 @@
+.pillars-of-eternity.actor {
+
+    .combat.tab.active {
+
+        .combat-fields {
+            display: flex;
+            justify-content: space-between;
+            height: 34px;
+            // margin: 10px 10px -10px 10px;
+
+            > * {
+                display: flex;
+                align-items: center;
+                font-size: var(--font-size-20);
+                input {
+                    margin: 0px 5px;
+                    width: 30px;
+                    height: 25px;
+                }
+            }
+
+            .initiative {
+                label {
+                    display: flex;
+                    align-items: center;
+                }
+                a {
+                    padding-top:  3px;
+                    height: 25px;
+                    width: 25px;
+                    img {
+                        opacity: 0.7;
+                        height: 100%;
+                    }
+                }
+            }
+
+            .soak {
+                .soak-group {
+                    position: relative;
+                    > .soak-img {
+                        position: absolute;
+                        filter: invert(40.4%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(119%);
+                        opacity: 0.1;
+                        width: 40px;
+                        height: 40x;
+                        top: -7px;
+                    }
+                    input {
+                        background: none;
+                    }
+                }
+            }
+          }
+
+          .defence-items {
+            display: flex;
+            width: 100%;
+            > *
+            {
+                flex: 1
+            }
+          }
+    }
+}

@@ -54,7 +54,7 @@ export default class RollDialog extends Dialog {
   }
 
   static async create(data: CheckDialogData): Promise<CheckDataFlattened> {
-    let html = await renderTemplate('systems/pillars-of-eternity/templates/apps/roll-dialog.html', data);
+    let html = await renderTemplate('systems/pillars-of-eternity/templates/apps/roll-dialog.hbs', data);
     return new Promise((resolve) => {
       return new this({
         title: data.title,

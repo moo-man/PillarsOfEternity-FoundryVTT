@@ -146,7 +146,7 @@ export default class SkillCheck
         async sendToChat()
         {
             let tooltip = await this.roll?.getTooltip()
-            let content = await renderTemplate("systems/pillars-of-eternity/templates/chat/check.html", {check : this, tooltip})
+            let content = await renderTemplate("systems/pillars-of-eternity/templates/chat/check.hbs", {check : this, tooltip})
             let chatData = {
                 content,
                 speaker : this.context?.speaker,

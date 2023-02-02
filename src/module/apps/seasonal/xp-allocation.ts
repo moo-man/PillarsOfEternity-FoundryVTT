@@ -39,7 +39,7 @@ export default class XPAllocationActivityApplication extends SeasonalActivityApp
   }
 
   get template() {
-    return 'systems/pillars-of-eternity/templates/apps/seasonal/xp-allocation.html';
+    return 'systems/pillars-of-eternity/templates/apps/seasonal/xp-allocation.hbs';
   }
 
   async setItems(): Promise<Collection<PillarsItem>> {

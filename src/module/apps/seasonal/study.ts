@@ -42,7 +42,7 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
   }
 
   get template() {
-    return 'systems/pillars-of-eternity/templates/apps/seasonal/study.html';
+    return 'systems/pillars-of-eternity/templates/apps/seasonal/study.hbs';
   }
 
   get title() {

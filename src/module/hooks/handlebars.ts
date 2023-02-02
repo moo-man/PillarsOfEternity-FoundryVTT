@@ -4,12 +4,6 @@ import { PILLARS } from "../system/config"
 export default function () {
 
     Hooks.on("init", () => {
-        // Dunno how to do this, not really needed
-        // Handlebars.registerHelper("ifIsGM", function (options : any) {
-        //     return getGame().user!.isGM ? options(this) : options.inverse(this)
-        // })
-
-
         Handlebars.registerHelper("isGM", function (options) {
             return getGame().user!.isGM
         })
@@ -54,25 +48,25 @@ export default function () {
         
 
         loadTemplates([
-            "systems/pillars-of-eternity/templates/actor/character/actor-main.html",
-            "systems/pillars-of-eternity/templates/actor/npc/actor-npc-main.html",
-            "systems/pillars-of-eternity/templates/actor/character/actor-combat.html",
-            "systems/pillars-of-eternity/templates/actor/shared/actor-effects.html",
-            "systems/pillars-of-eternity/templates/actor/character/actor-powers.html",
-            "systems/pillars-of-eternity/templates/actor/shared/actor-inventory.html",
-            "systems/pillars-of-eternity/templates/actor/character/actor-details.html",
-            "systems/pillars-of-eternity/templates/actor/npc/actor-npc-details.html",
-            "systems/pillars-of-eternity/templates/actor/npc/actor-npc-powers.html",
-            "systems/pillars-of-eternity/templates/actor/headquarters/actor-residents.html",
-            "systems/pillars-of-eternity/templates/actor/headquarters/actor-library.html",
-            "systems/pillars-of-eternity/templates/actor/headquarters/actor-accommodations.html",
-            "systems/pillars-of-eternity/templates/actor/headquarters/actor-defenses.html",
-            "systems/pillars-of-eternity/templates/item/item-effects.html",
-            "systems/pillars-of-eternity/templates/item/item-powers.html",
-            "systems/pillars-of-eternity/templates/item/item-description.html",
-            "systems/pillars-of-eternity/templates/item/item-header.html",
-            "systems/pillars-of-eternity/templates/partials/power-group.html",
-            "systems/pillars-of-eternity/templates/chat/check-buttons.html"
+            "systems/pillars-of-eternity/templates/actor/character/character-main.hbs",
+            "systems/pillars-of-eternity/templates/actor/npc/actor-npc-main.hbs",
+            "systems/pillars-of-eternity/templates/actor/character/actor-combat.hbs",
+            "systems/pillars-of-eternity/templates/actor/shared/actor-effects.hbs",
+            "systems/pillars-of-eternity/templates/actor/character/actor-powers.hbs",
+            "systems/pillars-of-eternity/templates/actor/shared/actor-inventory.hbs",
+            "systems/pillars-of-eternity/templates/actor/character/actor-details.hbs",
+            "systems/pillars-of-eternity/templates/actor/npc/actor-npc-details.hbs",
+            "systems/pillars-of-eternity/templates/actor/npc/actor-npc-powers.hbs",
+            "systems/pillars-of-eternity/templates/actor/headquarters/actor-residents.hbs",
+            "systems/pillars-of-eternity/templates/actor/headquarters/actor-library.hbs",
+            "systems/pillars-of-eternity/templates/actor/headquarters/actor-accommodations.hbs",
+            "systems/pillars-of-eternity/templates/actor/headquarters/actor-defenses.hbs",
+            "systems/pillars-of-eternity/templates/item/item-effects.hbs",
+            "systems/pillars-of-eternity/templates/item/item-powers.hbs",
+            "systems/pillars-of-eternity/templates/item/item-description.hbs",
+            "systems/pillars-of-eternity/templates/item/item-header.hbs",
+            "systems/pillars-of-eternity/templates/partials/power-group.hbs",
+            "systems/pillars-of-eternity/templates/chat/check-buttons.hbs"
         ])
     })
 }

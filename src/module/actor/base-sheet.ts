@@ -3,6 +3,16 @@ import { getGame } from "../system/utility";
 
 export class BasePillarsActorSheet<Options extends ActorSheet.Options = ActorSheet.Options, Data extends object = ActorSheet.Data<Options>> extends ActorSheet<Options, Data> {
 
+  static get defaultOptions() {
+    const options = super.defaultOptions;
+    options.classes = options.classes.concat(["pillars-of-eternity", "actor"]);
+    options.width = 1200;
+    options.height = 700;
+    options.tabs = [{ navSelector: '.sheet-tabs', contentSelector: '.tab-content', initial: 'main' }];
+    options.scrollY = ['.tab-content'];
+    return options;
+  }
+
   /* -------------------------------------------- */
   /** @override */
   activateListeners(html: JQuery<HTMLElement>): void {
@@ -69,7 +79,7 @@ export class BasePillarsActorSheet<Options extends ActorSheet.Options = ActorShe
       effectData['duration.rounds'] = 1;
     }
 
-    let html = await renderTemplate('systems/pillars-of-eternity/templates/apps/quick-effect.html', effectData);
+    let html = await renderTemplate('systems/pillars-of-eternity/templates/apps/quick-effect.hbs', effectData);
     new Dialog({
       title: getGame().i18n.localize("PILLARS.QuickEffect"),
       content: html,
@@ -148,7 +158,7 @@ export class BasePillarsActorSheet<Options extends ActorSheet.Options = ActorShe
       if (dropdownData.groups) {
         let groups = `<div class='power-groups'>`;
         for (let g in dropdownData.groups) {
-          let html = await renderTemplate('systems/pillars-of-eternity/templates/partials/power-group.html', { group: dropdownData.groups[g], groupId: g });
+          let html = await renderTemplate('systems/pillars-of-eternity/templates/partials/power-group.hbs', { group: dropdownData.groups[g], groupId: g });
           groups = groups.concat(html);
         }
         dropdownHTML = dropdownHTML.concat(groups);

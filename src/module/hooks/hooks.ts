@@ -25,7 +25,7 @@ export default function () {
     scene();
     settings();
 
-    Hooks.on("ready", () => new CharacterCreation().render(true));
+    // Hooks.on("ready", () => new CharacterCreation().render(true));
 
 
     

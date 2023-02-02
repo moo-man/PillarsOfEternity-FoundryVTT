@@ -34,7 +34,7 @@ export default class AgingDialog extends Dialog {
     static async create({modifier, changeList, changes, years, defaultYear} : AgingDialogData["dialogData"]) {
 
 
-        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/aging-dialog.html", {modifier, changeList, changes, years, defaultYear: defaultYear || years[0]})
+        let html = await renderTemplate("systems/pillars-of-eternity/templates/apps/aging-dialog.hbs", {modifier, changeList, changes, years, defaultYear: defaultYear || years[0]})
         return new Promise((resolve) => {
             return new this({
                 title: getGame().i18n.localize("PILLARS.AgingRoll"),

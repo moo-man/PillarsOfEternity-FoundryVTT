@@ -46,7 +46,7 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
     }
 
     get template() {
-            return "systems/pillars-of-eternity/templates/actor/actor-headquarters-sheet.html"
+            return "systems/pillars-of-eternity/templates/actor/actor-headquarters-sheet.hbs"
     }
 
     async getData()

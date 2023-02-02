@@ -37,7 +37,7 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
   }
 
   get template() {
-    return 'systems/pillars-of-eternity/templates/apps/seasonal/enchantment.html';
+    return 'systems/pillars-of-eternity/templates/apps/seasonal/enchantment.hbs';
   }
 
   get title() {

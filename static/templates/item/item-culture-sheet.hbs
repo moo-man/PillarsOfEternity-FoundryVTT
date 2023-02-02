@@ -1,0 +1,42 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.hbs category=item.Type physical=false}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "PILLARS.Description"}}</a>
+        <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+    </nav>
+
+    <section class="content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.hbs}}
+
+
+        <div class="tab details active" data-tab="details"> 
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.NativeLanguage"}}</label>
+                <div class="form-fields">
+                    <input type="text" name="system.languages.native" value="{{system.languages.native}}" data-dtype="String">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>{{localize "PILLARS.LocalLanguages"}}</label>
+                <div class="form-fields">
+                    <input type="text" name="system.languages.local" value="{{system.languages.local}}" data-dtype="String">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.CulturalSkills"}}</label>
+                <div class="form-fields">
+                    <input type="text" name="system.skills.value" value="{{system.skills.value}}" data-dtype="String">
+                </div>
+            </div>
+        
+        </div>
+
+        {{> systems/pillars-of-eternity/templates/item/item-effects.hbs}}
+
+    </section>
+
+</form>

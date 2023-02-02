@@ -6,7 +6,7 @@
 
 import { PillarsItemSheet } from "./module/item/item-sheet";
 import { PillarsItem } from "./module/item/item-pillars";
-import { PillarsActorSheet } from "./module/actor/actor-sheet";
+import { PillarsCharacterSheet } from "./module/actor/character-sheet";
 import { PillarsActor } from "./module/actor/actor-pillars";
 import { PillarsCombat } from "./module/system/combat";
 import { PILLARS } from "./module/system/config";
@@ -73,7 +73,7 @@ Hooks.on("init", () => {
 
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("pillars-of-eternity", PillarsActorSheet, { makeDefault: true });
+  Actors.registerSheet("pillars-of-eternity", PillarsCharacterSheet, { makeDefault: true });
   Actors.registerSheet("pillars-of-eternity", PillarsNPCSheet, {types: ["npc"], makeDefault: true });
   Actors.registerSheet("pillars-of-eternity", PillarsFollowerSheet, {types: ["follower"], makeDefault: true });
   Actors.registerSheet("pillars-of-eternity", PillarsHeadquartersSheet, {types: ["headquarters"], makeDefault: true });
@@ -106,7 +106,7 @@ Hooks.on("init", () => {
   let game = getGame()
   game.pillars = {
     apps : {
-      PillarsActorSheet,
+      PillarsCharacterSheet,
       PillarsItemSheet,
       BookOfSeasons,
       RollDialog,

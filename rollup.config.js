@@ -12,7 +12,7 @@ let systemPath = foundryPath.systemPath(manifest.name)
 console.log("Bundling to " + systemPath)
 
 export default {
-  input: ['src/pillars.ts', "src/styles/pillars.scss"],
+  input: ['src/pillars.ts', "styles/pillars.scss"],
   output: {
     dir : systemPath,
     format: "cjs",

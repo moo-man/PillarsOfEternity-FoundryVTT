@@ -68,7 +68,7 @@ export default class CharacterCreation extends FormApplication<FormApplicationOp
         let options = super.defaultOptions;
         options.classes = options.classes.concat(["pillar-of-eternity", "character-creation"]);
         options.title = getGame().i18n.localize("PILLARS.CharacterCreation");
-        options.template = "systems/pillars-of-eternity/templates/apps/character-creation.html";
+        options.template = "systems/pillars-of-eternity/templates/apps/character-creation.hbs";
         options.width = 600;
         options.resizable = true;
         return options;

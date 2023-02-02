@@ -54,7 +54,7 @@ export class PillarsCombat extends Combat {
     }
 
     get template() {
-        return "systems/pillars-of-eternity/templates/apps/combat-tracker.html"
+        return "systems/pillars-of-eternity/templates/apps/combat-tracker.hbs"
     }
 
     get phase() {

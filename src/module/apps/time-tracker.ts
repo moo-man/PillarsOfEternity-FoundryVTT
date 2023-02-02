@@ -9,7 +9,7 @@ export default class TimeTracker extends Application<ApplicationOptions> {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       id: 'time-tracker',
-      template: 'systems/pillars-of-eternity/templates/apps/time-tracker.html',
+      template: 'systems/pillars-of-eternity/templates/apps/time-tracker.hbs',
       title : "Time Tracker", // Needed to prevent _replaceHTML error
       resizable: false,
     });

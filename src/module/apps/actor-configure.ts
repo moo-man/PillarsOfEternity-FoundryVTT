@@ -7,7 +7,7 @@ export default class ActorConfigure extends FormApplication<any, any, PillarsAct
         return mergeObject(super.defaultOptions, {
             id: "actor-configure",
             title : getGame().i18n.localize("PILLARS.ActorConfiguration"),
-            template : "systems/pillars-of-eternity/templates/apps/actor-configure.html",
+            template : "systems/pillars-of-eternity/templates/apps/actor-configure.hbs",
             width:420
         })
     }

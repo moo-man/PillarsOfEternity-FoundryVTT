@@ -321,7 +321,7 @@ export class PillarsItem extends Item {
 
     chatData.item = this;
 
-    let html = await renderTemplate('systems/pillars-of-eternity/templates/chat/post-item.html', chatData);
+    let html = await renderTemplate('systems/pillars-of-eternity/templates/chat/post-item.hbs', chatData);
     let cardData = <ChatMessageDataConstructorData>{ content: html };
     if (this.actor) cardData.speaker = this.actor.speakerData();
 

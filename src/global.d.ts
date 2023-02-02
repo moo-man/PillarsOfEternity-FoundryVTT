@@ -18,7 +18,7 @@ import { PILLARS } from "./module/system/config";
 import DamageDialog from './module/apps/damage-dialog';
 import SkillCheck from './module/system/skill-check';
 import DamageRoll from './module/system/damage-roll';
-import { PillarsActorSheet } from './module/actor/actor-sheet';
+import { PillarsCharacterSheet } from './module/actor/character-sheet';
 import { PillarsItemSheet } from './module/item/item-sheet';
 import BookOfSeasons from './module/apps/book-of-seasons';
 import RollDialog from './module/apps/roll-dialog';
@@ -903,7 +903,7 @@ declare global {
   interface Game {
     pillars: {
       apps : {
-        PillarsActorSheet : typeof PillarsActorSheet,
+        PillarsCharacterSheet : typeof PillarsCharacterSheet,
         PillarsItemSheet : typeof PillarsItemSheet,
         BookOfSeasons : typeof BookOfSeasons,
         RollDialog : typeof RollDialog,

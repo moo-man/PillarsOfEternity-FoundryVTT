@@ -28,7 +28,7 @@ export default class PracticeSeasonalActivityApplication extends SeasonalActivit
   }
 
   get template() {
-    return 'systems/pillars-of-eternity/templates/apps/seasonal/practice.html';
+    return 'systems/pillars-of-eternity/templates/apps/seasonal/practice.hbs';
   }
 
   get title() {

@@ -1,7 +1,7 @@
 import { BookYearData } from "../../types/common";
 import { Season, Time, TimeSettingData } from "../../types/time";
 import { PillarsActor } from "../actor/actor-pillars";
-import { PillarsActorSheet } from "../actor/actor-sheet";
+import { PillarsCharacterSheet } from "../actor/character-sheet";
 import BookOfSeasons from "../apps/book-of-seasons";
 import SeasonalActivityMenu from "../apps/seasonal/activity-menu";
 import TimeTracker from "../apps/time-tracker";
@@ -81,7 +81,7 @@ export class TimeManager {
         windows.forEach(w => {
 
             // We don't rerender actor sheets (as this can disrupt player inputs), only edit the DOM directly
-            if (w instanceof PillarsActorSheet)
+            if (w instanceof PillarsCharacterSheet)
             {
                 if (w.object.type == "character")
                     w.checkSeasonAlerts();

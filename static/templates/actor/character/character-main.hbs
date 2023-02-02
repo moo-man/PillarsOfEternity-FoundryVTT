@@ -1,0 +1,160 @@
+<div class="attributes">
+
+    <div class="sheet-list benefits">
+        <li class="list-header">
+            <div class="list-name">{{localize "PILLARS.Benefits"}}</div>
+            <div class="list-controls">
+                <a class="list-control list-create" title="Create" data-type="attribute" data-category="benefit"><i
+                        class="fas fa-plus"></i></a>
+            </div>
+        </li>
+
+        <ul class="list-content">
+            {{#each items.attributes.benefits}}
+                <li data-id="{{this.id}}">
+                    <div class="row-content">
+                        {{#if this.system.used.value}}
+                            <a class="used list-toggle" data-target="item" data-path="system.used.value"><i
+                                    class="far fa-check-circle"></i></a>
+                        {{else}}
+                            <a class="used list-toggle" data-target="item" data-path="system.used.value"><i
+                                    class="far fa-circle"></i></a>
+                        {{/if}}
+
+                        <div class="list-name">
+                            <img class="list-image" src='{{this.img}}'>
+                            <a class="post">{{this.name}}</a>
+                        </div>
+
+                        <div class="list-controls flexrow">
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="sheet-list hindrances">
+        <li class="list-header">
+            <div class="list-name">{{localize "PILLARS.Hindrances"}}</div>
+            <div class="list-controls">
+                <a class="list-control list-create" title="Create" data-type="attribute" data-category="hindrance"><i
+                        class="fas fa-plus"></i></a>
+            </div>
+        </li>
+
+        <ul class="list-content">
+            {{#each items.attributes.hindrance}}
+                <li data-id="{{this.id}}">
+                    <div class="row-content">
+                        {{#if this.system.used.value}}
+                            <a class="used list-toggle" data-target="item" data-path="system.used.value"><i
+                                    class="far fa-check-circle"></i></a>
+                        {{else}}
+                            <a class="used list-toggle" data-target="item" data-path="system.used.value"><i
+                                    class="far fa-circle"></i></a>
+                        {{/if}}
+
+                        <div class="list-name">
+                            <img class="list-image" src='{{this.img}}'>
+                            <a class="post">{{this.name}}</a>
+                        </div>
+
+                        <div class="list-controls flexrow">
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="sheet-list traits">
+        <li class="list-header">
+            <div class="list-name">{{localize "PILLARS.Traits"}}</div>
+            <div class="list-controls">
+                <a class="list-control list-create" title="Create" data-type="trait"><i class="fas fa-plus"></i></a>
+            </div>
+        </li>
+
+        <ul class="list-content">
+            {{#each items.traits}}
+                <li data-id="{{this.id}}">
+                    <div class="row-content">
+                        {{#if this.system.used.value}}
+                            <a class="used list-toggle" data-target="item" data-path="system.used.value"><i
+                                    class="far fa-check-circle"></i></a>
+                        {{else}}
+                            <a class="used list-toggle" data-target="item" data-path="system.used.value"><i
+                                    class="far fa-circle"></i></a>
+                        {{/if}}
+
+                        <div class="list-name">
+                            <img class="list-image" src='{{this.img}}'>
+                            <a class="post">{{this.name}}</a>
+                        </div>
+
+                        <div class="list-controls flexrow">
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
+
+
+<div class="sheet-list skills">
+    <li class="list-header">
+        <div class="list-name">{{localize "PILLARS.Skills"}} <a title="Roll Untrained Skill" class="roll-untrained"><img
+                    src="icons/dice/d10black.svg" height="20" width="20" /></a></div>
+        <div class="small">{{localize "PILLARS.XP"}}</div>
+        <div class="small">{{localize "PILLARS.Mod"}}</div>
+        <div class="small">{{localize "PILLARS.Rank"}}</div>
+        <div class="small"></div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="skill"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.skills}}
+            <li data-id="{{this.id}}">
+                <div class="row-content">
+
+                    {{#if this.system.used.value}}
+                        <a class="used list-toggle" data-target="item" data-path="system.used.value"><i
+                                class="far fa-check-circle"></i></a>
+                    {{else}}
+                        <a class="used list-toggle" data-target="item" data-path="system.used.value"><i
+                                class="far fa-circle"></i></a>
+                    {{/if}}
+
+                    <div class="list-name">
+                        <a class="roll" data-type="skill">{{this.name}} </a>
+                    </div>
+
+                    <div class="small"><input class="property-edit" type="number" data-target="system.xp.value"
+                            value="{{this.system.xp.value}}"></div>
+                    <div class="small"><input class="property-edit" type="number" data-target="system.modifier.value"
+                            value="{{this.system.modifier.value}}"></div>
+                    <div class="small"><input class="property-edit" type="number" disabled
+                            value="{{this.system.xp.rank}}"></div>
+                    <div class="small"></div>
+
+                    <div class="list-controls flexrow">
+                        {{#if ../owner}}
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>

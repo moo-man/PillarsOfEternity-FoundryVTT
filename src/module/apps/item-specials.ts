@@ -9,7 +9,7 @@ export default class ItemSpecials extends FormApplication<FormApplicationOptions
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
             id: "item-specials",
-            template : "systems/pillars-of-eternity/templates/apps/item-specials.html",
+            template : "systems/pillars-of-eternity/templates/apps/item-specials.hbs",
             height : "auto",
             width : "auto",
             title : getGame().i18n.localize("PILLARS.ItemSpecials")
