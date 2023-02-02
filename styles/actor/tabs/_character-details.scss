@@ -1,0 +1,148 @@
+.pillars-of-eternity.actor.character {
+
+    .details.tab {
+
+        .detail-group {
+            margin-bottom: 5px;
+        }
+
+        .childhood {
+            label {
+                margin-right: 5px;
+            }
+            display: flex;
+            align-items: center;
+        }
+
+        .editor-container {
+            min-height: 50px;
+
+            .editor {
+                min-height: 50px;
+            }
+        }
+
+
+
+        .aging-section {
+           > label {
+                font-size: var(--font-size-20);
+            }
+
+            .aging-details {
+                display: flex;
+                width: 60%;
+                justify-content: space-between;
+            }
+
+            .aging-inputs {
+                display: flex;
+                flex-direction: column;
+                > * {
+                    margin-bottom: 5px;
+                    display: flex;
+                    align-items: center;
+                    label {
+                        width: 150px;
+                        margin-right: 5px;
+                    }
+                    input {
+                        width: 50px;
+                    }
+                }
+            }
+
+
+            .death-march{
+                .track {
+                    font-size: var(--font-size-24);
+                }
+            }
+        }
+        
+    }
+
+}
+
+
+
+
+
+
+
+
+
+// .pillars-of-eternity.actor.sheet .details .aging .aging-details {
+//     display: flex;
+//     flex-direction: row;
+//   }
+  
+//   .pillars-of-eternity.actor.sheet .details .aging {
+//     margin: 10px;
+//   }
+  
+  
+//   .pillars-of-eternity.actor.sheet .details .aging .death-march
+//   {
+//     flex: 2;
+//   }
+//     .pillars-of-eternity.actor.sheet .details .aging .death-march .track {
+//     display: flex;
+//     flex-direction: row;
+//     font-size: 22px;
+//   }
+  
+//   .pillars-of-eternity.actor.sheet .details .aging .death-march .track > *{
+//     margin: 0px 3px;
+//   }
+  
+  
+//     .pillars-of-eternity.actor.sheet .details .aging .aging-inputs {
+//       display: flex;
+//       flex-direction: column;
+//     margin-right: 10px;
+//   }
+//       .pillars-of-eternity.actor.sheet .details .aging .aging-inputs > * {
+//       display: flex;
+//       line-height: 25px;
+//       flex: 1;
+//       justify-content: space-between
+//   }
+  
+//   .pillars-of-eternity.actor.sheet .details .aging .phase {
+//     margin-left: 0px
+//   }
+  
+//   .pillars-of-eternity.actor.sheet .details .aging .phase select {
+//     margin-left: 10px;
+//     background: none;
+//     border: none;
+//     border-bottom: 1px solid black;
+//     text-align-last: center;
+//     border-radius: 0px;
+//   }
+//   .pillars-of-eternity.actor.sheet .details .aging .phase select:focus {
+//     box-shadow: none;
+//   }
+  
+  
+//   .pillars-of-eternity.actor.sheet .details .aging input {
+//     width: 50px;
+//     background: none;
+//     border: none;
+//     border-bottom: 1px solid black;
+//     text-align: center;
+//     border-radius: 0px;
+//     font-size: 16px;
+//     line-height: 25px;
+//     margin-left: 10px;
+//   }
+  
+//   .pillars-of-eternity.actor.sheet .details .aging input:focus {
+//     box-shadow: none;
+//   }
+  
+//   .pillars-of-eternity.actor.sheet .details .aging button{
+//     width: 150px;
+//     margin: 10px;
+//   }

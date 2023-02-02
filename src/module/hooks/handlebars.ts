@@ -54,7 +54,7 @@ export default function () {
             "systems/pillars-of-eternity/templates/actor/shared/actor-effects.hbs",
             "systems/pillars-of-eternity/templates/actor/character/actor-powers.hbs",
             "systems/pillars-of-eternity/templates/actor/shared/actor-inventory.hbs",
-            "systems/pillars-of-eternity/templates/actor/character/actor-details.hbs",
+            "systems/pillars-of-eternity/templates/actor/character/character-details.hbs",
             "systems/pillars-of-eternity/templates/actor/npc/actor-npc-details.hbs",
             "systems/pillars-of-eternity/templates/actor/npc/actor-npc-powers.hbs",
             "systems/pillars-of-eternity/templates/actor/headquarters/actor-residents.hbs",

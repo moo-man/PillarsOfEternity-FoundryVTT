@@ -1,0 +1,298 @@
+<div class="detail-group">
+    <label>{{localize "PILLARS.Notes"}}</label>
+    <div class="editor-container">
+        {{editor system.notes.value target="system.notes.value" engine="prosemirror" button=true owner=owner editable=editable}}
+    </div>
+</div>
+<div class="detail-group">
+    <label>{{localize "PILLARS.TheCause"}}</label>
+    <input type="text" name="system.details.cause" value="{{system.details.cause}}">
+</div>
+
+<div class="detail-group">
+    <label>{{localize "PILLARS.CallToTheCause"}}</label>
+    <input type="text" name="system.details.call" value="{{system.details.call}}">
+</div>
+
+<div class="detail-group">
+    <label>{{localize "PILLARS.PersonalGoal"}}</label>
+    <input type="text" name="system.details.goal" value="{{system.details.goal}}">
+</div>
+
+<div class="detail-group">
+    <label>{{localize "PILLARS.Relationships"}}</label>
+    <div class="editor-container">
+        {{editor system.details.relationships target="system.details.relationships" engine="prosemirror" button=true owner=owner editable=editable}}
+    </div>
+</div>
+<hr>
+<!-- childhood/background -->
+<div class="childhood">
+    <label>{{localize "PILLARS.Childhood"}}: </label>
+    <select name="system.life.childhood">
+        {{#select system.life.childhood}}
+            <option value=""></option>
+            {{#each (config "settings")}}
+                <option value="{{@key}}">{{this.name}}</option>
+            {{/each}}
+        {{/select}}
+    </select>
+</div>
+<div class="sheet-list backgrounds">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Backgrounds"}}</span></div>
+        <div class="normal">{{localize "PILLARS.Setting"}}</div>
+        <div class="small">{{localize "PILLARS.Years"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="background"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.backgrounds}}
+            <li class="item {{#if this.system.used.value}}used{{/if}}" data-list-id="{{this.id}}">
+                <div class="row-content">
+
+                    {{#if this.system.used.value}}
+                        <a class="list-toggle used" data-path="item" data-list-target="system.used.value"><i
+                                class="far fa-check-circle"></i></a>
+                    {{else}}
+                        <a class="list-toggle used" data-path="item" data-list-target="system.used.value"><i
+                                class="far fa-circle"></i></a>
+                    {{/if}}
+
+                    <div class="list-name">
+                        <div class="list-image"><img src="{{this.img}}"></div>
+                        <a>{{this.name}}</a>
+                    </div>
+
+
+                    <div class="normal">
+                        <select data-path="system.setting.id">
+                            {{#select this.system.setting.value}}
+                                <option value=""></option>
+                                {{#each (config "settings")}}
+                                    <option value="{{@key}}">{{this.name}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </div>
+                    <div class="small"><input type="number" data-path="system.years.value"
+                            value="{{this.system.years.value}}"></div>
+
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+        </ol>
+        </ol>
+</div>
+<hr>
+
+<div class="sheet-list bonds">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Bonds"}}</span></div>
+        <div class="small">{{localize "PILLARS.XP"}}</div>
+        <div class="small">{{localize "PILLARS.Mod"}}</div>
+        <div class="small">{{localize "PILLARS.Rank"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="bond"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.bonds}}
+            <li {{#unless this.system.active}}style="opacity: 0.5" {{/unless}} data-id="{{this.id}}">
+                <div class="row-content">
+                    <div class="list-name">
+                        <div class="list-image"><img src="{{this.img}}"></div>
+                        <a>{{this.Bond.name}}</a>
+                    </div>
+
+                    <div class="small"><input type="number" data-path="system.xp.value"
+                            value="{{this.system.xp.value}}"></div>
+                    <div class="small"><input type="number" data-path="system.modifier.value"
+                            value="{{this.modifier.value}}">
+                    </div>
+                    <div class="small"><input type="number" disabled data-path="system.xp.rank"
+                            value="{{this.system.xp.rank}}"></div>
+
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+<div class="sheet-list connection">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Connection"}}</span></div>
+        <div class="small">{{localize "PILLARS.XP"}}</div>
+        <div class="small">{{localize "PILLARS.Mod"}}</div>
+        <div class="small">{{localize "PILLARS.Rank"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="connection"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.connections}}
+            <li data-list-id="{{this.id}}">
+                <div class="row-content">
+
+                    <div class="list-name">
+                        <div class="list-image"><img src="{{this.img}}"></div>
+                        <a>{{this.name}}</a>
+                    </div>
+
+                    <div class="small"><input type="number" data-path="system.xp.value"
+                            value="{{this.system.xp.value}}"></div>
+                    <div class="small"><input type="number" data-path="system.modifier.value"
+                            value="{{this.modifier.value}}"></div>
+                    <div class="small"><input type="number" disabled data-path="system.xp.rank"
+                            value="{{this.system.xp.rank}}"></div>
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+<div class="sheet-list known-connections">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.KnownConnection"}}</span></div>
+        <div class="list-controls">
+            <a class="list-control create-connection" title="Create"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each Connections}}
+            <li data-index="{{i}}" data-actor-id="{{this.id}}">
+                <div class="row-content">
+
+                    <div class="list-name connection-name">
+                        <div class="list-image"><img src="{{this.img}}"></div>
+                        <a>{{this.name}}</a>
+                    </div>
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control edit-connection" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control delete-connection" title="Delete Item"><i
+                                    class="fas fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+<div class="sheet-list">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Reputation"}}</span></div>
+        <div>{{localize "PILLARS.Group"}}</div>
+        <div class="small">{{localize "PILLARS.XP"}}</div>
+        <div class="small">{{localize "PILLARS.Mod"}}</div>
+        <div class="small">{{localize "PILLARS.Rank"}}</div>
+
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="reputation"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.reputations}}
+            <li data-list-id="{{this.id}}">
+                <div class="row-content">
+                    <div class="list-name">
+                        <div class="list-image"><img src="{{this.img}}">
+                        </div>
+                        <a>{{this.name}}</a>
+                    </div>
+
+                    <div>{{this.group.value}}</div>
+                    <div class="small"><input type="number" data-path="system.xp.value"
+                            value="{{this.system.xp.value}}">
+                    </div>
+                    <div class="small"><input type="number" data-path="system.modifier.value"
+                            value="{{this.modifier.value}}">
+                    </div>
+
+                    <div class="small"><input type="number" disabled data-path="system.xp.rank"
+                            value="{{this.system.xp.rank}}"></div>
+
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+<hr>
+<div class="aging-section">
+        <label>{{localize "PILLARS.Aging"}}</label>
+    <div class="aging-details">
+        <div class="aging-inputs">
+
+            <div>
+                <label>{{localize "PILLARS.ActualAge"}}: </label>
+                <input type="number" name="system.life.age" value="{{system.life.age}}">
+            </div>
+
+            <div>
+                <label>{{localize "PILLARS.ApparentAge"}}: </label>
+                <input type="number" name="system.life.apparentAge" value="{{system.life.apparentAge}}">
+            </div>
+
+            <div>
+                <label>{{localize "PILLARS.AgingPoints"}}: </label>
+                <input type="number" name="system.life.agingPoints" value="{{system.life.agingPoints}}">
+            </div>
+            <div class="phase">
+                <label>{{localize "PILLARS.CurrentPhase"}}: </label>
+                <select name="system.life.phase">
+                    {{#select system.life.phase}}
+                        <option value="">-</option>
+                        {{#each (config "lifePhases")}}
+                            <option value="{{@key}}">{{this}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
+            </div>
+        </div>
+
+        <div class="death-march">
+            <div>{{localize "PILLARS.DeathMarch"}}</div>
+            <div class="track">
+                {{#each deathMarch}}
+                    {{{this}}}
+                {{/each}}
+            </div>
+            <button type="button" class="age-roll">Roll Aging</button>
+        </div>
+
+    </div>
+</div>

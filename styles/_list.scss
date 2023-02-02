@@ -24,9 +24,10 @@
         }
 
         li {
-            margin: 5px 0px;
             display : flex;
             text-align: center;
+            border-bottom: 1px solid #BBB;
+            padding: 5px 0px;
 
             > * {
                 flex: 1;
@@ -91,6 +92,10 @@
 
             }
             
+        }
+
+        li:not(.list-header):last-of-type {
+            border-bottom: none;
         }
 
     }
