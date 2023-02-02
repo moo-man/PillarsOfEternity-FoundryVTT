@@ -9,7 +9,9 @@
             height: 24px;
             align-items: center;
             .list-name{
-                margin-left: 10px;
+                span { // Span child is needed to avoid shifting all the other flex elements in the header
+                    margin-left: 10px;
+                }
             }
         }
 
@@ -37,6 +39,7 @@
                     flex: 1;
                 }
             }
+
             
             .small {
                 flex: 0 0 50px;

@@ -1,0 +1,29 @@
+.pillars-of-eternity.actor {
+
+    .powers.tab.active {
+        .sheet-list.power-sources {
+            .power-bar {
+                display: flex;
+                align-items: center;
+                flex: 5;
+                justify-content: center;
+
+                > * {
+                    margin: 0px 3px;
+                }
+
+                input {
+                    width: 30px;
+                }
+            }
+        }
+    }
+
+    .sheet-list {
+        .embedded-value,
+        .displayGroup {
+            flex: 0 0 60px;
+            opacity: 0.5;
+        }
+    }
+}
