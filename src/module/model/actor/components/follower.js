@@ -1,9 +1,11 @@
 import { BasicLifeModel } from "./base";
 
-export class FollowerLifeModel extends BasicLifeModel {
-    static defineSchema() {
+export class FollowerLifeModel extends BasicLifeModel 
+{
+    static defineSchema() 
+    {
         let schema = super.defineSchema();
         schema.startYear = new foundry.data.fields.NumberField();
-        return schema
+        return schema;
     }
 }

@@ -1,16 +1,16 @@
-import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
-import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
-import { TokenDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData';
-import { PillarsItem } from '../module/document/item-pillars';
-import PillarsActiveEffect from '../module/document/effect-pillars';
-import { PillarsEffectChangeDataProperties } from './effects';
-import { PowerDamage, PowerHealing } from './powers';
-import { PillarsActor } from '../module/document/actor-pillars';
+import { ActiveEffectDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
+import { ChatSpeakerDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData";
+import { TokenDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData";
+import { PillarsItem } from "../module/document/item-pillars";
+import PillarsActiveEffect from "../module/document/effect-pillars";
+import { PillarsEffectChangeDataProperties } from "./effects";
+import { PowerDamage, PowerHealing } from "./powers";
+import { PillarsActor } from "../module/document/actor-pillars";
 
 export enum State {
-  ADVANTAGED = 'adv',
-  NORMAL = 'normal',
-  DISADVANTAGED = 'dis',
+  ADVANTAGED = "adv",
+  NORMAL = "normal",
+  DISADVANTAGED = "dis",
 }
 
 export interface CheckDataFlattened {
@@ -83,7 +83,7 @@ export interface AgingDialogData extends Dialog.Data {
 };
 }
 
-export interface WeaponDialogData extends SkillDialogData {}
+export type WeaponDialogData = SkillDialogData
 
 export interface PowerDialogData extends CheckDialogData {
   hasRank: boolean;
@@ -118,7 +118,7 @@ export type SkillCheckData = {
     rollMode: keyof CONFIG.Dice.RollModes;
     messageId: string;
   };
-  result: ReturnType<Roll['toJSON']> & { results: Array<number | string> };
+  result: ReturnType<Roll["toJSON"]> & { results: Array<number | string> };
 };
 
 export type WeaponCheckData = {
@@ -154,7 +154,7 @@ export type AgingCheckData = {
     speaker: ChatSpeakerDataProperties;
     rollClass: string;
   };
-  result: {};
+  result: object;
 };
 
 export interface DamageRollData {
@@ -180,7 +180,7 @@ export type DialogHealing = {
   healing?: boolean;
 } & PowerHealing;
 
-export interface ConsolidatedDamage extends Omit<DialogDamage, 'target'> {
+export interface ConsolidatedDamage extends Omit<DialogDamage, "target"> {
   value?: string;
   target: DamageTarget[];
   parts: DamageTermToolTip[];

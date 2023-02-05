@@ -1,11 +1,13 @@
-export class BasicDetailsModel extends foundry.abstract.DataModel {
-    static defineSchema() {
+export class BasicDetailsModel extends foundry.abstract.DataModel 
+{
+    static defineSchema() 
+    {
         return {
             culture: new foundry.data.fields.StringField(),
             species: new foundry.data.fields.StringField(),
             stock: new foundry.data.fields.StringField(),
             godlike: new foundry.data.fields.StringField()
-        }
+        };
     }
 
     compute(items)
@@ -19,13 +21,14 @@ export class BasicDetailsModel extends foundry.abstract.DataModel {
 }
 
 
-export class ComputedDetailsModel extends BasicDetailsModel {
+export class ComputedDetailsModel extends BasicDetailsModel 
+{
 
     // trying to figure out how to get these items in a clean fashion
     compute(items, tooltips)
     {
-        super.compute(items)
-        let species = items.species[0]
+        super.compute(items);
+        let species = items.species[0];
         if (species)
         {
             tooltips?.stride.value.push(`${species.system.stride.value} (${species.name})`);

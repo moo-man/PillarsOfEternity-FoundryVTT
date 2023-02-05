@@ -1,50 +1,62 @@
-import { getGame } from "../system/utility"
-import { PILLARS } from "../system/config"
+import { getGame } from "../system/utility";
+import { PILLARS } from "../system/config";
 
-export default function () {
+export default function () 
+{
 
-    Hooks.on("init", () => {
-        Handlebars.registerHelper("isGM", function (options) {
-            return getGame().user!.isGM
-        })
+    Hooks.on("init", () => 
+    {
+        Handlebars.registerHelper("isGM", function (options) 
+        {
+            return getGame().user!.isGM;
+        });
 
 
-        Handlebars.registerHelper("config", function (key : string) {
-            return PILLARS[key as keyof typeof PILLARS]
-        })
+        Handlebars.registerHelper("config", function (key : string) 
+        {
+            return PILLARS[key as keyof typeof PILLARS];
+        });
 
-        Handlebars.registerHelper("configLookup", function (obj, key) {
-            return getProperty(PILLARS[obj as keyof typeof PILLARS], key)
-        })
+        Handlebars.registerHelper("configLookup", function (obj, key) 
+        {
+            return getProperty(PILLARS[obj as keyof typeof PILLARS], key);
+        });
 
-        Handlebars.registerHelper("array", function (array: string[], cls: string) {
+        Handlebars.registerHelper("array", function (array: string[], cls: string) 
+        {
             if (typeof cls == "string")
-                return array.map(i => `<a class="${cls}">${i}</a>`).join(`<span class="array-comma">,</span>`)
+            {return array.map(i => `<a class="${cls}">${i}</a>`).join(`<span class="array-comma">,</span>`);}
             else
-                return array.join(", ")
-        })
+            {return array.join(", ");}
+        });
 
-        Handlebars.registerHelper("pct", function(part :number , whole: number) {
-            return (part / whole) * 100
-        })
+        Handlebars.registerHelper("pct", function(part :number , whole: number) 
+        {
+            return (part / whole) * 100;
+        });
 
-        Handlebars.registerHelper("enrich", function (string : string) {
-            return TextEditor.enrichHTML(string)
-        })
+        Handlebars.registerHelper("enrich", function (string : string) 
+        {
+            return TextEditor.enrichHTML(string);
+        });
 
-        Handlebars.registerHelper("tokenImg", function(actor) {
-            try {
-                return actor.token ? actor.token.texture.src : actor.prototypeToken.texture.src
+        Handlebars.registerHelper("tokenImg", function(actor) 
+        {
+            try 
+            {
+                return actor.token ? actor.token.texture.src : actor.prototypeToken.texture.src;
             }
             catch(e) {}
-        })
+        });
 
-        Handlebars.registerHelper("tokenName", function(actor) {
-            try {
+        Handlebars.registerHelper("tokenName", function(actor) 
+        {
+            try 
+            {
                 return actor.token ? actor.token.name : actor.prototypeToken.name;
             }
             catch(e) {}
-        })
+        });
         
 
         loadTemplates([
@@ -67,6 +79,6 @@ export default function () {
             "systems/pillars-of-eternity/templates/item/item-header.hbs",
             "systems/pillars-of-eternity/templates/partials/power-group.hbs",
             "systems/pillars-of-eternity/templates/chat/check-buttons.hbs"
-        ])
-    })
+        ]);
+    });
 }

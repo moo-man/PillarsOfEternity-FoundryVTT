@@ -1,10 +1,12 @@
 import SeasonForm from "../apps/season-form";
 import { getGame } from "../system/utility";
 
-export default function () {
-    Hooks.on("init", () => {
+export default function () 
+{
+    Hooks.on("init", () => 
+    {
 
-        let game = getGame()
+        const game = getGame();
 
         game.settings.register("pillars-of-eternity", "systemMigrationVersion", {
             name: "System Migration Version",
@@ -59,8 +61,8 @@ export default function () {
             hint: "Configure Current and Latest Year",
             type: SeasonForm,
             restricted: true
-        })
-    })
+        });
+    });
 
 
 }
