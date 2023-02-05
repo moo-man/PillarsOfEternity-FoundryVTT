@@ -6,10 +6,10 @@ import { getGame } from "../../system/utility";
 import { hasEmbeddedPowers } from "../../../types/common";
 import { EmbeddedPower } from "../../../types/powers";
 import { ENCHANTMENT_STATE } from "../../../types/seasonal-activities";
-import { PillarsActor } from "../../actor/actor-pillars";
-import { PillarsItem } from "../../item/item-pillars";
+import { PillarsItem } from "../../document/item-pillars";
 import { PILLARS } from "../config";
 import { Enchantment } from "./enchantment";
+import { PillarsActor } from "../../document/actor-pillars";
 
 
 export class Embellishment extends Enchantment{

@@ -1,13 +1,13 @@
-import PowerTemplate from '../system/power-template';
-import BookOfSeasons from '../apps/book-of-seasons';
-import ActorConfigure from '../apps/actor-configure';
-import { PillarsItem } from '../item/item-pillars';
-import PillarsActiveEffect from '../system/pillars-effect';
-import { BasePreparedPillarsActorData, PreparedPillarsCharacterData } from '../../global';
-import { Defense, ItemType, SoakType } from '../../types/common';
-import { getGame } from "../system/utility"
-import { PILLARS_UTILITY } from '../system/utility';
-import { PowerGroups } from '../../types/powers';
+import PowerTemplate from '../../../system/power-template';
+import BookOfSeasons from '../../book-of-seasons';
+import ActorConfigure from '../../actor-configure';
+import { PillarsItem } from '../../../document/item-pillars';
+import PillarsActiveEffect from '../../../document/effect-pillars';
+import { BasePreparedPillarsActorData, PreparedPillarsCharacterData } from '../../../../global';
+import { Defense, ItemType, SoakType } from '../../../../types/common';
+import { getGame } from "../../../system/utility"
+import { PILLARS_UTILITY } from '../../../system/utility';
+import { PowerGroups } from '../../../../types/powers';
 import { BasePillarsActorSheet } from './base-sheet';
 
 // Overwrite default ActorSheet.Data data property and replace it with system data

@@ -1,5 +1,5 @@
 import { EffectChangeData, EffectChangeDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData"
-import PillarsActiveEffect from "../module/system/pillars-effect";
+import PillarsActiveEffect from "../module/document/effect-pillars";
 
 export interface ConfigEffect {
     id?: string,

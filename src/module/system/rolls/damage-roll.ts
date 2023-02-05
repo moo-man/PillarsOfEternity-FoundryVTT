@@ -1,8 +1,8 @@
 import { TokenDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData';
-import { getGame } from "../system/utility"
-import { DamageRollData, DialogDamage, ConsolidatedDamage, DialogHealing, DamageTarget, DamageTermOptions, DamageTermToolTip } from '../../types/checks';
-import { Defense } from '../../types/common';
-import { PILLARS } from './config';
+import { ConsolidatedDamage, DamageRollData, DamageTarget, DamageTermOptions, DamageTermToolTip, DialogDamage, DialogHealing } from '../../../types/checks';
+import { Defense } from '../../../types/common';
+import { PILLARS } from '../config';
+import { getGame } from '../utility';
 import SkillCheck from './skill-check';
 
 export default class DamageRoll {

@@ -1,5 +1,5 @@
 import { getGame } from "../system/utility"
-import { PillarsCharacterSheet } from "../actor/character-sheet"
+import { PillarsCharacterSheet } from "../apps/sheets/actor/character-sheet"
 import BookOfSeasons from "../apps/book-of-seasons"
 import { TimeSettingData } from "../../types/time"
 

@@ -1,11 +1,11 @@
 import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
 import { ChatSpeakerDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatSpeakerData';
 import { TokenDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData';
-import { PillarsActor } from '../module/actor/actor-pillars';
-import { PillarsItem } from '../module/item/item-pillars';
-import PillarsActiveEffect from '../module/system/pillars-effect';
+import { PillarsItem } from '../module/document/item-pillars';
+import PillarsActiveEffect from '../module/document/effect-pillars';
 import { PillarsEffectChangeDataProperties } from './effects';
 import { PowerDamage, PowerHealing } from './powers';
+import { PillarsActor } from '../module/document/actor-pillars';
 
 export enum State {
   ADVANTAGED = 'adv',

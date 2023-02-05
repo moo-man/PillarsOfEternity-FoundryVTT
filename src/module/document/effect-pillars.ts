@@ -1,7 +1,7 @@
 import { getGame } from "../system/utility"
 import { PillarsEffectChangeDataProperties } from "../../types/effects"
-import { PillarsActor } from "../actor/actor-pillars"
-import { PillarsItem } from "../item/item-pillars"
+import { PillarsItem } from "./item-pillars"
+import { PillarsActor } from "./actor-pillars";
 
 declare global {
     interface DocumentClassConfig {

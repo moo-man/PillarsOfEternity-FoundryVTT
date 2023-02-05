@@ -1,6 +1,6 @@
 import { getGame } from "../system/utility";
 import { ItemDialogData } from "../../types/common";
-import { PillarsItem } from "../item/item-pillars";
+import { PillarsItem } from "../document/item-pillars";
 
 export default class ItemDialog extends Dialog {
 

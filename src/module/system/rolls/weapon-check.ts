@@ -1,7 +1,6 @@
-import { getGame } from "../system/utility"
-import { WeaponCheckDataFlattened, WeaponCheckData } from "../../types/checks"
+import { WeaponCheckData, WeaponCheckDataFlattened } from "../../../types/checks"
+import { getGame } from "../utility"
 import SkillCheck from "./skill-check"
-import { WeaponSpecial } from "../../types/items"
 
 export default class WeaponCheck extends SkillCheck
 {

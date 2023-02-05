@@ -1,6 +1,6 @@
 import { getGame } from "../../system/utility";
 import { XPAllocationData, XPAllocationTemplateData, SeasonalActivityResult, SeasonalActivityResolve } from '../../../types/seasonal-activities';
-import { PillarsItem } from '../../item/item-pillars';
+import { PillarsItem } from '../../document/item-pillars';
 import SeasonalActivityApplication from './seasonal-activity';
 
 export default class XPAllocationActivityApplication extends SeasonalActivityApplication {
@@ -43,7 +43,7 @@ export default class XPAllocationActivityApplication extends SeasonalActivityApp
   }
 
   async setItems(): Promise<Collection<PillarsItem>> {
-    return new Collection(this.actor.items.contents.map(i => [i.id!, i]))
+    return new Collection(this.actor.items.contents.map((i: PillarsItem) => [i.id!, i]))
   }
 
 

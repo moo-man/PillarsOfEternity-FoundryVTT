@@ -1,5 +1,5 @@
 import { Category, Equipped, Physical, Used, XP } from '../global';
-import { PillarsItem } from '../module/item/item-pillars';
+import { PillarsItem } from '../module/document/item-pillars';
 import { PILLARS } from '../module/system/config';
 import { EmbeddedPower } from './powers';
 

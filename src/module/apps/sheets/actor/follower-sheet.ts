@@ -1,4 +1,4 @@
-import { stringToElement } from "../system/utility";
+import { stringToElement } from "../../../system/utility";
 import { PillarsCharacterSheet } from "./character-sheet";
 
 /**

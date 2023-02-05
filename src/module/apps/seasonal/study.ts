@@ -1,13 +1,12 @@
 import { getGame } from "../../system/utility";
-import { hasXP, hasXPData, ItemType } from '../../../types/common';
-import { SeasonalActivityResult, PracticeTemplateData } from '../../../types/seasonal-activities';
-import { PillarsActor } from '../../actor/actor-pillars';
-import { PillarsItem } from '../../item/item-pillars';
-import { PILLARS } from '../../system/config';
+import { ItemType } from '../../../types/common';
+import { SeasonalActivityResult } from '../../../types/seasonal-activities';
+import { PillarsItem } from '../../document/item-pillars';
 import { StudyActivity } from '../../system/seasonal/study';
 import { StudyTeacherActivity } from '../../system/seasonal/study-teacher';
 import { StudyTextActivity } from '../../system/seasonal/study-text';
 import SeasonalActivityApplication from './seasonal-activity';
+import { PillarsActor } from "../../document/actor-pillars";
 
 export default class StudySeasonalActivityApplication extends SeasonalActivityApplication {
   ui: {

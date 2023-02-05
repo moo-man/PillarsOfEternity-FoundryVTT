@@ -1,10 +1,10 @@
-import { PreparedPillarsHeadquartersData } from "../../global";
-import { hasXPData, ItemType } from "../../types/common";
-import { Accommodation } from "../../types/headquarters";
-import { PillarsItem } from "../item/item-pillars";
-import { PILLARS } from "../system/config";
-import { getGame } from "../system/utility";
-import { PillarsActor } from "./actor-pillars";
+import { PreparedPillarsHeadquartersData } from "../../../../global";
+import { hasXPData, ItemType } from "../../../../types/common";
+import { Accommodation } from "../../../../types/headquarters";
+import { PillarsActor } from "../../../document/actor-pillars";
+import { PillarsItem } from "../../../document/item-pillars";
+import { PILLARS } from "../../../system/config";
+import { getGame } from "../../../system/utility";
 import { BasePillarsActorSheet } from "./base-sheet";
 
 

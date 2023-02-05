@@ -1,11 +1,8 @@
 import RollDialog from '../apps/roll-dialog';
-import SkillCheck from '../system/skill-check';
-import PillarsActiveEffect from '../system/pillars-effect';
+import PillarsActiveEffect from './effect-pillars';
 import AgingDialog from '../apps/aging-dialog';
-import WeaponCheck from '../system/weapon-check';
-import PowerCheck from '../system/power-check';
-import AgingRoll from '../system/aging-roll';
-import { PillarsItem } from '../item/item-pillars';
+import AgingRoll from '../system/rolls/aging-roll';
+import { PillarsItem } from './item-pillars';
 import { ActorDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData';
 import { DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
 import { PreparedPillarsNonHeadquartersActorData } from '../../global';
@@ -30,6 +27,9 @@ import { PillarsEffectChangeDataProperties } from '../../types/effects';
 import ItemDialog from '../apps/item-dialog';
 import BookOfSeasons from '../apps/book-of-seasons';
 import { ItemDataConstructorData, ItemDataSource } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData';
+import SkillCheck from '../system/rolls/skill-check';
+import WeaponCheck from '../system/rolls/weapon-check';
+import PowerCheck from '../system/rolls/power-check';
 
 declare global {
   interface DocumentClassConfig {

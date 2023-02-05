@@ -12,8 +12,8 @@
 import { Context } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs";
 import { ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
 import { PowerSource } from "../global";
-import { PillarsActor } from "../module/actor/actor-pillars";
-import { PillarsItem } from "../module/item/item-pillars";
+import { PillarsActor } from "../module/document/actor-pillars";
+import { PillarsItem } from "../module/document/item-pillars";
 
 // export enum PowerTargetTypes  {
 //     TARGET = "Target",

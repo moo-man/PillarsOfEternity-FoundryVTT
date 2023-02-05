@@ -16,16 +16,12 @@ import {
 import { BondTrait, WeaponSpecial } from './types/items';
 import { PILLARS } from "./module/system/config";
 import DamageDialog from './module/apps/damage-dialog';
-import SkillCheck from './module/system/skill-check';
-import DamageRoll from './module/system/damage-roll';
-import { PillarsCharacterSheet } from './module/actor/character-sheet';
-import { PillarsItemSheet } from './module/item/item-sheet';
+import { PillarsCharacterSheet } from './module/apps/sheets/actor/character-sheet';
+import { PillarsItemSheet } from './module/apps/sheets/item/item-sheet';
 import BookOfSeasons from './module/apps/book-of-seasons';
 import RollDialog from './module/apps/roll-dialog';
 import ActorConfigure from './module/apps/actor-configure';
 import HealingDialog from './module/apps/healing-dialog';
-import WeaponCheck from './module/system/weapon-check';
-import PowerCheck from './module/system/power-check';
 import Migration from './module/system/migrations';
 import { PILLARS_UTILITY } from './module/system/utility';
 import { PillarsChat } from './module/system/chat';
@@ -35,6 +31,10 @@ import { Accommodation } from './types/headquarters';
 import { HeadquartersManager } from './module/system/headquarters-manager';
 import { TimeManager } from './module/system/time-manager';
 import { TimeSettingData, Season } from './types/time';
+import SkillCheck from './module/system/rolls/skill-check';
+import WeaponCheck from './module/system/rolls/weapon-check';
+import DamageRoll from './module/system/rolls/damage-roll';
+import PowerCheck from './module/system/rolls/power-check';
 
 //#region Actor
 

@@ -1,5 +1,5 @@
 import { getGame } from "../system/utility"
-import PillarsActiveEffect from "../system/pillars-effect"
+import PillarsActiveEffect from "../document/effect-pillars"
 
 export default class EffectScriptConfig extends FormApplication<FormApplicationOptions, {script: string, description: string}, {effect : PillarsActiveEffect, index : number}> {
     static get defaultOptions() {

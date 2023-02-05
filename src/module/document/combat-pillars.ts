@@ -2,7 +2,7 @@ import { DocumentModificationOptions } from "@league-of-foundry-developers/found
 import EmbeddedCollection from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs"
 import { CombatData, CombatDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/combatData"
 import { getGame } from "../system/utility"
-import { PillarsCombatant } from "./combatant"
+import { PillarsCombatant } from "./combatant-pillars"
 
 export class PillarsCombat extends Combat {
 

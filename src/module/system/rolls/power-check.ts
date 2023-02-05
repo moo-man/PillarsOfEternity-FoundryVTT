@@ -1,10 +1,11 @@
-import { getGame } from "../system/utility"
-import { PowerCheckData, PowerCheckDataFlattened } from "../../types/checks"
-import { ItemType } from "../../types/common"
-import { PillarsItem } from "../item/item-pillars"
-import { PILLARS } from "./config"
+import { PowerCheckData, PowerCheckDataFlattened } from "../../../types/checks"
+import { ItemType } from "../../../types/common"
+import { PowerRange } from "../../../types/powers"
+import { PillarsItem } from "../../document/item-pillars"
+import { PILLARS } from "../config"
+import { getGame } from "../utility"
 import SkillCheck from "./skill-check"
-import { PowerRange } from "../../types/powers"
+import WeaponCheck from "./weapon-check"
 
 export default class PowerCheck extends SkillCheck
 {
@@ -76,7 +77,7 @@ export default class PowerCheck extends SkillCheck
                 let weaponId = await this.weaponSelectDialog() as string
                 this.result!.chosenWeapon = weaponId
                 this.updateMessageFlags();
-                this.actor.setupWeaponCheck(weaponId, {add : {damage, effects: allEffects}}).then(async check => {
+                this.actor.setupWeaponCheck(weaponId, {add : {damage, effects: allEffects}}).then(async (check : WeaponCheck) => {
                     await check.rollCheck()
                     check.sendToChat();
                 })
@@ -86,9 +87,9 @@ export default class PowerCheck extends SkillCheck
         // Show the dialog to select which equipped weapon to apply this power to
         async weaponSelectDialog() {
             let game = getGame()
-            let weapons = this.actor.getItemTypes(ItemType.weapon).filter(w => w.system.equipped?.value);
+            let weapons = this.actor.getItemTypes(ItemType.weapon).filter((w: PillarsItem) => w.system.equipped?.value);
             let html = `<select>`
-            weapons.forEach(w => {
+            weapons.forEach((w : PillarsItem) => {
                 html += `<option value=${w.id}>${w.name}</option>`
             })
             html += `</select>`

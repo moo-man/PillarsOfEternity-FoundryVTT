@@ -1,4 +1,4 @@
-import PillarsActiveEffect from "../system/pillars-effect"
+import PillarsActiveEffect from "../document/effect-pillars"
 
 export default function() {
     Hooks.on("preCreateActiveEffect", (effect : PillarsActiveEffect, data : Record<string, unknown>) => {

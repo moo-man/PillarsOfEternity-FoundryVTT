@@ -1,6 +1,6 @@
 import { getGame } from "../system/utility";
 import { WeaponSpecialData } from "../../types/items";
-import { PillarsItem } from "../item/item-pillars";
+import { PillarsItem } from "../document/item-pillars";
 
 type ItemSpecialsFormData = Record<string, WeaponSpecialData & {itemHas : boolean, itemValue : string}>
 

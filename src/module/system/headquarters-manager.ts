@@ -1,4 +1,4 @@
-import { PillarsActor } from "../actor/actor-pillars";
+import { PillarsActor } from "../document/actor-pillars";
 import { getGame } from "./utility";
 
 export class HeadquartersManager {

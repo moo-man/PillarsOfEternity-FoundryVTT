@@ -1,12 +1,12 @@
 import { BookYearData } from "../../types/common";
 import { Season, Time, TimeSettingData } from "../../types/time";
-import { PillarsActor } from "../actor/actor-pillars";
-import { PillarsCharacterSheet } from "../actor/character-sheet";
+import { PillarsCharacterSheet } from "../apps/sheets/actor/character-sheet";
 import BookOfSeasons from "../apps/book-of-seasons";
 import SeasonalActivityMenu from "../apps/seasonal/activity-menu";
 import TimeTracker from "../apps/time-tracker";
 import { PILLARS } from "./config";
 import { getGame } from "./utility";
+import { PillarsActor } from "../document/actor-pillars";
 
 export class TimeManager {
     tracker: TimeTracker | undefined = undefined;

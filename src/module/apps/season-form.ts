@@ -1,5 +1,5 @@
 import { getGame } from "../system/utility"
-import { PillarsActor } from "../actor/actor-pillars"
+import { PillarsActor } from "../document/actor-pillars"
 
 export default class SeasonForm extends FormApplication<any, any, any>
 {

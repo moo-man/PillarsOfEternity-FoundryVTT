@@ -4,11 +4,10 @@
  */
 // Import Modules
 
-import { PillarsItemSheet } from "./module/item/item-sheet";
-import { PillarsItem } from "./module/item/item-pillars";
-import { PillarsCharacterSheet } from "./module/actor/character-sheet";
-import { PillarsActor } from "./module/actor/actor-pillars";
-import { PillarsCombat } from "./module/system/combat";
+import { PillarsItemSheet } from "./module/apps/sheets/item/item-sheet";
+import { PillarsItem } from "./module/document/item-pillars";
+import { PillarsCharacterSheet } from "./module/apps/sheets/actor/character-sheet";
+import { PillarsCombat } from "./module/document/combat-pillars";
 import { PILLARS } from "./module/system/config";
 import { PILLARS_UTILITY, getGame }from "./module/system/utility";
 import { PillarsChat } from "./module/system/chat";
@@ -16,21 +15,17 @@ import hooks from "./module/hooks/hooks"
 import PowerTemplate from "./module/system/power-template";
 import BookOfSeasons from "./module/apps/book-of-seasons"
 import RollDialog from "./module/apps/roll-dialog";
-import SkillCheck from "./module/system/skill-check";
 import PillarsCombatTracker from "./module/apps/combat-tracker";
-import PillarsActiveEffect from "./module/system/pillars-effect";
+import PillarsActiveEffect from "./module/document/effect-pillars";
 import PillarsEffectConfig from "./module/apps/effect-config";
 import Migration from "./module/system/migrations";
 import ActorConfigure from "./module/apps/actor-configure"
 import DamageDialog from "./module/apps/damage-dialog";
-import WeaponCheck from "./module/system/weapon-check";
-import PowerCheck from "./module/system/power-check";
 import PillarsTokenDocument from "./module/system/token";
-import DamageRoll from "./module/system/damage-roll";
-import { PillarsNPCSheet } from "./module/actor/npc-sheet";
-import { PillarsFollowerSheet } from "./module/actor/follower-sheet";
+import { PillarsNPCSheet } from "./module/apps/sheets/actor/npc-sheet";
+import { PillarsFollowerSheet } from "./module/apps/sheets/actor/follower-sheet";
 import HealingDialog from "./module/apps/healing-dialog";
-import { PillarsCombatant } from "./module/system/combatant";
+import { PillarsCombatant } from "./module/document/combatant-pillars";
 
 
 //@ts-ignore
@@ -52,9 +47,14 @@ import PracticeSeasonalActivityApplication from "./module/apps/seasonal/practice
 import StudySeasonalActivityApplication from "./module/apps/seasonal/study";
 import EnchantmentSeasonalActivityApplication from "./module/apps/seasonal/enchantment";
 import LivingOffLandSeasonalActivityApplication from "./module/apps/seasonal/living-off-land";
-import { PillarsHeadquartersSheet } from "./module/actor/headquarters-sheet";
+import { PillarsHeadquartersSheet } from "./module/apps/sheets/actor/headquarters-sheet";
 import { HeadquartersManager } from "./module/system/headquarters-manager";
 import { TimeManager } from "./module/system/time-manager";
+import SkillCheck from "./module/system/rolls/skill-check";
+import WeaponCheck from "./module/system/rolls/weapon-check";
+import PowerCheck from "./module/system/rolls/power-check";
+import DamageRoll from "./module/system/rolls/damage-roll";
+import { PillarsActor } from "./module/document/actor-pillars";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */

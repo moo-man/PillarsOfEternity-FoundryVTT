@@ -1,8 +1,8 @@
 import { ActorDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData";
 import { ItemData, ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
 import { ENCHANTMENT_STATE } from "../../../types/seasonal-activities";
-import { PillarsActor } from "../../actor/actor-pillars";
-import { PillarsItem } from "../../item/item-pillars";
+import { PillarsActor } from "../../document/actor-pillars";
+import { PillarsItem } from "../../document/item-pillars";
 
 
 export abstract class Enchantment {

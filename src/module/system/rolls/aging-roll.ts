@@ -1,7 +1,7 @@
-import { getGame } from "../system/utility"
-import { AgingCheckData, AgingCheckDataFlattened } from '../../types/checks';
-import { PILLARS } from './config';
-import { PILLARS_UTILITY } from './utility';
+import { getGame } from "../utility"
+import { AgingCheckData, AgingCheckDataFlattened } from '../../../types/checks';
+import { PILLARS } from '../config';
+import { PILLARS_UTILITY } from '../utility';
 
 export default class AgingRoll {
   data?: AgingCheckData

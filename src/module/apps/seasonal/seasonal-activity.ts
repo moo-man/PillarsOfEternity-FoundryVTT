@@ -1,6 +1,6 @@
 import { getGame } from "../../system/utility";
 import { SeasonalActivityData, SeasonalActivityResolve, SeasonalActivityResult } from '../../../types/seasonal-activities';
-import { PillarsActor } from '../../actor/actor-pillars';
+import { PillarsActor } from "../../document/actor-pillars";
 
 export default class SeasonalActivityApplication extends Application<{closeOnSubmit : boolean} & ApplicationOptions> {
 

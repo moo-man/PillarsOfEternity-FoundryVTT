@@ -1,5 +1,5 @@
 import { ChatMessageDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatMessageData";
-import { PillarsItem } from "../module/item/item-pillars";
+import { PillarsItem } from "../module/document/item-pillars";
 import { PowerGroups } from "./powers";
 
 export interface ItemChatData {

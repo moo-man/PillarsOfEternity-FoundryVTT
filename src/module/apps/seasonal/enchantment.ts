@@ -1,14 +1,14 @@
 import { getGame } from "../../system/utility";
 import { hasEmbeddedPowers, hasXP, hasXPData, ItemType } from '../../../types/common';
 import { SeasonalActivityResult, PracticeTemplateData, ENCHANTMENT_STATE, SeasonalActivityData } from '../../../types/seasonal-activities';
-import { PillarsActor } from '../../actor/actor-pillars';
-import { PillarsItem } from '../../item/item-pillars';
+import { PillarsItem } from '../../document/item-pillars';
 import { PILLARS } from '../../system/config';
 import { Embellishment } from '../../system/seasonal/embellishment';
 import { Enchantment } from '../../system/seasonal/enchantment';
 import { Imbuement } from '../../system/seasonal/imbuement';
 import { Refinement } from '../../system/seasonal/refinement';
 import SeasonalActivityApplication from './seasonal-activity';
+import { PillarsActor } from "../../document/actor-pillars";
 
 export default class EnchantmentSeasonalActivityApplication extends SeasonalActivityApplication {
   ui: {
@@ -187,7 +187,7 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
         imbuement: this.enchantment,
         item: this.enchantment?.item || this.item,
         actor : this.enchantment?.actor || this.actor,
-        skills : this.actor.getItemTypes(ItemType.skill).filter(i => i.system.category?.value == "artisan"),
+        skills : this.actor.getItemTypes(ItemType.skill).filter((i : PillarsItem) => i.system.category?.value == "artisan"),
         submitButton,
       };
     }

@@ -2,10 +2,10 @@ import { ActorDataConstructorData } from "@league-of-foundry-developers/foundry-
 import { ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
 import { getGame } from "../../system/utility";
 import { ENCHANTMENT_STATE } from "../../../types/seasonal-activities";
-import { PillarsActor } from "../../actor/actor-pillars";
-import { PillarsItem } from "../../item/item-pillars";
+import { PillarsItem } from "../../document/item-pillars";
 import { PILLARS } from "../config";
 import { Enchantment } from "./enchantment";
+import { PillarsActor } from "../../document/actor-pillars";
 
 
 export class Refinement extends Enchantment{

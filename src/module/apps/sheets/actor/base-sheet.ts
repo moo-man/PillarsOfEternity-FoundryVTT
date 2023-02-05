@@ -1,5 +1,5 @@
-import { PowerGroups } from "../../types/powers";
-import { getGame } from "../system/utility";
+import { PowerGroups } from "../../../../types/powers";
+import { getGame } from "../../../system/utility";
 
 export class BasePillarsActorSheet<Options extends ActorSheet.Options = ActorSheet.Options, Data extends object = ActorSheet.Data<Options>> extends ActorSheet<Options, Data> {
 

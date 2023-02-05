@@ -1,6 +1,6 @@
 import { getGame } from "../system/utility"
 import { BookYearData } from '../../types/common';
-import { PillarsActor } from '../actor/actor-pillars';
+import { PillarsActor } from '../document/actor-pillars';
 import { PILLARS } from '../system/config';
 import SeasonalActivityMenu from './seasonal/activity-menu';
 import SeasonalActivityApplication from './seasonal/seasonal-activity';

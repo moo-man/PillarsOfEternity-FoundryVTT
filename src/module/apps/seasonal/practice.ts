@@ -1,7 +1,7 @@
 import { getGame } from "../../system/utility";
-import { hasXP, hasXPData } from '../../../types/common';
+import { hasXPData } from '../../../types/common';
 import {SeasonalActivityResult, PracticeTemplateData } from '../../../types/seasonal-activities';
-import { PillarsItem } from '../../item/item-pillars';
+import { PillarsItem } from '../../document/item-pillars';
 import SeasonalActivityApplication from './seasonal-activity';
 
 export default class PracticeSeasonalActivityApplication extends SeasonalActivityApplication {
@@ -98,18 +98,21 @@ export default class PracticeSeasonalActivityApplication extends SeasonalActivit
         item = ownedSkill
     }
 
-    this.item = item;
-    this.ui.skillImg!.src = item.data.img!
-    this.ui.skillSelect!.value = item.id!;
+    if (item)
+    {
+      this.item = item;
+      this.ui.skillImg!.src = item.data.img!
+      this.ui.skillSelect!.value = item.id!;
+      
+      this.ui.skillName!.textContent = item.name;
 
-    this.ui.skillName!.textContent = item.name;
-
-    if (item.type == "powerSource" || ["artistic", "martial"].includes(item.system.category?.value || ""))
+      if (item.type == "powerSource" || ["artistic", "martial"].includes(item.system.category?.value || ""))
       this.ui.xp!.value = "5";
-    else 
+      else 
       this.ui.xp!.value = "10";
-
-    this.checkData()
+      
+    }
+      this.checkData()
   }
 
   activateListeners(html: JQuery<HTMLElement>): void {

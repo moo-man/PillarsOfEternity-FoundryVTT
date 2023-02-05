@@ -1,6 +1,6 @@
 import { getGame } from "../system/utility"
 import { PowerGroups, PowerTarget } from '../../types/powers';
-import { PillarsItem } from '../item/item-pillars';
+import { PillarsItem } from '../document/item-pillars';
 import { PILLARS } from './config';
 
 export default class PowerTemplate extends MeasuredTemplate {

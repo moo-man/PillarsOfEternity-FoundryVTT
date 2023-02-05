@@ -1,7 +1,7 @@
 import { getGame } from "../system/utility";
 import { DialogHealing } from "../../types/checks";
-import { PillarsItem } from "../item/item-pillars";
-import SkillCheck from "../system/skill-check";
+import { PillarsItem } from "../document/item-pillars";
+import SkillCheck from "../system/rolls/skill-check";
 
 interface HealingDialogRenderOptions extends Application.RenderOptions {
     resolve : (value: DialogHealing[]) => void

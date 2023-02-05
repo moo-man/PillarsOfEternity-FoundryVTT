@@ -1,7 +1,7 @@
 import { getGame } from "../system/utility"
 import { CheckDataFlattened, CheckDialogData, State } from '../../types/checks';
 import { PillarsEffectChangeDataProperties } from '../../types/effects';
-import { PillarsActor } from '../actor/actor-pillars';
+import { PillarsActor } from '../document/actor-pillars';
 import { PILLARS_UTILITY } from '../system/utility';
 
 type DialogData = Dialog.Data & { actor: PillarsActor; targets: Token[]; dialogData: CheckDialogData };

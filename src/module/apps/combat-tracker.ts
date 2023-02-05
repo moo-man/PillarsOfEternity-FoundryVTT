@@ -1,7 +1,7 @@
 import { getGame } from '../system/utility';
 import { PillarsTurn } from '../../types/combat';
-import { PillarsCombat } from '../system/combat';
-import { PillarsCombatant } from '../system/combatant';
+import { PillarsCombat } from '../document/combat-pillars';
+import { PillarsCombatant } from '../document/combatant-pillars';
 
 export default class PillarsCombatTracker extends CombatTracker {
   async _render(...args: Parameters<CombatTracker['_render']>) {

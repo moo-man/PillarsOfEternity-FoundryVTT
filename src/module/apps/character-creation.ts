@@ -1,6 +1,6 @@
 import { getGame } from "../system/utility"
-import { PillarsActor } from "../actor/actor-pillars"
-import { PillarsItem } from "../item/item-pillars"
+import { PillarsActor } from "../document/actor-pillars"
+import { PillarsItem } from "../document/item-pillars"
 import { PILLARS } from "../system/config"
 import { ActorDataConstructor, ActorDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData"
 import actor from "../hooks/actor"

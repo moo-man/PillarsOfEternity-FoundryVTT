@@ -1,6 +1,6 @@
 import { DocumentModificationOptions } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs";
 import { CombatantDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/combatantData";
-import { PillarsCombat } from "./combat";
+import { PillarsCombat } from "./combat-pillars";
 
 export class PillarsCombatant extends Combatant {
     async _preCreate(data: CombatantDataConstructorData, options: DocumentModificationOptions, user: User) 

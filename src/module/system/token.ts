@@ -1,7 +1,7 @@
 import { ObjectAttributeBar } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/documents/token';
 import { DocumentModificationOptions } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/document.mjs';
 import { TokenDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData';
-import { PillarsCombatant } from './combatant';
+import { PillarsCombatant } from '../document/combatant-pillars';
 
 export default class PillarsTokenDocument extends TokenDocument {
   async _preUpdate(data: TokenDataConstructorData, options: DocumentModificationOptions, user: User) {

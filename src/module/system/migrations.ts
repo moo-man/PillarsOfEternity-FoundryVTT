@@ -1,8 +1,9 @@
-import { ActiveEffectDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
+import { ActiveEffectDataConstructorData, ActiveEffectDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
 import { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
 import { getGame } from "../system/utility";
-import { PillarsActor } from "../actor/actor-pillars";
-import { PillarsItem } from "../item/item-pillars";
+import { PillarsItem } from "../document/item-pillars";
+import { PillarsActor } from "../document/actor-pillars";
+import PillarsActiveEffect from "../document/effect-pillars";
 
 export default class Migration {
 
@@ -54,7 +55,7 @@ export default class Migration {
    */
   migrateActorData(actor: PillarsActor) {
     const updateData : Record<string, unknown> = {};
-    let effects = actor.toObject().effects.map(i => this.migrateEffectData(i)).filter(i => !foundry.utils.isObjectEmpty(i))
+    let effects = actor.toObject().effects.map((i) => this.migrateEffectData(i)).filter(i => !foundry.utils.isObjectEmpty(i))
     if (effects.length)
       updateData.effects = effects
     return updateData;

@@ -1,9 +1,8 @@
 import { ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
 import { getGame } from "../../system/utility";
 import { SeasonalActivityResult } from "../../../types/seasonal-activities";
-import { PillarsActor } from "../../actor/actor-pillars";
-import BookOfSeasons from "../book-of-seasons";
 import SeasonalActivityApplication from "./seasonal-activity";
+import { PillarsActor } from "../../document/actor-pillars";
 
 export default class SeasonalActivityMenu extends FormApplication<FormApplicationOptions, {activities : string[]}, {actor : PillarsActor, index : number, season: string}> {
 

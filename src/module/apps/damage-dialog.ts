@@ -1,9 +1,9 @@
 import { TokenDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/tokenData";
 import { getGame } from "../system/utility";
-import { DialogDamage } from "../../types/checks";
+import { CheckAddData, DialogDamage } from "../../types/checks";
 import { Defense } from "../../types/common";
-import { PillarsItem } from "../item/item-pillars";
-import SkillCheck from "../system/skill-check";
+import { PillarsItem } from "../document/item-pillars";
+import SkillCheck from "../system/rolls/skill-check";
 
 
 
@@ -80,7 +80,7 @@ export default class DamageDialog extends Application
             if (this.check && this.check.addedProperties?.damage?.length)
             {
                 // Separate
-                this.addedCrits = this.check.addedProperties.damage.filter(d => !d.base && !d.crit && d.defaultCrit).reduce((prev, current) => prev += current.defaultCrit, 0)
+                this.addedCrits = this.check.addedProperties.damage.filter((d) => !d.base && !d.crit && d.defaultCrit).reduce((prev : number , current : DialogDamage) => prev += current.defaultCrit, 0)
                 damages = damages.concat(this.check.addedProperties.damage as DialogDamage[])
             }
 
