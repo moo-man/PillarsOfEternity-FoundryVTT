@@ -34,10 +34,10 @@ export default class RollDialog extends Dialog
 
     static get defaultOptions() 
     {
-        return mergeObject(super.defaultOptions, {
-            id: "roll-dialog",
-            resizable: true,
-        });
+        const options = super.defaultOptions;
+        options.classes = options.classes.concat("pillars-of-eternity", "roll-dialog");
+        options.resizable = true;
+        return options;
     }
 
     async _render(...args : Parameters<Dialog["_render"]>) 

@@ -1,6 +1,7 @@
 @import "styles/actor/actor-sheet";
 @import "list";
 @import "apps/time-tracker";
+@import "apps/roll-dialog";
 
 
 .pillars-of-eternity {
@@ -33,4 +34,21 @@
         }
     }
 
+}
+
+// Ensures all impmal forms scroll properly, Meaning the Submit button is always visible, but form content scrolls
+.pillars-of-eternity.form {
+    .window-content {
+        overflow-y: hidden;
+    }
+
+    form {
+        height: 100%;
+
+        >  :first-child {
+            height: calc(100% - 32px);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    }
 }
