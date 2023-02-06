@@ -70,8 +70,16 @@
                 cursor: pointer;
             }
 
+            .list-image.list-post {
+                font-size: 22px;
+                opacity: 0.5;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
 
-            .list-toggle {
+
+            .property-toggle {
                 flex: 0 0 15px;
             }
 

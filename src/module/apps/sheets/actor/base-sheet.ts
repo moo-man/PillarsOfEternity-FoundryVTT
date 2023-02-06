@@ -1,5 +1,6 @@
 import { PowerGroups } from "../../../../types/powers";
 import { getGame } from "../../../system/utility";
+import activateSharedListeners from "../shared/listeners";
 
 export class BasePillarsActorSheet<Options extends ActorSheet.Options = ActorSheet.Options, Data extends object = ActorSheet.Data<Options>> extends ActorSheet<Options, Data> 
 {
@@ -11,26 +12,38 @@ export class BasePillarsActorSheet<Options extends ActorSheet.Options = ActorShe
         options.width = 1200;
         options.height = 700;
         options.tabs = [{ navSelector: ".sheet-tabs", contentSelector: ".tab-content", initial: "main" }];
-        options.scrollY = [".tab-content"];
+        options.scrollY = options.scrollY.concat([".tab-content", ".tab"]);
         return options;
+    }
+
+    get template(): string 
+    {
+        return `systems/pillars-of-eternity/templates/actor/actor-${this.actor.type}-sheet.hbs`;
     }
 
     /* -------------------------------------------- */
     /** @override */
     activateListeners(html: JQuery<HTMLElement>): void 
     {
+        super.activateListeners(html);
+        activateSharedListeners(html, this as BasePillarsActorSheet);
+        html.find(".item-dropdown").on("click", this._onDropdown.bind(this));
+        html.find(".item-dropdown-rc").on("contextmenu", this._onDropdown.bind(this));
+        html.find(".post-hover").on("mouseenter", this._onPostItemEnter.bind(this));
+        html.find(".post-hover").on("mouseleave", this._onPostItemLeave.bind(this));
+    }
 
-        html.find(".item-edit").on("click", this._onItemEdit.bind(this));
-        html.find(".item-delete").on("click", this._onItemDelete.bind(this));
-        html.find(".item-create").on("click", this._onItemCreate.bind(this));
-        html.find(".item-post").on("click", this._onPostItem.bind(this));
-        html.find(".effect-create").on("click", this._onEffectCreate.bind(this));
-        html.find(".effect-edit").on("click", this._onEffectEdit.bind(this));
-        html.find(".effect-delete").on("click", this._onEffectDelete.bind(this));
-        html.find(".effect-toggle").on("click", this._onEffectToggle.bind(this));
-        html.find(".item-dropdown.item-control").on("mouseup", this._onDropdown.bind(this));
-        html.find(".item-dropdown h4").on("mouseup", this._onDropdown.bind(this));
-        html.find(".item-dropdown-alt h4").on("mouseup", this._onDropdownAlt.bind(this));
+    _onPostItemEnter(event : JQuery.MouseEnterEvent)
+    {
+        const img = $(event.currentTarget).find("img");
+        $(event.currentTarget).prepend(`<a class="list-post list-image"><i class="fa-solid fa-comment"></i></a>`);
+        img.hide();
+    }
+
+    _onPostItemLeave(event : JQuery.MouseLeaveEvent)
+    {
+        $(event.currentTarget).find("img").show();
+        $(event.currentTarget).find(".list-post").remove();
     }
 
     _onDrop(event: DragEvent) 
@@ -47,119 +60,14 @@ export class BasePillarsActorSheet<Options extends ActorSheet.Options = ActorShe
         }
     }
 
-    _onItemEdit(event: JQuery.ClickEvent) 
+    _onDropdown(event: JQuery.UIEventBase) 
     {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
-        if (itemId) {return this.actor.items.get(itemId)?.sheet?.render(true);}
-    }
-    _onItemDelete(event: JQuery.ClickEvent) 
-    {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
-        if (!itemId) {return;}
-        const game = getGame();
-
-        Dialog.confirm({
-            title: game.i18n.localize("PILLARS.DeleteItem"),
-            content: `<p>${game.i18n.localize("PILLARS.DeleteConfirmation")}</p>`,
-            yes: () => {this.actor.deleteEmbeddedDocuments("Item", [itemId!]);},
-            no: () => {},
-            defaultYes: true
-        });
-    }
-    _onItemCreate(event: JQuery.ClickEvent) 
-    {
-        const type = $(event.currentTarget!).attr("data-type");
-        const category = $(event.currentTarget!).attr("data-category");
-        const createData: Record<string, unknown> = { name: `New ${getGame().i18n.localize(CONFIG.Item.typeLabels[type!]!)}`, type };
-        if (type == "power") {createData["data.improvised.value"] = true;}
-
-        if (category) {createData["data.category.value"] = category;}
-        return this.actor.createEmbeddedDocuments("Item", [createData]);
-    }
-
-    _onPostItem(event: JQuery.ClickEvent) 
-    {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
-        if (itemId) {return this.actor.items.get(itemId)?.postToChat();}
-    }
-
-    async _onEffectCreate(ev: JQuery.ClickEvent) 
-    {
-        const type = (<HTMLElement>ev.currentTarget).dataset["type"];
-        const effectData: Record<string, unknown> = { label: getGame().i18n.localize("PILLARS.NewEffect"), icon: "icons/svg/aura.svg" };
-        if (type == "temporary") 
-        {
-            effectData["duration.rounds"] = 1;
-        }
-
-        const html = await renderTemplate("systems/pillars-of-eternity/templates/apps/quick-effect.hbs", effectData);
-        new Dialog({
-            title: getGame().i18n.localize("PILLARS.QuickEffect"),
-            content: html,
-            buttons: {
-                create: {
-                    label: "Create",
-                    callback: (html) => 
-                    {
-                        html = $(html);
-                        const mode = 2;
-                        const label = html.find(".label").val();
-                        const key = html.find(".key").val();
-                        const value = parseInt(html.find(".modifier").val()?.toString() || "");
-                        effectData.label = label;
-                        effectData.changes = [{ key, mode, value }];
-                        this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
-                    },
-                },
-                skip: {
-                    label: "Skip",
-                    callback: () => this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]),
-                },
-            },
-            render: (dlg) => 
-            {
-                $(dlg).find(".label").select();
-            },
-        }).render(true);
-    }
-
-    _onEffectEdit(ev: JQuery.ClickEvent) 
-    {
-        const id = $(ev.currentTarget!).parents(".item").attr("data-item-id");
-        this.object.effects.get(id!)?.sheet?.render(true);
-    }
-
-    _onEffectDelete(ev: JQuery.ClickEvent) 
-    {
-        const id = $(ev.currentTarget!).parents(".item").attr("data-item-id");
-        if (id) {this.object.deleteEmbeddedDocuments("ActiveEffect", [id]);}
-    }
-
-    _onEffectToggle(ev: JQuery.ClickEvent) 
-    {
-        const id = $(ev.currentTarget!).parents(".item").attr("data-item-id");
-        const effect = this.object.effects.get(id!);
-
-        if (effect) {effect.update({ disabled: !effect.data.disabled });}
-    }
-
-    _onDropdown(event: JQuery.MouseUpEvent) 
-    {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
+        const itemId = $(event.currentTarget).parents("[data-id]")[0]?.dataset.id;
         const item = this.actor.items.get(itemId!);
         if (item) {this._dropdown(event, item.dropdownData());}
     }
-    _onDropdownAlt(event: JQuery.MouseUpEvent) 
-    {
-        if (event.button == 2) 
-        {
-            const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
-            const item = this.actor.items.get(itemId!);
-            if (item) {this._dropdown(event, item.dropdownData());}
-        }
-    }
 
-    async _dropdown(event: JQuery.MouseUpEvent, dropdownData : {text: string, groups? : PowerGroups}) 
+    async _dropdown(event: JQuery.UIEventBase, dropdownData : {text: string, groups? : PowerGroups}) 
     {
         let dropdownHTML = "";
         event.preventDefault();

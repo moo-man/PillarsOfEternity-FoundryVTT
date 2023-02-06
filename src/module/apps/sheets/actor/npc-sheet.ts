@@ -9,17 +9,13 @@ export class PillarsNPCSheet extends PillarsCharacterSheet
     /** @override */
     static get defaultOptions() 
     {
-        return mergeObject(super.defaultOptions, {
-            width: 810,
-            height: 830
-        });
-    }
 
-    get template() 
-    {
-        return "systems/pillars-of-eternity/templates/actor/actor-npc-sheet.hbs";
+        const options = super.defaultOptions;
+        options.width = 810,
+        options.height = 830,
+        options.classes.push("npc");
+        return options;
     }
-
 
     activateListeners(html : JQuery<HTMLElement>)
     {

@@ -12,17 +12,17 @@
 
     <ul class="list-content">
         {{#each items.powerSources}}
-            <li data-list-id="{{this.id}}">
+            <li data-id="{{this.id}}">
                 <div class="row-content">
 
                     {{#if this.system.used.value}}
-                        <a class="used list-toggle"><i class="far fa-check-circle"></i></a>
+                        <a class="used property-toggle" data-path="system.used.value"><i class="far fa-check-circle"></i></a>
                     {{else}}
-                        <a class="used list-toggle"><i class="far fa-circle"></i></a>
+                        <a class="used property-toggle" data-path="system.used.value"><i class="far fa-circle"></i></a>
                     {{/if}}
 
                     <div class="list-name">
-                        <a>{{this.name}}</a>
+                        <a class="item-dropdown">{{this.name}}</a>
                     </div>
 
                     <div class="power-bar {{this.system.source.value}}">
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <a title="Restore Pool" class="restore-pool"><i class="fas fa-redo"></i></a>
-                        <input type="number" value="{{this.system.pool.current}}"> / <input type="number" disabled value="{{this.system.pool.max}}">
+                        <input type="number" class="property-edit" data-path="system.pool.current" value="{{this.system.pool.current}}"> / <input type="number" disabled value="{{this.system.pool.max}}">
                     </div>
                     <div class="small">+{{this.system.attack}}</div>
                     <div class="small"><input type="number" value="{{this.system.xp.value}}"></div>
@@ -70,7 +70,7 @@
                 <div class="row-content">
                     <div class="list-name">
                         <img class="list-image" src="{{this.img}}">
-                        <a>{{this.name}}</a>
+                        <a class="roll-power">{{this.name}}</a>
                     </div>
 
                     {{#if this.currentDisplayGroup}}
@@ -117,11 +117,11 @@
 
         <ul class="list-content">
             {{#each items.embeddedPowers}}
-                <li data-list-id="{{this.id}}">
+                <li data-id="{{this.id}}">
                     <div class="row-content">
                         <div class="list-name list-dropdown-alt">
                             <img class="list-image" src="{{this.img}}">
-                            <a>{{this.name}}</a>
+                            <a class="roll-power">{{this.name}}</a>
                         </div>
 
                         <a class="embedded-value">{{this.EmbeddedDisplay}}</a>

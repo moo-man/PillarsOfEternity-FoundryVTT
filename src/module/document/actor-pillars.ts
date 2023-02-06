@@ -199,7 +199,11 @@ export class PillarsActor extends Actor
         try 
         {
             this.itemCategories = this.itemTypes;
-            //for (let type in this.itemCategories) this.itemCategories[<ItemType>type] = this.itemCategories[<ItemType>type]!.sort((a, b) => (a.data.sort > b.data.sort ? 1 : -1));
+            for (const type in this.itemCategories)
+            {
+                this.itemCategories[<ItemType>type] = this.itemCategories[<ItemType>type]!.sort((a, b) => (a.data.sort > b.data.sort ? 1 : -1));
+            } 
+                
             super.prepareData();
             this.prepareItems();
             this.prepareEffectTooltips();

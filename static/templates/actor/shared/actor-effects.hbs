@@ -3,7 +3,7 @@
         <div class="list-name">{{localize "PILLARS.TemporaryEffects"}}</div>
         <div>{{localize "PILLARS.Source"}}</div>
         <div class="list-controls">
-            <a class="list-control list-create" title="Create" data-type="temporary"><i class="fas fa-plus"></i></a>
+            <a class="list-control list-create" title="Create" data-collection="effects" data-type="temporary" ><i class="fas fa-plus"></i></a>
         </div>
     </li>
 
@@ -13,15 +13,15 @@
             <div class="row-content">
                 <div class="list-name">
                     <img class="list-image" src="{{this.icon}}">
-                    <a class="list-edit">{{this.label}}</a>
+                    <a class="list-edit" data-collection="effects">{{this.label}}</a>
                 </div>
     
                 <div>{{this.sourceName}}</div>
     
                 <div class="list-controls flexrow">
                     {{#if ../document.isOwner}}
-                    <a class="list-control list-toggle" title="Disable Effect"><i class="far fa-check-circle"></i></a>
-                    <a class="list-control list-delete" title="Delete Effect"><i class="fas fa-trash"></i></a>
+                    <a class="list-control property-toggle" data-path="disabled" data-collection="effects" title="Disable Effect"><i class="far fa-check-circle"></i></a>
+                    <a class="list-control list-delete" data-collection="effects"  title="Delete Effect"><i class="fas fa-trash"></i></a>
                     {{/if}}
                 </div>
             </div>
@@ -35,7 +35,7 @@
         <div class="list-name">{{localize "PILLARS.PassiveEffects"}}</div>
         <div>{{localize "PILLARS.Source"}}</div>
         <div class="list-controls">
-            <a class="list-control list-create" title="Create" data-type="passive"><i class="fas fa-plus"></i></a>
+            <a class="list-control list-create" title="Create" data-collection="effects" data-type="passive"><i class="fas fa-plus"></i></a>
         </div>
     </li>
 
@@ -45,7 +45,7 @@
             <div class="row-content">
                 <div class="list-name">
                     <img class="list-image" src="{{this.icon}}">
-                    <a class="list-edit">{{this.label}}</a>
+                    <a class="list-edit" data-collection="effects">{{this.label}}</a>
                 </div>
     
                 <div>{{this.sourceName}}</div>
@@ -53,8 +53,8 @@
     
                 <div class="list-controls flexrow">
                     {{#if ../owner}}
-                    <a class="list-control list-toggle" title="Disable Effect"><i class="far fa-check-circle"></i></a>
-                    <a class="list-control list-delete" title="Delete Effect"><i class="fas fa-trash"></i></a>
+                    <a class="list-control property-toggle" data-path="disabled" data-collection="effects" title="Disable Effect"><i class="far fa-check-circle"></i></a>
+                    <a class="list-control list-delete" data-collection="effects" title="Delete Effect"><i class="fas fa-trash"></i></a>
                     {{/if}}
                 </div>
             </div>
@@ -76,7 +76,7 @@
             <div class="row-content">
                 <div class="list-name">
                     <img class="list-image" src="{{this.icon}}">
-                    <a class="list-edit">{{this.label}}</a>
+                    <a class="list-edit" data-collection="effects">{{this.label}}</a>
                 </div>
     
                 <div>{{this.sourceName}}</div>
@@ -84,8 +84,8 @@
     
                 <div class="list-controls flexrow">
                     {{#if ../owner}}
-                    <a class="list-control list-toggle" title="Enable Effect"><i class="far fa-circle"></i></a>
-                    <a class="list-control list-delete" title="Delete Effect"><i class="fas fa-trash"></i></a>
+                    <a class="list-control property-toggle" data-path="disabled" data-collection="effects" title="Enable Effect"><i class="far fa-circle"></i></a>
+                    <a class="list-control list-delete" data-collection="effects" title="Delete Effect"><i class="fas fa-trash"></i></a>
                     {{/if}}
                 </div>
             </div>

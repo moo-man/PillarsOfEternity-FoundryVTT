@@ -16,10 +16,6 @@ export class PillarsFollowerSheet extends PillarsCharacterSheet
         });
     }
 
-    get template() 
-    {
-        return "systems/pillars-of-eternity/templates/actor/actor-follower-sheet.hbs";
-    }
 
     checkAlerts(): void 
     {

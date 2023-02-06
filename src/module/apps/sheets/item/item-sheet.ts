@@ -10,6 +10,7 @@ import { PILLARS } from "../../../system/config";
 import PillarsActiveEffect from "../../../document/effect-pillars";
 import { PillarsItem } from "../../../document/item-pillars";
 import { PillarsActor } from "../../../document/actor-pillars";
+import activateSharedListeners from "../shared/listeners";
 
 interface PillarsItemSheetData extends Omit<ItemSheet.Data, "data"> {
   system: PillarsItemSystemData;
@@ -151,22 +152,10 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
         super.activateListeners(html);
         if (!this.options.editable) {return;}
 
-        $("input[type=text]").on("focusin", function () 
-        {
-            $(this).select();
-        });
-
-        $("input[type=number]").on("focusin", function () 
-        {
-            $(this).select();
-        });
-
+        activateSharedListeners(html, this);
         html.find(".item-specials").on("click", this._onConfigureSpecialsClick.bind(this));
         html.find(".csv-input").on("change", this._onCSVInputChange.bind(this));
         html.find(".add-power-effect").on("change", this._onAddPowerEffect.bind(this));
-        html.find(".effect-create").on("click", this._onEffectCreate.bind(this));
-        html.find(".effect-delete").on("click", this._onEffectDelete.bind(this));
-        html.find(".effect-edit").on("click", this._onEffectEdit.bind(this));
         html.find(".add-damage").on("click", this._onAddDamage.bind(this));
         html.find(".add-property").on("click", this._onAddProperty.bind(this));
         html.find(".remove-property").on("click", this._onRemoveProperty.bind(this));
@@ -200,56 +189,6 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
         const text = ev.target.value as string;
         const array = text.split(",").map((i) => i.trim());
         if (target) {return this.item.update({ [target]: array });}
-    }
-
-    async _onEffectCreate(ev: JQuery.ClickEvent) 
-    {
-        const game = getGame();
-        if (this.item.isOwned)
-        {return ui.notifications!.error(game.i18n.localize("PILLARS.ErrorCreateEffectOnOwnedItem"));}
-
-        const effectData: ActiveEffectDataSource = <ActiveEffectDataSource>{ label: this.item.name!, icon: this.item.data.img || "icons/svg/aura.svg" };
-        const html = await renderTemplate("systems/pillars-of-eternity/templates/apps/quick-effect.hbs", effectData);
-        new Dialog({
-            title: game.i18n.localize("PILLARS.QuickEffect"),
-            content: html,
-            buttons: {
-                create: {
-                    label: game.i18n.localize("PILLARS.Create"),
-                    callback: (dlg: JQuery<HTMLElement> | HTMLElement) => 
-                    {
-                        const mode = 2;
-                        const html = $(dlg);
-                        const label = html.find(".label").val()?.toString()!;
-                        const key = html.find(".key").val()?.toString()!;
-                        const value = html.find(".modifier").val()?.toString()!;
-                        effectData.label = label?.toString() || effectData.label;
-                        effectData.changes = [{ key, mode, value, priority: undefined }];
-                        this.item.createEmbeddedDocuments("ActiveEffect", [effectData]);
-                    },
-                },
-                skip: {
-                    label: game.i18n.localize("PILLARS.Skip"),
-                    callback: () => this.item.createEmbeddedDocuments("ActiveEffect", [effectData]),
-                },
-            },
-            render: (dlg: HTMLElement | JQuery<HTMLElement>) => 
-            {
-                $(dlg).find(".label").trigger("select"); // TODO test this
-            },
-        }).render(true);
-    }
-
-    _onEffectDelete(ev: JQuery.ClickEvent) 
-    {
-        const id = $(ev.currentTarget).parents(".item").attr("data-effect-id") ;
-        return this.item.deleteEmbeddedDocuments("ActiveEffect", [id || ""]);
-    }
-
-    _onEffectEdit(ev: JQuery.ClickEvent) 
-    {
-        const id = $(ev.currentTarget).parents(".item").attr("data-effect-id");
-        this.item?.effects?.get(id!)?.sheet?.render(true);
     }
 
     _onAddDamage(ev: JQuery.ClickEvent) 

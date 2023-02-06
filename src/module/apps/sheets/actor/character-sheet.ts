@@ -150,23 +150,11 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         options.classes = options.classes.concat(["character"]);
         options.width = 1200;
         options.height = 700;
-        options.tabs = [{ navSelector: ".sheet-tabs", contentSelector: ".tab-content", initial: "main" }];
-        options.scrollY = [".tab-content"];
+        options.scrollY = options.scrollY.concat([".attributes", ".skills"]);
         return options;
     }
 
-    get template(): string 
-    {
-        if (this.actor.type == "character") {return "systems/pillars-of-eternity/templates/actor/actor-character-sheet.hbs";}
-        else {return "";}
-    }
-
     /**
-   * Overrides the default ActorSheet.render to add lity.
-   *
-   * This adds scroll position saving support, as well as tooltips for the
-   * custom buttons.
-   *
    * @param {bool} force      used upstream.
    * @param {Object} options  used upstream.
    */
@@ -174,7 +162,6 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
     {
         await super._render(force, options);
         this.checkAlerts();
-    //this._refocus(this._element)
     }
 
 
@@ -537,26 +524,19 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         // Everything below here is only needed if the sheet is editable
         if (!this.options.editable) {return;}
 
-        $("input[type=text]").focusin(function () 
+        $("input").on("focusin", (ev => 
         {
-            $(this).select();
-        });
+            $(ev.target).trigger("select");
+        }));
 
-        $("input[type=number]").focusin(function () 
-        {
-            $(this).select();
-        });
-
-        html.find(".sheet-checkbox").on("click", this._onCheckboxClick.bind(this));
         html.find(".open-info").on("click", this._onInfoClick.bind(this));
         html.find(".add-wound").on("click", this._onWoundClick.bind(this));
         html.find(".subtract-wound").on("click", this._onWoundClick.bind(this));
         html.find(".item-special").on("mouseup", this._onSpecialClicked.bind(this));
-        html.find(".item-property").on("change", this._onEditItemProperty.bind(this));
-        html.find(".skill-roll").on("click", this._onSkillRoll.bind(this));
+        html.find(".roll-skill").on("click", this._onSkillRoll.bind(this));
         html.find(".roll-untrained").on("click", this._onUntrainedSkillClick.bind(this));
-        html.find(".weapon-roll").on("click", this._onWeaponRoll.bind(this));
-        html.find(".power-roll").on("click", this._onPowerRoll.bind(this));
+        html.find(".roll-weapon").on("click", this._onWeaponRoll.bind(this));
+        html.find(".roll-power").on("click", this._onPowerRoll.bind(this));
         html.find(".property-counter").on("mouseup", this._onCounterClick.bind(this));
         html.find(".create-connection").on("click", this._onCreateConnection.bind(this));
         html.find(".edit-connection").on("click", this._onEditConnection.bind(this));
@@ -569,30 +549,16 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         html.find(".roll-item-skill").on("click", this._onItemSkillClick.bind(this));
         html.find(".age-roll").on("click", this._onAgeRoll.bind(this));
         html.find(".roll-initiative").on("click", this._onInitiativeClick.bind(this));
-        html.find(".setting").on("click", this._onSettingClick.bind(this));
         html.find(".displayGroup").on("click", this._onDisplayGroupClick.bind(this));
         html.find(".box-click").on("click", this._onBoxClick.bind(this));
-        html.find(".long-rest").on("click", this._onLongRestClick.bind(this));
         html.find(".embedded-value").on("mouseup", this._onEmbeddedValueClick.bind(this));
-        html.find(".endurance-action").on("click", this._onEnduranceActionClick.bind(this));
-        html.find('.item:not(".tab-select")').each((i, li) => 
-        {
-            li.setAttribute("draggable", "true");
-            li.addEventListener("dragstart", this._onDragStart.bind(this), false);
-        });
+        // html.find('.item:not(".tab-select")').each((i, li) => 
+        // {
+        //     li.setAttribute("draggable", "true");
+        //     li.addEventListener("dragstart", this._onDragStart.bind(this), false);
+        // });
     }
 
-    _onCheckboxClick(event: JQuery.ClickEvent) 
-    {
-        let target = $(event.currentTarget!).attr("data-target");
-        if (target == "item") 
-        {
-            target = $(event.currentTarget!).attr("data-item-target");
-            const item = this.actor.items.get($(event.currentTarget!).parents(".item").attr("data-item-id") || "");
-            if (item && target) {return item.update({ [`${target}`]: !getProperty(item.data, target) });}
-        }
-        if (target) {return this.actor.update({ [`${target}`]: !getProperty(this.actor.data, target) });}
-    }
 
     _onInfoClick(event: JQuery.ClickEvent) 
     {
@@ -600,18 +566,6 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         const item = this.actor.getItemTypes(<ItemType>type!)[0];
         if (!item) {return ui.notifications!.error(getGame().i18n.format("PILLARS.ErrorNoOwnedItem", {type}));}
         else if (item) {item.sheet!.render(true);}
-    }
-
-    _onEditItemProperty(event: JQuery.ChangeEvent) 
-    {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
-        const target = $(event.currentTarget!).attr("data-target");
-        let value: string | number = (<HTMLInputElement>event.currentTarget!).value;
-        const item = this.actor.items.get(itemId!);
-
-        if (Number.isNumeric(value)) {value = parseInt(value);}
-
-        if (item && target) {return item.update({ [target]: value });}
     }
 
     _onCounterClick(event: JQuery.MouseUpEvent) 
@@ -623,7 +577,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         if (target == "item") 
         {
             target = $(event.currentTarget!).attr("data-item-target");
-            const item = this.actor.items.get($(event.currentTarget!).parents(".item").attr("data-item-id")!);
+            const item = this.actor.items.get($(event.currentTarget!).parents(".item").attr("data-id")!);
             if (item && target) {return item.update({ [`${target}`]: getProperty(item.data, target) + multiplier });}
         }
         if (target) {return this.actor.update({ [`${target}`]: getProperty(this.actor.data, target) + multiplier });}
@@ -647,7 +601,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         if (connections) 
         {
             connections.push({ name: getGame().i18n.format("PILLARS.NewConnection")});
-            this.actor.update({ "data.connections": connections });
+            this.actor.update({ "system.connections": connections });
         }
     }
 
@@ -699,7 +653,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
 
     _onPowerTargetClick(event: JQuery.ClickEvent) 
     {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
+        const itemId = $(event.currentTarget!).parents("[data-id]")[0]?.dataset.id;
         const index = parseInt($(event.currentTarget!).attr("data-index") || "0");
         const item = this.actor.items.get(itemId!);
         if (item)
@@ -711,9 +665,9 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
 
     _onRestorePoolClick(event: JQuery.ClickEvent) 
     {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
+        const itemId = $(event.currentTarget!).parents("[data-id]")[0]?.dataset.id;
         const item = this.actor.items.get(itemId!);
-        if (item) {return item.update({ "data.pool.current": item.system.pool?.max });}
+        if (item) {return item.update({ "system.pool.current": item.system.pool?.max });}
     }
 
     _onWoundClick(event: JQuery.ClickEvent) 
@@ -721,7 +675,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         if (this.actor.data.type == "headquarters")
         {return;}
         const multiplier = (<HTMLAnchorElement>event.currentTarget).classList.contains("add-wound") ? 1 : -1;
-        return this.actor.update({ "data.health.wounds.value": this.actor.system.health.wounds.value + 1 * multiplier });
+        return this.actor.update({ "system.health.wounds.value": this.actor.system.health.wounds.value + 1 * multiplier });
     }
 
     /* -------------------------------------------- */
@@ -731,14 +685,6 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         (await new Roll((<HTMLAnchorElement>event.target).text).roll()).toMessage({ speaker: this.actor.speakerData() });
     }
 
-
-    // _onDamageRollClick(event: JQuery.ClickEvent) {
-    //   let itemId = $(event.currentTarget!).parents('.item').attr('data-item-id');
-    //   let group = $(event.currentTarget!).attr('data-group');
-    //   let item = this.actor.items.get(itemId!);
-    //   if (item)
-    //     new DamageDialog(item, undefined, Array.from(getGame().user!.targets)).render(true);
-    // }
 
     _onInitiativeClick(event: JQuery.ClickEvent) 
     {
@@ -773,16 +719,9 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         }).render(true);
     }
 
-    _onSettingClick(ev: JQuery.ClickEvent) 
-    {
-        const itemId = $(ev.currentTarget!).attr("data-item-id");
-        const item = this.actor.items.get(itemId!);
-        if (item) {item.sheet!.render(true);}
-    }
-
     async _onSkillRoll(event: JQuery.ClickEvent) 
     {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
+        const itemId = $(event.currentTarget!).parents("[data-id]")[0]?.dataset.id;
         const item = this.actor.items.get(itemId!);
         if (item) 
         {
@@ -831,7 +770,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
 
     async _onWeaponRoll(event: JQuery.ClickEvent) 
     {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
+        const itemId = $(event.currentTarget!).parents("[data-id]")[0]?.dataset.id;
         const check = await this.actor.setupWeaponCheck(itemId!);
         await check.rollCheck();
         check.sendToChat();
@@ -839,7 +778,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
 
     async _onPowerRoll(event: JQuery.ClickEvent) 
     {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
+        const itemId = $(event.currentTarget!).parents("[data-id]")[0]?.dataset.id;
         const check = await this.actor.setupPowerCheck(itemId!);
         await check.rollCheck();
         check.sendToChat();
@@ -847,7 +786,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
 
     async _onItemSkillClick(event: JQuery.ClickEvent) 
     {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
+        const itemId = $(event.currentTarget!).parents("[data-id]")[0]?.dataset.id;
         const item = this.actor.items.get(itemId!);
         const skill = this.actor.items.getName(item?.system.skill?.value || "");
         if (!skill) {return ui.notifications!.warn(getGame().i18n.format("PILLARS.ErrorSkillNotFound", {name : item?.system.skill?.value}));}
@@ -865,7 +804,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
 
     _onDisplayGroupClick(event: JQuery.ClickEvent) 
     {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
+        const itemId = $(event.currentTarget!).parents("[data-id]")[0]?.dataset.id;
         const item = this.actor.items.get(itemId!);
         let groupIndex: number | string = <number | string>item?.getFlag("pillars-of-eternity", "displayGroup");
         if (item?.data.type == "power")
@@ -893,28 +832,9 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         }
     }
 
-    _onLongRestClick(ev: JQuery.ClickEvent) 
-    {
-        const game = getGame();
-        new Dialog({
-            title: game.i18n.localize("PILLARS.Rest"),
-            content: `<p>${game.i18n.localize("PILLARS.PromptShortLongRest")}</p>`,
-            buttons: {
-                long: {
-                    label: game.i18n.localize("PILLARS.ShortRest"),
-                    callback: () => this.actor.shortRest(),
-                },
-                short: {
-                    label: game.i18n.localize("PILLARS.LongRest"),
-                    callback: () => this.actor.longRest(),
-                },
-            },
-        }).render(true);
-    }
-
     _onEmbeddedValueClick(event: JQuery.MouseUpEvent) 
     {
-        const itemId = $(event.currentTarget!).parents(".item").attr("data-item-id");
+        const itemId = $(event.currentTarget!).parents("[data-id]")[0]?.dataset.id;
         const item = this.actor.items.get(itemId!);
         if (item) 
         {
@@ -929,8 +849,29 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet<ActorSheet.Opti
         }
     }
 
-    _onEnduranceActionClick(ev: JQuery.ClickEvent) 
+    _onActionCLick(ev: JQuery.ClickEvent) 
     {
-        this.actor.enduranceAction(<"exert" | "breath">(<HTMLAnchorElement>ev.currentTarget).dataset.type);
+        if (ev.currentTarget.dataset.type == "longRest")
+        {
+            const game = getGame();
+            new Dialog({
+                title: game.i18n.localize("PILLARS.Rest"),
+                content: `<p>${game.i18n.localize("PILLARS.PromptShortLongRest")}</p>`,
+                buttons: {
+                    long: {
+                        label: game.i18n.localize("PILLARS.ShortRest"),
+                        callback: () => this.actor.shortRest(),
+                    },
+                    short: {
+                        label: game.i18n.localize("PILLARS.LongRest"),
+                        callback: () => this.actor.longRest(),
+                    },
+                },
+            }).render(true);
+        }
+        else 
+        {
+            this.actor.enduranceAction(<"exert" | "breath">(<HTMLAnchorElement>ev.currentTarget).dataset.type);
+        }
     }
 }

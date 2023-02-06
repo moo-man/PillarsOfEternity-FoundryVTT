@@ -35,21 +35,12 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
     /** @override */
     static get defaultOptions() 
     {
-        const data = mergeObject(super.defaultOptions, {
-            classes: ["pillars-of-eternity", "sheet", "actor"],
-            width: 810,
-            height: 830,
-            tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".tab-content", initial: "main" }],
-        });
-        data.classes.push("headquarters");
-        data.dragDrop.push({ dragSelector: ".actor-list .actor", dropSelector: null });
-
-        return data;
-    }
-
-    get template() 
-    {
-        return "systems/pillars-of-eternity/templates/actor/actor-headquarters-sheet.hbs";
+        const options = super.defaultOptions;
+        options.width = 810,
+        options.height = 830,
+        options.classes.push("headquarters");
+        options.dragDrop.push({ dragSelector: ".actor-list .actor", dropSelector: null });
+        return options;
     }
 
     async getData()

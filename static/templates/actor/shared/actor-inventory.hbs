@@ -46,9 +46,9 @@
                             <div class="small">
                                 {{#if this.canEquip}}
                                     {{#if this.system.equipped.value}}
-                                        <a class="list-toggle"><i class="far fa-check-circle"></i></a>
+                                        <a class="property-toggle" data-path="system.equipped.value"><i class="far fa-check-circle"></i></a>
                                     {{else}}
-                                        <a class="list-toggle"><i class="far fa-circle"></i></a>
+                                        <a class="property-toggle" data-path="system.equipped.value"><i class="far fa-circle"></i></a>
                                     {{/if}}
                                 {{/if}}
                             </div>
