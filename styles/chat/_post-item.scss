@@ -1,0 +1,26 @@
+.post-item {
+    h2 {
+        text-align: center;
+    }
+
+    img {
+        border: none;
+        height: 100px;
+        width: 100px;
+    }
+
+
+    .post-img {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+
+    padding: 5px;
+
+}
+
+.post-item:hover {
+    outline: 1px dotted black;
+    cursor: move;
+}

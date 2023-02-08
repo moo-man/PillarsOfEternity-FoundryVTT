@@ -422,7 +422,7 @@ export class PillarsActor extends Actor
     getPowerDialogData(type: string, item: PillarsItem, options: CheckOptions = {}) 
     {
         const dialogData: PowerDialogData = <PowerDialogData>this.getDialogData(type, item, options);
-        if (item.system.damage?.value.length) {dialogData.title = getGame().i18n.format("PILLARS.Attacktitle", { name: item?.name || options.name });}
+        if (item.system.damage?.value.length) {dialogData.title = getGame().i18n.format("PILLARS.AttackTitle", { name: item?.name || options.name });}
         else {dialogData.title = item?.name || options.name || "";}
         //dialogData.assisters = this.constructAssisterList(weapon.Skill)
         dialogData.modifier = (item.SourceItem?.attack || 0).toString();
