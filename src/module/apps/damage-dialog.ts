@@ -41,15 +41,13 @@ export default class DamageDialog extends Application
 
     static get defaultOptions() 
     {
-        return mergeObject(super.defaultOptions, {
-            id: "damage-dialog",
-            classes : ["pillars-of-eternity"],
-            title : getGame().i18n.localize("PILLARS.Damage"),
-            //height: "auto",
-            resizable: true,
-            width: 500,
-            template : "systems/pillars-of-eternity/templates/apps/damage-dialog.hbs"
-        });
+        const options = super.defaultOptions;
+        options.classes = options.classes.concat(["pillars-of-eternity", "check-dialog", "damage-dialog", "form"]);
+        options.title = getGame().i18n.localize("PILLARS.Damage");
+        options.resizable = true;
+        options.width = 550;
+        options.template = "systems/pillars-of-eternity/templates/apps/damage-dialog.hbs";
+        return options;
     }
 
 
@@ -211,8 +209,9 @@ export default class DamageDialog extends Application
         {select.value = damage.mult?.toString() || "";}
     }
 
-    submit() 
-    {
+    submit(ev : JQuery.UIEventBase) 
+    {   
+        ev.preventDefault();
         const damages = duplicate(this.damages) as typeof this.damages;
         damages.forEach(d => d.target = this.targets.find(i => i.id == d.target));
         damages.forEach(d => d.misses = <TokenDataProperties[]>this.disabled.map(i => i.toObject()));
@@ -227,7 +226,7 @@ export default class DamageDialog extends Application
         {
             ev.preventDefault();
             ev.stopPropagation();
-            this.submit();
+            this.submit(ev);
         }
     }
 
@@ -241,7 +240,7 @@ export default class DamageDialog extends Application
     {
         super.activateListeners(html);
 
-        html.find(".add-damage").on("click", this.addDamage.bind(this));
+        html.find(".add-roll").on("click", this.addDamage.bind(this));
         html.find("button").on("click", this.submit.bind(this));
 
         html.find(".label,.type,.base,.crit,.mult").on("change", (ev : JQuery.ChangeEvent) => 

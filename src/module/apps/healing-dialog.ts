@@ -31,15 +31,13 @@ export default class HealingDialog extends Application
 
     static get defaultOptions() 
     {
-        return mergeObject(super.defaultOptions, {
-            id: "healing-dialog",
-            classes : ["pillars-of-eternity"],
-            title : getGame().i18n.localize("PILLARS.Healing"),
-            //height: "auto",
-            resizable: true,
-            width: 500,
-            template : "systems/pillars-of-eternity/templates/apps/healing-dialog.hbs"
-        });
+        const options = super.defaultOptions;
+        options.classes =  options.classes.concat(["pillars-of-eternity", "check-dialog", "healing-dialog", "form"]);
+        options.title =  getGame().i18n.localize("PILLARS.Healing");
+        options.resizable = true;
+        options.width = 550;
+        options.template =  "systems/pillars-of-eternity/templates/apps/healing-dialog.hbs";
+        return options;
     }
 
 
@@ -115,8 +113,10 @@ export default class HealingDialog extends Application
         parent.find(".target").find("img").attr("src", img);
     }
 
-    submit() 
-    {
+
+    submit(ev : JQuery.UIEventBase) 
+    {   
+        ev.preventDefault();
         const healing = duplicate(this.healing) as typeof this.healing;
         healing.forEach(h => h.target = this.targets.find(i => i.id == h.target));
         healing.forEach(h => h.healing = true);
@@ -131,7 +131,7 @@ export default class HealingDialog extends Application
         {
             ev.preventDefault();
             ev.stopPropagation();
-            this.submit();
+            this.submit(ev);
         }
     }
 
@@ -145,7 +145,7 @@ export default class HealingDialog extends Application
     {
         super.activateListeners(html);
 
-        html.find(".add-damage").on("click", this.addHealing.bind(this));
+        html.find(".add-roll").on("click", this.addHealing.bind(this));
         html.find("button").on("click", this.submit.bind(this));
 
         html.find(".label,.base").on("change", (ev : JQuery.ChangeEvent) => 

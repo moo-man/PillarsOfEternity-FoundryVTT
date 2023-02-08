@@ -29,7 +29,13 @@ export default class PowerCheck extends SkillCheck
         const terms = this.getTerms();
         this.roll = Roll.fromTerms(terms);
         if (this.requiresRoll)
-        {await this.roll.evaluate({async:true});}  
+        {
+            await this.roll.evaluate({async:true});
+        }
+        else 
+        {
+            this.roll = await new Roll("0").evaluate({async: true});
+        } 
                 
         // If embedded item, use up charges instead of power source
         const embeddedParent = this.power.EmbeddedPowerParent;

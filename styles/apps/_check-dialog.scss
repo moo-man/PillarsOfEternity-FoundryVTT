@@ -1,0 +1,62 @@
+.check-dialog {
+    input {
+        text-align: center;
+    }
+    ul {
+        list-style: none;
+        padding: 0px;
+
+        li {
+            display: flex;
+            align-items: center;
+
+            >* {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                margin: 3px;
+            }
+
+            .target {
+                display: flex;
+                align-items: center;
+                flex: 2;
+
+                img {
+                    margin: 3px;
+                }
+            }
+
+            .mult-crit {
+                flex: 2;
+                > span {
+                    margin: 0px 5px;
+                    font-size: 16px;
+                }
+            }
+
+            .control {
+                flex: 0 0 20px;
+            }
+        }
+
+        
+        li.header {
+            > * {
+                display: block;
+                text-align: center;
+            }
+        }
+    }
+
+    select {
+        width: 100%;
+    }
+
+    .roll-control {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+}
