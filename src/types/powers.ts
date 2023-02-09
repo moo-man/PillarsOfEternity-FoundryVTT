@@ -155,7 +155,7 @@ export interface PowerBaseEffect {
 
 export interface PowerSummon {
   group : string,
-  data : ItemDataConstructorData,
+  item : ItemDataConstructorData,
   modifier? : number
 }
 

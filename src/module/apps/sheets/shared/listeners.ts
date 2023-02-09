@@ -136,7 +136,7 @@ export default function activateSharedListeners(html : JQuery<HTMLElement>, shee
             const parent = $(ev.currentTarget).parents("[data-collection]");
             if (parent)
             {
-                collection =parent[0]?.dataset.id;
+                collection =parent[0]?.dataset.collection;
             }
         }
         return collection || "items";

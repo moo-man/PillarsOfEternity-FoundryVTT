@@ -74,18 +74,18 @@ export class PillarsItem extends Item
                 // If this is owned, set all owned powers (given by this item) to "source"
                 if (this.isOwned)
                 {
-this.actor!.updateEmbeddedDocuments(
-    "Item",
-    powers
-        .map((p : EmbeddedPower) => 
-        {
-            return {
-                _id: p.ownedId,
-                "data.embedded.spendType": "source",
-            };
-        })
-        .filter((p : EmbeddedPower) => p)
-);
+                    this.actor!.updateEmbeddedDocuments(
+                        "Item",
+                        powers
+                            .map((p : EmbeddedPower) => 
+                            {
+                                return {
+                                    _id: p.ownedId,
+                                    "data.embedded.spendType": "source",
+                                };
+                            })
+                            .filter((p : EmbeddedPower) => p)
+                    );
                 }
             }
         }

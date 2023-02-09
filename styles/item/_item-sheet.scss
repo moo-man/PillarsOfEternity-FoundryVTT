@@ -1,0 +1,151 @@
+.pillars-of-eternity.item {
+
+    .window-content {
+        overflow-y: hidden;
+
+        form {
+            height: 100%;
+
+            .tab-content {
+                height: 100%;
+
+                .tab {
+                    height: calc(100% - 130px);
+                    overflow: auto;
+                    padding-right: 5px;
+                }
+            }
+        }
+    }
+
+    .item-header {
+        display: flex;
+        width: 100%;
+
+        h1 {
+            margin: 5px;
+            height: 50px;
+            
+            input {
+                text-align: center;
+                height: 40px;
+            }
+        }
+
+        img {
+            width: 60px;
+            height: 60px
+        }
+
+        .header-details {
+            flex: 1;
+
+            .item-type {
+                opacity: 0.5;
+            }
+
+            .detail-row {
+                display: flex;
+                justify-content: space-around;
+
+                input {
+                    margin: 0px 3px;
+                    width: 75px;
+                }
+
+            }
+        }
+    }
+
+    .description.tab.active {
+        display: flex;
+        flex-direction: column;
+
+        >.note-section {
+            flex: 1;
+
+            .editor {
+                height: calc(100% - 17px);
+                min-height: 50px;
+            }
+        }
+    }
+
+    .details.tab {
+        .item-specials {
+            margin: 0px;
+        }
+    }
+
+    .charges {
+        display: flex;
+        width : 100%;
+        align-items: center;
+         > * {
+             margin: 3px;
+         }
+         input {
+             flex: 0 0 50px;
+         }
+      }
+
+    .form-group.power-group {
+        flex-direction: column;
+
+        h3 {
+            margin: 0px;
+            margin-top: 5px;
+            border-bottom: none;
+        }
+
+        .property-list {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            width: 100%;
+
+            .property-inputs {
+                display: flex;
+                align-items: center;
+                margin: 5px 0px;
+
+                input {
+                    text-align: center;
+                }
+
+                >* {
+                    flex: 1;
+                    margin: 0px 5px
+                }
+
+                .group {
+                    flex: 0 0 30px;
+                    text-align: center;
+                }
+
+                .summon {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .power-property-form-group {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex: unset
+                }
+
+                .property-control {
+                    flex: 0 0 20px;
+                }
+
+                img {
+                    height: 25px;
+                    width: 25px;
+                }
+
+            }
+
+        }
+    }
+}

@@ -1,31 +1,29 @@
 <div class="tab effects active" data-tab="effects">
-  <ol class="items-list">
-  <li class="items-header flexrow">
-    <h3 class="item-name flexrow">{{localize "PILLARS.Effects"}}</h3>
-    <div class="item-controls">
-      <a class="item-control effect-create" title="Create"><i class="fas fa-plus"></i></a>
-    </div>
-  </li>
-
-  <ol class="items">
-    {{#each item.effects as |effect e|}}
-    <li class="item" draggable="true" data-effect-id="{{effect.id}}">
-      <div class="row-content">
-        <div class="item-name flexrow effect-edit">
-          <div class="item-image" style="background-image: url('{{effect.system.icon}}')"></div>
-          <a>
-            <h4>{{effect.label}}</h4>
-          </a>
-        </div>
-
-        <div class="item-controls flexrow">
-          {{#if ../document.isOwner}}
-          <a class="item-control effect-delete" title="Delete"><i class="fas fa-trash"></i></a>
-          {{/if}}
-        </div>
+  <div class="sheet-list">
+    <li class="list-header">
+      <div class="list-name"><span>{{localize "PILLARS.Effects"}}</span></div>
+      <div class="list-controls">
+        <a class="list-control list-create" data-collection="effects" title="Create"><i class="fas fa-plus"></i></a>
       </div>
     </li>
-    {{/each}}
-  </ol>
-  </ol>
+
+    <ul class="list-content">
+      {{#each item.effects}}
+        <li data-collection="effects" data-id="{{this.id}}">
+          <div class="row-content">
+            <div class="list-name list-edit">
+              <img class="list-image" src={{this.icon}}>
+              <a>{{this.label}}</a>
+            </div>
+
+            <div class="list-controls">
+              {{#if ../document.isOwner}}
+                <a class="list-control list-delete" title="Delete"><i class="fas fa-trash"></i></a>
+              {{/if}}
+            </div>
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
 </div>

@@ -42,14 +42,14 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     /** @override */
     static get defaultOptions() 
     {
-        return mergeObject(super.defaultOptions, {
-            classes: ["pillars-of-eternity", "sheet", "item"],
-            width: 550,
-            height: 534,
-            tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".content", initial: "details" }],
-            dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }],
-            scrollY: [".content", ".details"],
-        });
+        const options = super.defaultOptions;
+        options.classes = options.classes.concat(["pillars-of-eternity", "item"]);
+        options.width = 550;
+        options.height = 534;
+        options.tabs = [{ navSelector: ".sheet-tabs", contentSelector: ".tab-content", initial: "details" }];
+        options.dragDrop = [{ dragSelector: ".item-list .item", dropSelector: null }];
+        options.scrollY = [".tab"];
+        return options;
     }
 
     get template() 
@@ -66,7 +66,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
                 label: getGame().i18n.localize("PILLARS.Post"),
                 class: "post",
                 icon: "fas fa-comment",
-                onclick: this.item.postToChat,
+                onclick: this.item.postToChat.bind(this.item),
             });
         }
         return buttons;
@@ -141,9 +141,9 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
 
     handleSummonedItem(itemData: ItemDataConstructorData) 
     {
-        const summons = foundry.utils.deepClone(this.item.system.summons); // TODO test this
-        summons?.push({ group: "", data: itemData });
-        this.item.update({ "data.summons": summons });
+        const summons = foundry.utils.deepClone(this.item.system.summons);
+        summons?.push({ group: "", item: itemData });
+        this.item.update({ "system.summons": summons });
     }
 
     /** @override */
@@ -203,7 +203,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
                 defense: "Deflection",
                 type: "Physical",
             });
-            return this.item.update({ "data.damage.value": damage });
+            return this.item.update({ "system.damage.value": damage });
         }
     }
 
@@ -212,29 +212,29 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
         const property = $(ev.currentTarget).parents(".form-group").attr("data-property")!;
         if (property == "summons") {return ui.notifications!.notify(getGame().i18n.localize("PILLARS.DragDropSummonPrompt"));}
 
-        const data = foundry.utils.deepClone(getProperty(this.item, property));
+        const data = foundry.utils.deepClone(getProperty(this.item.system, property));
         data.push(PillarsItem.baseData[property as keyof typeof PillarsItem.baseData]);
-        return this.item.update({ [`data.${property}`]: data });
+        return this.item.update({ [`system.${property}`]: data });
     }
 
     _onRemoveProperty(ev: JQuery.ClickEvent) 
     {
         const property = $(ev.currentTarget).parents(".form-group").attr("data-property")!;
         const index = $(ev.currentTarget).parents(".property-inputs").attr("data-index");
-        const data = foundry.utils.deepClone(getProperty(this.item, property));
+        const data = foundry.utils.deepClone(getProperty(this.item.system, property));
         data.splice(index, 1);
-        return this.item.update({ [`data.${property}`]: data });
+        return this.item.update({ [`system.${property}`]: data });
     }
 
     _onSummonClick(ev: JQuery.ClickEvent) 
     {
         const property = $(ev.currentTarget).parents(".form-group").attr("data-property")!;
         const index = $(ev.currentTarget).parents(".property-inputs").attr("data-index");
-        const array = foundry.utils.deepClone(getProperty(this.item, property)) as PowerSummon[];
+        const array = foundry.utils.deepClone(getProperty(this.item.system, property)) as PowerSummon[];
         if (index) 
         {
             const summon = array[parseInt(index)];
-            if (summon) {new PillarsItem(summon.data).sheet?.render(true, { editable: false });}
+            if (summon) {new PillarsItem(summon.item).sheet?.render(true, { editable: false });}
         }
     }
 
@@ -254,13 +254,13 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
             const propertyData = data[parseInt(index)]!;
 
             setProperty(propertyData, target, value); // TODO TEST
-            return this.item.update({ [`data.${property}`]: data });
+            return this.item.update({ [`system.${property}`]: data });
         }
     }
 
     _onEditPower(ev: JQuery.ClickEvent) 
     {
-        const index = Number($(ev.currentTarget).parents(".item").attr("data-index"));
+        const index = Number($(ev.currentTarget).parents("[data-index]")[0]?.dataset.index);
         if (this.item.system.powers)
         {
             const power = this.item.system.powers[index];
@@ -271,28 +271,28 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
 
     _onPowerDelete(ev: JQuery.ClickEvent) 
     {
-        const index = Number($(ev.currentTarget).parents(".item").attr("data-index"));
+        const index = Number($(ev.currentTarget).parents("[data-index]")[0]?.dataset.index);
         if (this.item.system.powers)
         {
             const powers = foundry.utils.deepClone(this.item.system.powers); // TODO test this
-            if (powers[index]?.ownedId && this.item.isOwned) {this.actor?.updateEmbeddedDocuments("Item", [{ _id: powers[index]?.ownedId, "data.embedded.item": null }]);}
+            if (powers[index]?.ownedId && this.item.isOwned) {this.actor?.updateEmbeddedDocuments("Item", [{ _id: powers[index]?.ownedId, "system.embedded.item": null }]);}
       
             powers.splice(index, 1);
-            return this.item.update({ "data.powers": powers });
+            return this.item.update({ "system.powers": powers });
         }
     }
 
     _onEditEmbeddedPower(ev: JQuery.ChangeEvent) 
     {
-        const index = Number($(ev.currentTarget).parents(".item").attr("data-index"));
+        const index = Number($(ev.currentTarget).parents("[data-index]")[0]?.dataset.index);
         const path = ev.currentTarget.dataset.path;
         const powers = foundry.utils.deepClone(this.item.system.powers);
         const value = Number.isNumeric(ev.currentTarget.value) ? Number(ev.currentTarget.value) : ev.currentTarget.value;
 
         if (powers)
         {
-            setProperty(powers[index]?.data!, path, value);
-            if (path == "embedded.uses.max") {setProperty(powers[index]?.data!, "embedded.uses.value", value);}
+            setProperty(powers[index]?.system!, path, value);
+            if (path == "embedded.uses.max") {setProperty(powers[index]?.system!, "embedded.uses.value", value);}
       
             // Update owned power if it exists
             if (powers[index]?.ownedId) 
@@ -301,7 +301,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
                 if (ownedItem) {ownedItem.update(powers[index]);}
             }
       
-            return this.item.update({ "data.powers": powers });
+            return this.item.update({ "system.powers": powers });
         }
     }
 
@@ -340,7 +340,7 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
             range[index] = Number(ev.currentTarget.value);
         }
 
-        this.item.update({[`data.phases.${phase}`] : range});
+        this.item.update({[`system.phases.${phase}`] : range});
     }
 
   
