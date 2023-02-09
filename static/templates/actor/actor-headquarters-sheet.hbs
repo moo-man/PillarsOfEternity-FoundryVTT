@@ -1,6 +1,6 @@
 <form class="{{cssClass}}" autocomplete="off">
 
-    <section class="general">
+    <div class="sheet-side">
         <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
         <div>
             <div class="form-group">
@@ -16,8 +16,9 @@
                 <input type="number" value="{{system.staff.total}}" disabled>
             </div>
             <div class="form-group">
-                <label>Treasury  <a class="transfer"><i class="fa-solid fa-treasure-chest"></i></a></label>
-                <input type="number" name="system.treasury.value" value="{{system.treasury.value}}" {{#unless (isGM)}}disabled{{/unless}}>
+                <label>Treasury <a class="transfer"><i class="fa-solid fa-treasure-chest"></i></a></label>
+                <input type="number" name="system.treasury.value" value="{{system.treasury.value}}" {{#unless
+                    (isGM)}}disabled{{/unless}}>
             </div>
             <div class="form-group">
                 <label>Upkeep</label>
@@ -34,36 +35,38 @@
             {{{this.log}}}
         </div>
 
-    </section>
+    </div>
 
-    <section class="sheet-content">
-        <div class="name-header">
-            <h1 class="charname">
-                <input name="name" type="text" value="{{actor.name}}" placeholder="Name" />
-            </h1>
+    <div class="sheet-content">
+        <div class="sheet-header">
+            <div class="name">
+                <h1 class="charname">
+                    <input name="name" type="text" value="{{actor.name}}" placeholder="Name" />
+                </h1>
+            </div>
         </div>
 
-        <section class="tab-section">
+        <div class="tab-section">
             <nav class="sheet-tabs tabs">
-                <a  class="tab-select item active" data-tab="residents">{{localize "PILLARS.Residents"}}</a>
-                <a  class="tab-select item" data-tab="accommodations">{{localize "PILLARS.Accommodations"}}</a>
-                <a  class="tab-select item" data-tab="library">{{localize "PILLARS.Library"}}</a>
-                <a  class="tab-select item" data-tab="defenses">{{localize "PILLARS.Defenses"}}</a>
+                <a class="tab-select item active" data-tab="residents">{{localize "PILLARS.Residents"}}</a>
+                <a class="tab-select item" data-tab="accommodations">{{localize "PILLARS.Accommodations"}}</a>
+                <a class="tab-select item" data-tab="library">{{localize "PILLARS.Library"}}</a>
+                <a class="tab-select item" data-tab="defenses">{{localize "PILLARS.Defenses"}}</a>
             </nav>
             <div class="tab-content">
-                <div class="tab residents save-scroll" data-tab="residents">
+                <div class="tab residents" data-tab="residents">
                     {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-residents.hbs}}
                 </div>
-                <div class="tab accommodations save-scroll" data-tab="accommodations">
+                <div class="tab accommodations" data-tab="accommodations">
                     {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-accommodations.hbs}}
                 </div>
-                <div class="tab library save-scroll" data-tab="library">
+                <div class="tab library" data-tab="library">
                     {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-library.hbs}}
                 </div>
-                <div class="tab defenses save-scroll" data-tab="defenses">
+                <div class="tab hq-defenses" data-tab="defenses">
                     {{> systems/pillars-of-eternity/templates/actor/headquarters/actor-defenses.hbs}}
                 </div>
             </div>
-        </section>
-    </section>
+        </div>
+    </div>
 </form>
