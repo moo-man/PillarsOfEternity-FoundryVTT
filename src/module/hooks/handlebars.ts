@@ -62,9 +62,11 @@ export default function ()
         loadTemplates([
             "systems/pillars-of-eternity/templates/actor/character/character-main.hbs",
             "systems/pillars-of-eternity/templates/actor/npc/actor-npc-main.hbs",
+            "systems/pillars-of-eternity/templates/actor/npc/actor-npc-combat.hbs",
             "systems/pillars-of-eternity/templates/actor/character/actor-combat.hbs",
             "systems/pillars-of-eternity/templates/actor/shared/actor-effects.hbs",
-            "systems/pillars-of-eternity/templates/actor/character/actor-powers.hbs",
+            "systems/pillars-of-eternity/templates/actor/shared/actor-powers.hbs",
+            "systems/pillars-of-eternity/templates/actor/npc/actor-npc-powers.hbs",
             "systems/pillars-of-eternity/templates/actor/shared/actor-inventory.hbs",
             "systems/pillars-of-eternity/templates/actor/character/character-details.hbs",
             "systems/pillars-of-eternity/templates/actor/npc/actor-npc-details.hbs",

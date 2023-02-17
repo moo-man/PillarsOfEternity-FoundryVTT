@@ -4,9 +4,29 @@
  */
 // Import Modules
 
+//@ts-ignore
+import { PillarsCharacterSheet } from "./module/apps/sheets/actor/character-sheet.js";
+//@ts-ignore
+import { PillarsNPCSheet } from "./module/apps/sheets/actor/npc-sheet";
+//@ts-ignore
+import { PillarsFollowerSheet } from "./module/apps/sheets/actor/follower-sheet";
+//@ts-ignore
+import { PillarsHeadquartersSheet } from "./module/apps/sheets/actor/headquarters-sheet";
+//@ts-ignore
+import FoundryOverrides from "./module/system/overrides.js";
+//@ts-ignore
+import PillarsExplode from "./module/system/explode.js";
+//@ts-ignore
+import {CharacterActorDataModel} from "./module/model/actor/character.js";
+//@ts-ignore
+import {FollowerActorDataModel} from "./module/model/actor/follower.js";
+//@ts-ignore 
+import {StandardActorDataModel} from "./module/model/actor/components/base.js";
+//@ts-ignore
+import {HeadquartersDataModel} from "./module/model/actor/headquarters.js";
+
 import { PillarsItemSheet } from "./module/apps/sheets/item/item-sheet";
 import { PillarsItem } from "./module/document/item-pillars";
-import { PillarsCharacterSheet } from "./module/apps/sheets/actor/character-sheet";
 import { PillarsCombat } from "./module/document/combat-pillars";
 import { PILLARS } from "./module/system/config";
 import { PILLARS_UTILITY, getGame }from "./module/system/utility";
@@ -22,24 +42,8 @@ import Migration from "./module/system/migrations";
 import ActorConfigure from "./module/apps/actor-configure";
 import DamageDialog from "./module/apps/damage-dialog";
 import PillarsTokenDocument from "./module/system/token";
-import { PillarsNPCSheet } from "./module/apps/sheets/actor/npc-sheet";
-import { PillarsFollowerSheet } from "./module/apps/sheets/actor/follower-sheet";
 import HealingDialog from "./module/apps/healing-dialog";
 import { PillarsCombatant } from "./module/document/combatant-pillars";
-
-
-//@ts-ignore
-import FoundryOverrides from "./module/system/overrides.js";
-//@ts-ignore
-import PillarsExplode from "./module/system/explode.js";
-//@ts-ignore
-import {CharacterActorDataModel} from "./module/model/actor/character.js";
-//@ts-ignore
-import {FollowerActorDataModel} from "./module/model/actor/follower.js";
-//@ts-ignore 
-import {StandardActorDataModel} from "./module/model/actor/components/base.js";
-//@ts-ignore
-import {HeadquartersDataModel} from "./module/model/actor/headquarters.js";
 
 import AdventureSeasonalActivityApplication from "./module/apps/seasonal/adventure";
 import SocializingSeasonalActivityApplication from "./module/apps/seasonal/socializing";
@@ -47,7 +51,6 @@ import PracticeSeasonalActivityApplication from "./module/apps/seasonal/practice
 import StudySeasonalActivityApplication from "./module/apps/seasonal/study";
 import EnchantmentSeasonalActivityApplication from "./module/apps/seasonal/enchantment";
 import LivingOffLandSeasonalActivityApplication from "./module/apps/seasonal/living-off-land";
-import { PillarsHeadquartersSheet } from "./module/apps/sheets/actor/headquarters-sheet";
 import { HeadquartersManager } from "./module/system/headquarters-manager";
 import { TimeManager } from "./module/system/time-manager";
 import SkillCheck from "./module/system/rolls/skill-check";

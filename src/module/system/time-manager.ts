@@ -1,5 +1,6 @@
 import { BookYearData } from "../../types/common";
 import { Season, Time, TimeSettingData } from "../../types/time";
+//@ts-ignore 
 import { PillarsCharacterSheet } from "../apps/sheets/actor/character-sheet";
 import BookOfSeasons from "../apps/book-of-seasons";
 import SeasonalActivityMenu from "../apps/seasonal/activity-menu";
@@ -90,8 +91,10 @@ export class TimeManager
             // We don't rerender actor sheets (as this can disrupt player inputs), only edit the DOM directly
             if (w instanceof PillarsCharacterSheet)
             {
-                if (w.object.type == "character")
-                {w.checkSeasonAlerts();}
+                if ((w as any).object.type == "character")
+                {
+                    (w as any).checkSeasonAlerts();
+                }
             }
             // Ok to rerender BookOfSeasons
             else if (w instanceof BookOfSeasons)

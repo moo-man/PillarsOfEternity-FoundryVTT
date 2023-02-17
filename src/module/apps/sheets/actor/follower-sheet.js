@@ -1,4 +1,3 @@
-import { stringToElement } from "../../../system/utility";
 import { PillarsCharacterSheet } from "./character-sheet";
 
 /**
@@ -10,17 +9,18 @@ export class PillarsFollowerSheet extends PillarsCharacterSheet
     /** @override */
     static get defaultOptions() 
     {
-        return mergeObject(super.defaultOptions, {
-            width: 810,
-            height: 830,
-        });
+        const options = super.defaultOptions;
+        options.width = 810,
+        options.height = 830,
+        options.classes.push("follower");
+        return options;
     }
 
 
-    checkAlerts(): void 
+    checkAlerts()
     {
 
-        if (this.actor.data.type == "follower" && !this.actor.system.subtype!.value)
+        if (!this.actor.system.subtype.value)
         {
             const typeSelect = this.element.find<HTMLSelectElement>(".subtype")[0];
             if (typeSelect)
@@ -33,14 +33,14 @@ export class PillarsFollowerSheet extends PillarsCharacterSheet
         
     }
 
-    protected async _onDropItem(event: DragEvent, data: ActorSheet.DropData.Item): Promise<unknown> 
+    async _onDropItem(event, data)
     {
         if ( !this.actor.isOwner ) {return false;}
         const item = await Item.fromDropData(data);
         if (item?.data.type == "species")
         {
             // Add special handling when followers are given a species
-            return super._onDropItem(event, data).then(items => 
+            return super._onDropItem(event, data).then(() =>  
             {
                 this.actor.setFollowerSpecies(item);
             });
@@ -48,7 +48,7 @@ export class PillarsFollowerSheet extends PillarsCharacterSheet
     }
 
 
-    activateListeners(html : JQuery<HTMLElement>)
+    activateListeners(html)
     {
         super.activateListeners(html);
 
@@ -56,7 +56,7 @@ export class PillarsFollowerSheet extends PillarsCharacterSheet
         if (!this.isEditable) {return;}
 
 
-        html.find(".subtype").on("change", (ev : JQuery.ChangeEvent)=> 
+        html.find(".subtype").on("change", (ev)=> 
         {
             this.actor.setFollowerType(ev.target.value);
         });

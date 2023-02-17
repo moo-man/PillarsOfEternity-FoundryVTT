@@ -37,15 +37,15 @@ export class CharacterActorDataModel extends TieredActorDataModel
         return preCreateData;
     }
 
-    computeBase(items, tooltips) 
+    computeBase(items) 
     {
         // Compute Details (size) before calling super class (which uses size)
-        let details = this.details.compute(items, tooltips);
+        let details = this.details.compute(items);
         if (details.stride)
         {this.stride.value = details.stride;}
         if (Number.isNumeric(details.size))
         {this.size.value = details.size;}
-        this.life.compute(items, tooltips);
-        super.computeBase(items, tooltips);
+        this.life.compute(items);
+        super.computeBase(items);
     }
 }

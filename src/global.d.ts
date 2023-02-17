@@ -16,6 +16,7 @@ import {
 import { BondTrait, WeaponSpecial } from "./types/items";
 import { PILLARS } from "./module/system/config";
 import DamageDialog from "./module/apps/damage-dialog";
+//@ts-ignore
 import { PillarsCharacterSheet } from "./module/apps/sheets/actor/character-sheet";
 import { PillarsItemSheet } from "./module/apps/sheets/item/item-sheet";
 import BookOfSeasons from "./module/apps/book-of-seasons";
@@ -35,6 +36,7 @@ import SkillCheck from "./module/system/rolls/skill-check";
 import WeaponCheck from "./module/system/rolls/weapon-check";
 import DamageRoll from "./module/system/rolls/damage-roll";
 import PowerCheck from "./module/system/rolls/power-check";
+import DocumentTooltips from "./module/apps/sheets/shared/tooltips";
 
 //#region Actor
 
@@ -320,7 +322,7 @@ type PreparedPillarsNPC = {
   data: BasePreparedPillarsActorData;
   system: BasePreparedPillarsActorData;
   flags: {
-    tooltips: PillarsActorTooltips;
+    tooltips: DocumentTooltips;
   };
 };
 
@@ -329,7 +331,7 @@ type PreparedPillarsFollower = {
   data: PreparedPillarsFollowerData;
   system: PreparedPillarsFollowerData;
   flags: {
-    tooltips: PillarsActorTooltips;
+    tooltips: DocumentTooltips;
   };
 };
 
@@ -338,7 +340,7 @@ type PreparedPillarsCharacter = {
   data: PreparedPillarsCharacterData;
   system: PreparedPillarsCharacterData;
   flags: {
-    tooltips: PillarsActorTooltips;
+    tooltips: DocumentTooltips;
   };
 };
 

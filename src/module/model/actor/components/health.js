@@ -22,7 +22,7 @@ export class ActorHealthModel extends foundry.abstract.DataModel
         };
     }
 
-    compute(tooltips)
+    compute()
     {
         this.threshold.bloodied += this.modifier;
         this.threshold.incap += this.modifier;
@@ -33,7 +33,7 @@ export class ActorHealthModel extends foundry.abstract.DataModel
         // health.value = number of pips, can't be less than wounds
         this.value = Math.max(this.value, this.wounds.value);
 
-        tooltips?.health.threshold.bloodied.push(game.i18n.format("PILLARS.Tooltip", { value: this.threshold.bloodied, source: game.i18n.localize("PILLARS.TooltipBase") }));
-        tooltips?.health.threshold.incap.push(game.i18n.format("PILLARS.Tooltip", { value: this.threshold.incap, source: game.i18n.localize("PILLARS.TooltipBase") }));
+        this.tooltips?.health.threshold.bloodied.push(game.i18n.format("PILLARS.Tooltip", { value: this.threshold.bloodied, source: game.i18n.localize("PILLARS.TooltipBase") }));
+        this.tooltips?.health.threshold.incap.push(game.i18n.format("PILLARS.Tooltip", { value: this.threshold.incap, source: game.i18n.localize("PILLARS.TooltipBase") }));
     }
 }

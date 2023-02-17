@@ -10,6 +10,7 @@ import { PILLARS } from "../../../system/config";
 import PillarsActiveEffect from "../../../document/effect-pillars";
 import { PillarsItem } from "../../../document/item-pillars";
 import { PillarsActor } from "../../../document/actor-pillars";
+//@ts-ignore
 import activateSharedListeners from "../shared/listeners";
 
 interface PillarsItemSheetData extends Omit<ItemSheet.Data, "data"> {
@@ -39,6 +40,8 @@ interface PillarsItemSheetData extends Omit<ItemSheet.Data, "data"> {
  */
 export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSheetData> 
 {
+    focusIndex : number | undefined = undefined;
+
     /** @override */
     static get defaultOptions() 
     {
@@ -150,8 +153,18 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
     activateListeners(html: JQuery<HTMLElement>) 
     {
         super.activateListeners(html);
-        if (!this.options.editable) {return;}
 
+        // Give every input / select element a tab index
+        this._setFocusIndices(html);
+        // Focus the previously focused tabindex when rerendering
+        this._focusPreviousIndex(html);
+        
+        if (!this.options.editable) {return;}
+        
+        html.find("input,select").on("focusin", (ev : JQuery.FocusInEvent) => 
+        {   
+            this.focusIndex = ev.currentTarget.tabIndex;
+        });
         activateSharedListeners(html, this);
         html.find(".item-specials").on("click", this._onConfigureSpecialsClick.bind(this));
         html.find(".csv-input").on("change", this._onCSVInputChange.bind(this));
@@ -167,6 +180,24 @@ export class PillarsItemSheet extends ItemSheet<ItemSheet.Options, PillarsItemSh
         html.find(".bond-trait input").on("change", this._onBondTraitChecked.bind(this));
         html.find(".phase-range").on("change", this._onPhaseRangeChange.bind(this));
         html.find(".array-edit").on("change", this._onArrayEdit.bind(this));
+    }
+
+    _setFocusIndices(html: JQuery<HTMLElement>)
+    {
+        html.find("input,select").each((index, element) => {element.tabIndex = index;});
+    }
+
+    _focusPreviousIndex(html: JQuery<HTMLElement>)
+    {
+        const element = html.find(`[tabindex=${this.focusIndex}]`)[0];
+        if (element)
+        {
+            element.focus();
+            if (element instanceof HTMLInputElement)
+            {
+                element.select();
+            }
+        }
     }
 
     _onConfigureSpecialsClick(ev: JQuery.ClickEvent) 

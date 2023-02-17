@@ -26,21 +26,21 @@ export class ActorDefensesModel extends foundry.abstract.DataModel
         };
     }
 
-    compute(size, tooltips)
+    compute(size)
     {
         this.deflection.value = (this.deflection.base || 10) - size * 2;
         this.reflex.value = (this.reflex.base || 15) - size * 2;
         this.fortitude.value = (this.fortitude.base || 15) + size * 2;
         this.will.value = this.will.base || 15;
 
-        tooltips?.defenses.deflection.push(game.i18n.format("PILLARS.Tooltip", { value: this.deflection.base, source: game.i18n.localize("PILLARS.TooltipBase") }));
-        tooltips?.defenses.reflex.push(game.i18n.format("PILLARS.Tooltip", { value: this.reflex.base, source: game.i18n.localize("PILLARS.TooltipBase") }));
-        tooltips?.defenses.fortitude.push(game.i18n.format("PILLARS.Tooltip", { value: this.fortitude.base, source: game.i18n.localize("PILLARS.TooltipBase") }));
-        tooltips?.defenses.will.push(game.i18n.format("PILLARS.Tooltip", { value: this.will.base, source: game.i18n.localize("PILLARS.TooltipBase") }));
+        this.tooltips?.defenses.deflection.push(game.i18n.format("PILLARS.Tooltip", { value: this.deflection.base, source: game.i18n.localize("PILLARS.TooltipBase") }));
+        this.tooltips?.defenses.reflex.push(game.i18n.format("PILLARS.Tooltip", { value: this.reflex.base, source: game.i18n.localize("PILLARS.TooltipBase") }));
+        this.tooltips?.defenses.fortitude.push(game.i18n.format("PILLARS.Tooltip", { value: this.fortitude.base, source: game.i18n.localize("PILLARS.TooltipBase") }));
+        this.tooltips?.defenses.will.push(game.i18n.format("PILLARS.Tooltip", { value: this.will.base, source: game.i18n.localize("PILLARS.TooltipBase") }));
 
-        tooltips?.defenses.deflection.push(game.i18n.format("PILLARS.Tooltip", { value: -size * 2, source: game.i18n.localize("PILLARS.TooltipSize") }));
-        tooltips?.defenses.reflex.push(game.i18n.format("PILLARS.Tooltip", { value: -size * 2, source: game.i18n.localize("PILLARS.TooltipSize") }));
-        tooltips?.defenses.fortitude.push(game.i18n.format("PILLARS.Tooltip", { value: size * 2, source: game.i18n.localize("PILLARS.TooltipSize") }));
+        this.tooltips?.defenses.deflection.push(game.i18n.format("PILLARS.Tooltip", { value: -size * 2, source: game.i18n.localize("PILLARS.TooltipSize") }));
+        this.tooltips?.defenses.reflex.push(game.i18n.format("PILLARS.Tooltip", { value: -size * 2, source: game.i18n.localize("PILLARS.TooltipSize") }));
+        this.tooltips?.defenses.fortitude.push(game.i18n.format("PILLARS.Tooltip", { value: size * 2, source: game.i18n.localize("PILLARS.TooltipSize") }));
         
         let checkedCount = 0;
         for (let defense of Object.keys(this)) 
@@ -55,23 +55,23 @@ export class ActorDefensesModel extends foundry.abstract.DataModel
                 if (this[defense].checked) 
                 {
                     this[defense].value += bonus;
-                    tooltips?.defenses[defense].push(game.i18n.format("PILLARS.Tooltip", { value: bonus, source: game.i18n.localize("PILLARS.TooltipCheckedBonus") }));
+                    this.tooltips?.defenses[defense].push(game.i18n.format("PILLARS.Tooltip", { value: bonus, source: game.i18n.localize("PILLARS.TooltipCheckedBonus") }));
                 }
             }
         }
     }
 
-    applyTierBonus(tier, tooltips)
+    applyTierBonus(tier)
     {
         let bonus = PILLARS.tierBonus[tier]?.def || 0;
         for (let defense of Object.keys(this)) 
         {
             this[defense].value += bonus;
-            tooltips?.defenses[defense].push(game.i18n.format("PILLARS.Tooltip", { value: bonus, source: game.i18n.localize("PILLARS.TooltipTier") }));
+            this.tooltips?.defenses[defense].push(game.i18n.format("PILLARS.Tooltip", { value: bonus, source: game.i18n.localize("PILLARS.TooltipTier") }));
         }
     }
 
-    applyEquippedBonuses({shield, weapons}, tooltips)
+    applyEquippedBonuses({shield, weapons})
     {
         let weaponDeflectionBonus = 0;
         for (let weapon of weapons) 
@@ -87,13 +87,13 @@ export class ActorDefensesModel extends foundry.abstract.DataModel
         if (weaponDeflectionBonus > 0) 
         {
             this.deflection.value += weaponDeflectionBonus;
-            tooltips?.defenses.deflection.push(game.i18n.format("PILLARS.Tooltip", { value: weaponDeflectionBonus, source: game.i18n.localize("PILLARS.TooltipWeaponDeflectionBonus") }));
+            this.tooltips?.defenses.deflection.push(game.i18n.format("PILLARS.Tooltip", { value: weaponDeflectionBonus, source: game.i18n.localize("PILLARS.TooltipWeaponDeflectionBonus") }));
 
         }
         if (shield) 
         {
             this.deflection.value += shield.system.deflection.value;
-            tooltips?.defenses.deflection.push(game.i18n.format("PILLARS.Tooltip", { value: shield.system.deflection.value, source: game.i18n.localize("PILLARS.TooltipShield") }));
+            this.tooltips?.defenses.deflection.push(game.i18n.format("PILLARS.Tooltip", { value: shield.system.deflection.value, source: game.i18n.localize("PILLARS.TooltipShield") }));
         }
     }
 }

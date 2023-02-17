@@ -1,36 +1,11 @@
-import { PreparedPillarsHeadquartersData } from "../../../../global";
-import { hasXPData, ItemType } from "../../../../types/common";
-import { Accommodation } from "../../../../types/headquarters";
-import { PillarsActor } from "../../../document/actor-pillars";
-import { PillarsItem } from "../../../document/item-pillars";
 import { PILLARS } from "../../../system/config";
-import { getGame } from "../../../system/utility";
 import { BasePillarsActorSheet } from "./base-sheet";
-
-
-type PillarsHeadquartersSheetData = ActorSheet & {
-    system : PreparedPillarsHeadquartersData,
-    items: HeadquartersSheetItemData
-    accommodations : any
-    log : any
-}
-
-type SheetAccommodation = {
-    size? : number
-} & Accommodation
-
-type HeadquartersSheetItemData = {
-    library: PillarsItem[]
-    spaces: PillarsItem[]
-    defenses: PillarsItem[]
-}
-
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.Options, PillarsHeadquartersSheetData> 
+export class PillarsHeadquartersSheet extends BasePillarsActorSheet
 {
     /** @override */
     static get defaultOptions() 
@@ -55,32 +30,32 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
     }
 
 
-    constructItemLists(sheetData: PillarsHeadquartersSheetData): HeadquartersSheetItemData 
+    constructItemLists(sheetData) 
     {
-        const items: HeadquartersSheetItemData = <HeadquartersSheetItemData>{};
+        const items = {};
 
-        items.library = sheetData.actor.getItemTypes(ItemType.equipment).filter(i => ["book", "grimoire"].includes(i.system.category.value));
-        items.spaces = sheetData.actor.getItemTypes(ItemType.space);
-        items.defenses = sheetData.actor.getItemTypes(ItemType.defense);
+        items.library = sheetData.actor.getItemTypes("equipment").filter(i => ["book", "grimoire"].includes(i.system.category.value));
+        items.spaces = sheetData.actor.getItemTypes("space");
+        items.defenses = sheetData.actor.getItemTypes("defense");
 
         return items;
     }
 
-    formatAccommodations(sheetData: PillarsHeadquartersSheetData) : SheetAccommodation[] 
+    formatAccommodations(sheetData)
     {
-        return sheetData.system.accommodations.list.map((a : SheetAccommodation)=> 
+        return sheetData.system.accommodations.list.map((a)=> 
         {
 
             //  Attempting to reflect larger sized actors taking up more space : make accommodation element bigger
-            const size = Math.max(1, a.occupants!.filter(o => o).reduce((acc : number, actor : PillarsActor) => acc + (actor.system.size.value || 1), 0));
-            a.size = Math.max(a.occupants!.length * 60, size * 100);
+            const size = Math.max(1, a.occupants.filter(o => o).reduce((acc, actor) => acc + (actor.system.size.value || 1), 0));
+            a.size = Math.max(a.occupants.length * 60, size * 100);
             return a;
         });
     }
 
-    formatLog(sheetData : PillarsHeadquartersSheetData)
+    formatLog(sheetData)
     {
-        const log : Record<string, Record<string, string[]>> = {};
+        const log = {};
 
         let html = `<ul>`;
 
@@ -115,7 +90,7 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
             html += `<li class="log-group"><div class="year">${group.year}</div>`;
             Object.keys(group.seasons).reverse().forEach(seasonNum => 
             {
-                html += `<div class="season">${PILLARS.seasons[Number(seasonNum) as keyof typeof PILLARS.seasons]}</div>`;
+                html += `<div class="season">${PILLARS.seasons[Number(seasonNum)]}</div>`;
                 group.seasons[seasonNum]?.forEach(entry => 
                 {
                     html += `<div class="entry">${entry}</div>`;
@@ -128,10 +103,10 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
         return html;
     }
 
-    async _onDrop(ev : DragEvent) 
+    async _onDrop(ev) 
     {
 
-        const data = JSON.parse(ev.dataTransfer?.getData("text/plain")!);
+        const data = JSON.parse(ev.dataTransfer?.getData("text/plain"));
 
         if (data.type == "Actor")
         {
@@ -139,7 +114,7 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
         }
         else if (data.type == "Item")
         {
-            const item = await fromUuid(data.uuid) as PillarsItem;
+            const item = await fromUuid(data.uuid);
             if (item.type != "space" &&
                 item.type != "defense" &&
                 item.system.category?.value != "grimoire" &&
@@ -155,7 +130,7 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
     }
 
 
-    activateListeners(html : JQuery<HTMLElement>)
+    activateListeners(html)
     {
         super.activateListeners(html);
         if (!this.isEditable) {return;}
@@ -167,7 +142,7 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
             callbacks : { drop: this._onActorDrop.bind(this), dragstart : this._onActorDrag.bind(this) }
         });
 
-        dragDrop.bind(html[0]!);
+        dragDrop.bind(html[0]);
 
         html.find(".resident-remove").on("click", this._onRemoveResident.bind(this));
         html.find(".resident-edit").on("change", this._onEditResident.bind(this));
@@ -178,31 +153,30 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
 
     }
 
-    _onUnpreparedClick(ev : JQuery.ClickEvent) 
+    _onUnpreparedClick(ev) 
     {
-        const game = getGame();
         const index = Number($(ev.currentTarget).parents(".accomm-container").attr("data-index"));
-        if (game.user!.isGM)
+        if (game.user.isGM)
         {
             const current = this.object.system.accommodations.list[index].prepared;
             this.object.update({"system.accommodations.list" : this.object.system.accommodations.edit(index, {prepared: !current})});
         }
-        else if (game.user!.character) 
+        else if (game.user.character) 
         {
             Dialog.confirm({
                 title: game.i18n.localize("PILLARS.PrepareAccommodation"),
                 content: `<p>${game.i18n.format("PILLARS.PrepareAccommodationPrompt", {name : game.user?.character.name})}</p>`,
                 yes: async () => 
                 {
-                    if (game.pillars.time.currentSeasonDataFor(game.user!.character!))
+                    if (game.pillars.time.currentSeasonDataFor(game.user.character))
                     {
-                        return ui.notifications!.error("Seasonal Activity already exists for this season");
+                        return ui.notifications.error("Seasonal Activity already exists for this season");
                     }
-                    else if (game.user!.character)
+                    else if (game.user.character)
                     {
-                        let skill = game.user!.character.getItemTypes(ItemType.skill).find(i => i.name?.includes("Housekeeping"));
+                        let skill = game.user.character.getItemTypes("skill").find(i => i.name?.includes("Housekeeping"));
                         if (!skill)
-                        {skill = game.items!.contents.find(i => i.type == "skill" && i.name?.includes("Housekeeping"));}
+                        {skill = game.items.contents.find(i => i.type == "skill" && i.name?.includes("Housekeeping"));}
                         const skillObject = skill?.toObject();
                         if (hasXPData(skillObject))
                         {
@@ -210,15 +184,15 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
                         }
 
                         await game.pillars.time.updateSeasonAtYear(
-                            game.user?.character!,
+                            game.user?.character,
                             game.pillars.time.current.year,
-                            game.pillars.time.current.key as "spring" | "summer" | "autumn" | "winter",
+                            game.pillars.time.current.key,
                             `Practice (Prepared Accommodotation): +10 Housekeeping`);
                         await game.user?.character.update(...[{skillObject}]);
                     }
                     else
                     {
-                        return ui.notifications!.error("No Assigned Character");
+                        return ui.notifications.error("No Assigned Character");
                     }
                     this.object.update({
                         "system.accommodations.list" : this.object.system.accommodations.edit(index, {prepared: true}),
@@ -230,9 +204,9 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
         }
     }
 
-    _onAccommAction(ev : JQuery.ClickEvent) 
+    _onAccommAction(ev) 
     {
-        const action = ev.currentTarget.dataset.action as string;
+        const action = ev.currentTarget.dataset.action;
 
         if (action == "reset")
         {
@@ -252,16 +226,15 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
         this.object.update({"system.accommodations.list" : this.object.system.accommodations.reset()});
     }
 
-    _onEditAccommodation(ev : JQuery.ClickEvent)
+    _onEditAccommodation(ev)
     {
         const index = $(ev.currentTarget).parents(".accomm-container").attr("data-index");
         if (!Number.isNumeric(index))
         {return;}
 
-        const accomm = this.object.system.accommodations.list[index!];
-        const game = getGame();
+        const accomm = this.object.system.accommodations.list[index];
 
-        const GMcontent = game.user!.isGM ? `
+        const GMcontent = game.user.isGM ? `
         <div class="form-group">
         <label>Prepared</label>
         <input type="checkbox" ${accomm.prepared ? "checked" : ""}>
@@ -288,9 +261,9 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
                     callback : (dlg) => 
                     {
                         dlg = $(dlg);
-                        const labelInput = dlg.find<HTMLInputElement>("input")[0]!;
-                        const preparedInput = dlg.find<HTMLInputElement>("input")[1]!;
-                        const update : {label : string, prepared: boolean, occupantIds? : string[]} = {label : labelInput.value, prepared : preparedInput.checked};
+                        const labelInput = dlg.find<HTMLInputElement>("input")[0];
+                        const preparedInput = dlg.find<HTMLInputElement>("input")[1];
+                        const update = {label : labelInput.value, prepared : preparedInput.checked};
 
                         if (!update.prepared)
                         {update.occupantIds = [];}
@@ -303,10 +276,10 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
         }).render(true);
     }
 
-    async _onActorDrop(ev : DragEvent) 
+    async _onActorDrop(ev) 
     {
-        const data : {id : string | undefined, from: number} = JSON.parse(ev.dataTransfer?.getData("text/plain") || "");
-        const index = ((ev.currentTarget as HTMLElement).dataset.index);
+        const data = JSON.parse(ev.dataTransfer?.getData("text/plain") || "");
+        const index = (ev.currentTarget.dataset.index);
         const fromIndex = data.from;
         if (Number(fromIndex) == Number(index))
         {return;}
@@ -328,24 +301,24 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
         {this.object.update({"system.accommodations.list" : this.object.system.accommodations.addActorTo(index, data.id)});}
     }
 
-    _onActorDrag(ev : DragEvent) 
+    _onActorDrag(ev) 
     {
-        ev.dataTransfer?.setData("text/plain", JSON.stringify({id : (<HTMLElement>ev.currentTarget).dataset.id as string, from: $(<HTMLElement>ev.currentTarget).parents(".accomm-container").attr("data-index")}));
+        ev.dataTransfer?.setData("text/plain", JSON.stringify({id : ev.currentTarget.dataset.id, from: $(ev.currentTarget).parents(".accomm-container").attr("data-index")}));
     }
 
-    _onRemoveResident(ev : JQuery.ClickEvent)
+    _onRemoveResident(ev)
     {
         const li = $(ev.currentTarget).parents(".item")[0];
-        const type = li?.dataset.type as string;
+        const type = li?.dataset.type;
         const index = Number(li?.dataset.index);
         const list = this.object.system[type].remove(index);
         this.object.update({[`system.${type}.list`] : list, "system.log" : this.object.system.addToLog(this.object.system[type].list[index].document.name + " Left")});
     }
 
-    _onEditResident(ev : JQuery.ChangeEvent)
+    _onEditResident(ev)
     {
         const li = $(ev.currentTarget).parents(".item")[0];
-        const type = li?.dataset.type as string;
+        const type = li?.dataset.type;
         const target = ev.currentTarget.dataset.target;
         let value = ev.currentTarget.value;
         if (Number.isNumeric(value))
@@ -358,7 +331,7 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
         this.object.update({[`system.${type}.list`] : list}, {diff: false});
     }
 
-    _onResidentClick(ev : JQuery.ClickEvent)
+    _onResidentClick(ev)
     {
         const li= $(ev.currentTarget).parents(".item");
         const type = li.attr("data-type") || "";
@@ -368,9 +341,9 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
 
     }
 
-    async _onDropResident(dragData : {uuid : string, type : string})
+    async _onDropResident(dragData)
     {
-        const actor = await fromUuid(dragData.uuid) as Actor;
+        const actor = await fromUuid(dragData.uuid);
 
         // Return if invalid
         if (this.object.type != "headquarters" || actor?.type == "headquarters") {return;}
@@ -400,15 +373,15 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
     }
 
 
-    async _onTransferClicked(ev : JQuery.ClickEvent) 
+    async _onTransferClicked() 
     {
 
         const options = this.object.system.residents.list
-            .map((i : {document : PillarsActor}) => i.document)
-            .filter((i : PillarsActor) => i.isOwner)
-            .map((i : PillarsActor) => 
+            .map(i => i.document)
+            .filter(i => i.isOwner)
+            .map(i => 
             {
-                return `<option ${getGame().user!.character?.id == i.id ? "selected" : ""} value=${i.id}>${i.name}</option>`;
+                return `<option ${game.user.character?.id == i.id ? "selected" : ""} value=${i.id}>${i.name}</option>`;
             });
 
 
@@ -434,18 +407,18 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
             content,
             buttons : {
                 deposit : {
-                    label : getGame().i18n!.localize("PILLARS.Deposit"),
+                    label : game.i18n.localize("PILLARS.Deposit"),
                     callback: async (dlg) => 
                     {
                         dlg = $(dlg);
                         const value = Number(dlg.find<HTMLInputElement>("input")[0]?.value) || 0;
                         const id = dlg.find<HTMLInputElement>("select")[0]?.value;
 
-                        const actor = this.object.system.residents.list.find ((i : {document: PillarsActor} )=> i.document?.id == id)?.document;
+                        const actor = this.object.system.residents.list.find (i=> i.document?.id == id)?.document;
                         if (actor)
                         {
                             if (value > actor.system.wealth.cp)
-                            {return ui.notifications!.error("Not Enough Money");}
+                            {return ui.notifications.error("Not Enough Money");}
 
                             else
                             {
@@ -453,27 +426,27 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
                             }
 
                         }
-                        else if (!getGame().user!.isGM)
+                        else if (!game.user.isGM)
                         {
-                            return ui.notifications!.error("No Actor Found");
+                            return ui.notifications.error("No Actor Found");
                         }
 
                         await this.object.update({"system.treasury.value" : this.object.system.treasury.value + value, "system.log" : this.object.system.addToLog(`Deposited ${value}`)});
                     }
                 },
                 withdraw : {
-                    label : getGame().i18n!.localize("PILLARS.Withdraw"),
+                    label : game.i18n.localize("PILLARS.Withdraw"),
                     callback: async (dlg) => 
                     {
                         dlg = $(dlg);
                         const value = Number(dlg.find<HTMLInputElement>("input")[0]?.value) || 0;
                         const id = dlg.find<HTMLInputElement>("select")[0]?.value;
 
-                        const actor = this.object.system.residents.list.find ((i : {document: PillarsActor} )=> i.document?.id == id)?.document;
+                        const actor = this.object.system.residents.list.find (i => i.document?.id == id)?.document;
                         if (actor)
                         {
                             if (value > this.object.system.treasury.value)
-                            {return ui.notifications!.error("Not Enough Money");}
+                            {return ui.notifications.error("Not Enough Money");}
 
                             else
                             {
@@ -484,7 +457,7 @@ export class PillarsHeadquartersSheet extends BasePillarsActorSheet<ActorSheet.O
                         }
                         else
                         {
-                            return ui.notifications!.error("No Actor Found");
+                            return ui.notifications.error("No Actor Found");
                         }
 
                     }

@@ -117,6 +117,7 @@
             {
                 "allowSingleLine": true
             }
-        ]
+        ],
+        "no-unused-vars" : ["off"]
     }
 }

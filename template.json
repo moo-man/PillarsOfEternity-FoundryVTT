@@ -133,7 +133,8 @@
             },
             "notes": {
                 "notes": {
-                    "value": ""
+                    "value": "",
+                    "gm": ""
                 }
             },
             "headquarters" : {

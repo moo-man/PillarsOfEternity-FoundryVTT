@@ -30,6 +30,7 @@ import { ItemDataConstructorData, ItemDataSource } from "@league-of-foundry-deve
 import SkillCheck from "../system/rolls/skill-check";
 import WeaponCheck from "../system/rolls/weapon-check";
 import PowerCheck from "../system/rolls/power-check";
+import DocumentTooltips from "../apps/sheets/shared/tooltips";
 
 declare global {
   interface DocumentClassConfig {
@@ -138,53 +139,9 @@ export class PillarsActor extends Actor
     {
 
         // Initialize tooltips
-        this.data.flags.tooltips = {
-            defenses: {
-                deflection: [],
-                reflex: [],
-                fortitude: [],
-                will: [],
-            },
-            health: {
-                max: [],
-                threshold: {
-                    bloodied: [],
-                    incap: [],
-                },
-            },
-            endurance: {
-                max: [],
-                threshold: {
-                    winded: [],
-                },
-            },
-            initiative: {
-                value: [],
-            },
-            soak: {
-                base: [],
-                shield: [],
-                physical: [],
-                burn: [],
-                freeze: [],
-                raw: [],
-                corrode: [],
-                shock: [],
-            },
-            stride: {
-                value: [],
-            },
-            run: {
-                value: [],
-            },
-            toughness: {
-                value: [],
-            },
-            damageIncrement: {
-                value: [],
-            },
-        };
-
+        this.data.flags.tooltips = new DocumentTooltips(this.system.tooltipModel);
+        //@ts-ignore
+        this.data.flags.tooltips.permeateDataModel(this.system);
         this.system.computeBase(this.itemCategories, this.data.flags.tooltips);
     }
 

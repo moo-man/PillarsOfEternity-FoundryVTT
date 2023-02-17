@@ -1,15 +1,6 @@
-import { ActiveEffectDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
-import {  ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
-import { PillarsActor } from "../../../document/actor-pillars";
-import PillarsActiveEffect from "../../../document/effect-pillars";
 import { PillarsItem } from "../../../document/item-pillars";
-import { getGame } from "../../../system/utility";
-import { BasePillarsActorSheet } from "../actor/base-sheet";
-import { PillarsItemSheet } from "../item/item-sheet";
 
-type PillarsSheet = BasePillarsActorSheet | PillarsItemSheet
-
-export default function activateSharedListeners(html : JQuery<HTMLElement>, sheet : PillarsSheet)
+export default function activateSharedListeners(html, sheet )
 {
     html.find(".list-edit").on("click", _onListEdit.bind(sheet));
     html.find(".list-create").on("click", _onListCreate.bind(sheet));
@@ -18,26 +9,26 @@ export default function activateSharedListeners(html : JQuery<HTMLElement>, shee
     html.on("click", ".list-post", _onListPost.bind(sheet));
     html.find(".property-edit").on("change", _onPropertyEdit.bind(sheet));
 
-    function _onListEdit(this: PillarsSheet, ev : JQuery.ClickEvent) 
+    function _onListEdit(ev) 
     {   
         const id = _getId(ev);
         const collection = _getCollection(ev);
 
-        (getProperty(this.object, collection).get(id) as (Item | ActiveEffect))?.sheet?.render(true);
+        (getProperty(this.object, collection).get(id))?.sheet?.render(true);
     }
 
     
-    function _onListDelete(this: PillarsSheet, ev : JQuery.ClickEvent) 
+    function _onListDelete(ev) 
     {   
         const id = _getId(ev);
         const collection = _getCollection(ev);
 
         Dialog.confirm({
-            title: getGame().i18n.localize("PILLARS.DeleteItem"),
-            content: `<p>${getGame().i18n.localize("PILLARS.DeleteConfirmation")}</p>`,
+            title: game.i18n.localize("PILLARS.DeleteItem"),
+            content: `<p>${game.i18n.localize("PILLARS.DeleteConfirmation")}</p>`,
             yes: () => 
             {
-                (getProperty(this.object, collection).get(id) as (Item | ActiveEffect))?.delete();
+                (getProperty(this.object, collection).get(id))?.delete();
             },
             no: () => {},
             defaultYes: true
@@ -45,74 +36,105 @@ export default function activateSharedListeners(html : JQuery<HTMLElement>, shee
 
     }
 
-    async function _onListCreate(this: PillarsSheet, ev : JQuery.ClickEvent) 
+    async function _onListCreate(ev) 
     {   
-        const dataset = ev.currentTarget.dataset;
         const collection = _getCollection(ev);
-        const cls = collection == "effects" ? PillarsActiveEffect : PillarsItem;
+        const cls = collection == "effects" ? ActiveEffect : PillarsItem;
 
         const createData =  collection == "effects" ? await _effectCreateData(ev) : _itemCreateData(ev);
 
-        cls.create(createData as (ItemDataConstructorData & ActiveEffectDataConstructorData), {parent : this.object});
+        cls.create(createData, {parent : this.object});
     }
 
-    function _onListPost(this : PillarsSheet, ev : JQuery.ClickEvent)
+    function _onListPost(ev) 
     {
         const id = _getId(ev);
         const collection = _getCollection(ev);
 
-        (getProperty(this.object, collection).get(id) as (PillarsItem))?.postToChat();
+        (getProperty(this.object, collection).get(id))?.postToChat();
     }
 
-    function _onPropertyEdit(this: PillarsSheet, ev : JQuery.EventBase) 
+    function _onPropertyEdit(ev) 
     {   
         const id = _getId(ev);
-        const path = ev.currentTarget.dataset.path as string;
-        let document : (PillarsActiveEffect | PillarsActor | PillarsItem)= this.object;
+        const path = ev.currentTarget.dataset.path;
+        let document = this.object;
 
         // If ID is specified, edit an embedded document
         if (id)
         {
             const collection = _getCollection(ev);
-            document = getProperty(this.object, collection).get(id)! as (PillarsActiveEffect | PillarsActor | PillarsItem);
+            document = getProperty(this.object, collection).get(id);
         }
 
         const value = _getInputValue(ev);
 
         document?.update({[`${path}`] : value});
     }
+
+    // function _onArrayEdit(ev) 
+    // {   
+    //     const id = _getId(ev);
+    //     const path = ev.currentTarget.dataset.path as string;
+    //     let document : (PillarsActiveEffect | PillarsActor | PillarsItem)= this.object;
+
+    //     // If ID is specified, edit an embedded document
+    //     if (id)
+    //     {
+    //         const collection = _getCollection(ev);
+    //         document = getProperty(this.object, collection).get(id)! as (PillarsActiveEffect | PillarsActor | PillarsItem);
+    //     }
+
+    //     const value = _getInputValue(ev);
+
+    //     document?.update({[`${path}`] : value});
+    // }
     
-    function _onPropertyToggle(this: PillarsSheet, ev : JQuery.ClickEvent) 
+    function _onPropertyToggle(ev) 
     {   
         const id = _getId(ev);
-        const path = ev.currentTarget.dataset.path as string;
-        let document : (PillarsActiveEffect | PillarsActor | PillarsItem)= this.object;
+        const path = ev.currentTarget.dataset.path;
+        let document = this.object;
 
         // If ID is specified, edit an embedded document
         if (id)
         {
             const collection = _getCollection(ev);
-            document = getProperty(this.object, collection).get(id)! as (PillarsActiveEffect | PillarsActor | PillarsItem);
+            document = getProperty(this.object, collection).get(id);
         }
-
-        const value = _getInputValue(ev);
 
         document?.update({[`${path}`] : !getProperty(document, path)});
     }
 
 
-    function _getInputValue(ev : JQuery.UIEventBase | JQuery.EventBase)
+    function _getInputValue(ev)
     {
         let value = ev.currentTarget.type == "number" ? Number(ev.currentTarget.value) : ev.currentTarget.value;
 
         if (ev.currentTarget.type == "checkbox")
         {
-            value = (ev.currentTarget as HTMLInputElement).checked;
+            value = (ev.currentTarget).checked;
         }
         return value;
     }
 
-    function _getId(ev: JQuery.UIEventBase | JQuery.EventBase)
+    function _getIndex(ev)
+    {
+        let index = ev.currentTarget.dataset.index;
+
+        if (!Number.isNumeric(index))
+        {
+            const parent = $(ev.currentTarget).parents("[data-index]");
+            if (parent)
+            {
+                index = parent[0]?.dataset.index;
+            }
+        }
+        return Number(index);
+    }
+
+
+    function _getId(ev)
     {
         let id = ev.currentTarget.dataset.id;
 
@@ -127,7 +149,7 @@ export default function activateSharedListeners(html : JQuery<HTMLElement>, shee
         return id;
     }
 
-    function _getCollection(ev: JQuery.UIEventBase | JQuery.EventBase) : "items" | "effects"
+    function _getCollection(ev)
     {
         let collection = ev.currentTarget.dataset.collection;
 
@@ -143,10 +165,10 @@ export default function activateSharedListeners(html : JQuery<HTMLElement>, shee
     }
 }
 
-async function _effectCreateData(ev: JQuery.ClickEvent) : Promise<ActiveEffectDataConstructorData>
+async function _effectCreateData(ev)
 {
     const type = ev.currentTarget.dataset.type;
-    const createData: Record<string, unknown> = { label: getGame().i18n.localize("PILLARS.NewEffect"), icon: "icons/svg/aura.svg" };
+    const createData = { label: game.i18n.localize("PILLARS.NewEffect"), icon: "icons/svg/aura.svg" };
     if (type == "temporary") 
     {
         createData["duration.rounds"] = 1;
@@ -156,7 +178,7 @@ async function _effectCreateData(ev: JQuery.ClickEvent) : Promise<ActiveEffectDa
     return new Promise(resolve => 
     {
         new Dialog({
-            title: getGame().i18n.localize("PILLARS.QuickEffect"),
+            title: game.i18n.localize("PILLARS.QuickEffect"),
             content: html,
             buttons: {
                 create: {
@@ -170,7 +192,7 @@ async function _effectCreateData(ev: JQuery.ClickEvent) : Promise<ActiveEffectDa
                         const value = parseInt(html.find(".modifier").val()?.toString() || "");
                         createData.label = label;
                         createData.changes = [{ key, mode, value }];
-                        resolve(createData as ActiveEffectDataConstructorData);
+                        resolve(createData);
                     },
                 },
                 skip: {
@@ -185,14 +207,14 @@ async function _effectCreateData(ev: JQuery.ClickEvent) : Promise<ActiveEffectDa
         }).render(true);
     });
 }
-function _itemCreateData(ev: JQuery.ClickEvent) : ItemDataConstructorData
+function _itemCreateData(ev)
 {
     const type = ev.currentTarget.dataset.type;
     const category = ev.currentTarget.dataset.category;
-    const createData: Record<string, unknown> & {name : string, type : string} = { name: `New ${getGame().i18n.localize(CONFIG.Item.typeLabels[type!]!)}`, type };
+    const createData = { name: `New ${game.i18n.localize(CONFIG.Item.typeLabels[type])}`, type };
     if (type == "power") {createData["system.improvised.value"] = true;}
 
     if (category) {createData["system.category.value"] = category;}
-    return createData as ItemDataConstructorData;
+    return createData;
 }
 

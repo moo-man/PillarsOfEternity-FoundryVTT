@@ -7,6 +7,55 @@ import { SoakModel } from "./soak";
 
 export class StandardActorDataModel extends foundry.abstract.DataModel 
 {
+    get tooltipModel() 
+    {
+        return {
+            defenses: {
+                deflection: [],
+                reflex: [],
+                fortitude: [],
+                will: [],
+            },
+            health: {
+                max: [],
+                threshold: {
+                    bloodied: [],
+                    incap: [],
+                },
+            },
+            endurance: {
+                max: [],
+                threshold: {
+                    winded: [],
+                },
+            },
+            initiative: {
+                value: [],
+            },
+            soak: {
+                base: [],
+                shield: [],
+                physical: [],
+                burn: [],
+                freeze: [],
+                raw: [],
+                corrode: [],
+                shock: [],
+            },
+            stride: {
+                value: [],
+            },
+            run: {
+                value: [],
+            },
+            toughness: {
+                value: [],
+            },
+            damageIncrement: {
+                value: [],
+            },
+        };
+    }
     static defineSchema() 
     {
         return {
@@ -23,7 +72,8 @@ export class StandardActorDataModel extends foundry.abstract.DataModel
             wealth: new foundry.data.fields.SchemaField({ cp: new foundry.data.fields.NumberField() }),
             weight : new foundry.data.fields.NumberField(),
             notes: new foundry.data.fields.SchemaField({
-                value: new foundry.data.fields.StringField()
+                value: new foundry.data.fields.StringField(),
+                gm: new foundry.data.fields.StringField()
             }),
             headquarters : new foundry.data.fields.EmbeddedDataField(HeadquarterResidencyModel)
         };
@@ -48,30 +98,30 @@ export class StandardActorDataModel extends foundry.abstract.DataModel
         return preCreateData;
     }
 
-    computeBase(items, tooltips) 
+    computeBase(items) 
     {
-        this.defenses.compute(this.size.value, tooltips);
+        this.defenses.compute(this.size.value);
     }
 
-    computeDerived(items, tooltips)
+    computeDerived(items)
     {
         let equipped = {};
         equipped.armor = items.armor.find(i =>i.system.equipped.value);
         equipped.shield = items.shield.find(i => i.system.equipped.value);
         equipped.weapons = items.weapon.filter(i => i.system.equipped.value);
 
-        this.applyEquippedBonuses(equipped, tooltips);
-        this.health.compute(tooltips);
-        this.endurance.compute(equipped, tooltips);
+        this.applyEquippedBonuses(equipped);
+        this.health.compute();
+        this.endurance.compute(equipped);
         this.run.value += this.stride.value * 2;
-        tooltips?.run.value.push(game.i18n.format("PILLARS.Tooltip", { value: "Stride x 2", source: game.i18n.localize("PILLARS.TooltipBase") }));
+        this.tooltips?.run.value.push(game.i18n.format("PILLARS.Tooltip", { value: "Stride x 2", source: game.i18n.localize("PILLARS.TooltipBase") }));
 
     }
 
-    applyEquippedBonuses({armor, shield, weapons}, tooltips)
+    applyEquippedBonuses({armor, shield, weapons})
     {
-        this.defenses.applyEquippedBonuses({shield, weapons}, tooltips);
-        this.soak.applyEquippedBonuses({armor, shield}, tooltips);
+        this.defenses.applyEquippedBonuses({shield, weapons});
+        this.soak.applyEquippedBonuses({armor, shield});
 
         if (armor) 
         {
@@ -80,10 +130,10 @@ export class StandardActorDataModel extends foundry.abstract.DataModel
             this.stride.value += armor?.system.stride.value;
             this.run.value += armor?.system.run.value;
 
-            tooltips.initiative.value.push(game.i18n.format("PILLARS.Tooltip", { value: armor.system.initiative.value, source: game.i18n.localize("PILLARS.TooltipArmor") }));
-            tooltips.toughness.value.push(game.i18n.format("PILLARS.Tooltip", { value: armor.system.toughness.value, source: game.i18n.localize("PILLARS.TooltipArmor") }));
-            tooltips.stride.value.push(game.i18n.format("PILLARS.Tooltip", { value: armor.system.stride.value, source: game.i18n.localize("PILLARS.TooltipArmor") }));
-            tooltips.run.value.push(game.i18n.format("PILLARS.Tooltip", { value: armor.system.run.value, source: game.i18n.localize("PILLARS.TooltipArmor") }));
+            this.tooltips?.initiative.value.push(game.i18n.format("PILLARS.Tooltip", { value: armor.system.initiative.value, source: game.i18n.localize("PILLARS.TooltipArmor") }));
+            this.tooltips?.toughness.value.push(game.i18n.format("PILLARS.Tooltip", { value: armor.system.toughness.value, source: game.i18n.localize("PILLARS.TooltipArmor") }));
+            this.tooltips?.stride.value.push(game.i18n.format("PILLARS.Tooltip", { value: armor.system.stride.value, source: game.i18n.localize("PILLARS.TooltipArmor") }));
+            this.tooltips?.run.value.push(game.i18n.format("PILLARS.Tooltip", { value: armor.system.run.value, source: game.i18n.localize("PILLARS.TooltipArmor") }));
         }
 
     }
@@ -101,19 +151,19 @@ export class TieredActorDataModel extends StandardActorDataModel
         return schema;
     } 
 
-    computeBase(items, tooltips) 
+    computeBase(items) 
     {
-        super.computeBase(items, tooltips);
+        super.computeBase(items);
         let attributes = PILLARS.sizeAttributes[this.size.value.toString()][this.tier.value];
         if (attributes)
         {
             this.damageIncrement.value = attributes.damageIncrement;
             this.toughness.value = attributes.toughness;
 
-            tooltips?.toughness.value.push(game.i18n.format("PILLARS.Tooltip", { value: this.toughness.value, source: game.i18n.localize("PILLARS.TooltipBase") }));
-            tooltips?.damageIncrement.value.push(game.i18n.format("PILLARS.Tooltip", { value: this.damageIncrement.value, source: game.i18n.localize("PILLARS.TooltipBase") }));
+            this.tooltips?.toughness.value.push(game.i18n.format("PILLARS.Tooltip", { value: this.toughness.value, source: game.i18n.localize("PILLARS.TooltipBase") }));
+            this.tooltips?.damageIncrement.value.push(game.i18n.format("PILLARS.Tooltip", { value: this.damageIncrement.value, source: game.i18n.localize("PILLARS.TooltipBase") }));
         }
-        this.defenses.applyTierBonus(this.tier.value, tooltips);
+        this.defenses.applyTierBonus(this.tier.value);
     }
 }
 
