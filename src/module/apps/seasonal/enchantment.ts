@@ -33,6 +33,7 @@ export default class EnchantmentSeasonalActivityApplication extends SeasonalActi
         const options = super.defaultOptions;
         options.width = 600;
         options.height = "auto";
+        options.classes = options.classes.concat("enchantment");
         options.tabs = [{ navSelector: ".sheet-tabs", contentSelector: ".tab-content", initial: "imbuement" }];
         options.closeOnSubmit = false;
         return options;

@@ -9,6 +9,7 @@
 @import "chat/post-item";
 @import "item/item-sheet";
 @import "apps/quick-effects";
+@import "apps/seasonal/seasonal";
 
 
 .pillars-of-eternity {
@@ -43,7 +44,7 @@
 
 }
 
-// Ensures all impmal forms scroll properly, Meaning the Submit button is always visible, but form content scrolls
+// Ensures all pillars forms scroll properly, Meaning the Submit button is always visible, but form content scrolls
 .pillars-of-eternity.form {
     .window-content {
         overflow-y: hidden;

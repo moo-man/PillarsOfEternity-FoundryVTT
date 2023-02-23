@@ -15,7 +15,7 @@ export default class SeasonalActivityApplication extends Application<{closeOnSub
     static get defaultOptions() 
     {
         const options = super.defaultOptions as ApplicationOptions & {closeOnSubmit : boolean};
-        options.classes.push("seasonal-activity");
+        options.classes = options.classes.concat("pillars-of-eternity", "seasonal-activity", "form");
         options.resizable = true;
         options.closeOnSubmit = true;
         return options;
@@ -84,6 +84,8 @@ export default class SeasonalActivityApplication extends Application<{closeOnSub
     
         this.ui.submitButton = html.find<HTMLButtonElement>("button[type='submit']").on("click", async (ev: JQuery.ClickEvent) => 
         {
+            ev.preventDefault();
+            ev.stopPropagation();
             const game = getGame();
 
             const state = await this.checkData();

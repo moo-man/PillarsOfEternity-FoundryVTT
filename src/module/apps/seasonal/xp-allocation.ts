@@ -29,6 +29,7 @@ export default class XPAllocationActivityApplication extends SeasonalActivityApp
     {
         const options = super.defaultOptions;
         options.width = 700;
+        options.classes = options.classes.concat("xp-allocation");
         return options;
     }
 

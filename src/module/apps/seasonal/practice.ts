@@ -24,6 +24,7 @@ export default class PracticeSeasonalActivityApplication extends SeasonalActivit
     static get defaultOptions() 
     {
         const options = super.defaultOptions;
+        options.classes = options.classes.concat("practice");
         options.width = 400;
         options.height = 400;
         return options;
@@ -147,7 +148,7 @@ export default class PracticeSeasonalActivityApplication extends SeasonalActivit
         this.ui.skillDrag = html.find<HTMLDivElement>(".dragarea")[0];
         this.ui.skillImg = html.find<HTMLImageElement>(".dragarea img")[0];
         this.ui.skillName = html.find<HTMLImageElement>(".item-name")[0];
-        this.ui.xp = html.find<HTMLInputElement>(".xp input")[0];
+        this.ui.xp = html.find<HTMLInputElement>(".xp-footer input")[0];
 
         this.ui.skillDrag?.addEventListener("dragenter", (ev : DragEvent) => 
         {

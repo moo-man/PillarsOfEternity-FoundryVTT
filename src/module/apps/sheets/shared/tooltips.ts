@@ -18,7 +18,10 @@ export default class DocumentTooltips
 
     permeateDataModel(model) 
     {
-        Object.defineProperty(model, "tooltips", {value : this, enumerable : false});
+        if (!model.tooltips)
+        {
+            Object.defineProperty(model, "tooltips", {value : this, enumerable : false});
+        }
         for(const embedded in model)
         {
             if (model[embedded] instanceof foundry.abstract.DataModel)

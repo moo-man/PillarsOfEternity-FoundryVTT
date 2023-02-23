@@ -19,12 +19,12 @@ export default class SeasonalActivityMenu extends FormApplication<FormApplicatio
 
     static get defaultOptions() 
     {
-        return mergeObject(super.defaultOptions, {
-            id: "activity-menu",
-            template: "systems/pillars-of-eternity/templates/apps/seasonal/activity-menu.hbs",
-            width: 500,
-            title: getGame().i18n.localize("PILLARS.SeasonalActivity"),
-        });
+        const options = super.defaultOptions;
+        options.classes = options.classes.concat("activity-menu", "pillars-of-eternity");
+        options.template = "systems/pillars-of-eternity/templates/apps/seasonal/activity-menu.hbs";
+        options.width = 500;
+        options.title = getGame().i18n.localize("PILLARS.SeasonalActivity");
+        return options;
     }
 
     async getData(options?: Partial<FormApplicationOptions> | undefined) 

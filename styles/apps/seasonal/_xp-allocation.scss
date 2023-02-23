@@ -1,0 +1,30 @@
+.seasonal-activity.xp-allocation {
+    form {
+        > :first-child {
+            overflow-y: hidden;
+            display: block;
+        }
+    }
+
+    .item-lists {
+        height: calc(100% - 30px);
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        >* {
+            display: flex;
+            align-items: center;
+        }
+
+        .experience {
+            input {
+                width: 30px;
+                border: none;
+            }
+        }
+    }
+}

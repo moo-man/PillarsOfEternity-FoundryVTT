@@ -1,146 +1,147 @@
-<div class="study">
+<form>
+    <div>
+        <nav class="sheet-tabs tabs">
+            <a class="tab-select item" data-tab="text">{{localize "PILLARS.TextStudy"}}</a>
+            <a class="tab-select item" data-tab="teacher">{{localize "PILLARS.Teacher"}}</a>
+        </nav>
+        <div class="tab-content">
+            <div class="tab text" data-tab="text">
+                <header>
+                    {{#if object.item}}
+                        <h3>{{object.item.name}}</h3>
+                    {{else}}
+                        <h3>Drag and drop the Book you wish to study</h3>
+                    {{/if}}
+                </header>
 
-    <nav class="sheet-tabs tabs">
-        <a class="tab-select item" data-tab="text">{{localize "PILLARS.TextStudy"}}</a>
-        <a class="tab-select item" data-tab="teacher">{{localize "PILLARS.Teacher"}}</a>
-    </nav>
-    <div class="tab-content">
-        <div class="tab text" data-tab="text">
-            <header>
-                {{#if object.item}}
-                <h3>{{object.item.name}}</h3>
-                {{else}}
-                <h3>Drag and drop the Book you wish to study</h3>
-                {{/if}}
-            </header>
-
-            <div class="item-drag-container">
-                <div class="item-drag">
-                    <div class="dragarea">
-                        <img src="{{object.item.img}}">
+                <div class="item-group">
+                    <div class="item-drag">
+                        <div class="dragarea">
+                            <img src="{{object.item.img}}">
+                        </div>
                     </div>
+                </div>
+
+                <div class="item-details">
+                    <div class="language">
+                        <label>
+                            {{localize "PILLARS.Language"}}
+                            <a class="pass" style="display: none"><i class="fas fa-check"></i></a>
+                            <a class="warn" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                            <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                        </label>
+                        <span class="status">
+                            {{object.item.system.language.value}}
+                        </span>
+
+                    </div>
+                    <div class="subject">
+                        <label>{{localize "PILLARS.Subject"}}</label>
+                        <span class="status">
+                            {{object.item.system.subject.value}}
+
+                        </span>
+                    </div>
+                    <div class="req">
+                        <label>
+                            {{localize "PILLARS.SkillRequirement"}}
+                            <a class="pass" style="display: none"><i class="fas fa-check"></i></a>
+                            <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                        </label>
+                        <span class="status">
+                            {{object.item.system.range.[0]}}
+                            -
+                            {{object.item.system.range.[1]}}
+                        </span>
+                    </div>
+
                 </div>
             </div>
 
-            <div class="item-details">
-                <div class="language">
-                    <label>
-                        {{localize "PILLARS.Language"}}
-                        <a class="pass" style="display: none"><i class="fas fa-check"></i></a>
-                        <a class="warn" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
-                        <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
-                    </label>
-                    <span class="status">
-                        {{object.item.system.language.value}}
-                    </span>
+            <div class="tab teacher" data-tab="teacher">
+                <header>
+                    {{#if object.teacher}}
+                        <h3>{{object.teacher.name}}</h3>
+                    {{else}}
+                        <h3>Drag and drop an Actor</h3>
+                    {{/if}}
+                </header>
 
-                </div>
-                <div class="subject">
-                    <label>{{localize "PILLARS.Subject"}}</label>
-                    <span class="status">
-                        {{object.item.system.subject.value}}
-
-                    </span>
-                </div>
-                <div class="req">
-                    <label>
-                        {{localize "PILLARS.SkillRequirement"}}
-                        <a class="pass" style="display: none"><i class="fas fa-check"></i></a>
-                        <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
-                    </label>
-                    <span class="status">
-                        {{object.item.system.range.[0]}}
-                        -
-                        {{object.item.system.range.[1]}}
-                    </span>
+                <div class="item-group">
+                    <div class="item-drag">
+                        <div class="dragarea">
+                            <img src="{{object.teacher.prototypeToken.texture.src}}">
+                        </div>
+                    </div>
                 </div>
 
+                <div class="item-details">
+                    <div class="teaching-skill">
+                        Teaching:
+                        <span>
+                            {{this.object.teachingSkill}}
+                        </span>
+                    </div>
+                    <div class="subject">
+                        <label>
+                            {{localize "PILLARS.Skill"}}
+                        </label>
+                        <select class="skill-select">
+                            {{#select object.skill}}
+                                <option value=""></option>
+                                {{#each skills as |skill index|}}
+                                    <option value="{{skill.name}}">{{skill.name}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </div>
+                    <div class="teaching-minimum">
+                        Student Skill Minimum:
+                        <span>
+                            {{this.object.skillMinimum}}
+                            <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                        </span>
+                    </div>
+                </div>
+
+                {{#if object.teacherSkill}}
+                    <div class="item-details">
+                        <div class="skill-minimum">
+                            <label>
+                                {{localize "PILLARS.RaiseMinimum"}}
+                            </label>
+                            <div class="range-container">
+                                {{rangePicker name="raiseMinimum" value=object.raiseMinimum min=object.teachingMinimum
+                        max=object.teacherSkill.rank step=1}}
+                            </div>
+
+                        </div>
+                        <div class="skill-maximum">
+                            <label>
+                                {{localize "PILLARS.SkillMaximum"}}
+                                <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
+                            </label>
+                            <div class="range-container">
+                                {{rangePicker name="skillMaximum" value=object.skillMaximum min=1
+                        max=object.teacherSkill.rank step=1}}
+                            </div>
+                        </div>
+                        <div class="students">
+                            <label>
+                                {{localize "PILLARS.Students"}}
+                            </label>
+                            <div class="range-container">
+                                {{rangePicker name="students" value=object.students min=1 max=10 step=1}}
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
             </div>
         </div>
-
-        <div class="tab teacher" data-tab="teacher">
-            <header>
-                {{#if object.teacher}}
-                <h3>{{object.teacher.name}}</h3>
-                {{else}}
-                <h3>Drag and drop an Actor</h3>
-                {{/if}}
-            </header>
-
-            <div class="item-drag-container">
-                <div class="item-drag">
-                    <div class="dragarea">
-                        <img src="{{object.teacher.prototypeToken.texture.src}}">
-                    </div>
-                </div>
-            </div>
-
-            <div class="item-details">
-                <div class="teaching-skill">
-                    Teaching:
-                    <span>
-                        {{this.object.teachingSkill}}
-                    </span>
-                </div>
-                <div class="subject">
-                    <label>
-                        {{localize "PILLARS.Skill"}}
-                    </label>
-                    <select class="skill-select">
-                        {{#select object.skill}}
-                        <option value=""></option>
-                        {{#each skills as |skill index|}}
-                        <option value="{{skill.name}}">{{skill.name}}</option>
-                        {{/each}}
-                        {{/select}}
-                    </select>
-                </div>
-                <div class="teaching-minimum">
-                    Student Skill Minimum: 
-                    <span>
-                        {{this.object.skillMinimum}}
-                    <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
-                    </span>
-                </div>
-            </div>
-
-            {{#if object.teacherSkill}}
-            <div class="item-details">
-                <div class="skill-minimum">
-                    <label>
-                        {{localize "PILLARS.RaiseMinimum"}}
-                    </label>
-                    <div class="range-container">
-                        {{rangePicker name="raiseMinimum" value=object.raiseMinimum min=object.teachingMinimum
-                        max=object.teacherSkill.rank step=1}}
-                    </div>
-
-                </div>
-                <div class="skill-maximum">
-                    <label>
-                        {{localize "PILLARS.SkillMaximum"}}
-                        <a class="alert" style="display: none"><i class="fas fa-exclamation-circle"></i></a>
-                    </label>
-                    <div class="range-container">
-                        {{rangePicker name="skillMaximum" value=object.skillMaximum min=1
-                        max=object.teacherSkill.rank step=1}}
-                    </div>
-                </div>
-                <div class="students">
-                    <label>
-                        {{localize "PILLARS.Students"}}
-                    </label>
-                    <div class="range-container">
-                        {{rangePicker name="students" value=object.students min=1 max=10 step=1}}
-                    </div>
-                </div>
-            </div>
-            {{/if}}
+        <div class="xp-footer">
+            XP Received:
+            <input type="number" value="{{object.xp}}">
         </div>
-    </div>
-    <div class="xp">
-        XP Received:
-        <input type="number" value="{{object.xp}}">
     </div>
     <button type="submit">{{localize "Submit"}}</button>
-</div>
+</form>

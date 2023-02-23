@@ -38,6 +38,7 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
         const options = super.defaultOptions;
         options.width = 600;
         options.height = "auto";
+        options.classes = options.classes.concat("study");
         options.tabs = [{ navSelector: ".sheet-tabs", contentSelector: ".tab-content", initial: "text" }];
         return options;
     }
@@ -162,7 +163,7 @@ export default class StudySeasonalActivityApplication extends SeasonalActivityAp
         this.alerts.reqAlert = html.find<HTMLAnchorElement>(".req .alert")[0];
         this.ui.actorDrag = html.find<HTMLDivElement>(".dragarea")[0];
         this.ui.itemDrag = html.find<HTMLDivElement>(".dragarea.item")[0];
-        this.ui.xp = html.find<HTMLInputElement>(".xp input")[0];
+        this.ui.xp = html.find<HTMLInputElement>(".xp-footer input")[0];
         this.alerts.skillMaximum = html.find<HTMLAnchorElement>(".skill-maximum .alert")[0];
         this.alerts.skillMinimum = html.find<HTMLAnchorElement>(".teaching-minimum .alert")[0];
 
