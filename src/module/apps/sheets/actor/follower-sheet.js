@@ -1,17 +1,17 @@
-import { PillarsCharacterSheet } from "./character-sheet";
+import { BasePillarsActorSheet } from "./base-sheet";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PillarsFollowerSheet extends PillarsCharacterSheet 
+export class PillarsFollowerSheet extends BasePillarsActorSheet 
 {
     /** @override */
     static get defaultOptions() 
     {
         const options = super.defaultOptions;
         options.width = 810,
-        options.height = 830,
+        options.height = 665,
         options.classes.push("follower");
         return options;
     }
@@ -44,6 +44,10 @@ export class PillarsFollowerSheet extends PillarsCharacterSheet
             {
                 this.actor.setFollowerSpecies(item);
             });
+        }
+        else 
+        {
+            return super._onDropItem(event, data);
         }
     }
 

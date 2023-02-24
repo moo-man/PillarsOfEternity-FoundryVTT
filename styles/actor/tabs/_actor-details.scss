@@ -1,0 +1,16 @@
+.pillars-of-eternity.actor {
+    .details.tab {
+        .editors {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+    
+          .editor-container {
+            flex: 1;
+            .editor {
+              height: calc(100% - 17px);
+            }
+          }
+        }
+      }
+}

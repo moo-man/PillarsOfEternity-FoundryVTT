@@ -259,6 +259,12 @@ export class BasePillarsActorSheet extends ActorSheet
         html.find(".roll-power").on("click", this._onPowerRoll.bind(this));
         html.find(".roll-initiative").on("click", this._onInitiativeClick.bind(this));
         html.find(".roll-item-skill").on("click", this._onItemSkillClick.bind(this));
+        html.find(".open-info").on("click", this._onInfoClick.bind(this));
+        html.find(".add-wound").on("click", this._onWoundClick.bind(this));
+        html.find(".item-special").on("mouseup", this._onSpecialClicked.bind(this));
+        html.find(".restore-pool").on("click", this._onRestorePoolClick.bind(this));
+        html.find(".box-click").on("click", this._onBoxClick.bind(this));
+
     }
 
     
@@ -309,9 +315,7 @@ export class BasePillarsActorSheet extends ActorSheet
 
     async _onUntrainedSkillClick() 
     {
-        const allSkills = game
-            .items.contents.filter((i) => i.type == "skill")
-            .sort((a, b) => (a.name > b.name ? 1 : -1));
+        const allSkills = game.items.contents.filter((i) => i.type == "skill").sort((a, b) => (a.name > b.name ? 1 : -1));
         let selectElement = `<select name="skill">`;
         for (const s of allSkills) {selectElement += `<option name=${s.name}>${s.name}</option>`;}
         selectElement += "</select>";
@@ -445,6 +449,80 @@ export class BasePillarsActorSheet extends ActorSheet
             div.slideDown(200);
         }
         li.toggleClass("expanded");
+    }
+
+    _onInfoClick(event) 
+    {
+        const type = $(event.currentTarget).attr("data-type");
+        const item = this.actor.getItemTypes(type)[0];
+        if (!item) {return ui.notifications.error(game.i18n.format("PILLARS.ErrorNoOwnedItem", {type}));}
+        else if (item) {item.sheet.render(true);}
+    }
+    _onSpecialClicked(event) 
+    {
+        const text = (event.currentTarget).text?.split("(")[0]?.trim();
+        const specials = PILLARS_UTILITY.weaponSpecials();
+        for (const special in specials) 
+        {
+            if (specials[special].label == text) {return this._dropdown(event, { text: specials[special].description });}
+        }
+    }
+
+    _onWoundClick(event) 
+    {
+        if (this.actor.data.type == "headquarters")
+        {return;}
+        const multiplier = (event.currentTarget).classList.contains("add-wound") ? 1 : -1;
+        return this.actor.update({ "system.health.wounds.value": this.actor.system.health.wounds.value + 1 * multiplier });
+    }
+    _onBoxClick(ev) 
+    {
+        const index = parseInt($(ev.currentTarget).attr("data-index") || "");
+        const target = $(ev.currentTarget).attr("data-target");
+
+        if (target) 
+        {
+            const data = foundry.utils.deepClone(getProperty(this.actor.data, target));
+            if (index + 1 == data.value) {data.value = data.value - 1;}
+            else {data.value = Number(index) + 1;}
+
+            this.actor.update({ [`${target}.value`]: data.value });
+        }
+    }
+
+    
+    _onRestorePoolClick(event) 
+    {
+        const itemId = $(event.currentTarget).parents("[data-id]")[0]?.dataset.id;
+        const item = this.actor.items.get(itemId);
+        if (item) {return item.update({ "system.pool.current": item.system.pool?.max });}
+    }
+
+
+    _onActionClick(ev) 
+    {
+        if (ev.currentTarget.dataset.type == "longRest")
+        {
+            const game = game;
+            new Dialog({
+                title: game.i18n.localize("PILLARS.Rest"),
+                content: `${game.i18n.localize("PILLARS.PromptShortLongRest")}</p>`,
+                buttons: {
+                    long: {
+                        label: game.i18n.localize("PILLARS.ShortRest"),
+                        callback: () => this.actor.shortRest(),
+                    },
+                    short: {
+                        label: game.i18n.localize("PILLARS.LongRest"),
+                        callback: () => this.actor.longRest(),
+                    },
+                },
+            }).render(true);
+        }
+        else 
+        {
+            this.actor.enduranceAction(ev.currentTarget.dataset.type);
+        }
     }
 
 }

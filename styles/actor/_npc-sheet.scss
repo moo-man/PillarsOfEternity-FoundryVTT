@@ -60,36 +60,4 @@
     }
 
   }
-  .powers.tab {
-    .sheet-list.power-sources {
-      .pool {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        >* {
-          margin: 0px 3px;
-        }
-
-        input {
-          width: 30px;
-        }
-      }
-    }
-  }
-
-  .details.tab {
-    .editors {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-
-      .editor-container {
-        flex: 1;
-        .editor {
-          height: calc(100% - 17px);
-        }
-      }
-    }
-  }
 }

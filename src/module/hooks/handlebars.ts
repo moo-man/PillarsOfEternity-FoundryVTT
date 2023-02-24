@@ -60,6 +60,7 @@ export default function ()
         
 
         loadTemplates([
+            "systems/pillars-of-eternity/templates/actor/follower/actor-follower-main.hbs",
             "systems/pillars-of-eternity/templates/actor/character/character-main.hbs",
             "systems/pillars-of-eternity/templates/actor/npc/actor-npc-main.hbs",
             "systems/pillars-of-eternity/templates/actor/npc/actor-npc-combat.hbs",
