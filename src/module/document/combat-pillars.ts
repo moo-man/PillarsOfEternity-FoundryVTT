@@ -49,15 +49,6 @@ export class PillarsCombat extends Combat
         else {return super._sortCombatants(...args);}
     }
 
-    async startCombat() 
-    {
-        await super.startCombat();
-        this.setupTurns(); // Now that combat has started, sort combatants
-        ui.sidebar!.tabs.combat!.render(true); // Rerender to show sort
-        return this;
-
-    }
-
     get template() 
     {
         return "systems/pillars-of-eternity/templates/apps/combat-tracker.hbs";
@@ -76,6 +67,8 @@ export class PillarsCombat extends Combat
 
 Hooks.on("updateCombat", (combat : Combat, data : Record<string, unknown>) => 
 {
-    if (hasProperty(data, "flags.pillars-of-eternity.phase"))
-    {combat.setupTurns();}
+    if (hasProperty(data, "flags.pillars-of-eternity.phase") || (data.round == 1 && data.turn == 0))
+    {
+        combat.setupTurns();
+    }
 });
