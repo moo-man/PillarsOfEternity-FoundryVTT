@@ -1,0 +1,42 @@
+<div class="pillars-of-eternity roll check">
+    <header>
+        <hr>
+        <div class="check-title">
+            <img src="{{check.item.img}}">
+            <h3>{{check.checkData.title}}</h3>
+        </div>
+        <hr>
+        <div class="tags">
+            {{#each check.tags}}
+                <div class="tag">{{this}}</div>
+            {{/each}}
+            {{#each check.weaponTags}}
+                <div class="tag">{{this}}</div>
+            {{/each}}
+        </div>
+    </header>
+    {{#if check.requiresRoll}}
+        <div class="dice-roll">
+            <div class="dice-result">
+                <div title="{{check.roll.formula}}" class="dice-total">
+                    {{check.roll.total}}
+                </div>
+            </div>
+        </div>
+        {{{tooltip}}}
+    {{/if}}
+
+    {{> systems/pillars-of-eternity/templates/chat/check-buttons.hbs}}
+
+    {{#if check.targets.length}}
+        <div class="tags">
+            <i class="fas fa-crosshairs"></i>
+            {{#each check.targets as |target i|}}
+                <div class="tag highlight-token" data-token-id="{{target.id}}">
+                    {{target.name}}
+                </div>
+            {{/each}}
+        </div>
+    {{/if}}
+
+</div>

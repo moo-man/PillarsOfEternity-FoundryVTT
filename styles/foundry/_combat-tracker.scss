@@ -1,0 +1,47 @@
+#combat-tracker {
+    .phase-header {
+        flex: unset;
+        text-align: center;
+      }
+
+      #combat-round .encounters .switch-phase {
+        flex: 1;
+        margin: 0;
+        font-size: 18px;
+        text-align: center;
+        color: unset;
+      }
+
+      .initiative-buttons {
+        display: flex;
+        width: 130px;
+      }
+
+      li.combatant .token-resource {
+        display: flex;
+        align-items: center;
+      
+        > * {
+          padding: 0px 3px;
+        }
+      
+        .token-move {
+          opacity: 0.5;
+        }
+      
+        .token-move.running {
+          opacity: 1;
+          color: red;
+        }
+      }
+      
+
+      .initiative-buttons a[data-control='rollInitiativeAdv'] {
+        filter: sepia(100%) saturate(1500%) brightness(70%) hue-rotate(380deg);
+      }
+
+      .initiative-buttons a[data-control='rollInitiativeDis'] {
+        filter: sepia(100%) saturate(1500%) brightness(70%) hue-rotate(280deg);
+      }
+      
+}

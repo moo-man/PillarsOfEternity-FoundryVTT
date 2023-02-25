@@ -1,4 +1,5 @@
-export default function () {
+export default function () 
+{
 
     // Hooks.once('diceSoNiceReady', (dice3d) => {});
 }

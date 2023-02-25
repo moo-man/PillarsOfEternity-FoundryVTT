@@ -1,4 +1,4 @@
-import { PillarsActor } from "../module/actor/actor-pillars";
+import { PillarsActor } from "../module/document/actor-pillars";
 
 export interface Accommodation {
     id : string,

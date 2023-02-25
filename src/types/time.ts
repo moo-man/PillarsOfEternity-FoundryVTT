@@ -11,11 +11,11 @@ export interface Time {
     year : number
   }
   
-  export interface TimeSettingData extends Time { 
+export interface TimeSettingData extends Time { 
     context? : TimeContextData
   }
   
-  export interface TimeContextData {
+export interface TimeContextData {
     latest? : boolean
     adventure? : {
       name? : string,

@@ -1,0 +1,150 @@
+@import "menu";
+@import "xp-allocation";
+@import "practice";
+@import "enchantment";
+
+.seasonal-activity {
+    .alert {
+        color: red;
+    }
+
+    .warn {
+        color: orange
+    }
+
+    .pass {
+        color: green
+    }
+
+    .disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
+    select {
+        width: fit-content
+    }
+
+    nav {
+        border: 3px groove
+    }
+
+    nav,
+    .tab-content {
+        width: 100%
+    }
+
+
+    form {
+        > :first-child {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+
+    .xp-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        input {
+            width: 30px
+        }
+    }
+
+    .item-lists {
+        display: flex;
+        height: 100%;
+
+        .item-list.skill {
+            flex: 2
+        }
+
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow-y: auto;
+
+            input {
+                flex: 0 0 40px;
+                margin: 10px;
+            }
+
+            li {
+                border-bottom: none;
+                align-items: center;
+            }
+
+            li:last-of-type {
+                border-bottom: 1px solid black
+            }
+
+            .directory {
+                overflow: auto;
+            }
+        }
+    }
+
+    .item-header {
+        display: flex;
+        align-items: center;
+
+        h3 {
+            margin: 0px
+        }
+    }
+
+    .item-details {
+        display: flex;
+        width: 100%;
+
+        >* {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .range-container {
+            display: flex;
+        }
+    }
+
+    .item-group {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        width: 100%;
+        align-items: center;
+        justify-content: space-around;
+
+        .item-drag {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .dragarea {
+                margin: 5px 20px;
+                border: 1px dotted black;
+                height: 200px;
+                width: 200px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+
+            .dragarea.hover {
+                box-shadow: 0 0 10px inset;
+            }
+        }
+    }
+
+}

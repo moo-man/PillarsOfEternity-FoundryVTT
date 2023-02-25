@@ -1,0 +1,71 @@
+<div class="inventory-fields">
+    <div class="wealth">
+        <label>{{localize "PILLARS.Wealth"}}:</label>
+        <input type="number" name="system.wealth.cp" value={{system.wealth.cp}}>
+        <label>{{localize "PILLARS.CP"}}</label>
+    </div>
+    <div class="weight">
+        <label>{{localize "PILLARS.Weight"}}:</label>
+        <input disabled type="number" value={{actor.system.weight}}>
+        <label>{{localize "PILLARS.IBS"}}</label>
+    </div>
+</div>
+<div class="inventory-lists">
+    {{#each items.inventory}}
+        <div class="sheet-list">
+            <li class="list-header">
+                <div class="list-name">{{this.label}}</div>
+                {{#if (eq @key "tools")}}
+                    <div class="normal">{{localize "PILLARS.Skill"}}</div>
+                {{/if}}
+
+                <div class="small">{{localize "PILLARS.Eqp"}}</div>
+                <div class="small">{{localize "PILLARS.Qty"}}</div>
+                <div class="small">{{localize "PILLARS.Wt"}}</div>
+                <div class="list-controls">
+                    <a class="list-control list-create" title="Create" data-type="{{this.type}}"><i
+                            class="fas fa-plus"></i></a>
+                </div>
+            </li>
+            <ul class="list-content">
+                {{#each this.items}}
+                    <li data-id="{{this.id}}">
+                        <div class="row-content">
+                            <div class="list-name">
+                                <div class="list-image">
+                                    <img src="{{this.img}}">
+                                </div>
+                                <a>{{this.name}}</a>
+                            </div>
+                            {{#unless (eq this.type "weapon") }}
+                                {{#if this.skill.value}}
+                                    <button type="button" class="normal">{{this.system.skill.value}}</button>
+                                {{/if}}
+                            {{/unless}}
+
+                            <div class="small">
+                                {{#if this.canEquip}}
+                                    {{#if this.system.equipped.value}}
+                                        <a class="property-toggle" data-path="system.equipped.value"><i class="far fa-check-circle"></i></a>
+                                    {{else}}
+                                        <a class="property-toggle" data-path="system.equipped.value"><i class="far fa-circle"></i></a>
+                                    {{/if}}
+                                {{/if}}
+                            </div>
+                            <div class="small">{{this.system.quantity.value}}</div>
+                            <div class="small">{{this.system.weight.value}}</div>
+
+                            <div class="list-controls">
+                                {{#if ../../owner}}
+                                    <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                                    <a class="list-control list-delete" title="Delete Item"><i
+                                            class="fas fa-trash"></i></a>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    {{/each}}
+</div>

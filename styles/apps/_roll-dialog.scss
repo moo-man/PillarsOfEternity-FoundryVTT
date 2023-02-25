@@ -1,0 +1,95 @@
+.pillars-of-eternity.roll-dialog {
+    .window-content {
+        overflow: hidden;
+    }
+
+    form {
+        display: flex;
+        height: 100%;
+    }
+
+    .state {
+        text-align: center;
+
+        >* {
+
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    .dialog-content {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .dialog-fields {
+        flex: 0 0 250px;
+        display: flex;
+        flex-direction: column;
+        .form-group {
+            flex: 1
+        }
+    }
+
+    .dialog-buttons {
+        flex: 0 0 32px;
+    }
+
+    .effects {
+        select {
+            margin: 4px;
+            height: calc(100% - 10px);
+            width: calc(100% - 5px);
+        }
+    }
+}
+
+
+
+
+
+//   .pillars-of-eternity.roll-dialog .advantage-disadvantage {
+//     margin: 10px 0px;
+//   }
+
+//   .pillars-of-eternity.roll-dialog .advantage-disadvantage > * {
+//     flex-direction: column;
+//     align-items: center;
+//   }
+
+//   .pillars-of-eternity.roll-dialog .dialog-buttons {
+//     justify-content: flex-end;
+//     max-height: 35px;
+//   }
+
+//   .pillars-of-eternity.roll-dialog .dialog-buttons button {
+//     height: 35px;
+//   }
+
+//   .pillars-of-eternity.roll-dialog option {
+//     background: unset;
+//   }
+
+
+// .pillars-of-eternity.roll-dialog .dialog-content {
+//     display: flex;
+//   }
+
+//   .pillars-of-eternity.roll-dialog .dialog-fields {
+//     flex: 0 0 214px;
+//   }
+
+//   .pillars-of-eternity.roll-dialog .effects {
+//     flex: 1;
+//     padding: 10px;
+//   }
+
+//   .pillars-of-eternity.roll-dialog .effects option {
+//     white-space: normal;
+//   }
+
+//   .pillars-of-eternity.roll-dialog .effects .effect-select {
+//     width: 100%;
+//     height: 100%;
+//   }

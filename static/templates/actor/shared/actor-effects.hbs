@@ -1,0 +1,95 @@
+<div class="sheet-list">
+    <li class="list-header">
+        <div class="list-name">{{localize "PILLARS.TemporaryEffects"}}</div>
+        <div>{{localize "PILLARS.Source"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-collection="effects" data-type="temporary" ><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each effects.temporary}}
+        <li data-id="{{this.id}}">
+            <div class="row-content">
+                <div class="list-name">
+                    <img class="list-image" src="{{this.icon}}">
+                    <a class="list-edit" data-collection="effects">{{this.label}}</a>
+                </div>
+    
+                <div>{{this.sourceName}}</div>
+    
+                <div class="list-controls flexrow">
+                    {{#if ../document.isOwner}}
+                    <a class="list-control property-toggle" data-path="disabled" data-collection="effects" title="Disable Effect"><i class="far fa-check-circle"></i></a>
+                    <a class="list-control list-delete" data-collection="effects"  title="Delete Effect"><i class="fas fa-trash"></i></a>
+                    {{/if}}
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+
+<div class="sheet-list">
+    <li class="list-header">
+        <div class="list-name">{{localize "PILLARS.PassiveEffects"}}</div>
+        <div>{{localize "PILLARS.Source"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-collection="effects" data-type="passive"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each effects.passive}}
+        <li data-id="{{this.id}}">
+            <div class="row-content">
+                <div class="list-name">
+                    <img class="list-image" src="{{this.icon}}">
+                    <a class="list-edit" data-collection="effects">{{this.label}}</a>
+                </div>
+    
+                <div>{{this.sourceName}}</div>
+    
+    
+                <div class="list-controls flexrow">
+                    {{#if ../owner}}
+                    <a class="list-control property-toggle" data-path="disabled" data-collection="effects" title="Disable Effect"><i class="far fa-check-circle"></i></a>
+                    <a class="list-control list-delete" data-collection="effects" title="Delete Effect"><i class="fas fa-trash"></i></a>
+                    {{/if}}
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+
+<div class="sheet-list">
+    <li class="list-header">
+        <div class="list-name">{{localize "PILLARS.DisabledEffects"}}</div>
+        <div>{{localize "PILLARS.Source"}}</div>
+        <div class="list-controls"></div>
+    </li>
+
+    <ul class="list-content" style="opacity: 0.5">
+        {{#each effects.disabled}}
+        <li data-id="{{this.id}}">
+            <div class="row-content">
+                <div class="list-name">
+                    <img class="list-image" src="{{this.icon}}">
+                    <a class="list-edit" data-collection="effects">{{this.label}}</a>
+                </div>
+    
+                <div>{{this.sourceName}}</div>
+    
+    
+                <div class="list-controls flexrow">
+                    {{#if ../owner}}
+                    <a class="list-control property-toggle" data-path="disabled" data-collection="effects" title="Enable Effect"><i class="far fa-circle"></i></a>
+                    <a class="list-control list-delete" data-collection="effects" title="Delete Effect"><i class="fas fa-trash"></i></a>
+                    {{/if}}
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>

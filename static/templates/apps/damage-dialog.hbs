@@ -1,0 +1,67 @@
+<form>
+    <div>
+        <ul>
+            <li class="header">
+                <div>{{localize "PILLARS.Label"}}</div>
+                <div>{{localize "PILLARS.Type"}}</div>
+                <div>{{localize "PILLARS.Base"}}</div>
+                <div class="mult-crit">{{localize "PILLARS.Crit"}}</div>
+                <div class="target">{{localize "PILLARS.Target"}}</div>
+            </li>
+            {{#each damages}}
+
+                <li data-index={{@key}}>
+                    <input type="text" class="label" placeholder='{{localize "PILLARS.Label"}}'
+                        value="{{this.label}}" />
+                    <select class="type">
+                        {{#select this.type}}
+                            {{#each (config "damageTypes") as |type t|}}
+                                <option value="{{t}}">{{type}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                    <input type="text" class="base" placeholder='{{localize "PILLARS.Base"}}' value="{{this.base}}" />
+                    <div class="mult-crit" style="display: flex;">
+                        <span>+</span>
+                        <select name={{d}} class="mult">
+                            {{#select this.mult}}
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            {{/select}}
+                        </select>
+                        <span>x</span>
+                        <input type="text" class="crit" placeholder='{{localize "PILLARS.Crit"}}'
+                            value="{{this.crit}}" />
+                    </div>
+                    <div class="target">
+                        <select class="target-select">
+                            {{#select this.target}}
+                                <option value=""> - </option>
+                                {{#each ../targets as |target t|}}
+                                    <option value="{{target.id}}">{{target.name}}</option>
+                                {{/each}}
+                                {{#each ../disabled as |disabledTarget t|}}
+                                    <option disabled>{{disabledTarget.name}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                        <img src="{{this.img}}" height="30" width="30">
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+        <div class="roll-control">
+            <a class="add-roll"><i class="fas fa-plus-square"></i></a>
+        </div>
+    </div>
+    <button type="submit">{{localize "Roll"}}</button>
+</form>

@@ -1,0 +1,31 @@
+<div class="sheet-list">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Defenses"}}</span></div>
+        <div class="normal">{{localize "PILLARS.Upkeep"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="defense"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.defenses}}
+            <li data-id="{{this.id}}">
+                <div class="row-content">
+                    <div class="list-name">
+                        <img class="list-image" src="{{this.img}}">
+                        <a>{{this.name}}</a>
+                    </div>
+
+                    <div class="normal">{{this.system.upkeep.value}}</div>
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>

@@ -1,0 +1,110 @@
+.pillars-of-eternity {
+    .sheet-list {
+        margin: 5px;
+        .list-header {
+            border: 1px solid #7a7971;
+            background: rgba(0, 0, 0, 0.05);
+            border-left: none;
+            border-right: none;
+            height: 24px;
+            align-items: center;
+            .list-name{
+                span { // Span child is needed to avoid shifting all the other flex elements in the header
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        .list-content {
+            padding: 0px;
+            li {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        li {
+            display : flex;
+            text-align: center;
+            border-bottom: 1px solid #BBB;
+            padding: 5px 0px;
+
+            > * {
+                flex: 1;
+            }
+
+            .row-content {
+                display: flex;
+                align-items: center;
+                > * {
+                    flex: 1;
+                }
+            }
+
+            
+            .small {
+                flex: 0 0 50px;
+            }
+
+            .normal {
+                flex: 0 0 100px;
+            }
+
+            .large {
+                flex: 0 0 200px;
+            }
+            
+            .list-name {
+                flex: 2;
+                display: flex;
+                align-items: center;
+                text-align: left;
+                a {
+                    margin-left: 5px;
+                }
+            }
+
+            .list-image {
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+            }
+
+            .list-image.list-post {
+                font-size: 22px;
+                opacity: 0.5;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+
+            .property-toggle {
+                flex: 0 0 15px;
+            }
+
+
+            .list-controls {
+                flex: 0 0 50px;
+                display: flex;
+                text-align: center;
+                align-items: center;
+                justify-content: space-evenly;
+            }
+
+            .used {
+                margin-right: 5px;
+            }
+
+            .list-control {
+
+            }
+            
+        }
+
+        li:not(.list-header):last-of-type {
+            border-bottom: none;
+        }
+
+    }
+}

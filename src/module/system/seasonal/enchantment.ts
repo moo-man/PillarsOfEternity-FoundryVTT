@@ -1,11 +1,12 @@
 import { ActorDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData";
 import { ItemData, ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
 import { ENCHANTMENT_STATE } from "../../../types/seasonal-activities";
-import { PillarsActor } from "../../actor/actor-pillars";
-import { PillarsItem } from "../../item/item-pillars";
+import { PillarsActor } from "../../document/actor-pillars";
+import { PillarsItem } from "../../document/item-pillars";
 
 
-export abstract class Enchantment {
+export abstract class Enchantment 
+{
     abstract item : PillarsItem | PillarsActor
     abstract actor : PillarsActor
     abstract data : {
@@ -26,25 +27,28 @@ export abstract class Enchantment {
         current : 0,
         total : 0,
         state : ENCHANTMENT_STATE.NOT_STARTED,
-    } 
+    }; 
 
     static fromData<T extends Enchantment>(this : {new() : T}, data : Enchantment["data"]): Enchantment
     {
-        return new this()
+        return new this();
     }
 
-    async save() {
+    async save() 
+    {
         this.computeProgress();
-        return this.actor.setFlag("pillars-of-eternity", `enchantments.${this.id}`, this.data)
+        return this.actor.setFlag("pillars-of-eternity", `enchantments.${this.id}`, this.data);
     }
 
 
-    get id() {
-        return this.data.id
+    get id() 
+    {
+        return this.data.id;
     }
 
-    getSaveData() {
-        return {[`flags.pillars-of-eternity.enchantments.${this.id}`] : this.data}
+    getSaveData() 
+    {
+        return {[`flags.pillars-of-eternity.enchantments.${this.id}`] : this.data};
     }
 
     abstract getStateMessage() : string 

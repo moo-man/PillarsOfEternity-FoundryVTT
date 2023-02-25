@@ -1,0 +1,329 @@
+<div class="combat-fields">
+    <div class="initiative">
+        <label>{{localize "PILLARS.Initiative"}}</label>
+        <input type="number" class="value" data-tooltip="{{tooltips.initiative.value}}" disabled
+            value="{{system.initiative.value}}" />
+        <a title="Roll Initiative" class="roll-initiative"><img src="icons/dice/d10black.svg" /></a>
+    </div>
+    <div class="stride">
+        <label>{{localize "PILLARS.Stride"}}: </label>
+        <input type="number" disabled class="value" data-tooltip="{{tooltips.stride.value}}"
+            value="{{system.stride.value}}">
+    </div>
+    <div class="run">
+        <label>{{localize "PILLARS.Run"}}: </label>
+        <input type="number" disabled class="value" data-tooltip="{{tooltips.run.value}}" value="{{system.run.value}}">
+    </div>
+
+    <div class="soak">
+        <label>{{localize "PILLARS.Soak"}}: </label>
+        <input type="number" disabled class="value" data-tooltip="{{tooltips.soak.base}}" value="{{system.soak.base}}">
+        {{#if items.equipped.shields.length}}
+            <div class="soak-group">
+                <img class="soak-img" src="icons/svg/shield.svg" />
+                <input class="soak-total" type="number" disabled class="value" data-tooltip="{{tooltips.soak.shield}}"
+                    value="{{system.soak.shield}}">
+            </div>
+        {{/if}}
+        {{#each soaks as |soak s|}}
+            {{#if soak.show}}
+                <div class="soak-group">
+                    <img class="soak-img" src="{{soak.img}}" />
+                    <input class="soak-total" type="number" disabled class="value"
+                        data-tooltip="{{lookup ../tooltips.soak s}} " value="{{soak.total}}">
+                </div>
+            {{/if}}
+        {{/each}}
+    </div>
+</div>
+
+<div class="sheet-list armor">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Armor"}}</span></div>
+        <div class="small">{{localize "PILLARS.Soak"}}</div>
+        <div class="small">{{localize "PILLARS.Winded"}}</div>
+        <div class="small">{{localize "PILLARS.Init"}}</div>
+        <div class="list-controls"></div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.equipped.armor}}
+            <li data-id="{{this.id}}">
+                <div class="row-content">
+
+                    <div class="list-name">
+                        <img class="list-image" src="{{this.img}}">
+                        <a class="item-dropdown">{{this.name}}</a>
+                    </div>
+                    <div class="small">{{this.system.soak.value}}</div>
+                    <div class="small">{{this.system.winded.value}}</div>
+                    <div class="small">{{this.system.initiative.value}}</div>
+
+                    <div class="list-controls">
+                        <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                        <a class="list-control property-toggle" data-path="system.equipped.value"
+                            title="Unequip Item"><i class="fas fa-times"></i></a>
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+<div class="sheet-list shield">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Shield"}}</span></div>
+        <div class="small">{{localize "PILLARS.Defl."}}</div>
+        <div class="small">{{localize "PILLARS.Soak"}}</div>
+        <div class="small">{{localize "PILLARS.Winded"}}</div>
+        <div class="small">{{localize "PILLARS.Health"}}</div>
+        <div class="list-controls"></div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.equipped.shields}}
+            <li data-id="{{this.id}}">
+                <div class="row-content">
+
+                    {{#if this.system.used.value}}
+                        <a class="property-toggle used" data-path="system.used.value"><i
+                                class="far fa-check-circle"></i></a>
+                    {{else}}
+                        <a class="property-toggle used" data-path="system.used.value"><i class="far fa-circle"></i></a>
+                    {{/if}}
+
+                    <div class="list-name">
+                        <img class="list-image" src="{{this.img}}">
+                        <a class="item-dropdown">{{this.name}}</a>
+                    </div>
+
+                    <div class="small">{{this.system.deflection.value}}</div>
+                    <div class="small">{{this.system.soak.value}}</div>
+                    <div class="small">{{this.system.winded.value}}</div>
+                    <div class="small"><a class="list-counter"
+                            data-path="system.health.current">{{this.system.health.current}}</a>/{{this.system.health.max}}
+                    </div>
+
+                    <div class="list-controls">
+                        <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                        <a class="list-control property-toggle" data-path="system.equipped.value"
+                            title="Unequip Item"><i class="fas fa-times"></i></a>
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+{{#if items.equipped.meleeWeapons.length}}
+    <div class="sheet-list">
+        <li class="list-header">
+            <div class="list-name"><span>{{localize "PILLARS.MeleeWeapons"}}</span></div>
+            <div class="small">{{localize "PILLARS.Skill"}}</div>
+            <div class="small">{{localize "PILLARS.Misc"}}</div>
+            <div class="small">{{localize "PILLARS.Accuracy"}}</div>
+            <div class="list-controls"></div>
+        </li>
+
+        <ul class="list-content weapons">
+            {{#each items.equipped.meleeWeapons}}
+                <li data-id="{{this.id}}">
+                    <div class="row-content">
+
+                        <div class="list-name">
+                            <img class="list-image" src="{{this.img}}">
+                            <a class="roll-weapon">{{this.name}}</a>
+                        </div>
+
+                        <div class="small">{{this.Skill.rank}}</div>
+                        <div class="small"><input class="property-edit" type="number" data-path="system.misc.value"
+                                value="{{this.system.misc.value}}"></div>
+                        <div class="small"><input class="property-edit" type="number" data-path="system.accuracy.value"
+                                value="{{this.system.accuracy.value}}"></div>
+
+                        <div class="list-controls">
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control property-toggle" data-path="system.equipped.value"
+                                title="Unequip Item"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="special-list">
+                        {{{array this.Specials "item-special"}}}
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+
+{{#if items.equipped.rangedWeapons.length}}
+    <div class="sheet-list">
+        <li class="list-header">
+            <div class="list-name"><span>{{localize "PILLARS.RangedWeapons"}}</span></div>
+            <div class="small">{{localize "PILLARS.Skill"}}</div>
+            <div class="small">{{localize "PILLARS.Misc"}}</div>
+            <div class="small">{{localize "PILLARS.Accuracy"}}</div>
+            <div class="small">{{localize "PILLARS.Range"}}</div>
+            <div class="list-controls"></div>
+        </li>
+
+        <ul class="list-content weapons">
+            {{#each items.equipped.rangedWeapons}}
+                <li data-id="{{this.id}}">
+                    <div class="row-content">
+
+                        <div class="list-name">
+                            <img class="list-image" src="{{this.img}}">
+                            <a class="roll-weapon">{{this.name}}</a>
+                        </div>
+
+                        <div class="small">{{this.system.Skill.xp.rank}}</div>
+                        <div class="small"><input class="property-edit" type="number" data-path="system.misc.value"
+                                value="{{this.system.misc.value}}"></div>
+                        <div class="small"><input class="property-edit" type="number" data-path="system.accuracy.value"
+                                value="{{this.system.accuracy.value}}"></div>;
+                        <div class="small">{{this.system.range.value}}</div>
+
+                        <div class="list-controls">
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control property-toggle" data-path="system.equipped.value"
+                                title="Unequip Item"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="special-list">
+                        {{{array this.Specials "item-special"}}}
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+
+<div class="sheet-list power-sources">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.PowerSources"}}</span></div>
+        <div class="pool">{{localize "PILLARS.Pool"}}</div>
+        <div class="small">{{localize "PILLARS.Attack"}}</div>
+        <div class="small">{{localize "PILLARS.XP"}}</div>
+        <div class="small">{{localize "PILLARS.Level"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="powerSource"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.powerSources}}
+            <li data-id="{{this.id}}">
+                <div class="row-content">
+
+                    <div class="list-name">
+                        <a class="item-dropdown">{{this.name}}</a>
+                    </div>
+
+                    <div class="pool">
+                        <input type="number" class="property-edit" data-path="system.pool.current" value="{{this.system.pool.current}}"> / <input type="number" disabled value="{{this.system.pool.max}}">
+                        <a title="Restore Pool" class="restore-pool"><i class="fas fa-redo"></i></a>
+                    </div>
+
+                    <div class="small">+{{this.system.attack}}</div>
+                    <div class="small"><input type="number" value="{{this.system.xp.value}}"></div>
+                    <div class="small"><input type="number" disabled value="{{this.system.xp.level}}"></div>
+
+                    <div class="list-controls">
+                        <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                        <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+<div class="sheet-list powers-list">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Powers"}}</span></div>
+        <div>{{localize "PILLARS.Level"}}</div>
+        <div>{{localize "PILLARS.Range"}}</div>
+        <div>{{localize "PILLARS.Target"}}</div>
+        <div>{{localize "PILLARS.Speed"}}</div>
+        <div>{{localize "PILLARS.Exclusion"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="power"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.powers}}
+            <li data-id="{{this.id}}">
+                <div class="row-content">
+                    <div class="list-name">
+                        <img class="list-image" src="{{this.img}}">
+                        <a class="roll-power">{{this.name}}</a>
+                    </div>
+
+                    <div {{this.system.level.value}} {{#if this.system.improvised.value}} title="Improvised Cost"
+                        {{/if}}>
+                        {{this.system.level.value}} {{#if this.system.improvised.value}}
+                            ({{this.system.level.cost}}) {{/if}}
+                    </div>
+                    <div>{{this.Range}}</div>
+                    <a class="power-target">{{this.Target}}</a>
+                    <div>{{this.Speed}}</div>
+                    <div>{{this.Exclusion}}</div>
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+{{#if items.embeddedPowers.length}}
+    <div class="sheet-list powers-list">
+        <li class="list-header">
+            <div class="list-name"><span>{{localize "PILLARS.ItemPowers"}}</span></div>
+            <div class="embedded-value">{{this.EmbeddedDisplay}}</div>
+            <div>{{localize "PILLARS.Level"}}</div>
+            <div>{{localize "PILLARS.Range"}}</div>
+            <div>{{localize "PILLARS.Target"}}</div>
+            <div>{{localize "PILLARS.Speed"}}</div>
+            <div>{{localize "PILLARS.Exclusion"}}</div>
+            <div class="list-controls"></div>
+        </li>
+
+        <ul class="list-content">
+            {{#each items.embeddedPowers}}
+                <li data-id="{{this.id}}">
+                    <div class="row-content">
+                        <div class="list-name list-dropdown-alt">
+                            <img class="list-image" src="{{this.img}}">
+                            <a class="roll-power">{{this.name}}</a>
+                        </div>
+
+                        <a class="embedded-value">{{this.EmbeddedDisplay}}</a>
+                        
+                        <div {{this.system.level.value}} {{#if this.improvised.value}} title="Improvised Cost" {{/if}}>
+                            {{this.system.level.value}} {{#if this.improvised.value}}
+                                ({{this.system.level.cost}})
+                            {{/if}}
+                        </div>
+                        <div>{{this.Range}}</div>
+                        <a class="power-target">{{this.Target}}</a>
+                        <div>{{this.Speed}}</div>
+                        <div>{{this.Exclusion}}</div>
+
+                        <div class="list-controls">
+                            {{#if ../owner}}
+                                <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                                <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                            {{/if}}
+                        </div>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}

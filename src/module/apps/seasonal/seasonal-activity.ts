@@ -1,103 +1,119 @@
 import { getGame } from "../../system/utility";
-import { SeasonalActivityData, SeasonalActivityResolve, SeasonalActivityResult } from '../../../types/seasonal-activities';
-import { PillarsActor } from '../../actor/actor-pillars';
+import { SeasonalActivityData, SeasonalActivityResolve, SeasonalActivityResult } from "../../../types/seasonal-activities";
+import { PillarsActor } from "../../document/actor-pillars";
 
-export default class SeasonalActivityApplication extends Application<{closeOnSubmit : boolean} & ApplicationOptions> {
+export default class SeasonalActivityApplication extends Application<{closeOnSubmit : boolean} & ApplicationOptions> 
+{
 
-  actor: PillarsActor;
-  resolve? : SeasonalActivityResolve
+    actor: PillarsActor;
+    resolve? : SeasonalActivityResolve;
 
-  ui : {
+    ui : {
     submitButton?: HTMLButtonElement;
-  } = {}
+  } = {};
   
-  static get defaultOptions() {
-    let options = super.defaultOptions as ApplicationOptions & {closeOnSubmit : boolean};
-    options.classes.push("seasonal-activity")
-    options.resizable = true;
-    options.closeOnSubmit = true;
-    return options
-  }
-
-
-  constructor(data : SeasonalActivityData, resolve? : SeasonalActivityResolve, options?: ApplicationOptions) {
-    super(options);
+    static get defaultOptions() 
     {
-      this.actor = data.actor;
-      this.resolve = resolve
+        const options = super.defaultOptions as ApplicationOptions & {closeOnSubmit : boolean};
+        options.classes = options.classes.concat("pillars-of-eternity", "seasonal-activity", "form");
+        options.resizable = true;
+        options.closeOnSubmit = true;
+        return options;
     }
-  }
 
-  static get label(): string {
-    return getGame().i18n.localize('PILLARS.SeasonalActivity');
-  }
 
-  static create(data : SeasonalActivityData): Promise<SeasonalActivityResult> {
-    return new Promise<SeasonalActivityResult>(async resolve => {
-      let app = new this(data, resolve)
-      app.render(true);
-    })
-  }
-
-  async submit(): Promise<SeasonalActivityResult> {
-    if (this.resolve)
-      this.resolve({text : "", data : this.actor.toObject()})
-    return {text : "", data : this.actor.toObject()}
-  };
-
-  showAlert(alert : HTMLAnchorElement | undefined, tooltip="")
-  {
-    if (alert)
+    constructor(data : SeasonalActivityData, resolve? : SeasonalActivityResolve, options?: ApplicationOptions) 
     {
-      alert.style.display = ""
-      alert.title = tooltip
+        super(options);
+        {
+            this.actor = data.actor;
+            this.resolve = resolve;
+        }
     }
 
-  }
-
-  hideAlert(alert : HTMLAnchorElement | undefined)
-  {
-    if (alert)
-      alert.style.display = "none"
-  }
-
-  async checkData() : Promise<{errors : string[], message : string}>{
-    return {
-      message : "",
-      errors: []
+    static get label(): string 
+    {
+        return getGame().i18n.localize("PILLARS.SeasonalActivity");
     }
-  }
 
-
-
-  activateListeners(html: JQuery<HTMLElement>): void {
-    super.activateListeners(html)
-    
-    this.ui.submitButton = html.find<HTMLButtonElement>("button[type='submit']").on('click', async (ev: JQuery.ClickEvent) => {
-      let game = getGame();
-
-      let state = await this.checkData();
-
-      if (state.errors.length) {
-        Dialog.confirm({
-          title: game.i18n.localize('Error'),
-          content: state.message,
-          yes: () => {
-            this.submit();
-            if (this.options.closeOnSubmit)
-              this.close();
-          },
-          no: () => {},
+    static create(data : SeasonalActivityData): Promise<SeasonalActivityResult> 
+    {
+        return new Promise<SeasonalActivityResult>(resolve => 
+        {
+            const app = new this(data, resolve);
+            app.render(true);
         });
-      } else {
-          this.submit();
-          if (this.options.closeOnSubmit)
-            this.close();
-      }
-    })[0];
+    }
 
-    this.checkData();
-  }
+    async submit(): Promise<SeasonalActivityResult> 
+    {
+        if (this.resolve)
+        {this.resolve({text : "", data : this.actor.toObject()});}
+        return {text : "", data : this.actor.toObject()};
+    }
+
+    showAlert(alert : HTMLAnchorElement | undefined, tooltip="")
+    {
+        if (alert)
+        {
+            alert.style.display = "";
+            alert.title = tooltip;
+        }
+
+    }
+
+    hideAlert(alert : HTMLAnchorElement | undefined)
+    {
+        if (alert)
+        {alert.style.display = "none";}
+    }
+
+    async checkData() : Promise<{errors : string[], message : string}>
+    {
+        return {
+            message : "",
+            errors: []
+        };
+    }
+
+
+
+    activateListeners(html: JQuery<HTMLElement>): void 
+    {
+        super.activateListeners(html);
+    
+        this.ui.submitButton = html.find<HTMLButtonElement>("button[type='submit']").on("click", async (ev: JQuery.ClickEvent) => 
+        {
+            ev.preventDefault();
+            ev.stopPropagation();
+            const game = getGame();
+
+            const state = await this.checkData();
+
+            if (state.errors.length) 
+            {
+                Dialog.confirm({
+                    title: game.i18n.localize("Error"),
+                    content: state.message,
+                    yes: () => 
+                    {
+                        this.submit();
+                        if (this.options.closeOnSubmit)
+                        {this.close();}
+                    },
+                    no: () => {},
+                });
+            }
+            else 
+            {
+                this.submit();
+                if (this.options.closeOnSubmit)
+                {this.close();}
+            }
+        })[0];
+
+        this.checkData();
+    }
 }
 
 

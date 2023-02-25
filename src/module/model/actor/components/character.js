@@ -2,8 +2,10 @@ import { PILLARS } from "../../../system/config";
 import { BasicLifeModel } from "./base";
 import { ComputedDetailsModel } from "./details";
 
-export class CharacterLifeModel extends BasicLifeModel {
-    static defineSchema() {
+export class CharacterLifeModel extends BasicLifeModel 
+{
+    static defineSchema() 
+    {
         let schema = super.defineSchema();
         schema.apparentAge = new foundry.data.fields.NumberField();
         schema.agingPoints = new foundry.data.fields.NumberField();
@@ -11,18 +13,20 @@ export class CharacterLifeModel extends BasicLifeModel {
         schema.childhood = new foundry.data.fields.SchemaField({
             setting : new foundry.data.fields.StringField()
         });
-        return schema
+        return schema;
     }
     
     compute({species}) 
     {
         super.compute({species});
         let thresholds = PILLARS.agePointsDeathRank;
-        for (let pointThreshold in thresholds) {
-          if (this.agingPoints < parseInt(pointThreshold)) {
-            this.march = thresholds[parseInt(pointThreshold)];
-            break;
-          }
+        for (let pointThreshold in thresholds) 
+        {
+            if (this.agingPoints < parseInt(pointThreshold)) 
+            {
+                this.march = thresholds[parseInt(pointThreshold)];
+                break;
+            }
         }
         this.march -= 1;
     }
@@ -30,13 +34,15 @@ export class CharacterLifeModel extends BasicLifeModel {
 }
 
 
-export class CharacterDetailsModel extends ComputedDetailsModel {
-    static defineSchema() {
-        let schema = super.defineSchema()
-        schema.cause = new foundry.data.fields.StringField()
-        schema.call = new foundry.data.fields.StringField()
-        schema.goal = new foundry.data.fields.StringField()
-        schema.relationships = new foundry.data.fields.StringField()
-        return schema
+export class CharacterDetailsModel extends ComputedDetailsModel 
+{
+    static defineSchema() 
+    {
+        let schema = super.defineSchema();
+        schema.cause = new foundry.data.fields.StringField();
+        schema.call = new foundry.data.fields.StringField();
+        schema.goal = new foundry.data.fields.StringField();
+        schema.relationships = new foundry.data.fields.StringField();
+        return schema;
     }
 }

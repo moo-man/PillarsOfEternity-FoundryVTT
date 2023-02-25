@@ -1,0 +1,157 @@
+<div class="sheet-list power-sources">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.PowerSources"}}</span></div>
+        <div class="power-bar">{{localize "PILLARS.Pool"}}</div>
+        <div class="small">{{localize "PILLARS.Attack"}}</div>
+        <div class="small">{{localize "PILLARS.XP"}}</div>
+        <div class="small">{{localize "PILLARS.Level"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="powerSource"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.powerSources}}
+            <li data-id="{{this.id}}">
+                <div class="row-content">
+
+                    {{#if this.system.used.value}}
+                        <a class="used property-toggle" data-path="system.used.value"><i class="far fa-check-circle"></i></a>
+                    {{else}}
+                        <a class="used property-toggle" data-path="system.used.value"><i class="far fa-circle"></i></a>
+                    {{/if}}
+
+                    <div class="list-name">
+                        <a class="item-dropdown">{{this.name}}</a>
+                    </div>
+
+                    <div class="power-bar {{this.system.source.value}}">
+                        <div class="progress-bar">
+                            <div class="progress-bar-container">
+                                <div class="progress"
+                                    style="width: {{pct this.system.pool.current this.system.pool.max}}%"></div>
+                            </div>
+                        </div>
+                        <a title="Restore Pool" class="restore-pool"><i class="fas fa-redo"></i></a>
+                        <input type="number" class="property-edit" data-path="system.pool.current" value="{{this.system.pool.current}}"> / <input type="number" disabled value="{{this.system.pool.max}}">
+                    </div>
+                    <div class="small">+{{this.system.attack}}</div>
+                    <div class="small"><input type="number" value="{{this.system.xp.value}}"></div>
+                    <div class="small"><input type="number" disabled value="{{this.system.xp.level}}"></div>
+
+                    <div class="list-controls">
+                        <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                        <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+<div class="sheet-list powers-list">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Powers"}}</span></div>
+        <div class="displayGroup"></div>
+        <div>{{localize "PILLARS.Level"}}</div>
+        <div>{{localize "PILLARS.Range"}}</div>
+        <div>{{localize "PILLARS.Target"}}</div>
+        <div>{{localize "PILLARS.Duration"}}</div>
+        <div>{{localize "PILLARS.Speed"}}</div>
+        <div>{{localize "PILLARS.Exclusion"}}</div>
+        <div class="list-controls">
+            <a class="list-control list-create" title="Create" data-type="power"><i class="fas fa-plus"></i></a>
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each items.powers}}
+            <li data-id="{{this.id}}">
+                <div class="row-content">
+                    <div class="list-name">
+                        <img class="list-image" src="{{this.img}}">
+                        <a class="roll-power">{{this.name}}</a>
+                    </div>
+
+                    {{#if this.currentDisplayGroup}}
+                        <a class="displayGroup">({{this.currentDisplayGroup}})</a>
+                    {{else}}
+                        <a class="displayGroup">(Default)</a>
+                    {{/if}}
+
+                    <div {{this.system.level.value}} {{#if this.system.improvised.value}} title="Improvised Cost"
+                        {{/if}}>
+                        {{this.system.level.value}} {{#if this.system.improvised.value}}
+                            ({{this.system.level.cost}}) {{/if}}
+                    </div>
+                    <div>{{this.Range}}</div>
+                    <a class="power-target">{{this.Target}}</a>
+                    <div>{{this.Duration}}</div>
+                    <div>{{this.Speed}}</div>
+                    <div>{{this.Exclusion}}</div>
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                            <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+{{#if items.embeddedPowers.length}}
+    <div class="sheet-list powers-list">
+        <li class="list-header">
+            <div class="list-name"><span>{{localize "PILLARS.ItemPowers"}}</span></div>
+            <div class="embedded-value">{{this.EmbeddedDisplay}}</div>
+            <div class="displayGroup"></div>
+            <div>{{localize "PILLARS.Level"}}</div>
+            <div>{{localize "PILLARS.Range"}}</div>
+            <div>{{localize "PILLARS.Target"}}</div>
+            <div>{{localize "PILLARS.Duration"}}</div>
+            <div>{{localize "PILLARS.Speed"}}</div>
+            <div>{{localize "PILLARS.Exclusion"}}</div>
+            <div class="list-controls"></div>
+        </li>
+
+        <ul class="list-content">
+            {{#each items.embeddedPowers}}
+                <li data-id="{{this.id}}">
+                    <div class="row-content">
+                        <div class="list-name list-dropdown-alt">
+                            <img class="list-image" src="{{this.img}}">
+                            <a class="roll-power">{{this.name}}</a>
+                        </div>
+
+                        <a class="embedded-value">{{this.EmbeddedDisplay}}</a>
+
+                        {{#if this.currentDisplayGroup}}
+                            <a class="displayGroup">({{this.currentDisplayGroup}})</a>
+                        {{else}}
+                            <a class="displayGroup">(Default)</a>
+                        {{/if}}
+
+                        <div {{this.system.level.value}} {{#if this.improvised.value}} title="Improvised Cost" {{/if}}>
+                            {{this.system.level.value}} {{#if this.improvised.value}}
+                                ({{this.system.level.cost}})
+                            {{/if}}
+                        </div>
+                        <div>{{this.Range}}</div>
+                        <a class="power-target">{{this.Target}}</a>
+                        <div>{{this.Duration}}</div>
+                        <div>{{this.Speed}}</div>
+                        <div>{{this.Exclusion}}</div>
+
+                        <div class="list-controls">
+                            {{#if ../owner}}
+                                <a class="list-control list-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                                <a class="list-control list-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                            {{/if}}
+                        </div>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}

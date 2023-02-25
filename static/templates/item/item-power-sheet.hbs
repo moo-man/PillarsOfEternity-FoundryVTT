@@ -1,0 +1,373 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.hbs category=item.Type physical=false}}
+
+    <nav class="sheet-tabs tabs">
+        <a class="item active" data-tab="description">{{localize "PILLARS.Description"}}</a>
+        <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+        <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+    </nav>
+
+    <section class="tab-content">
+        {{> systems/pillars-of-eternity/templates/item/item-description.hbs}}
+
+
+        <div class="tab details active" data-tab="details">
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.PowerLevel"}}</label>
+                <div class="form-fields">
+                    <input type="number" disabled value="{{system.level.value}}" data-dtype="Number">
+                    <input type="number" name="system.level.modifier" placeholder="Modifier"
+                        value="{{system.level.modifier}}" data-dtype="Number">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.PowerSource"}}</label>
+                <div class="form-fields">
+                    <select name="system.source.value">
+                        {{#select system.source.value}}
+                            <option value=""></option>
+                            {{#each (config "powerSources") as |value k|}}
+                                <option value="{{k}}">{{value}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+
+            </div>
+
+            {{#if (eq system.source.value "spirits") }}
+                <div class="form-group">
+                    <label>{{localize "PILLARS.Type"}}</label>
+                    <div class="form-fields">
+                        <select name="system.category.value">
+                            {{#select system.category.value}}
+                                <option value=""></option>
+                                <option value="phrase">Phrase</option>
+                                <option value="invocation">Invocation</option>
+                            {{/select}}
+                        </select>
+                    </div>
+                </div>
+            {{/if}}
+
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Improvised"}}</label>
+                <div class="form-fields">
+                    <input type="checkbox" name="system.improvised.value" {{checked system.improvised.value}}>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Foundation"}}</label>
+                <div class="form-fields">
+                    <input type="checkbox" name="system.foundation.value" {{checked system.foundation.value}}>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.RequiresRoll"}}</label>
+                <div class="form-fields">
+                    <input type="checkbox" name="system.roll.value" {{checked system.roll.value}}>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Speed"}}</label>
+                <div class="form-fields">
+                    <select name="system.speed.value">
+                        {{#select system.speed.value}}
+                            {{#each (config "powerSpeeds") as |value k|}}
+                                <option value="{{k}}">{{value}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                    <input type="text" name="system.speed.text" value="{{system.speed.text}}" placeholder="Text"
+                        data-dtype="String">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Limitations"}}</label>
+                <div class="form-fields">
+                    <input type="text" name="system.limitations.value" value="{{system.limitations.value}}"
+                        data-dtype="String">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.BaseAbstractModifier"}}</label>
+                <div class="form-fields">
+                    <!-- <input type="text" name="system.base.value" value="{{system.base.value}}" data-dtype="String"> -->
+                    <input class="base-effect-cost" type="number" name="system.base.cost" value="{{system.base.cost}}"
+                        data-dtype="Number">
+                </div>
+            </div>
+            <hr>
+            <div class="form-group power-group" data-property="base.effects">
+                <h3>{{localize "PILLARS.Effects"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each item.system.base.effects as |effect i|}}
+                        <div class="property-inputs" data-index="{{i}}">
+                            <input type="text" data-path="group" class="power-property group" title="Group"
+                                value="{{effect.group}}">
+                            <select class="power-property" data-path="value">
+                                {{#select effect.value}}
+                                    <option value=""></option>
+                                    {{#if ../powerEffects.item}}
+                                        <optgroup label="Item">
+                                            {{#each ../powerEffects.item as |value k|}}
+                                                <option value="{{value.id}}">{{value.label}}</option>
+                                            {{/each}}
+                                        </optgroup>
+                                    {{/if}}
+                                    <optgroup label="Conditions">
+                                        {{#each ../powerEffects.conditions as |value k|}}
+                                            <option value="{{value.id}}">{{value.label}}</option>
+                                        {{/each}}
+                                    </optgroup>
+                                {{/select}}
+                            </select>
+                            vs.
+                            <select data-path="defense" class="power-property">
+                                {{#select effect.defense}}
+                                    <option value="">-</option>
+                                    {{#each (config "defenses") as |defense def|}}
+                                        <option value="{{def}}">{{defense}}</option>
+                                    {{/each}}
+                                {{/select}}
+                            </select>
+                            <input type="text" data-path="text" class="power-property" placeholder="Text"
+                                value="{{effect.text}}">
+                            <input type="number" data-path="modifier" class="power-property" title="Abstract Modifier"
+                                value="{{effect.modifier}}">
+                            <div class="property-control">
+                                <a class="remove-property"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group power-group" data-property="damage.value">
+                <h3>{{localize "PILLARS.Damage"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each item.system.damage.value as |damage i|}}
+                        <div class="property-inputs" data-index="{{i}}">
+                            <input type="text" data-path="group" class="power-property group" title="Group"
+                                value="{{damage.group}}">
+                            <input type="text" data-path="base" class="power-property" placeholder="Base"
+                                value="{{damage.base}}">
+                            <input type="text" data-path="crit" class="power-property" placeholder="Crit"
+                                value="{{damage.crit}}">
+                            <input type="number" data-path="defaultCrit" class="power-property group"
+                                title="Default Critical: Crit dice start at this amount" value="{{damage.defaultCrit}}">
+                            <select data-path="type" class="power-property type">
+                                {{#select damage.type}}
+                                    {{#each (config "damageTypes") as |type t|}}
+                                        <option value="{{t}}">{{type}}</option>
+                                    {{/each}}
+                                {{/select}}
+                            </select>
+                            vs.
+                            <select data-path="defense" class="power-property">
+                                {{#select damage.defense}}
+                                    {{#each (config "defenses") as |defense def|}}
+                                        <option value="{{def}}">{{defense}}</option>
+                                    {{/each}}
+                                {{/select}}
+                            </select>
+
+                            <input type="text" data-path="label" class="power-property" placeholder="Label"
+                                value="{{damage.label}}">
+                            <div class="property-control">
+                                <a class="remove-property"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group power-group" data-property="healing">
+                <h3>{{localize "PILLARS.Healing"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each item.system.healing as |healing i|}}
+                        <div class="property-inputs" data-index="{{i}}">
+                            <input type="text" data-path="group" class="power-property group" title="Group"
+                                value="{{healing.group}}">
+                            <input type="text" data-path="label" class="power-property" placeholder="Label"
+                                value="{{healing.label}}">
+                            <input type="text" data-path="value" class="power-property" value="{{healing.value}}">
+                            <select data-path="type" class="power-property">
+                                {{#select healing.type}}
+                                    <option value="health">Health</option>
+                                    <option value="endurance">Endurance</option>
+                                {{/select}}
+                            </select>
+                            <div class="property-control">
+                                <a class="remove-property"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group power-group" data-property="range">
+                <h3>{{localize "PILLARS.Range"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each item.system.range as |range i|}}
+                        <div class="property-inputs" data-index="{{i}}">
+                            <input type="text" data-path="group" class="power-property group" title="Group"
+                                value="{{range.group}}">
+                            <select class="power-property" data-path="value">
+                                {{#select range.value}}
+                                    {{#each (config "powerRanges") as |value k|}}
+                                        <option value="{{k}}">{{value}}</option>
+                                    {{/each}}
+                                {{/select}}
+                            </select>
+                            <div class="property-control">
+                                <a class="remove-property"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group power-group" data-property="target">
+                <h3>{{localize "PILLARS.Target"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each item.system.target as |target i|}}
+                        <div class="property-inputs" data-index="{{i}}">
+                            <input type="text" data-path="group" class="power-property group" title="Group"
+                                value="{{target.group}}">
+                            <select class="power-property" data-path="value">
+                                {{#select target.value}}
+                                    <option value=""></option>
+                                    {{#each (config "powerTargetTypes") as |value k|}}
+                                        <option value="{{k}}">{{value}}</option>
+                                    {{/each}}
+                                {{/select}}
+                            </select>
+                            <select class="power-property" data-path="subtype">
+                                {{#select target.subtype}}
+                                    <option value=""></option>
+                                    {{#each target.subchoices as |value k|}}
+                                        <option value="{{k}}">{{value}}</option>
+                                    {{/each}}
+                                {{/select}}
+                            </select>
+                            <select class="power-property" data-path="exclusion">
+                                {{#select target.exclusion}}
+                                    {{#each (config "powerExclusions") as |value k|}}
+                                        <option value="{{k}}">{{value}}</option>
+                                    {{/each}}
+                                {{/select}}
+                            </select>
+                            <div class="power-property-form-group" title="Targeted">
+                                <label>{{localize "PILLARS.T"}}</label>
+                                <input type="checkbox" class="power-property-checkbox" data-path="targeted" {{checked
+                                    target.targeted}}>
+                            </div>
+                            <div class="property-control">
+                                <a class="remove-property"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group power-group" data-property="duration">
+                <h3>{{localize "PILLARS.Duration"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each item.system.duration as |duration i|}}
+                        <div class="property-inputs" data-index="{{i}}">
+                            <input type="text" data-path="group" class="power-property group" title="Group"
+                                value="{{duration.group}}">
+                            <select class="power-property" data-path="value">
+                                {{#select duration.value}}
+                                    {{#each (config "powerDurations") as |value k|}}
+                                        <option value="{{k}}">{{value}}</option>
+                                    {{/each}}
+                                {{/select}}
+                            </select>
+                            <div class="property-control">
+                                <a class="remove-property"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group power-group" data-property="summons">
+                <h3>{{localize "PILLARS.Summons"}}<a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each item.system.summons as |summon i|}}
+                        <div class="property-inputs" data-index="{{i}}">
+                            <input type="text" data-path="group" class="power-property group" title="Group"
+                                value="{{summon.group}}">
+                            <div class="power-property summon">
+                                <img src="{{summon.item.img}}" />
+                                <a>{{summon.item.name}}</a>
+                            </div>
+                            <input type="number" data-path="modifier" class="power-property group"
+                                title="Abstract Modifier" value="{{summon.modifier}}">
+                            <div class="property-control">
+                                <a class="remove-property"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+            <hr>
+
+            <div class="form-group power-group" data-property="misc">
+                <h3>{{localize "PILLARS.Misc"}} <a class="add-property"><i class="fas fa-plus-square"></i></a></h3>
+                <div class="property-list">
+                    {{#each item.system.misc as |misc i|}}
+                        <div class="property-inputs" data-index="{{i}}">
+                            <input type="text" data-path="group" class="power-property group" title="Group"
+                                value="{{misc.group}}">
+                            <input type="text" data-path="value" class="power-property" placeholder="Description"
+                                value="{{misc.value}}">
+                            <input type="number" data-path="modifier" class="power-property group"
+                                title="Abstract Modifier" value="{{misc.modifier}}">
+                            <div class="property-control">
+                                <a class="remove-property"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <hr>
+
+            <h3>{{localize "PILLARS.Abstract"}}: {{item.system.pl}}</h3>
+
+            <div class="power-groups">
+                {{#each item.system.groups as |group g|}}
+                    {{> systems/pillars-of-eternity/templates/partials/power-group.hbs group=group groupId=g}}
+                {{/each}}
+            </div>
+
+        </div>
+
+        {{> systems/pillars-of-eternity/templates/item/item-effects.hbs}}
+
+    </section>
+
+</form>

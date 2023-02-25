@@ -1,6 +1,6 @@
-import { ActorDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData"
-import { PillarsActor } from "../module/actor/actor-pillars"
-import { PillarsItem } from "../module/item/item-pillars"
+import { ActorDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/actorData";
+import { PillarsActor } from "../module/document/actor-pillars";
+import { PillarsItem } from "../module/document/item-pillars";
 
 export interface SeasonalActivityData {
     actor : PillarsActor

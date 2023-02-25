@@ -1,0 +1,52 @@
+@import "./tabs/headquarters-accommodations";
+
+.pillars-of-eternity.actor.headquarters {
+
+  .window-content form .tab-section .tab-content {
+    height: calc(100% - 85px);
+  }
+
+  .sheet-side {
+    overflow: hidden;
+
+    .form-group {
+      label {
+        flex: 0 0 100px;
+      }
+
+      input {
+        flex: 0 0 50px;
+        text-align: center;
+      }
+    }
+
+    .log {
+      height: calc(100% - 460px);
+
+      h3 {
+        text-align: center;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0px;
+        overflow-y: auto;
+        height: calc(100% - 30px);
+
+        .year {
+          font-weight: bold;
+        }
+
+        .season {
+          font-style: italic;
+          padding: 0 0 0 1.5rem;
+        }
+
+        .entry {
+          padding: 0 0 0 3rem;
+        }
+
+      }
+    }
+  }
+}

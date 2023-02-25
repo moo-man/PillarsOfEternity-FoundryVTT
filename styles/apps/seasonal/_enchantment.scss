@@ -1,0 +1,87 @@
+.enchantment {
+
+    .item-drag {
+        .dragarea {
+            height: 100px;
+            width: 100px;
+        }
+    }
+
+    .details {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+
+        >* {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    .maedrs {
+        width: 100%;
+        height: fit-content;
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+        text-align: center;
+
+        .dragarea {
+            height: 50px;
+            border: 1px dotted black;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .maedr-list {
+            display: flex;
+            justify-content: flex-start;
+
+            >* {
+                img {
+                    height: 30px;
+                    width: 30px;
+                    border: none
+                }
+
+                display: flex;
+                flex-direction: column;
+
+                .potency {
+                    display: flex;
+                    justify-content: space-around;
+
+                    .active {
+                        font-weight: bold;
+                    }
+                }
+
+            }
+        }
+    }
+
+    .progress {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        .progress-bar {
+            width: 100%;
+
+            .progress-bar-container {
+                border: 1px solid black;
+                height: 10px;
+                border-radius: 10px;
+
+                .progress-bar-fill {
+                    background-color: black;
+                    height: 100%;
+                    border-radius: 10px;
+                }
+            }
+        }
+    }
+
+}

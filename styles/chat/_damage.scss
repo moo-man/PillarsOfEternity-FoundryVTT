@@ -1,0 +1,44 @@
+.message .pillars-of-eternity.damage {
+    .dice-tooltip {
+        margin-top: 10px;
+        .part-targets {
+            display: flex;
+            justify-content: end;
+            margin-right: 3px;
+
+            img {
+                width: 23px;
+                height: 23px;
+                margin: 0px 2px;
+            }
+
+            .shield img {
+                filter: invert(40.4%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(119%);
+                margin-bottom: -8px;
+                opacity: 0.1;
+            }
+
+            .shield.active img {
+                opacity: 0.4;
+            }
+
+            .target-group {
+                width:23px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+        }
+
+        .misses {
+            img {
+                opacity: 0.5;
+            }
+            padding-bottom: 2px;
+            padding-right: 25px;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+        }
+    }
+}

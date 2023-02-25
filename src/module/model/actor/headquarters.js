@@ -1,7 +1,9 @@
 
 
-export class HeadquartersDataModel extends foundry.abstract.DataModel {
-    static defineSchema() {
+export class HeadquartersDataModel extends foundry.abstract.DataModel 
+{
+    static defineSchema() 
+    {
         return {
             residents: new foundry.data.fields.EmbeddedDataField(EmbeddedActorDataModel),
             staff: new foundry.data.fields.EmbeddedDataField(EmbeddedActorDataModel),
@@ -18,28 +20,30 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
             disrepair: new foundry.data.fields.SchemaField({
                 value: new foundry.data.fields.NumberField({ default: 0, min: 0}),
             }),
-        }
+        };
     }
 
-    getPreCreateData(data) {
-        let preCreateData = {}
-        if (!data.prototypeToken) {
+    getPreCreateData(data) 
+    {
+        let preCreateData = {};
+        if (!data.prototypeToken) 
+        {
             mergeObject(preCreateData, {
-                'prototypeToken.disposition': CONST.TOKEN_DISPOSITIONS.NEUTRAL, // Default disposition to neutral
-                'prototypeToken.name': data.name, // Set token name to actor name
-                'prototypeToken.actorLink': true
+                "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.NEUTRAL, // Default disposition to neutral
+                "prototypeToken.name": data.name, // Set token name to actor name
+                "prototypeToken.actorLink": true
             });
         }
 
         if (!data.img)
-            preCreateData.img = "icons/svg/castle.svg";
+        {preCreateData.img = "icons/svg/castle.svg";}
 
         if (!getProperty(data, "system.accommodations.list"))
         {
-            setProperty(preCreateData, "system.accommodations.list", this._createAccommodations(15))
+            setProperty(preCreateData, "system.accommodations.list", this._createAccommodations(15));
         }
 
-        return preCreateData
+        return preCreateData;
     }
 
 
@@ -49,12 +53,12 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
         {
             if (data.system.size > this.size)
             {
-                setProperty(data, "system.accommodations.list", this.accommodations.list.concat(this._createAccommodations(data.system.size - this.size)))
+                setProperty(data, "system.accommodations.list", this.accommodations.list.concat(this._createAccommodations(data.system.size - this.size)));
             }
             else if (data.system.size < this.size)
             {
-                let remaining = this.accommodations.list.slice(0, data.system.size)
-                setProperty(data, "system.accommodations.list", remaining)
+                let remaining = this.accommodations.list.slice(0, data.system.size);
+                setProperty(data, "system.accommodations.list", remaining);
             }
         }
 
@@ -62,56 +66,59 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
             "system.accommodations.list" :  this._cleanAccommodationOccupants(data.system?.accommodations?.list || this.accommodations.list),
             "system.residents.list" :  this._cleanActors(data.system?.residents?.list || this.residents.list),
             "system.staff.list" :  this._cleanActors(data.system?.staff?.list || this.staff.list)
-        })
+        });
     }
 
     addToLog(text)
     {
-        let time = game.pillars.time.current
+        let time = game.pillars.time.current;
         let entry = {
             text,
             year : time.year,
             season : time.season
-        }
-        let newLog = [entry].concat(this.log)
-        return newLog
+        };
+        let newLog = [entry].concat(this.log);
+        return newLog;
     }
 
-    computeBase() {
+    computeBase() 
+    {
         this.residents.findActors();
         this.staff.findActors();
-        this.size = this.accommodations.list.length
+        this.size = this.accommodations.list.length;
     }
 
-    computeDerived(items) {
-        this.disrepair.ruin = this.disrepair.value >= 3
-        this.residents.computeTotal()
-        this.staff.computeTotal()
-        this.accommodations.prepareAccommodations(this.residents)
-        this.residents.setAccommodations(this.accommodations)
-        this.accommodationUpkeep = this.accommodations.list.reduce((total, accomm) => total + accomm.upkeep, 0) // Used for calculating defense upkeep
+    computeDerived(items) 
+    {
+        this.disrepair.ruin = this.disrepair.value >= 3;
+        this.residents.computeTotal();
+        this.staff.computeTotal();
+        this.accommodations.prepareAccommodations(this.residents);
+        this.residents.setAccommodations(this.accommodations);
+        this.accommodationUpkeep = this.accommodations.list.reduce((total, accomm) => total + accomm.upkeep, 0); // Used for calculating defense upkeep
 
         this.upkeep = 
             this.accommodationUpkeep + 
             this.staff.list.reduce((total, staff) => total += staff.count * (staff.document?.system.upkeep?.value || 0), 0) +
             items.space.reduce((total, space) => total += space.system.upkeep.value, 0) +
-            items.defense.reduce((total, defense) => total += defense.system.upkeep.value * Math.ceil(this.accommodationUpkeep / defense.system.upkeep.per), 0)
+            items.defense.reduce((total, defense) => total += defense.system.upkeep.value * Math.ceil(this.accommodationUpkeep / defense.system.upkeep.per), 0);
 
     }
 
-    performUpkeep(items) {
-
+    performUpkeep()//items) 
+    {
         // TODO: if upkeep isn't paid
-        let library = this.handleLibrary(items);
-        return {"system.treasury.value" : this.treasury.value - this.upkeep, "system.log" : this.addToLog("Upkeep: " + this.upkeep)}
+        // let library = this.handleLibrary(items);
+        return {"system.treasury.value" : this.treasury.value - this.upkeep, "system.log" : this.addToLog("Upkeep: " + this.upkeep)};
     }
 
-    handleLibrary(items) {
-        let books = items.equipment.filter(i => i.category?.value == "book")
+    handleLibrary(items) 
+    {
+        let books = items.equipment.filter(i => i.category?.value == "book");
 
-        let librariansNeeded = Math.floor(books.length / 30)
+        let librariansNeeded = Math.floor(books.length / 30);
 
-        let librariansPresent = this.staff.list.filter(i => i.type == "book").reduce((prev, current) => prev += current.count || 1, 0)
+        let librariansPresent = this.staff.list.filter(i => i.type == "book").reduce((prev, current) => prev += current.count || 1, 0);
 
         if (this.disrepair.value > 0 || librariansPresent < librariansNeeded)
         {
@@ -183,7 +190,7 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
                 book.system.damage.value += damage;
             }
 
-            return textsDamaged
+            return textsDamaged;
         }
 
 
@@ -191,29 +198,32 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
 
     _createAccommodations(number)
     {
-        return Array(number).fill(undefined).map((i, index) => {
+        return Array(number).fill(undefined).map((i, index) => 
+        {
             return {
                 id : randomID(),
                 label : `Room ${index + 1}`,
                 prepared : false,
                 spaceId : "",
                 occupantIds : []
-            }
-        })
+            };
+        });
     }
 
     // Make sure occupantIds only include existing residents
     _cleanAccommodationOccupants(list)
     {
-        return list.map(a => {
-            a.occupantIds = a.occupantIds.filter(i => this.residents.getActor(i))
-            return a
-        })
+        return list.map(a => 
+        {
+            a.occupantIds = a.occupantIds.filter(i => this.residents.getActor(i));
+            return a;
+        });
     }
 
     // Make sure residents/staff only includes existing actors
-    _cleanActors(list) {
-        return list.filter(i => game.actors.has(i.id))
+    _cleanActors(list) 
+    {
+        return list.filter(i => game.actors.has(i.id));
     }
 
 }
@@ -221,34 +231,40 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel {
 
 class ListDataModel extends foundry.abstract.DataModel
 {
-    static defineSchema() {
+    static defineSchema() 
+    {
         return {
             list: new foundry.data.fields.ArrayField(new foundry.data.fields.ObjectField()),
-        }
+        };
     }
 
-    add(object) {
+    add(object) 
+    {
         let list = duplicate(this.list);
-        list.push(object)
-        return list
+        list.push(object);
+        return list;
     }
 
-    remove(index) {
+    remove(index) 
+    {
         let list = duplicate(this.list);
         list.splice(index, 1);
-        return list
+        return list;
     }
 
-    edit(index, data) {
+    edit(index, data) 
+    {
         let list = duplicate(this.list);
-        mergeObject(list[index], data, { overwrite: true })
-        return list
+        mergeObject(list[index], data, { overwrite: true });
+        return list;
     }
 }
 
 
-class EmbeddedActorDataModel extends ListDataModel {
-    static defineSchema() {
+class EmbeddedActorDataModel extends ListDataModel 
+{
+    static defineSchema() 
+    {
         return {
             list: new foundry.data.fields.ArrayField(new foundry.data.fields.SchemaField(
                 {
@@ -258,61 +274,70 @@ class EmbeddedActorDataModel extends ListDataModel {
                 }
             )),
             extra: new foundry.data.fields.NumberField({ min: 0, integer: true }),
-        }
+        };
     }
 
     /* PREPARATION FUNCTIONS */
-    findActors() {
-        if (game.ready) {
-            this.list.forEach(i => i.document = game.actors.get(i.id))
+    findActors() 
+    {
+        if (game.ready) 
+        {
+            this.list.forEach(i => i.document = game.actors.get(i.id));
         }
     }
 
-    computeTotal() {
-        this.total = this.extra + this.list.reduce((prev, current) => prev += (current.count || 1), 0)
+    computeTotal() 
+    {
+        this.total = this.extra + this.list.reduce((prev, current) => prev += (current.count || 1), 0);
     }
 
     setAccommodations(accommodations)
     {
-        this.list.forEach(resident => {
-            resident.accommodation = accommodations.list.find(a => a.occupantIds.includes(resident.id))
-        })
+        this.list.forEach(resident => 
+        {
+            resident.accommodation = accommodations.list.find(a => a.occupantIds.includes(resident.id));
+        });
     }
 
     /* EDIT FUNCTIONS */
 
-    add(actor, type=undefined) {
+    add(actor, type=undefined) 
+    {
         let obj = { id: actor.id, count: 1 };
 
         // Only used by staff
         if (type)
-            obj.type = type;
+        {obj.type = type;}
 
-        let list = super.add(obj)
-        return list
+        let list = super.add(obj);
+        return list;
     }
 
-    editId(id, data) {
-        return this.edit(this.findIndex(id), data)
+    editId(id, data) 
+    {
+        return this.edit(this.findIndex(id), data);
     }
 
 
     /* HELPER FUNCTIONS */
     findIndex(id)
     {
-        return this.list.findIndex(i => i.id == id)
+        return this.list.findIndex(i => i.id == id);
     }
 
-    getActor(id) {
-        let index = this.findIndex(id)
+    getActor(id) 
+    {
+        let index = this.findIndex(id);
         if (index >= 0)
-            return this.list[this.findIndex(id)]?.document
+        {return this.list[this.findIndex(id)]?.document;}
     }
 }
 
 
-class AccommodationsDataModel extends ListDataModel {
-    static defineSchema() {
+class AccommodationsDataModel extends ListDataModel 
+{
+    static defineSchema() 
+    {
         return {
             list: new foundry.data.fields.ArrayField(new foundry.data.fields.SchemaField({
                 label : new foundry.data.fields.StringField(),
@@ -320,33 +345,35 @@ class AccommodationsDataModel extends ListDataModel {
                 spaceId: new foundry.data.fields.StringField(),
                 occupantIds: new foundry.data.fields.ArrayField(new foundry.data.fields.StringField()),
             }))
-        }
+        };
     }
 
     addActorTo(index, actorId)
     {
         if (!this.list[index].occupantIds.includes(actorId))
-            return this.edit(index, {occupantIds : this.list[index].occupantIds.concat([actorId])})
+        {return this.edit(index, {occupantIds : this.list[index].occupantIds.concat([actorId])});}
     }
 
     removeActorFrom(index, actorId)
     {
-        return this.edit(index, {occupantIds : this.list[index].occupantIds.filter(i => i != actorId)})
+        return this.edit(index, {occupantIds : this.list[index].occupantIds.filter(i => i != actorId)});
     }
 
     // Edit accommodation with given occupant ID 
     editActorId(actorId, data)
     {
-        let index = this.list.findIndex(i => i.occupantIds.includes(actorId))
+        let index = this.list.findIndex(i => i.occupantIds.includes(actorId));
         if (index >= 0)
-            return this.edit(index, data)
+        {return this.edit(index, data);}
     }
 
-    reset() {
-        return this.list.map(i => {
+    reset() 
+    {
+        return this.list.map(i => 
+        {
             i.occupantIds = [];
-            return i
-        })
+            return i;
+        });
     }
 
     /**
@@ -354,31 +381,32 @@ class AccommodationsDataModel extends ListDataModel {
      * 
      * @param {EmbeddedActorDataModel} residents Current Residents in the strong hold
      */
-    prepareAccommodations(residents) {
+    prepareAccommodations(residents) 
+    {
         for(let a of this.list)
         {
-            a.occupants = a.occupantIds.map(i => residents.getActor(i))
-            let upkeep = a.occupants.reduce((acc, actor) => acc + game.pillars.config.sizeAccommodations[actor.system.size.value], 0)
-            let bonded = a.occupants.some(actor => a.occupants.find(target => actor.isBondedWith(target)))
+            a.occupants = a.occupantIds.map(i => residents.getActor(i));
+            let upkeep = a.occupants.reduce((acc, actor) => acc + game.pillars.config.sizeAccommodations[actor.system.size.value], 0);
+            let bonded = a.occupants.some(actor => a.occupants.find(target => actor.isBondedWith(target)));
 
             if (bonded)
-                upkeep -= 1
+            {upkeep -= 1;}
 
             upkeep = Math.max(1, upkeep);
 
-            a.upkeep = upkeep
+            a.upkeep = upkeep;
 
             if (!a.prepared)
             {
-                a.status = "unprepared"
+                a.status = "unprepared";
             }
             else if (a.occupants.filter(i => i) == 0)
             {
-                a.status = "unoccupied"
+                a.status = "unoccupied";
             }
             else 
             {
-                a.status = "occupied"
+                a.status = "occupied";
             }
         }
     }

@@ -1,40 +1,42 @@
-import { ActiveEffectDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
-import { Defense, LifePhase, BookYearData } from './types/common';
+import { ActiveEffectDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
+import { Defense, LifePhase, BookYearData } from "./types/common";
 import {
-  EmbeddedPower,
-  PowerBaseEffect,
-  PowerDamage,
-  PowerDuration,
-  PowerGroup,
-  PowerGroups,
-  PowerHealing,
-  PowerMisc,
-  PowerRange,
-  PowerSummon,
-  PowerTarget,
-} from './types/powers';
-import { BondTrait, WeaponSpecial } from './types/items';
+    EmbeddedPower,
+    PowerBaseEffect,
+    PowerDamage,
+    PowerDuration,
+    PowerGroup,
+    PowerGroups,
+    PowerHealing,
+    PowerMisc,
+    PowerRange,
+    PowerSummon,
+    PowerTarget,
+} from "./types/powers";
+import { BondTrait, WeaponSpecial } from "./types/items";
 import { PILLARS } from "./module/system/config";
-import DamageDialog from './module/apps/damage-dialog';
-import SkillCheck from './module/system/skill-check';
-import DamageRoll from './module/system/damage-roll';
-import { PillarsActorSheet } from './module/actor/actor-sheet';
-import { PillarsItemSheet } from './module/item/item-sheet';
-import BookOfSeasons from './module/apps/book-of-seasons';
-import RollDialog from './module/apps/roll-dialog';
-import ActorConfigure from './module/apps/actor-configure';
-import HealingDialog from './module/apps/healing-dialog';
-import WeaponCheck from './module/system/weapon-check';
-import PowerCheck from './module/system/power-check';
-import Migration from './module/system/migrations';
-import { PILLARS_UTILITY } from './module/system/utility';
-import { PillarsChat } from './module/system/chat';
-import PowerTemplate from './module/system/power-template';
-import SeasonalActivityApplication from './module/apps/seasonal/seasonal-activity';
-import { Accommodation } from './types/headquarters';
-import { HeadquartersManager } from './module/system/headquarters-manager';
-import { TimeManager } from './module/system/time-manager';
-import { TimeSettingData, Season } from './types/time';
+import DamageDialog from "./module/apps/damage-dialog";
+//@ts-ignore
+import { PillarsCharacterSheet } from "./module/apps/sheets/actor/character-sheet";
+import { PillarsItemSheet } from "./module/apps/sheets/item/item-sheet";
+import BookOfSeasons from "./module/apps/book-of-seasons";
+import RollDialog from "./module/apps/roll-dialog";
+import ActorConfigure from "./module/apps/actor-configure";
+import HealingDialog from "./module/apps/healing-dialog";
+import Migration from "./module/system/migrations";
+import { PILLARS_UTILITY } from "./module/system/utility";
+import { PillarsChat } from "./module/system/chat";
+import PowerTemplate from "./module/system/power-template";
+import SeasonalActivityApplication from "./module/apps/seasonal/seasonal-activity";
+import { Accommodation } from "./types/headquarters";
+import { HeadquartersManager } from "./module/system/headquarters-manager";
+import { TimeManager } from "./module/system/time-manager";
+import { TimeSettingData, Season } from "./types/time";
+import SkillCheck from "./module/system/rolls/skill-check";
+import WeaponCheck from "./module/system/rolls/weapon-check";
+import DamageRoll from "./module/system/rolls/damage-roll";
+import PowerCheck from "./module/system/rolls/power-check";
+import DocumentTooltips from "./module/apps/sheets/shared/tooltips";
 
 //#region Actor
 
@@ -179,22 +181,22 @@ export interface PillarsHeadquartersSourceSystemData {
 }
 
 interface CharacterDataSource {
-  type: 'character';
+  type: "character";
   data: PillarsCharacterSourceSystemData;
 }
 
 interface NPCDataSource {
-  type: 'npc';
+  type: "npc";
   data: PillarsActorSourceSystemData;
 }
 
 interface FollowerDataSource {
-  type: 'follower';
+  type: "follower";
   data: PillarsFollowerSourceSystemData;
 }
 
 interface HeadquartersDataSource {
-  type: 'headquarters';
+  type: "headquarters";
   data: PillarsHeadquartersSourceSystemData;
 }
 
@@ -313,35 +315,32 @@ export interface PreparedPillarsFollowerData
 }
 
 
-export interface PreparedPillarsHeadquartersData extends PillarsHeadquartersSourceSystemData {
-
-
-}
+export type PreparedPillarsHeadquartersData = PillarsHeadquartersSourceSystemData
 
 type PreparedPillarsNPC = {
-  type: 'npc';
+  type: "npc";
   data: BasePreparedPillarsActorData;
   system: BasePreparedPillarsActorData;
   flags: {
-    tooltips: PillarsActorTooltips;
+    tooltips: DocumentTooltips;
   };
 };
 
 type PreparedPillarsFollower = {
-  type: 'follower';
+  type: "follower";
   data: PreparedPillarsFollowerData;
   system: PreparedPillarsFollowerData;
   flags: {
-    tooltips: PillarsActorTooltips;
+    tooltips: DocumentTooltips;
   };
 };
 
 type PreparedPillarsCharacter = {
-  type: 'character';
+  type: "character";
   data: PreparedPillarsCharacterData;
   system: PreparedPillarsCharacterData;
   flags: {
-    tooltips: PillarsActorTooltips;
+    tooltips: DocumentTooltips;
   };
 };
 
@@ -357,7 +356,7 @@ export type PreparedPillarsActorData =
   | PreparedPillarsHeadquarters;
   
 
-  export type PreparedPillarsNonHeadquartersActorData = 
+export type PreparedPillarsNonHeadquartersActorData = 
   | PreparedPillarsCharacter
   | PreparedPillarsNPC
   | PreparedPillarsFollower;
@@ -430,7 +429,7 @@ interface Powers {
 //#endregion
 
 export interface AttributeSource {
-  type: 'attribute';
+  type: "attribute";
   data: AttributeSourceData;
 }
 
@@ -441,7 +440,7 @@ export interface AttributeSourceData extends Description, Powers {
 }
 
 export interface SkillSource {
-  type: 'skill';
+  type: "skill";
   data: SkillSourceData;
 }
 
@@ -459,7 +458,7 @@ export interface SkillSourceData extends Description, Category, XP, Used {
 }
 
 export interface TraitSource {
-  type: 'trait';
+  type: "trait";
   data: TraitSourceData;
 }
 
@@ -470,7 +469,7 @@ export interface TraitSourceData extends Description, Category, Used, Powers {
 }
 
 export interface PowerSource {
-  type: 'power';
+  type: "power";
   system: any
   data: PowerSourceData;
   ownedId?: string
@@ -518,7 +517,7 @@ export interface PowerSourceData extends Description, Category {
     text: string;
   };
   limitations: {
-    group: '';
+    group: "";
     value: string;
   };
   improvised: {
@@ -528,7 +527,7 @@ export interface PowerSourceData extends Description, Category {
 }
 
 export interface PowerSourceSource {
-  type: 'powerSource';
+  type: "powerSource";
   data: PowerSourceSourceData;
 }
 
@@ -548,7 +547,7 @@ export interface PowerSourceSourceData extends Description, Category, XP {
 }
 
 export interface WeaponSource {
-  type: 'weapon';
+  type: "weapon";
   data: WeaponSourceData;
 }
 
@@ -579,7 +578,7 @@ export interface WeaponSourceData
 }
 
 export interface ArmorSource {
-  type: 'armor';
+  type: "armor";
   data: ArmorSourceData;
 }
 
@@ -610,7 +609,7 @@ export interface ArmorSourceData
 }
 
 export interface ShieldSource {
-  type: 'shield';
+  type: "shield";
   data: ShieldSourceData;
 }
 
@@ -637,7 +636,7 @@ export interface ShieldSourceData
 }
 
 export interface EquipmentSource {
-  type: 'equipment';
+  type: "equipment";
   data: EquipmentSourceData;
 }
 
@@ -677,7 +676,7 @@ export interface EquipmentSourceData
 }
 
 export interface ConnectionSource {
-  type: 'connection';
+  type: "connection";
   data: ConnectionSourceData;
 }
 
@@ -691,7 +690,7 @@ export interface ConnectionSourceData extends Description, XP {
 }
 
 export interface CultureSource {
-  type: 'culture';
+  type: "culture";
   data: CultureSourceData;
 }
 
@@ -706,7 +705,7 @@ export interface CultureSourceData extends Description {
 }
 
 export interface BackgroundSource {
-  type: 'background';
+  type: "background";
   data: BackgroundSourceData;
 }
 
@@ -724,7 +723,7 @@ export interface BackgroundSourceData extends Description {
 }
 
 export interface SettingSource {
-  type: 'setting';
+  type: "setting";
   data: SettingSourceData;
 }
 
@@ -742,7 +741,7 @@ export interface SettingSourceData extends Description {
 }
 
 export interface SpeciesSource {
-  type: 'species';
+  type: "species";
   data: SpeciesSourceData;
 }
 
@@ -768,21 +767,21 @@ export interface SpeciesSourceData extends Description, Powers {
 }
 
 export interface StockSource {
-  type: 'stock';
+  type: "stock";
   data: StockSourceData;
 }
 
 export interface StockSourceData extends Description, Powers {}
 
 export interface GodlikeSource {
-  type: 'godlike';
+  type: "godlike";
   data: GodlikeSourceData;
 }
 
 export interface GodlikeSourceData extends Description, Powers {}
 
 export interface ReputationSource {
-  type: 'reputation';
+  type: "reputation";
   data: ReputationSourceData;
 }
 
@@ -796,15 +795,15 @@ export interface ReputationSourceData extends Description, XP {
 }
 
 export interface InjurySource {
-  type: 'injury';
+  type: "injury";
   data: InjurySourceData;
 }
 
-export interface InjurySourceData extends Description {}
+export type InjurySourceData = Description
 
 
 export interface BondSource {
-  type: 'bond';
+  type: "bond";
   data: BondSourceData;
   active : boolean // NOTE: Does not exist on source, actually exists only on prepared data
 }
@@ -827,8 +826,8 @@ export interface DefenseSource {
 }
 
 
-export interface SpaceSourceData extends Description {}
-export interface DefenseSourceData extends Description {}
+export type SpaceSourceData = Description
+export type DefenseSourceData = Description
 
 type PillarsItemDataSource =
  | AttributeSource
@@ -903,7 +902,7 @@ declare global {
   interface Game {
     pillars: {
       apps : {
-        PillarsActorSheet : typeof PillarsActorSheet,
+        PillarsCharacterSheet : typeof PillarsCharacterSheet,
         PillarsItemSheet : typeof PillarsItemSheet,
         BookOfSeasons : typeof BookOfSeasons,
         RollDialog : typeof RollDialog,
@@ -928,12 +927,8 @@ declare global {
       postReadyPrepare : Actor[]
     };
     dice3d : {
-      DiceFactory : {
-
-      }
-      constructor : {
-
-      }
+      DiceFactory : any,
+      constructor : any
     }
   }
   interface SourceConfig {
@@ -960,12 +955,12 @@ declare global {
 
   namespace ClientSettings {
     interface Values {
-      'pillars-of-eternity.playerApplyDamage': boolean;
-      'pillars-of-eternity.systemMigrationVersion': string;
-      'pillars-of-eternity.time': TimeSettingData,
-      'pillars-of-eternity.latestTime': {season: Season, year : number};
-      'pillars-of-eternity.trackerPosition': {left: number, top : number};
-      'pillars-of-eternity.activeHeadquarters': string[];
+      "pillars-of-eternity.playerApplyDamage": boolean;
+      "pillars-of-eternity.systemMigrationVersion": string;
+      "pillars-of-eternity.time": TimeSettingData,
+      "pillars-of-eternity.latestTime": {season: Season, year : number};
+      "pillars-of-eternity.trackerPosition": {left: number, top : number};
+      "pillars-of-eternity.activeHeadquarters": string[];
     }
   }
 

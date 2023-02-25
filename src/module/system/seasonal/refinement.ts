@@ -2,15 +2,16 @@ import { ActorDataConstructorData } from "@league-of-foundry-developers/foundry-
 import { ItemDataConstructorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/itemData";
 import { getGame } from "../../system/utility";
 import { ENCHANTMENT_STATE } from "../../../types/seasonal-activities";
-import { PillarsActor } from "../../actor/actor-pillars";
-import { PillarsItem } from "../../item/item-pillars";
+import { PillarsItem } from "../../document/item-pillars";
 import { PILLARS } from "../config";
 import { Enchantment } from "./enchantment";
+import { PillarsActor } from "../../document/actor-pillars";
 
 
-export class Refinement extends Enchantment{
-    item : PillarsItem | PillarsActor
-    actor : PillarsActor
+export class Refinement extends Enchantment
+{
+    item : PillarsItem | PillarsActor;
+    actor : PillarsActor;
 
     data : {
         // Saved data
@@ -21,12 +22,12 @@ export class Refinement extends Enchantment{
             check? : number
         }
         
-    } & Enchantment["data"]
+    } & Enchantment["data"];
 
     constructor(item : PillarsItem | PillarsActor, actor : PillarsActor)
     {
 
-        super()
+        super();
         // Make sure all objects are prepared
         item.prepareData();
         actor.prepareData();
@@ -41,7 +42,7 @@ export class Refinement extends Enchantment{
                 state : ENCHANTMENT_STATE.NOT_STARTED,
                 current : 0,
             }
-        }
+        };
 
         this.actor = actor;
         this.item = item;
@@ -50,51 +51,56 @@ export class Refinement extends Enchantment{
 
     static fromData(data : Refinement["data"]): Refinement
     {
-        let game = getGame();
-        let actor = game.actors!.get(data.actorId);
-        let item =  new PillarsItem(data.itemData as ItemDataConstructorData)
+        const game = getGame();
+        const actor = game.actors!.get(data.actorId);
+        const item =  new PillarsItem(data.itemData as ItemDataConstructorData);
 
         if (item && actor)
         {
-            let imbuement = new this(item, actor)
+            const imbuement = new this(item, actor);
             imbuement.data = data;
             imbuement.computeProgress();
-            return imbuement
+            return imbuement;
         }
-        else throw new Error("Error creating enchantment from data")
+        else {throw new Error("Error creating enchantment from data");}
     }
 
-    async save() {
+    async save() 
+    {
         this.computeProgress();
-        return this.actor.setFlag("pillars-of-eternity", `enchantments.${this.id}`, this.data)
+        return this.actor.setFlag("pillars-of-eternity", `enchantments.${this.id}`, this.data);
     }
 
 
-    get id() {
-        return this.data.id
+    get id() 
+    {
+        return this.data.id;
     }
 
-    getSaveData() {
-        return {[`flags.pillars-of-eternity.enchantments.${this.id}`] : this.data}
+    getSaveData() 
+    {
+        return {[`flags.pillars-of-eternity.enchantments.${this.id}`] : this.data};
     }
 
-    getStateMessage() {
+    getStateMessage() 
+    {
         switch(this.progress.state)
         {
-            case ENCHANTMENT_STATE.FINISHED:
-                return `Refinement: ${this.item.name}`
-            default: 
-                return ""
+        case ENCHANTMENT_STATE.FINISHED:
+            return `Refinement: ${this.item.name}`;
+        default: 
+            return "";
         }
     }
 
-    getFinishedData(): Partial<ActorDataConstructorData> {
-        let finishedItem = <PillarsItem>this.item;
+    getFinishedData(): Partial<ActorDataConstructorData> 
+    {
+        const finishedItem = <PillarsItem>this.item;
         
-        let updateObject = {items : [], [`flags.pillars-of-eternity.enchantments.-=${this.id}`] : null}
+        const updateObject = {items : [], [`flags.pillars-of-eternity.enchantments.-=${this.id}`] : null};
 
 
-        return {items : [finishedItem.toObject()], [`flags.pillars-of-eternity.enchantments.-=${this.id}`] : null}
+        return {items : [finishedItem.toObject()], [`flags.pillars-of-eternity.enchantments.-=${this.id}`] : null};
     }
 
     start() 
@@ -104,25 +110,28 @@ export class Refinement extends Enchantment{
         return this.advanceProgress();
     }
 
-    computeProgress() {
+    computeProgress() 
+    {
         this.progress = this.data.progress as typeof this.progress;
 
-        let size = (this.item instanceof PillarsItem ? this.item.system.itemSize?.value : "average" )|| "average"
+        const size = (this.item instanceof PillarsItem ? this.item.system.itemSize?.value : "average" )|| "average";
 
         if (this.progress.current)
-            this.progress.state = ENCHANTMENT_STATE.FINISHED
+        {this.progress.state = ENCHANTMENT_STATE.FINISHED;}
     }
 
-    async advanceProgress() {
-        let check = await this.actor.setupSkillCheck("Metaphysics");
+    async advanceProgress() 
+    {
+        const check = await this.actor.setupSkillCheck("Metaphysics");
         await check.sendToChat();
-        this.data.progress.check = check.result?.total
+        this.data.progress.check = check.result?.total;
         this.data.progress.current = 1;
         this.computeProgress();
     }
 
-    validate(): string[] {
-        return []
+    validate(): string[] 
+    {
+        return [];
     }
 
 }

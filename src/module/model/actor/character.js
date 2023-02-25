@@ -1,15 +1,17 @@
 import { TieredActorDataModel } from "./components/base";
 import { CharacterDetailsModel, CharacterLifeModel } from "./components/character";
 
-export class CharacterActorDataModel extends TieredActorDataModel {
-    static defineSchema() {
+export class CharacterActorDataModel extends TieredActorDataModel 
+{
+    static defineSchema() 
+    {
         let schema = super.defineSchema();
-        schema.life = new foundry.data.fields.EmbeddedDataField(CharacterLifeModel)
-        schema.details = new foundry.data.fields.EmbeddedDataField(CharacterDetailsModel)
+        schema.life = new foundry.data.fields.EmbeddedDataField(CharacterLifeModel);
+        schema.details = new foundry.data.fields.EmbeddedDataField(CharacterDetailsModel);
         schema.connections = new foundry.data.fields.ArrayField(
             new foundry.data.fields.SchemaField({ 
                 name : new foundry.data.fields.StringField()
-        }))
+            }));
         schema.seasons = new foundry.data.fields.ArrayField(
             new foundry.data.fields.SchemaField({
                 year: new foundry.data.fields.NumberField(),
@@ -18,8 +20,8 @@ export class CharacterActorDataModel extends TieredActorDataModel {
                 autumn: new foundry.data.fields.StringField(),
                 winter: new foundry.data.fields.StringField(),
                 aging: new foundry.data.fields.StringField()
-            }))
-        return schema
+            }));
+        return schema;
     }
 
     getPreCreateData(data)
@@ -30,19 +32,20 @@ export class CharacterActorDataModel extends TieredActorDataModel {
                 enabled : true
             },
             actorLink : true
-        }}, {overwrite : true})
+        }}, {overwrite : true});
 
-        return preCreateData
-      }
+        return preCreateData;
+    }
 
-    computeBase(items, tooltips) {
+    computeBase(items) 
+    {
         // Compute Details (size) before calling super class (which uses size)
-        let details = this.details.compute(items, tooltips);
+        let details = this.details.compute(items);
         if (details.stride)
-        this.stride.value = details.stride;
+        {this.stride.value = details.stride;}
         if (Number.isNumeric(details.size))
-            this.size.value = details.size;
-        this.life.compute(items, tooltips);
-        super.computeBase(items, tooltips)
+        {this.size.value = details.size;}
+        this.life.compute(items);
+        super.computeBase(items);
     }
 }

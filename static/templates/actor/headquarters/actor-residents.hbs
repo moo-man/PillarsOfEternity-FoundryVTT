@@ -1,0 +1,89 @@
+<div class="sheet-list resident-list">
+    <li class="list-header">
+        <div class="list-name"><span>{{localize "PILLARS.Residents"}}</span></div>
+        <div class="normal">{{localize "PILLARS.Count"}}</div>
+        <!-- <div class=" extra">
+            <label>{{localize "PILLARS.Extra"}}</label>
+            <input type="number" name="{{system.residents.extra}}" value="{{system.residents.extra}}" >
+        </div> -->
+        <div class="list-controls">
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each system.residents.list}}
+            <li data-index="{{key}}" data-type="residents">
+                <div class="row-content">
+                    <div class="resident-sheet list-name">
+                        <img class="list-image" src='{{tokenImg this.document}}'>
+                        <a>{{this.document.name}}</a>
+                    </div>
+
+                    {{#unless this.document.prototypeToken.actorLink}}
+                        <div class="normal">
+                            <input class="array-edit" data-path="count" type="number" value="{{this.count}}">
+                        </div>
+                    {{/unless}}
+
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control array-remove"><i class="fa-solid fa-times"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+<div class="sheet-list resident-list">
+    <li class="list-header">
+        <div class="resident-sheet list-name"><span>{{localize "PILLARS.Staff"}}</span></div>
+        <div class="large">{{localize "PILLARS.Type"}}</div>
+        <div class="normal">{{localize "PILLARS.Count"}}</div>
+        <!-- <div class="large extra">
+            <label>{{localize "PILLARS.Extra"}}</label>
+            <input type="number" name="{{system.staff.extra}}" value="{{system.staff.extra}}" >
+        </div> -->
+        <div class="list-controls">
+        </div>
+    </li>
+
+    <ul class="list-content">
+        {{#each system.staff.list}}
+            <li data-index="{{key}}" data-type="staff">
+                <div class="row-content">
+                    <div class="resident-name list-name">
+                        <img class="list-image" src='{{tokenImg this.document}}'>
+                        <a>{{this.document.name}}</a>
+                    </div>
+
+                    <div class="large">
+                        <select class="array-edit" data-path="type">
+                            {{#select this.type}}
+                                <option value="staff">{{localize "PILLARS.Staff"}}</option>
+                                <option value="guard">{{localize "PILLARS.Guard"}}</option>
+                                <option value="librarian">{{localize "PILLARS.Librarian"}}</option>
+                            {{/select}}
+                        </select>
+                    </div>
+
+                    <div class="normal">
+                        {{#unless this.document.prototypeToken.actorLink}}
+                            <input class="array-edit" data-path="count" type="number" value="{{this.count}}">
+                        {{/unless}}
+                    </div>
+                    <!-- <div class=" extra"></div> -->
+
+
+                    <div class="list-controls">
+                        {{#if ../owner}}
+                            <a class="list-control array-remove"><i class="fa-solid fa-times"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>

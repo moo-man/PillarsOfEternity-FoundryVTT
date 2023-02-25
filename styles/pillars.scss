@@ -1,0 +1,66 @@
+@import "styles/actor/actor-sheet";
+@import "list";
+@import "apps/time-tracker";
+@import "apps/book-of-seasons";
+@import "apps/roll-dialog";
+@import "chat/check";
+@import "chat/damage";
+@import "chat/roll";
+@import "apps/check-dialog"; 
+@import "apps/item-dialog"; 
+@import "chat/post-item";
+@import "item/item-sheet";
+@import "apps/quick-effects";
+@import "apps/seasonal/seasonal";
+@import "foundry/combat-tracker";
+@import "apps/character-creation";
+
+
+.pillars-of-eternity {
+    input[type="number"] {
+        text-align: center;
+    }
+
+    a {
+        cursor: pointer;
+    }
+
+    img {
+        border: none;
+    }
+
+    .progress-bar {
+        width: 100%;
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            border: 1px solid black;
+
+            .progress {
+                background: black;
+                border-radius: 5px;
+                height: 100%;
+            }
+        }
+    }
+
+}
+
+// Ensures all pillars forms scroll properly, Meaning the Submit button is always visible, but form content scrolls
+.pillars-of-eternity.form {
+    .window-content {
+        overflow-y: hidden;
+    }
+
+    form {
+        height: 100%;
+
+        >  :first-child {
+            height: calc(100% - 32px);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    }
+}

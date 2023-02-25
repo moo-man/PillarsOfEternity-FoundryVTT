@@ -2,14 +2,19 @@
   "devDependencies": {
     "@csstools/postcss-sass": "^5.0.1",
     "@league-of-foundry-developers/foundry-vtt-types": "^9.268.0",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
     "cross-env": "^7.0.3",
+    "eslint": "^8.33.0",
     "postcss": "^8.4.16",
     "rollup": "^2.79.1",
     "rollup-plugin-copy-watch": "^0.0.1",
     "rollup-plugin-jscc": "^2.0.0",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-typescript2": "^0.34.0",
-    "sass": "^1.54.0"
+    "sass": "^1.54.0",
+    "typescript": "^4.9.5",
+    "typescript-eslint": "^0.0.1-alpha.0"
   },
   "name": "pillars-of-eternity",
   "version": "1.0.0",

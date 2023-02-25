@@ -1,0 +1,29 @@
+<div class="tab effects active" data-tab="effects">
+  <div class="sheet-list">
+    <li class="list-header">
+      <div class="list-name"><span>{{localize "PILLARS.Effects"}}</span></div>
+      <div class="list-controls">
+        <a class="list-control list-create" data-collection="effects" title="Create"><i class="fas fa-plus"></i></a>
+      </div>
+    </li>
+
+    <ul class="list-content">
+      {{#each item.effects}}
+        <li data-collection="effects" data-id="{{this.id}}">
+          <div class="row-content">
+            <div class="list-name list-edit">
+              <img class="list-image" src={{this.icon}}>
+              <a>{{this.label}}</a>
+            </div>
+
+            <div class="list-controls">
+              {{#if ../document.isOwner}}
+                <a class="list-control list-delete" title="Delete"><i class="fas fa-trash"></i></a>
+              {{/if}}
+            </div>
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>

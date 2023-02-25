@@ -1,0 +1,32 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{> systems/pillars-of-eternity/templates/item/item-header.hbs category=item.Type physical=false}}
+
+    <nav class="sheet-tabs tabs">
+      <a class="item" data-tab="details">{{localize "PILLARS.Details"}}</a>
+      <a class="item" data-tab="effects">{{localize "PILLARS.Effects"}}</a>
+    </nav>
+
+    <section class="tab-content">
+
+
+        <div class="tab details active" data-tab="details">
+
+            <div class="form-group">
+                <label>{{localize "PILLARS.Type"}}</label>
+                <select name="system.category.value">
+                    {{#select system.category.value}}
+                    {{#each (config "traitTypes") as |type t|}}
+                    <option value="{{t}}">{{type}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+            </div>
+
+            <h2 class="note-section label">{{localize "PILLARS.Description"}}</h2>
+          {{editor system.description.value target="system.description.value" engine="prosemirror" button=true owner=owner editable=editable}}
+        </div>
+        {{> systems/pillars-of-eternity/templates/item/item-effects.hbs}}
+
+    </section>
+
+</form>
