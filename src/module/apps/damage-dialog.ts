@@ -117,7 +117,7 @@ export default class DamageDialog extends Application
                 const defense = damage.defense.toLowerCase() || "deflection";
                 const target = this.targets.find(i => i.id == damage.target);
                 let multiplier = 0;
-                if (target?.actor?.data.type != "headquarters")
+                if (target?.actor && target?.actor?.type != "headquarters")
                 {
                     const margin = (this.check.result?.total || 0) - (target?.actor?.system.defenses?.[<Defense>defense]!.value || 0);
                     multiplier = Math.floor(margin / 5);

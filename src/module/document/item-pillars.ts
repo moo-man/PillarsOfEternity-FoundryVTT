@@ -305,7 +305,7 @@ export class PillarsItem extends Item
 
     preparePower() 
     {
-        if (this.data.type == "power") {this.data.groups = this.preparePowerGroups();}
+        if (this.type == "power") {this.system.groups = this.preparePowerGroups();}
 
         if (this.system.level) 
         {
@@ -563,8 +563,9 @@ export class PillarsItem extends Item
                     pl += values.powerExclusions[target.exclusion as keyof typeof PILLARS.powerExclusions];
                 }
                 for (const duration of this.system.duration!) {pl += values.powerDurations[duration.value as keyof typeof PILLARS.powerDurations];}
+                
                 for (const summon of this.system.summons || []) {pl += summon.modifier || 0;}
-
+                for (const effect of this.system.base.effects || []) {pl += effect.modifier || 0;}
                 for (const misc of <PowerMisc[]>this.system.misc!) {pl += misc.modifier || 0;}
 
                 pl += values.powerSpeeds[this.system.speed!.value as keyof typeof PILLARS.powerSpeeds];
@@ -1017,6 +1018,6 @@ export class PillarsItem extends Item
             type: "physical",
             defaultCrit: 0,
         },
-        "base.effects": { text: "", group: "", value: "", defense: "" },
+        "base.effects": { text: "", group: "", value: "", defense: "", modifier : 0 },
     };
 }

@@ -1,8 +1,8 @@
 <form class="{{cssClass}}" autocomplete="off">
     <div class="sheet-side">
         <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
-        <div class="tier">
-            <select name="system.subtype.value">
+        <div class="subtype">
+            <select>
                 {{#select system.subtype.value}}
                     <option value=""></option>
                     {{#each (config "followerTypes") as |type t|}}

@@ -60,7 +60,7 @@ export class PillarsFollowerSheet extends BasePillarsActorSheet
         if (!this.isEditable) {return;}
 
 
-        html.find(".subtype").on("change", (ev)=> 
+        html.find(".subtype select").on("change", (ev)=> 
         {
             this.actor.setFollowerType(ev.target.value);
         });

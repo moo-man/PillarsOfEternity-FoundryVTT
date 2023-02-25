@@ -21,6 +21,7 @@ export default class ItemDialog extends Dialog
     static get defaultOptions() 
     {
         const options =  super.defaultOptions;
+        options.classes.push("pillars-of-eternity");
         options.classes.push("item-dialog");
         options.resizable = true;
         return options;

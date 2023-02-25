@@ -77,9 +77,9 @@ export default class PowerCheck extends SkillCheck
 
         const rangeGroup = range.group;
 
-        if (this.power.data.type == "power")
+        if (this.power.type == "power")
         {
-            const {damage, effects} = (this.power.data.groups?.[rangeGroup] || this.power.data.groups?.[getGame().i18n.localize("Default")])!;
+            const {damage, effects} = (this.power.system.groups?.[rangeGroup] || this.power.system.groups?.[getGame().i18n.localize("Default")])!;
                 
             const allEffects = this._toEffectObjects(effects);
                 

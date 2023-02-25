@@ -5,14 +5,11 @@ export default class EffectScriptConfig extends FormApplication<FormApplicationO
 {
     static get defaultOptions() 
     {
-        return mergeObject(super.defaultOptions, {
-            id: "effect-script-config",
-            template: "systems/pillars-of-eternity/templates/apps/effect-script.hbs",
-            height: 400,
-            width: 500,
-            title: getGame().i18n.localize("PILLARS.EffectScriptConfig"),
-            resizable: true
-        });
+        const options = super.defaultOptions;
+        options.classes = options.classes.concat("pillars-of-eternity", "effect-script-config"),
+        options.title = getGame().i18n.localize("PILLARS.EffectScriptConfig"),
+        options.resizable = true;
+        return options;
     }
     async getData() 
     {

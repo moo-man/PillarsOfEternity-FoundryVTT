@@ -58,6 +58,7 @@ import WeaponCheck from "./module/system/rolls/weapon-check";
 import PowerCheck from "./module/system/rolls/power-check";
 import DamageRoll from "./module/system/rolls/damage-roll";
 import { PillarsActor } from "./module/document/actor-pillars";
+import { PillarsPowerSheet } from "./module/apps/sheets/item/power-sheet.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -71,7 +72,7 @@ Hooks.on("init", () =>
     // #if _ENV == "development"
     CONFIG.debug.pillars = true;
     //@ts-ignore
-    CONFIG.compatibility.mode = 0;
+    // CONFIG.compatibility.mode = 0;
     // #endif
 
 
@@ -83,7 +84,9 @@ Hooks.on("init", () =>
     Actors.registerSheet("pillars-of-eternity", PillarsHeadquartersSheet, {types: ["headquarters"], makeDefault: true });
     Items.unregisterSheet("core", ItemSheet);
     Items.registerSheet("pillars-of-eternity", PillarsItemSheet, { makeDefault: true });
-    DocumentSheetConfig.registerSheet(ActiveEffect, "pillars-of-eternity", PillarsEffectConfig);
+    Items.registerSheet("pillars-of-eternity", PillarsPowerSheet, {types: ["power"], makeDefault: true });
+
+    DocumentSheetConfig.registerSheet(ActiveEffect, "pillars-of-eternity", PillarsEffectConfig, {makeDefault: true});
   
     //   // Assign the actor class to the CONFIG
     CONFIG.Actor.documentClass = PillarsActor;

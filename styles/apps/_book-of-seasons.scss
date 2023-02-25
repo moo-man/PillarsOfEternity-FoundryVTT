@@ -1,0 +1,68 @@
+// TODO Refactor this
+
+.pillars-of-eternity.book-of-seasons .window-content {
+    overflow: hidden;
+  }
+  
+.pillars-of-eternity.book-of-seasons form {
+    height: 100%;
+  }
+  
+.pillars-of-eternity.book-of-seasons h2 {
+    text-align: center;
+  }
+  
+.pillars-of-eternity.book-of-seasons .season-list {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
+    height: calc(100% - 90px);
+  }
+  
+.pillars-of-eternity.book-of-seasons .controls {
+    margin: 10px;
+  }
+  
+.pillars-of-eternity.book-of-seasons input {
+    border: none;
+    border-bottom: 1px solid black;
+    border-radius: 0px;
+    background: none;
+  }
+  
+.pillars-of-eternity.book-of-seasons input:focus {
+    box-shadow: none;
+  }
+  
+.pillars-of-eternity.book-of-seasons .year-input h3 {
+    display: flex;
+    align-items: center;
+    width: 100px;
+    border: none;
+  }
+  
+.pillars-of-eternity.book-of-seasons .year-input input {
+    text-align: center;
+    height: 18px;
+    margin: 5px 5px;
+  }
+  
+.pillars-of-eternity.book-of-seasons .form-group label {
+    flex: none;
+    width: 100px;
+  }
+  
+.pillars-of-eternity.book-of-seasons .season-details {
+    padding-bottom: 25px;
+    border-bottom: 1px inset #ccc;
+  }
+.pillars-of-eternity.book-of-seasons .alert{
+      color: orange
+  }
+  
+.pillars-of-eternity.book-of-seasons .form-group a{
+      flex: 0 0 15px;
+      text-align: center;
+      margin-right: 2px;
+  }

@@ -16,15 +16,15 @@ export default class BookOfSeasons extends Application
 
     static get defaultOptions() 
     {
-        return mergeObject(super.defaultOptions, {
-            id: "seasons",
-            template: "systems/pillars-of-eternity/templates/apps/book-of-seasons.hbs",
-            height: 900,
-            width: 400,
-            title: getGame().i18n.localize("PILLARS.BookOfSeasons"),
-            resizable: true,
-            scrollY: [".season-list"],
-        });
+        const options = super.defaultOptions;
+        options.classes = options.classes.concat("pillars-of-eternity", "book-of-seasons");
+        options.template = "systems/pillars-of-eternity/templates/apps/book-of-seasons.hbs";
+        options.height = 900;
+        options.width = 400;
+        options.title = getGame().i18n.localize("PILLARS.BookOfSeasons");
+        options.resizable = true;
+        options.scrollY = [".season-list"];
+        return options;
     }
 
     getData() 

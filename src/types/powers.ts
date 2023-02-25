@@ -151,6 +151,7 @@ export interface PowerBaseEffect {
   group: string
   value: string
   defense: string
+  modifier?: number
 }
 
 export interface PowerSummon {

@@ -1,0 +1,26 @@
+.pillars-of-eternity.item.power {
+
+    .power-groups {
+        display: flex;
+        flex-wrap: wrap;
+
+        .power-group-container {
+            border: 1px solid #333;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 5px;
+
+            h3 {
+                text-decoration: underline;
+                text-align: center;
+                border-bottom: none;
+            }
+
+
+            label {
+                font-weight: bold;
+            }
+        }
+
+    }
+}
