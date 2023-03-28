@@ -13,11 +13,14 @@ export default class PillarsActiveEffect extends ActiveEffect
 {
     changes : typeof this["data"]["changes"] = []; // V10 shim
     
-
+    // v10 shim 
+    origin: any;
+    disabled: any;
+    updateSource : any;    
     prepareData() 
     {
         if (getGame().ready && this.requiresEquip && this.item?.canEquip)
-        {this.data.disabled = !this.item.system.equipped?.value;}
+        {this.disabled = !this.item.system.equipped?.value;}
     }
 
     getDialogChanges({target = undefined, condense = false, indexOffset = 0} : {target? : PillarsActor | null, condense? : boolean, indexOffset? : number} ={}) 
@@ -52,21 +55,21 @@ export default class PillarsActiveEffect extends ActiveEffect
     }
     get changeConditionals() 
     {
-        return (getProperty(this.data, "flags.pillars-of-eternity.changeCondition") || {});
+        return (getProperty(this, "flags.pillars-of-eternity.changeCondition") || {});
     }
 
     get description() 
     {
-        return getProperty(this.data, "flags.pillars-of-eternity.description");
+        return getProperty(this, "flags.pillars-of-eternity.description");
     }
 
     get item() 
     {
         if (this.parent && this.parent.documentName == "Item")
         {return this.parent;}
-        else if (this.data.origin && this.parent?.documentName == "Actor") 
+        else if (this.origin && this.parent?.documentName == "Actor") 
         {
-            const origin = this.data.origin.split(".");
+            const origin = this.origin.split(".");
             if (origin[1] == this.parent.id) // If origin ID is same as parent ID
             {
                 if (origin[3])
@@ -84,10 +87,10 @@ export default class PillarsActiveEffect extends ActiveEffect
 
     get sourceName() 
     {
-        if (!this.data.origin)
+        if (!this.origin)
         {return super.sourceName;}
 
-        const data = this.data.origin.split(".");
+        const data = this.origin.split(".");
 
         if (data.length == 4)
         {
@@ -113,6 +116,6 @@ export default class PillarsActiveEffect extends ActiveEffect
 
     get requiresEquip() 
     {
-        return getProperty(this.data, "flags.pillars-of-eternity.itemEquip");
+        return getProperty(this, "flags.pillars-of-eternity.itemEquip");
     }
 }

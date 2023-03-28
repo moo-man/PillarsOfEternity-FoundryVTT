@@ -334,6 +334,7 @@
     "PILLARS.Inventory": "Inventory",
     "PILLARS.ItemCharges": "Item Charges",
     "PILLARS.ItemCreatedOn": "{item} created on {actor}",
+    "PILLARS.ItemNotAllowed" : "Item type {type} not allowed on this Actor",
     "PILLARS.ItemPowers": "Item Powers",
     "PILLARS.ItemSpecials": "Item Specials",
     "PILLARS.ItemSizeTiny" : "Tiny",

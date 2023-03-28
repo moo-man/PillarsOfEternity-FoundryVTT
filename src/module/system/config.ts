@@ -901,10 +901,10 @@ export const PILLARS = {
                 disabled : true,
                 changes: [
                     { key: "state", mode: 6, value: "dis" },
-                    { key: "data.defenses.deflection.value", mode: 2, value: "-2" },
-                    { key: "data.defenses.fortitude.value", mode: 2, value: "-2" },
-                    { key: "data.defenses.reflex.value", mode: 2, value: "-2" },
-                    { key: "data.defenses.will.value", mode: 2, value: "-2" },
+                    { key: "system.defenses.deflection.value", mode: 2, value: "-2" },
+                    { key: "system.defenses.fortitude.value", mode: 2, value: "-2" },
+                    { key: "system.defenses.reflex.value", mode: 2, value: "-2" },
+                    { key: "system.defenses.will.value", mode: 2, value: "-2" },
                 ],
                 flags: {
                     "pillars-of-eternity": {
@@ -987,10 +987,10 @@ CONFIG.statusEffects = [
         icon: "systems/pillars-of-eternity/assets/conditions/bloodied.png",
         changes: [
             { key: "steps", mode: 6, value: "-2" },
-            { key: "data.defenses.deflection.value", mode: 2, value: "-3" },
-            { key: "data.defenses.fortitude.value", mode: 2, value: "-3" },
-            { key: "data.defenses.reflex.value", mode: 2, value: "-3" },
-            { key: "data.defenses.will.value", mode: 2, value: "-3" },
+            { key: "system.defenses.deflection.value", mode: 2, value: "-3" },
+            { key: "system.defenses.fortitude.value", mode: 2, value: "-3" },
+            { key: "system.defenses.reflex.value", mode: 2, value: "-3" },
+            { key: "system.defenses.will.value", mode: 2, value: "-3" },
         ],
         flags: {
             "pillars-of-eternity": {
@@ -1006,10 +1006,10 @@ CONFIG.statusEffects = [
         icon: "systems/pillars-of-eternity/assets/conditions/winded.png",
         changes: [
             { key: "steps", mode: 6, value: "-1" },
-            { key: "data.defenses.deflection.value", mode: 2, value: "-2" },
-            { key: "data.defenses.fortitude.value", mode: 2, value: "-2" },
-            { key: "data.defenses.reflex.value", mode: 2, value: "-2" },
-            { key: "data.defenses.will.value", mode: 2, value: "-2" },
+            { key: "system.defenses.deflection.value", mode: 2, value: "-2" },
+            { key: "system.defenses.fortitude.value", mode: 2, value: "-2" },
+            { key: "system.defenses.reflex.value", mode: 2, value: "-2" },
+            { key: "system.defenses.will.value", mode: 2, value: "-2" },
         ],
         flags: {
             "pillars-of-eternity": {
@@ -1379,7 +1379,7 @@ CONFIG.statusEffects = [
         label: "PILLARS.AfflictionDemoralized",
         icon: "systems/pillars-of-eternity/assets/conditions/demoralized.png",
         changes: [
-            { key: "data.initiative.value", mode: 2, value: "-5" },
+            { key: "system.initiative.value", mode: 2, value: "-5" },
             { key: "state", mode: 7, value: "adv" },
         ],
         flags: {
@@ -1395,7 +1395,7 @@ CONFIG.statusEffects = [
         label: "PILLARS.AfflictionFrightened",
         icon: "systems/pillars-of-eternity/assets/conditions/frightened.png",
         changes: [
-            { key: "data.initiative.value", mode: 2, value: "-5" },
+            { key: "system.initiative.value", mode: 2, value: "-5" },
             { key: "state", mode: 6, value: "dis" },
             { key: "state", mode: 7, value: "adv" },
         ],
@@ -1413,7 +1413,7 @@ CONFIG.statusEffects = [
         label: "PILLARS.AfflictionTerrified",
         icon: "systems/pillars-of-eternity/assets/conditions/terrified.png",
         changes: [
-            { key: "data.initiative.value", mode: 2, value: "-5" },
+            { key: "system.initiative.value", mode: 2, value: "-5" },
             { key: "state", mode: 6, value: "dis" },
             { key: "state", mode: 7, value: "adv" },
         ],

@@ -193,7 +193,7 @@ export class TimeManager
     {
         const needsUpdating: Record<string, boolean> = {};
         const game = getGame();
-        if (actor.data.type == "character") 
+        if (actor.type == "character") 
         {
       actor.system.seasons!.forEach((s: BookYearData, i : number) => 
       {

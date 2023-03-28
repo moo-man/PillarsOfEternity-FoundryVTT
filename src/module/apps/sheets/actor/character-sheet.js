@@ -211,7 +211,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet
                     {
                         const newName = ($(dlg).find("[name='connection']")[0]).value || "";
                         connections[index].name = newName;
-                        this.actor.update({ "data.connections": connections });
+                        this.actor.update({ "system.connections": connections });
                     },
                 },
             },
@@ -226,7 +226,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet
         const index = parseInt($(event.currentTarget).parents(".item").attr("data-index") || "");
         const connections = duplicate(this.actor.system.connections || []);
         connections.splice(index, 1);
-        this.actor.update({ "data.connections": connections });
+        this.actor.update({ "system.connections": connections });
     }
 
     _onConnectionClick(event) 
@@ -283,7 +283,7 @@ export class PillarsCharacterSheet extends BasePillarsActorSheet
 
             embedded.uses.value = Math.clamped(embedded.uses.value, 0, embedded.uses.max);
 
-            item.update({ "data.embedded": embedded });
+            item.update({ "system.embedded": embedded });
         }
     }
 

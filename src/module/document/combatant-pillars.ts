@@ -4,10 +4,11 @@ import { PillarsCombat } from "./combat-pillars";
 
 export class PillarsCombatant extends Combatant 
 {
+    updateSource: any;
     async _preCreate(data: CombatantDataConstructorData, options: DocumentModificationOptions, user: User) 
     {
         await super._preCreate(data, options, user);
-        this.data.update({"flags.pillars-of-eternity.moveCounter": 0});
+        this.updateSource({"flags.pillars-of-eternity.moveCounter": 0});
     }
 
     handleMovement(distance : number)
@@ -30,14 +31,14 @@ export class PillarsCombatant extends Combatant
 
     get isRunning(): boolean 
     {
-        if (this.actor?.data.type != "headquarters")
+        if (this.actor?.type != "headquarters")
         {return <number>this.getFlag("pillars-of-eternity", "moveCounter") > (this.actor?.system.stride?.value || 0);}
         else {return false;}
     }
 
     getMoveData() 
     {
-        if (this.actor?.data.type != "headquarters")
+        if (this.actor?.type != "headquarters")
         {
             return {
                 running : this.isRunning,

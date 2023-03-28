@@ -259,7 +259,7 @@ export class BasePillarsActorSheet extends ActorSheet
         html.find(".roll-power").on("click", this._onPowerRoll.bind(this));
         html.find(".roll-initiative").on("click", this._onInitiativeClick.bind(this));
         html.find(".roll-item-skill").on("click", this._onItemSkillClick.bind(this));
-        html.find(".open-info").on("click", this._onInfoClick.bind(this));
+        html.find(".singleton").on("click", this._onSingletonClick.bind(this));
         html.find(".add-wound").on("click", this._onWoundClick.bind(this));
         html.find(".item-special").on("mouseup", this._onSpecialClicked.bind(this));
         html.find(".restore-pool").on("click", this._onRestorePoolClick.bind(this));
@@ -451,12 +451,11 @@ export class BasePillarsActorSheet extends ActorSheet
         li.toggleClass("expanded");
     }
 
-    _onInfoClick(event) 
+    _onSingletonClick(event) 
     {
-        const type = $(event.currentTarget).attr("data-type");
-        const item = this.actor.getItemTypes(type)[0];
-        if (!item) {return ui.notifications.error(game.i18n.format("PILLARS.ErrorNoOwnedItem", {type}));}
-        else if (item) {item.sheet.render(true);}
+        const path = event.currentTarget.dataset.path;
+        const item = getProperty(this.actor, path)?.document;
+        if (item) {item.sheet.render(true);}
     }
     _onSpecialClicked(event) 
     {

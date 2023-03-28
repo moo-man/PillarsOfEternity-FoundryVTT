@@ -9,6 +9,13 @@ export default class PowerTemplate extends MeasuredTemplate
     item? : PillarsItem; 
     actorSheet? : FormApplication;
 
+    // V10 shim
+    updateSource : any;
+    distance : any;
+    x : any;
+    y: any;
+    direction: any;
+
     static fromItem(item: PillarsItem, groupId: keyof PowerGroups, index = 0) 
     {
         const game = getGame();
@@ -91,17 +98,17 @@ export default class PowerTemplate extends MeasuredTemplate
 
         // Get number of rows and columns
         const [maxr, maxc] = grid!.grid!.getGridPositionFromPixels(d.width, d.height);
-        let nr = Math.ceil((this.data.distance * 1.5) / d.distance / (d.size / grid.h));
-        let nc = Math.ceil((this.data.distance * 1.5) / d.distance / (d.size / grid.w));
+        let nr = Math.ceil((this.distance * 1.5) / d.distance / (d.size / grid.h));
+        let nc = Math.ceil((this.distance * 1.5) / d.distance / (d.size / grid.w));
         nr = Math.min(nr, maxr);
         nc = Math.min(nc, maxc);
 
         // Get the offset of the template origin relative to the top-left grid space
-        const [tx, ty] = canvas!.grid!.getTopLeft(this.data.x, this.data.y);
+        const [tx, ty] = canvas!.grid!.getTopLeft(this.x, this.y);
         const [row0, col0] = grid!.grid!.getGridPositionFromPixels(tx, ty);
         const hx = Math.ceil(canvas!.grid!.w / 2);
         const hy = Math.ceil(canvas!.grid!.h / 2);
-        const isCenter = this.data.x - tx === hx && this.data.y - ty === hy;
+        const isCenter = this.x - tx === hx && this.y - ty === hy;
 
         // Identify grid coordinates covered by the template Graphics
         // for (let r = -nr; r < nr; r++) {
@@ -110,8 +117,8 @@ export default class PowerTemplate extends MeasuredTemplate
         for (const token of canvas!.tokens!.placeables) 
         {
             //let [gx, gy] = canvas!.grid!.grid.getPixelsFromGridPosition(row0 + r, col0 + c);
-            const testX = token.center.x - this.data.x;
-            const testY = token.center.y - this.data.y;
+            const testX = token.center.x - this.x;
+            const testY = token.center.y - this.y;
             const contains = this.shape?.contains(testX, testY);
             if (!contains) {continue;}
             ids.push(token.document.id || "");
@@ -139,7 +146,7 @@ export default class PowerTemplate extends MeasuredTemplate
             if (now - moveTime <= 20) {return;}
             const center = event.data.getLocalPosition(this.layer);
             const snapped = canvas!.grid!.getSnappedPosition(center.x, center.y, 2);
-            this.data.update({ x: snapped.x, y: snapped.y });
+            this.updateSource({ x: snapped.x, y: snapped.y });
             (<PIXI.Circle | PIXI.Ellipse | PIXI.Rectangle | PIXI.RoundedRectangle>this.shape).x = snapped.x;
             (<PIXI.Circle | PIXI.Ellipse | PIXI.Rectangle | PIXI.RoundedRectangle>this.shape).y = snapped.y;
             this.refresh();
@@ -166,9 +173,10 @@ export default class PowerTemplate extends MeasuredTemplate
         handlers.lc = (event : JQuery.ClickEvent) => 
         {
       handlers.rc!(event);
-      const destination = canvas!.grid!.getSnappedPosition(this.data.x, this.data.y, 2);
-      this.data.update(destination);
-      canvas!.scene!.createEmbeddedDocuments("MeasuredTemplate", [{...this.data}]);
+      const destination = canvas!.grid!.getSnappedPosition(this.x, this.y, 2);
+      this.updateSource(destination);
+      // @ts-ignore
+      canvas!.scene!.createEmbeddedDocuments("MeasuredTemplate", [this.toObject()]);
         };
 
         // Rotate the template by 3 degree increments (mouse-wheel)
@@ -178,7 +186,7 @@ export default class PowerTemplate extends MeasuredTemplate
             event.stopPropagation();
             const delta = canvas!.grid!.type > CONST.GRID_TYPES.SQUARE ? 30 : 15;
             const snap = event.shiftKey ? delta : 5;
-            this.data.update({ direction: this.data.direction + snap * Math.sign(event.deltaY) });
+            this.updateSource({ direction: this.direction + snap * Math.sign(event.deltaY) });
             this.refresh();
         };
 

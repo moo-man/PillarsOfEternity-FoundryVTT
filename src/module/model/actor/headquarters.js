@@ -1,7 +1,9 @@
+import { BaseActorDataModel } from "./components/base";
 
-
-export class HeadquartersDataModel extends foundry.abstract.DataModel 
+export class HeadquartersDataModel extends BaseActorDataModel 
 {
+    static preventItemTypes = ["attribute", "skill", "trait", "power", "powerSource", "weapon", "armor", "shield", "equipment", "connection", "culture", "background", "setting", "species", "stock", "godlike", "reputation", "injury", "bond",];
+    static singletonItemTypes = [];
     static defineSchema() 
     {
         return {
@@ -23,14 +25,13 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel
         };
     }
 
-    getPreCreateData(data) 
+    async getPreCreateData(data) 
     {
         let preCreateData = {};
         if (!data.prototypeToken) 
         {
             mergeObject(preCreateData, {
                 "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.NEUTRAL, // Default disposition to neutral
-                "prototypeToken.name": data.name, // Set token name to actor name
                 "prototypeToken.actorLink": true
             });
         }
@@ -47,7 +48,7 @@ export class HeadquartersDataModel extends foundry.abstract.DataModel
     }
 
 
-    handlePreUpdate(data)  
+    async preUpdate(data, options, user)  
     {
         if (data.system?.size)
         {

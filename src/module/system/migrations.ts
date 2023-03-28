@@ -11,7 +11,7 @@ export default class Migration
     async migrateWorld() 
     {
         const game = getGame();
-    ui.notifications!.info(game.i18n.format("PILLARS.Migration", {version : game.system.data.version}), { permanent: true });
+    ui.notifications!.info(game.i18n.format("PILLARS.Migration", {version : game.system.version}), { permanent: true });
     // Migrate World Items
     for (const i of game.items!.contents) 
     {
@@ -51,8 +51,8 @@ export default class Migration
     }
 
     // // Set the migration as complete
-    game.settings.set("pillars-of-eternity", "systemMigrationVersion", game.system.data.version);
-    ui.notifications!.info(game.i18n.format("PILLARS.MigrationComplete", {version : game.system.data.version}), { permanent: true });
+    game.settings.set("pillars-of-eternity", "systemMigrationVersion", game.system.version);
+    ui.notifications!.info(game.i18n.format("PILLARS.MigrationComplete", {version : game.system.version}), { permanent: true });
     }
 
     /* -------------------------------------------- */

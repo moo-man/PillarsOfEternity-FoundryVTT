@@ -29,7 +29,7 @@ export default function ()
         let needMigration;
         if (!game.settings.get("pillars-of-eternity", "systemMigrationVersion")) 
         {
-            game.settings.set("pillars-of-eternity", "systemMigrationVersion", game.system.data.version);
+            game.settings.set("pillars-of-eternity", "systemMigrationVersion", game.system.version);
             needMigration = true;
         }
 
@@ -48,7 +48,7 @@ export default function ()
         }
         else if (game.user!.isGM) 
         {
-            game.settings.set("pillars-of-eternity", "systemMigrationVersion", game.system.data.version);
+            game.settings.set("pillars-of-eternity", "systemMigrationVersion", game.system.version);
         }
 
     game.socket!.on("system.pillars-of-eternity", async (data) => 

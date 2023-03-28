@@ -86,10 +86,10 @@
             },
             "species": {
                 "details": {
-                    "culture": "",
-                    "species": "",
-                    "stock": "",
-                    "godlike": ""
+                    "culture": {"id" : ""},
+                    "species": {"id" : ""},
+                    "stock": {"id" : ""},
+                    "godlike": {"id" : ""}
                 }
             },
             "damageIncrement": {

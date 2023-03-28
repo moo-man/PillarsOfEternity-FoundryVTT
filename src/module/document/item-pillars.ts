@@ -36,10 +36,10 @@ export class PillarsItem extends Item
         await super._preUpdate(updateData, options, user);
 
         // Clamp the shield health to between max and 0
-        if (this.type == "shield" && hasProperty(updateData, "data.health.current"))
-        {setProperty(updateData, "data.health.current", Math.clamped(getProperty(updateData, "data.health.current"), 0, this.system.health?.max || 0));}
+        if (this.type == "shield" && hasProperty(updateData, "system.health.current"))
+        {setProperty(updateData, "system.health.current", Math.clamped(getProperty(updateData, "system.health.current"), 0, this.system.health?.max || 0));}
 
-        if (this.data.type == "bond" && hasProperty(updateData, "system.partner"))
+        if (this.type == "bond" && hasProperty(updateData, "system.partner"))
         {
             const id = getProperty(updateData, "system.partner");
             const actor = getGame().actors?.get(id);
@@ -51,15 +51,15 @@ export class PillarsItem extends Item
         }
 
         // Convenience feature to set the power source name to the same as the newly selected source
-        if (this.type == "powerSource" && hasProperty(updateData, "data.source.value"))
-        {updateData.name = PILLARS.powerSources[getProperty(updateData, "data.source.value") as keyof typeof PILLARS.powerSources];}
+        if (this.type == "powerSource" && hasProperty(updateData, "system.source.value"))
+        {updateData.name = PILLARS.powerSources[getProperty(updateData, "system.source.value") as keyof typeof PILLARS.powerSources];}
 
-        if (getProperty(updateData, "data.category.value") == "grimoire") 
+        if (getProperty(updateData, "system.category.value") == "grimoire") 
         {
             // Check for non-arcana powers before switiching to Grimoire type
             if (!(await this._checkGrimoirePowers())) 
             {
-                setProperty(updateData, "data.category.value", this.system.category?.value);
+                setProperty(updateData, "system.category.value", this.system.category?.value);
                 return;
             }
 
@@ -69,7 +69,7 @@ export class PillarsItem extends Item
             {
                 powers.forEach((p : EmbeddedPower) => (p.data.embedded.spendType = "source"));
 
-                setProperty(updateData, "data.powers", powers);
+                setProperty(updateData, "system.powers", powers);
 
                 // If this is owned, set all owned powers (given by this item) to "source"
                 if (this.isOwned)
@@ -81,7 +81,7 @@ export class PillarsItem extends Item
                             {
                                 return {
                                     _id: p.ownedId,
-                                    "data.embedded.spendType": "source",
+                                    "system.embedded.spendType": "source",
                                 };
                             })
                             .filter((p : EmbeddedPower) => p)
@@ -137,7 +137,7 @@ export class PillarsItem extends Item
       {
           // Add id of actual owned power to the parent flags
           this.update({
-              "data.powers": this.system.powers?.map((p : EmbeddedPower, i : number) => 
+              "system.powers": this.system.powers?.map((p : EmbeddedPower, i : number) => 
               {
                   p.ownedId = items[i]!.id;
                   return p;
@@ -159,17 +159,17 @@ export class PillarsItem extends Item
             const parentPowers = foundry.utils.deepClone(embeddedParent.system.powers);
 
             const index = parentPowers!.findIndex((i : EmbeddedPower) => i.ownedId == this.id);
-            if (this.data.type == "power") 
+            if (this.type == "power") 
             {
                 const powerData = this.toObject() as PowerSource;
                 powerData.ownedId = this.id!;
         parentPowers![index] = powerData;
-        embeddedParent.update({ "data.powers": parentPowers });
+        embeddedParent.update({ "system.powers": parentPowers });
             }
         }
 
 
-        if (this.data.type == "bond")
+        if (this.type == "bond")
         {
             if (this.system.xp!.rank! >= 5)
             {
@@ -198,7 +198,7 @@ export class PillarsItem extends Item
 
     async checkBondTraitEffects() 
     {
-        if(this.data.type == "bond" && this.isOwned)
+        if(this.type == "bond" && this.isOwned)
         {
             const toAdd: Partial<ActiveEffectDataConstructorData>[] = [];
             const toDelete = [];
@@ -327,13 +327,13 @@ export class PillarsItem extends Item
     prepareOwnedBond() 
     {
     this.system.xp!.rank = PILLARS_UTILITY.getSkillRank(this.system.xp!.value) + (this.system.modifier?.value || 0);
-    if (this.data.type == "bond")
+    if (this.type == "bond")
     {this.system.active = this.system.xp!.value >= 15;}
     }
 
     prepareOwnedPowerSource() 
     {
-        if (this.data.type == "powerSource") 
+        if (this.type == "powerSource") 
         {
             // NPCs don't use xp, so use level directly
             if (this.actor!.type == "character") {this.system.xp!.level = PILLARS_UTILITY.getPowerSourceLevel(this.system.xp!.value);}
@@ -376,7 +376,7 @@ export class PillarsItem extends Item
     {
         const data = <ItemChatData>{ text: this.system.description.value };
 
-        if (this.data.type === "power") {data.groups = this.data.groups;}
+        if (this.type === "power") {data.groups = this.system.groups;}
 
         return data;
 
@@ -547,7 +547,7 @@ export class PillarsItem extends Item
     calculatePowerLevel(): number 
     {
         let level = 0;
-        if (this.data.type == "power") 
+        if (this.type == "power") 
         {
             try 
             {
@@ -587,7 +587,7 @@ export class PillarsItem extends Item
         if (powers[index]) 
         {
             mergeObject(powers[index]!, updateData, { overwrite: true });
-            return this.update({ "data.powers": powers });
+            return this.update({ "system.powers": powers });
         }
     }
 
@@ -613,9 +613,9 @@ export class PillarsItem extends Item
 
         const powers = foundry.utils.deepClone(this.system.powers) || []; // TODO test this
         powers.push(power);
-        return this.update({ "data.powers": powers }).then((item) => 
+        return this.update({ "system.powers": powers }).then((item) => 
         {
-            if (ownedPower) {ownedPower.update({ "data.embedded.item": item?.id, "data.embedded.spendType": "source" });}
+            if (ownedPower) {ownedPower.update({ "system.embedded.item": item?.id, "system.embedded.spendType": "source" });}
         });
     }
 
@@ -642,7 +642,7 @@ export class PillarsItem extends Item
                                 {
                                     p.system.embedded.spendType == "source";
                                 });
-                                await this.update({ "data.powers": arcanaPowers });
+                                await this.update({ "system.powers": arcanaPowers });
                                 resolve(true);
                             },
                         },
@@ -662,17 +662,17 @@ export class PillarsItem extends Item
 
     hasMatchingBond() 
     {
-        if (this.data.type == "bond" && this.isOwned)
+        if (this.type == "bond" && this.isOwned)
         {
             const partner = getGame().actors!.get(this.system.partner);
             const partnerBond = partner?.getItemTypes(ItemType.bond).find(b => 
             {
-                if (b.data.type == "bond")
+                if (b.type == "bond")
                 {
                     return b.system.partner == this.parent!.id;
                 }
             });
-            if (partnerBond && partnerBond.data.type == "bond")
+            if (partnerBond && partnerBond.type == "bond")
             {
                 let matching = true;
                 if (this.system.xp!.value != partnerBond.system.xp!.value)
@@ -685,7 +685,7 @@ export class PillarsItem extends Item
                     // If both partner and self arrays have the same values, return true
                     const matchingArrays = this.system.traits.every((t : string) => 
                     {
-                        if (partnerBond?.data.type == "bond")
+                        if (partnerBond?.type == "bond")
                         {
                             return partnerBond.system.traits.includes(t);
                         }
@@ -693,7 +693,7 @@ export class PillarsItem extends Item
           &&
           partnerBond.system.traits.every((t : string) => 
           {
-              if (this.data.type == "bond")
+              if (this.type == "bond")
               {
                   return this.system.traits.includes(t);
               }
@@ -742,7 +742,7 @@ export class PillarsItem extends Item
 
     get languageProficiency() : keyof typeof PILLARS.languageProficiencies 
     {
-        if (this.data.type == "skill" && this.system.category.value == "language")
+        if (this.type == "skill" && this.system.category.value == "language")
         {
             const rank = this.system.xp?.rank || 0;
             if (rank >= 9)
@@ -866,7 +866,7 @@ export class PillarsItem extends Item
 
     get Bond() 
     {
-        if (this.data.type == "bond" && this.system.partner)
+        if (this.type == "bond" && this.system.partner)
         {
             return getGame().actors!.get(this.system.partner);
         }
@@ -876,24 +876,24 @@ export class PillarsItem extends Item
     {
         try 
         {
-            if (this.data.type == "power") 
+            if (this.type == "power") 
             {
                 const groupIndex: number = this.getFlag("pillars-of-eternity", "displayGroup") as number;
 
-                const group = Object.keys(this.data.groups!)[groupIndex];
-                const first = Object.keys(this.data.groups!)
+                const group = Object.keys(this.system.groups!)[groupIndex];
+                const first = Object.keys(this.system.groups!)
                     .filter((i) => i)
                     .sort((a, b): number => (a > b ? 1 : -1))[0];
 
                 if (type && group) 
                 {
-                    if (group && this.data.groups![group] && (this.data.groups![group]![type] as Array<unknown>).length) {return group;}
-                    else if (first && this.data.groups![first] && (this.data.groups![first]![type] as Array<unknown>).length) {return first;}
+                    if (group && this.system.groups![group] && (this.system.groups![group]![type] as Array<unknown>).length) {return group;}
+                    else if (first && this.system.groups![first] && (this.system.groups![first]![type] as Array<unknown>).length) {return first;}
                     else {return "";}
                 }
                 else 
                 {
-                    if (group && Object.keys(this.data.groups![group] || {}).length) {return group;}
+                    if (group && Object.keys(this.system.groups![group] || {}).length) {return group;}
                     else {return first;}
                 }
             }
@@ -910,10 +910,10 @@ export class PillarsItem extends Item
     {
         try 
         {
-            if (this.data.type == "power") 
+            if (this.type == "power") 
             {
                 const groupIndex: number = this.getFlag("pillars-of-eternity", "displayGroup") as number;
-                const group = Object.keys(this.data.groups!)[groupIndex];
+                const group = Object.keys(this.system.groups!)[groupIndex];
                 return group;
             }
         }
@@ -992,7 +992,7 @@ export class PillarsItem extends Item
     }
     get attack() 
     {
-        if (this.data.type == "powerSource") {return this.system.attack;}
+        if (this.type == "powerSource") {return this.system.attack;}
     }
 
     //#endregion

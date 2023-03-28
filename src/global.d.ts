@@ -930,6 +930,7 @@ declare global {
       DiceFactory : any,
       constructor : any
     }
+    system : any
   }
   interface SourceConfig {
     Actor: PillarsActorSourceData;

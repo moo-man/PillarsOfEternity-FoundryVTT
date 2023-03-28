@@ -1,8 +1,9 @@
-import { TieredActorDataModel } from "./components/base";
+import { TieredActorDataModel } from "./components/standard";
 import { CharacterDetailsModel, CharacterLifeModel } from "./components/character";
 
 export class CharacterActorDataModel extends TieredActorDataModel 
 {
+    
     static defineSchema() 
     {
         let schema = super.defineSchema();
@@ -39,12 +40,6 @@ export class CharacterActorDataModel extends TieredActorDataModel
 
     computeBase(items) 
     {
-        // Compute Details (size) before calling super class (which uses size)
-        let details = this.details.compute(items);
-        if (details.stride)
-        {this.stride.value = details.stride;}
-        if (Number.isNumeric(details.size))
-        {this.size.value = details.size;}
         this.life.compute(items);
         super.computeBase(items);
     }

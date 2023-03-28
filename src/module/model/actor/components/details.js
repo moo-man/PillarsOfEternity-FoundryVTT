@@ -1,21 +1,23 @@
+import { SingletonItemModel } from "../../shared/singleton-item";
+
 export class BasicDetailsModel extends foundry.abstract.DataModel 
 {
     static defineSchema() 
     {
         return {
-            culture: new foundry.data.fields.StringField(),
-            species: new foundry.data.fields.StringField(),
-            stock: new foundry.data.fields.StringField(),
-            godlike: new foundry.data.fields.StringField()
+            culture: new foundry.data.fields.EmbeddedDataField(SingletonItemModel),
+            species: new foundry.data.fields.EmbeddedDataField(SingletonItemModel),
+            stock: new foundry.data.fields.EmbeddedDataField(SingletonItemModel),
+            godlike: new foundry.data.fields.EmbeddedDataField(SingletonItemModel)
         };
     }
 
     compute(items)
     {
-        this.species = items.species[0]?.name;
-        this.stock = items.stock[0]?.name;
-        this.culture = items.culture[0]?.name;
-        this.godlike = items.godlike[0]?.name;
+        this.species.getDocument(items.species);
+        this.stock.getDocument(items.stock);
+        this.culture.getDocument(items.culture);
+        this.godlike.getDocument(items.godlike);
     }
 
 }
@@ -28,8 +30,8 @@ export class ComputedDetailsModel extends BasicDetailsModel
     compute(items, tooltips)
     {
         super.compute(items);
-        let species = items.species[0];
-        if (species)
+        let species = this.species.document;
+        if (this.species.document)
         {
             tooltips?.stride.value.push(`${species.system.stride.value} (${species.name})`);
         }

@@ -21,7 +21,7 @@ import {CharacterActorDataModel} from "./module/model/actor/character.js";
 //@ts-ignore
 import {FollowerActorDataModel} from "./module/model/actor/follower.js";
 //@ts-ignore 
-import {StandardActorDataModel} from "./module/model/actor/components/base.js";
+import {StandardActorDataModel} from "./module/model/actor/components/standard.js";
 //@ts-ignore
 import {HeadquartersDataModel} from "./module/model/actor/headquarters.js";
 

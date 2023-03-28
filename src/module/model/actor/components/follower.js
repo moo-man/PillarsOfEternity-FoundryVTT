@@ -1,4 +1,4 @@
-import { BasicLifeModel } from "./base";
+import { BasicLifeModel } from "./standard";
 
 export class FollowerLifeModel extends BasicLifeModel 
 {

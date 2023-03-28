@@ -133,8 +133,8 @@ export class Imbuement extends Enchantment
             if (powerData.type == "power")
             {
                 powers.push(this.power.toObject() as EmbeddedPower);
-                finishedItem.data.update({"data.powers" : powers});
-                finishedItem.data.update(this.getSaveData());
+                finishedItem.updateSource({"system.powers" : powers});
+                finishedItem.updateSource(this.getSaveData());
             }
         }
         return {items : [finishedItem.toObject()], [`flags.pillars-of-eternity.enchantments.-=${this.id}`] : null};

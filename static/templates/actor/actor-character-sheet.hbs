@@ -85,7 +85,7 @@
         <div class="side-section">
             <div class="status">
                 <div class="status-section {{#if system.health.bloodied}}bloodied{{/if}}">
-                    <label>{{localize "PILLARS.Health"}} <a class="action" data-type="long-rest"><i
+                    <label>{{localize "PILLARS.Health"}} <a class="action" data-path="system.details.long-rest"><i
                                 class="fas fa-bed"></i></a></label>
                     <div class="status-array">
                         {{#each system.health.array as | value key| }}
@@ -113,8 +113,8 @@
                     </div>
                 </div>
                 <div class="status-section {{#if system.endurance.winded}}winded{{/if}}">
-                    <label>{{localize "PILLARS.Endurance"}} <a class="action" data-type="exert" title="Exert"><i
-                                class="fa-solid fa-person-running"></i></a><a class="action" data-type="breath"
+                    <label>{{localize "PILLARS.Endurance"}} <a class="action" data-path="system.details.exert" title="Exert"><i
+                                class="fa-solid fa-person-running"></i></a><a class="action" data-path="system.details.breath"
                             title="Catch Breath"><i class="fa-solid fa-lungs"></i></a></label>
                     <div class="status-array">
                         {{#each system.endurance.array as | value key| }}
@@ -184,19 +184,19 @@
             <div class="header-details">
                 <div class="detail-group">
                     <label>{{localize "PILLARS.Culture"}}</label>
-                    <div data-type="culture" class="fake-input"><a>{{system.details.culture}}</a></div>
+                    <div data-path="system.details.culture" class="fake-input singleton"><a>{{system.details.culture.name}}</a></div>
                 </div>
                 <div class="detail-group">
                     <label>{{localize "PILLARS.Species"}}</label>
-                    <div data-type="species" class="fake-input"><a>{{system.details.species}}</a></div>
+                    <div data-path="system.details.species" class="fake-input singleton"><a>{{system.details.species.name}}</a></div>
                 </div>
                 <div class="detail-group">
                     <label>{{localize "PILLARS.Stock"}}</label>
-                    <div data-type="stock" class="fake-input"><a>{{system.details.stock}}</a></div>
+                    <div data-path="system.details.stock" class="fake-input singleton"><a>{{system.details.stock.name}}</a></div>
                 </div>
                 <div class="detail-group">
                     <label>{{localize "PILLARS.Godlike"}}</label>
-                    <div data-type="godlike" class="fake-input"><a>{{system.details.godlike}}</a></div>
+                    <div data-path="system.details.godlike" class="fake-input singleton"><a>{{system.details.godlike.name}}</a></div>
                 </div>
                 <div class="detail-group">
                     <label>{{localize "PILLARS.Size"}}</label>

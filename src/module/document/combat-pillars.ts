@@ -6,11 +6,11 @@ import { PillarsCombatant } from "./combatant-pillars";
 
 export class PillarsCombat extends Combat 
 {
-
+    updateSource : any;
     async _preCreate(data: CombatDataConstructorData, options: DocumentModificationOptions, user: User) 
     {
         await super._preCreate(data, options, user);
-        this.data.update({"flags.pillars-of-eternity.phase": 0});
+        this.updateSource({"flags.pillars-of-eternity.phase": 0});
     }
 
     async _preUpdate(data: CombatDataConstructorData, options: DocumentModificationOptions, user: User)

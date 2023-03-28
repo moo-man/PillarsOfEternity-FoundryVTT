@@ -79,7 +79,7 @@ export enum DamageType {
 // }
 
 interface Useable {
-  data: Used
+  system: Used
 }
 
 interface EmbeddedPowersItem {
@@ -156,7 +156,7 @@ export interface ItemFilter {
 
 export function isUsable(item: any): item is Useable 
 {
-    return item.data.used;
+    return item.system.used;
 }
 
 export function isUsableItem(item: any): item is UsableItem 

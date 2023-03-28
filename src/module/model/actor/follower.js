@@ -1,4 +1,4 @@
-import { TieredActorDataModel } from "./components/base";
+import { TieredActorDataModel } from "./components/standard";
 import { ComputedDetailsModel } from "./components/details";
 import { FollowerLifeModel } from "./components/follower";
 
@@ -18,12 +18,6 @@ export class FollowerActorDataModel extends TieredActorDataModel
     
     computeBase(items) 
     {
-        // Compute Details (size) before calling super class (which uses size)
-        let details = this.details.compute(items);
-        if (details.stride)
-        {this.stride.value = details.stride;}
-        if (Number.isNumeric(details.size))
-        {this.size.value = details.size;}
         this.life.compute(items);
         super.computeBase(items);
     }

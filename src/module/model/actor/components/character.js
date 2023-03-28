@@ -1,5 +1,5 @@
 import { PILLARS } from "../../../system/config";
-import { BasicLifeModel } from "./base";
+import { BasicLifeModel } from "./standard";
 import { ComputedDetailsModel } from "./details";
 
 export class CharacterLifeModel extends BasicLifeModel 

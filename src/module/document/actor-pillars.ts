@@ -52,7 +52,7 @@ export class PillarsActor extends Actor
     system: any;
     prototypeToken: any;
     _source: any;
-
+    flags: any;
     itemCategories: Record<keyof typeof ItemType, PillarsItem[]> | undefined;
 
     async _preCreate(data: ActorDataConstructorData, options: DocumentModificationOptions, user: User) 
@@ -65,73 +65,13 @@ export class PillarsActor extends Actor
     {
         await super._preUpdate(data, options, user);
         this.handleScrollingText(data);
-        if (this.system.handlePreUpdate) 
-        {
-            this.system.handlePreUpdate(data);
-        }
+        this.system.preUpdate(data);
     }
 
     async _onUpdate(data: Record<string, unknown>, options: DocumentModificationOptions, userId: string) 
     {
         await super._onUpdate(data, options, userId);
-        if (this.data.type == "headquarters") {return;}
-
-        // Only allow user who made the modification to apply effects, otherwise multiple effects are applied
-        if (getGame().user?.id == userId) 
-        {
-            // If health or endurance has been modified
-            if (hasProperty(data, "system.health") || hasProperty(data, "system.endurance")) 
-            {
-                // Apply automatic effects only if option is enabled
-                if (this.getFlag("pillars-of-eternity", "autoEffects")) 
-                {
-                    // Bloodied
-                    if (this.system.health.bloodied) 
-                    {
-                        const existing = this.effects.find((e) => e.getFlag("core", "statusId") == "bloodied");
-                        if (!existing) 
-                        {
-                            const existing = this.hasCondition("bloodied");
-                            if (!existing) {await this.addCondition("bloodied");}
-                        }
-                    }
-                    else 
-                    {
-                        await this.removeCondition("bloodied");
-                    }
-
-                    // Winded
-                    if (this.system.endurance.winded) 
-                    {
-                        const existing = this.hasCondition("winded");
-                        if (!existing) {await this.addCondition("winded");}
-                    }
-                    else 
-                    {
-                        await this.removeCondition("winded");
-                    }
-
-                    // Incapacitated (From health or endurance)
-                    if (this.system.health.incap || this.system.endurance.incap) 
-                    {
-                        if (!this.hasCondition("incapacitated")) {await this.addCondition("incapacitated");}
-                        if (!this.hasCondition("prone")) {await this.addCondition("prone");}
-                    }
-                    else if (this.hasCondition("incapacitated")) {await this.removeCondition("incapacitated");}
-
-                    // Dead
-                    if (this.system.health.dead) 
-                    {
-                        await this.addCondition("dead");
-                    }
-                    else if (this.hasCondition("dead")) {await this.removeCondition("dead");}
-                    if (hasProperty(data, "system.health.wounds") && this.system.health.value > this.system.health.max) 
-                    {
-                        this.update({ "system.health.value": this.system.health.max });
-                    }
-                }
-            }
-        }
+        this.system.onUpdate(data, options, userId);
     }
 
 
@@ -139,15 +79,15 @@ export class PillarsActor extends Actor
     {
 
         // Initialize tooltips
-        this.data.flags.tooltips = new DocumentTooltips(this.system.tooltipModel);
-        //@ts-ignore
-        this.data.flags.tooltips.permeateDataModel(this.system);
-        this.system.computeBase(this.itemCategories, this.data.flags.tooltips);
+        this.flags.tooltips = new DocumentTooltips(this.system.tooltipModel);
+        this.flags.tooltips.permeateDataModel(this.system);
+
+        this.system.computeBase(this.itemCategories, this.flags.tooltips);
     }
 
     prepareDerivedData() 
     {
-        this.system.computeDerived(this.itemCategories, this.data.flags.tooltips);
+        this.system.computeDerived(this.itemCategories, this.flags.tooltips);
     }
 
     //#region Data Preparation
@@ -158,7 +98,8 @@ export class PillarsActor extends Actor
             this.itemCategories = this.itemTypes;
             for (const type in this.itemCategories)
             {
-                this.itemCategories[<ItemType>type] = this.itemCategories[<ItemType>type]!.sort((a, b) => (a.data.sort > b.data.sort ? 1 : -1));
+                //@ts-ignore
+                this.itemCategories[<ItemType>type] = this.itemCategories[<ItemType>type]!.sort((a, b) => (a.sort > b.sort ? 1 : -1));
             } 
                 
             super.prepareData();
@@ -173,7 +114,7 @@ export class PillarsActor extends Actor
 
     prepareItems() 
     {
-        if (this.data.type == "headquarters") {return;}
+        if (this.type == "headquarters") {return;}
 
         let weight = 0;
         for (const i of this.items) 
@@ -188,18 +129,18 @@ export class PillarsActor extends Actor
     // Parse active effect keys and add their values to tooltips
     prepareEffectTooltips() 
     {
-        if (this.data.type == "headquarters") {return;}
-        const tooltips = this.data.flags.tooltips;
-        const tooltipKeys = Object.keys(flattenObject(this.data.flags.tooltips));
-        for (const effect of this.effects.filter((e) => !e.data.disabled)) 
+        if (this.type == "headquarters") {return;}
+        const tooltips = this.flags.tooltips;
+        const tooltipKeys = Object.keys(flattenObject(this.flags.tooltips));
+        for (const effect of this.effects.filter((e) => !e.disabled)) 
         {
-            for (const change of effect.data.changes) 
+            for (const change of effect.changes) 
             {
                 const foundTooltipKey = tooltipKeys.find((key) => change.key.includes(key));
                 if (foundTooltipKey) 
                 {
                     const tooltip = getProperty(tooltips, foundTooltipKey);
-                    tooltip.push(change.value + ` (${effect.data.label})`);
+                    tooltip.push(change.value + ` (${effect.label})`);
                 }
             }
         }
@@ -412,7 +353,7 @@ export class PillarsActor extends Actor
     {
     // Aggregate dialog changes from each effect
         let changes: PillarsEffectChangeDataProperties[] = this.effects
-            .filter((i) => !i.data.disabled)
+            .filter((i) => !i.disabled)
             .reduce((prev: PillarsEffectChangeDataProperties[], current) => prev.concat(current.getDialogChanges({ condense, indexOffset: prev.length })), []);
 
         if (getGame().user!.targets.size > 0) 
@@ -471,14 +412,14 @@ export class PillarsActor extends Actor
     use(type: string, name: string) 
     {
         const item = this.getItemTypes(type as ItemType).find((i) => i.name == name);
-        if (item) {return item.update({ "data.used.value": true });}
+        if (item) {return item.update({ "system.used.value": true });}
         const worldItem = getGame().items!.contents.find((i) => i.type == type && i.name == name);
         if (worldItem) 
         {
-            const itemData = worldItem.toObject();
-            if (isUsable(itemData)) 
+            const itemData = worldItem.toObject() as {system : any};
+            if (itemData.system.used) 
             {
-                itemData.data.used.value = true;
+                itemData.system.used.value = true;
             }
             return this.createEmbeddedDocuments("Item", [{ ...itemData }]);
         }
@@ -536,7 +477,7 @@ export class PillarsActor extends Actor
 
     longRest() 
     {
-        if (this.data.type == "headquarters") {return;}
+        if (this.type == "headquarters") {return;}
 
         const updates = this._baseRest() as DeepPartial<PreparedPillarsNonHeadquartersActorData> & ActorDataConstructorData;
 
@@ -580,7 +521,7 @@ export class PillarsActor extends Actor
 
     shortRest() 
     {
-        if (this.data.type == "headquarters") {return;}
+        if (this.type == "headquarters") {return;}
 
         const updates = this._baseRest() as DeepPartial<PreparedPillarsNonHeadquartersActorData> & { items: ItemDataConstructorData[] };
 
@@ -595,20 +536,20 @@ export class PillarsActor extends Actor
 
     enduranceAction(action: "exert" | "breath") 
     {
-        if (this.data.type == "headquarters") {return;}
+        if (this.type == "headquarters") {return;}
         const game = getGame();
         let actionName;
         if (action == "exert") 
         {
             this.update({
-                "data.endurance.value": Math.min(this.system.endurance.max, this.system.endurance.value + 2),
+                "system.endurance.value": Math.min(this.system.endurance.max, this.system.endurance.value + 2),
             });
             actionName = game.i18n.localize("PILLARS.Exert");
         }
         else if (action == "breath") 
         {
             this.update({
-                "data.endurance.value": Math.max(0, this.system.endurance.value - 2),
+                "system.endurance.value": Math.max(0, this.system.endurance.value - 2),
             });
             actionName = game.i18n.localize("PILLARS.CatchBreath");
         }
@@ -623,18 +564,27 @@ export class PillarsActor extends Actor
         return this.effects.find((i) => i.conditionId == condition);
     }
 
-    addCondition(condition: string) 
+    addCondition(conditions: string | string[]) 
     {
-        const effect = duplicate(CONFIG.statusEffects.find((e) => e.id == condition));
-        if (!effect) {return new Error(getGame().i18n.localize("PILLARS.ErrorConditionKey"));}
-
-        if (condition == "incapacitated") {this.addDefeatedStatus();}
-
-        if (condition == "dead" || condition == "incapacitated") {setProperty(effect, "flags.core.overlay", true);}
-
-        setProperty(effect, "flags.core.statusId", effect.id);
-        delete effect.id;
-        return this.createEmbeddedDocuments("ActiveEffect", [effect]);
+        if (typeof conditions == "string")
+        {
+            conditions = [conditions];
+        }
+        const effects : Record<string, unknown>[] = [];
+        for (const condition of conditions)
+        {
+            const effect = duplicate(CONFIG.statusEffects.find((e) => e.id == condition));
+            if (!effect) {return new Error(getGame().i18n.localize("PILLARS.ErrorConditionKey"));}
+            
+            if (condition == "incapacitated") {this.addDefeatedStatus();}
+            
+            if (condition == "dead" || condition == "incapacitated") {setProperty(effect, "flags.core.overlay", true);}
+            
+            setProperty(effect, "flags.core.statusId", effect.id);
+            delete effect.id;
+            effects.push(effect);
+        }
+        return this.createEmbeddedDocuments("ActiveEffect", effects);
     }
 
     removeCondition(condition: string) 
@@ -646,7 +596,7 @@ export class PillarsActor extends Actor
 
     addDefeatedStatus() 
     {
-        if (this.data.type == "headquarters") {return;}
+        if (this.type == "headquarters") {return;}
         const game = getGame();
         if (game.combat) 
         {
@@ -665,7 +615,7 @@ export class PillarsActor extends Actor
 
     handleScrollingText(data: ActorDataConstructorData) 
     {
-        if (this.data.type == "headquarters") {return;}
+        if (this.type == "headquarters") {return;}
         try 
         {
             if (hasProperty(data, "system.health.value")) {this._displayScrollingChange(getProperty(data, "system.health.value") - this._source.system.health.value);}
@@ -717,14 +667,14 @@ export class PillarsActor extends Actor
 
     async applyDamage(damage: number, type: string, options: DamageOptions) 
     {
-        if (this.data.type == "headquarters") {return;}
+        if (this.type == "headquarters") {return;}
 
         const game = getGame();
         if (damage < this.system.toughness.value) {return game.i18n.localize("PILLARS.NoDamage");}
 
         const updateObj: DeepPartial<PreparedPillarsNonHeadquartersActorData> & ActorDataConstructorData = {
             name: this.name!,
-            type: this.data.type,
+            type: this.type,
             system: {
                 health: {
                     wounds: {},
@@ -812,11 +762,11 @@ game.socket!.emit("system.pillars-of-eternity", {
     {
         const game = getGame();
 
-        if (this.data.type == "headquarters") {return;}
+        if (this.type == "headquarters") {return;}
 
         const updateObj: DeepPartial<PreparedPillarsNonHeadquartersActorData> & ActorDataConstructorData = {
             name: this.name!,
-            type: this.data.type,
+            type: this.type,
             items: [],
             data: {
                 health: {
@@ -952,7 +902,7 @@ game.socket!.emit("system.pillars-of-eternity", {
         const age = YA_age + Math.ceil(CONFIG.Dice.randomUniform() * 6);
         const birthYear = year - age;
 
-        return this.update({ "data.life": { birthYear, startYear: year } });
+        return this.update({ "system.life": { birthYear, startYear: year } });
     }
 
     /**
@@ -964,7 +914,7 @@ game.socket!.emit("system.pillars-of-eternity", {
 
         items.forEach((i) => 
         {
-            if (isUsable(i)) {i.data.used.value = false;}
+            if (isUsable(i)) {i.system.used.value = false;}
         });
 
         if (items.length) {return this.update({ items });}

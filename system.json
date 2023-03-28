@@ -24,8 +24,9 @@
       "path": "lang/en.json"
     }
   ],
-  "gridDistance": 5,
-  "gridUnits": "ft",
+  "gridDistance": 2,
+  "gridUnits": "m",
+  "gridType" : 2,
   "initiative": "2d10[Initiative] + (1d12[Tiebreaker] / 100) + @initiative.value",
   "background" : "",
   "socket" : true,
